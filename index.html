@@ -1,1 +1,803 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101817">
+<meta name="description" content="DoomWatch - UK emergency preparedness intelligence, Northern Ireland first.">
+<link rel="manifest" href="manifest.json">
+<title>DOOMWATCH | Operation Containment</title>
+
+<style>
+:root {
+  --bg:#0b1110;
+  --panel:#121c1a;
+  --panel2:#172320;
+  --line:#2b3b36;
+  --text:#e7eee9;
+  --muted:#9eaea6;
+  --green:#9bc6a5;
+  --amber:#e6b85c;
+  --red:#e27d70;
+  --blue:#8fb9d4;
+}
+
+* {box-sizing:border-box}
+
+body {
+  margin:0;
+  background:linear-gradient(160deg,#111d19,#080d0c 55%);
+  color:var(--text);
+  font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+
+header {
+  padding:22px max(18px,calc((100% - 1100px)/2));
+  border-bottom:1px solid var(--line);
+  background:#101917;
+}
+
+.brand {
+  font-size:12px;
+  letter-spacing:.22em;
+  color:var(--green);
+  font-weight:800;
+}
+
+.hero {
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.hero h1 {
+  margin:5px 0 0;
+  font-size:clamp(28px,6vw,46px);
+  letter-spacing:.06em;
+}
+
+.sub {color:var(--muted);font-size:13px}
+
+main {
+  max-width:1100px;
+  margin:auto;
+  padding:18px;
+}
+
+.notice {
+  border:1px solid #806a3e;
+  background:#282315;
+  color:#f0d9a6;
+  border-radius:10px;
+  padding:12px 14px;
+  margin:14px 0;
+}
+
+nav {
+  display:flex;
+  gap:7px;
+  overflow:auto;
+  padding:5px 0 13px;
+}
+
+nav button,.btn {
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:var(--text);
+  padding:9px 13px;
+  border-radius:8px;
+  font-weight:650;
+  white-space:nowrap;
+  cursor:pointer;
+}
+
+nav button.active,.btn.primary {
+  background:#294438;
+  border-color:#52745e;
+  color:#eaffed;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:12px;
+}
+
+.panel {
+  background:linear-gradient(145deg,var(--panel),#101816);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:15px;
+  margin-bottom:12px;
+}
+
+.panel h2,.panel h3 {margin:0 0 9px}
+
+.eyebrow {
+  font-size:10px;
+  letter-spacing:.16em;
+  color:var(--green);
+  font-weight:800;
+}
+
+.metric {font-size:23px;font-weight:800}
+.muted {color:var(--muted)}
+
+.pill {
+  display:inline-block;
+  border-radius:99px;
+  padding:3px 8px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.low {background:#1e3b2b;color:#a8dfb5}
+.watch {background:#40351c;color:#f2d18a}
+.high {background:#482521;color:#ffb2a8}
+
+.item {
+  padding:11px 0;
+  border-top:1px solid var(--line);
+}
+
+.item strong {display:block}
+.item small {color:var(--muted)}
+
+.section {display:none}
+.section.active {display:block}
+
+label {
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin:10px 0 4px;
+}
+
+input,textarea,select {
+  width:100%;
+  background:#0a1210;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:7px;
+  padding:10px;
+  font:inherit;
+}
+
+textarea {min-height:90px;resize:vertical}
+
+.actions {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.check {
+  display:flex;
+  gap:9px;
+  align-items:flex-start;
+  padding:8px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.check input {width:auto;margin-top:4px}
+.check.done span {text-decoration:line-through;color:var(--muted)}
+
+footer {
+  max-width:1100px;
+  margin:20px auto;
+  padding:15px 18px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:11px;
+}
+
+a {color:var(--blue)}
+.empty {color:var(--muted);font-style:italic}
+.source {font-size:12px;word-break:break-word}
+
+@media(min-width:760px) {
+  main {padding:24px 18px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="hero">
+<div>
+<div class="brand">OPERATION CONTAINMENT · UK RESILIENCE MONITOR</div>
+<h1>DOOMWATCH</h1>
+<div class="sub">
+Northern Ireland first. United Kingdom second.
+Prepared, not panicked.
+</div>
+</div>
+<div class="sub" id="today"></div>
+</div>
+</header>
+
+<main>
+
+<div class="notice">
+<b>INTELLIGENCE DISCLAIMER:</b>
+This is a personal preparedness dashboard, not an official warning service.
+It does not receive live government feeds.
+Verify developing incidents with linked authorities before acting.
+</div>
+
+<nav id="tabs">
+<button class="active" data-tab="overview">Overview</button>
+<button data-tab="ni">Northern Ireland</button>
+<button data-tab="uk">United Kingdom</button>
+<button data-tab="sectors">Critical systems</button>
+<button data-tab="rumours">Rumour watch</button>
+<button data-tab="plan">Preparedness</button>
+<button data-tab="sources">Sources</button>
+</nav>
+
+<!-- OVERVIEW -->
+
+<section class="section active" id="overview">
+
+<div class="grid">
+
+<div class="panel">
+<div class="eyebrow">CURRENT POSTURE</div>
+<div class="metric">MONITOR</div>
+<span class="pill watch">WATCH / VERIFY</span>
+<p class="muted">
+Review verified intelligence before changing the assessment.
+</p>
+</div>
+
+<div class="panel">
+<div class="eyebrow">GEOGRAPHIC PRIORITY</div>
+<div class="metric">NI → UK</div>
+<p class="muted">
+Local services, heating oil, water, ports and cross-border supply chains first.
+</p>
+</div>
+
+<div class="panel">
+<div class="eyebrow">HOUSEHOLD BASELINE</div>
+<div class="metric">72 hours</div>
+<p class="muted">
+A modest three-day resilience baseline.
+Build gradually through normal shopping.
+</p>
+</div>
+
+</div>
+
+<div class="panel">
+<h2>Latest intelligence notes</h2>
+<p class="muted">
+Add dated, sourced updates. No fabricated live incident feed.
+</p>
+<div id="notesList" class="empty">
+No local intelligence notes saved yet.
+</div>
+</div>
+
+<div class="panel">
+<h2>Add an intelligence note</h2>
+
+<label for="noteTitle">Headline</label>
+<input id="noteTitle" placeholder="e.g. NI Water service interruption">
+
+<label for="noteArea">Geography / sector</label>
+<input id="noteArea" placeholder="e.g. BT39 · Water">
+
+<label for="noteLevel">Assessment</label>
+<select id="noteLevel">
+<option value="watch">WATCH</option>
+<option value="low">LOW</option>
+<option value="high">HIGH</option>
+</select>
+
+<label for="noteBody">Details and assessment</label>
+<textarea id="noteBody"></textarea>
+
+<label for="noteSource">Source URL</label>
+<input id="noteSource" type="url" placeholder="https://...">
+
+<div class="actions">
+<button class="btn primary" id="addNote">Save note</button>
+<button class="btn" id="exportNotes">Export JSON backup</button>
+</div>
+</div>
+</section>
+
+<!-- NORTHERN IRELAND -->
+
+<section class="section" id="ni">
+
+<div class="grid">
+
+<div class="panel">
+<div class="eyebrow">ENERGY</div>
+<h3>Heating oil & electricity</h3>
+<p>
+Monitor heating-oil prices, delivery lead times,
+supplier reliability, NIE Networks outages and SONI updates.
+</p>
+<span class="pill watch">STRUCTURAL EXPOSURE</span>
+</div>
+
+<div class="panel">
+<div class="eyebrow">WATER</div>
+<h3>Water & wastewater</h3>
+<p>
+Monitor NI Water interruptions, treatment notices,
+pumping dependencies and DfI Rivers flood information.
+</p>
+<span class="pill watch">LOCAL OUTAGES MATTER</span>
+</div>
+
+<div class="panel">
+<div class="eyebrow">FOOD & AGRICULTURE</div>
+<h3>Farm and retail supply</h3>
+<p>
+Monitor DAERA animal-health restrictions, fertiliser,
+feed inputs, ports and cross-border movements.
+</p>
+<span class="pill watch">SUPPLY-CHAIN WATCH</span>
+</div>
+
+<div class="panel">
+<div class="eyebrow">CIVIL CONTINGENCIES</div>
+<h3>Local response</h3>
+<p>
+Monitor councils, PSNI, NIFRS, Education Authority,
+PHA and NI Executive announcements.
+</p>
+<span class="pill low">OFFICIAL ALERTS</span>
+</div>
+
+</div>
+</section>
+
+<!-- UNITED KINGDOM -->
+
+<section class="section" id="uk">
+
+<div class="grid">
+
+<div class="panel">
+<div class="eyebrow">NATIONAL RESILIENCE</div>
+<h3>Government & civil contingencies</h3>
+<p>
+Cabinet Office, COBR announcements, national risk,
+resilience policy and local resilience forums.
+</p>
+</div>
+
+<div class="panel">
+<div class="eyebrow">ENERGY & FUEL</div>
+<h3>Oil, gas and electricity</h3>
+<p>
+DESNZ, NESO, Ofgem, National Gas, fuel distribution
+and aviation fuel supply.
+</p>
+</div>
+
+<div class="panel">
+<div class="eyebrow">FOOD & CHEMICALS</div>
+<h3>Inputs and manufacturing</h3>
+<p>
+Defra, FSA, AHDB, fertiliser, industrial chemicals,
+water-treatment chemicals and pharmaceutical supply.
+</p>
+</div>
+
+<div class="panel">
+<div class="eyebrow">TRANSPORT & HEALTH</div>
+<h3>Networks and public health</h3>
+<p>
+DfT, National Highways, Network Rail, ports,
+UKHSA, NHS and medical supply notices.
+</p>
+</div>
+
+</div>
+</section>
+
+<!-- CRITICAL SYSTEMS -->
+
+<section class="section" id="sectors">
+
+<div class="panel">
+<h2>Critical systems watch matrix</h2>
+
+<div class="item">
+<strong>Electricity</strong>
+<small>Generation margin · interconnectors · distribution · outages</small>
+</div>
+
+<div class="item">
+<strong>Gas and heating oil</strong>
+<small>Wholesale exposure · storage · import routes · delivery capacity</small>
+</div>
+
+<div class="item">
+<strong>Water and wastewater</strong>
+<small>Treatment chemicals · power dependency · pumping · repairs</small>
+</div>
+
+<div class="item">
+<strong>Food and agriculture</strong>
+<small>Fertiliser · animal feed · veterinary medicines · cold chain · ports</small>
+</div>
+
+<div class="item">
+<strong>Healthcare</strong>
+<small>Medicines · APIs · oxygen · consumables · staffing · seasonal demand</small>
+</div>
+
+<div class="item">
+<strong>Transport and logistics</strong>
+<small>Ports · ferries · roads · rail · aviation · freight</small>
+</div>
+
+<div class="item">
+<strong>Telecoms and cyber</strong>
+<small>Mobile networks · subsea cables · data centres · ransomware · OT</small>
+</div>
+
+<div class="item">
+<strong>Hazardous materials</strong>
+<small>Industrial gases · chlorine · solvents · fertiliser precursors</small>
+</div>
+
+</div>
+</section>
+
+<!-- RUMOUR WATCH -->
+
+<section class="section" id="rumours">
+
+<div class="panel">
+<h2>Rumour verification register</h2>
+
+<p class="muted">
+Never promote a rumour to fact based on repetition,
+screenshots or anonymous posts. Record the original claim,
+provenance, corroboration and contradiction.
+</p>
+
+<div id="rumourList"></div>
+
+<label for="rumourClaim">Original claim</label>
+<textarea id="rumourClaim"></textarea>
+
+<label for="rumourWhere">Where it is circulating / original source</label>
+<input id="rumourWhere">
+
+<label for="rumourStatus">Classification</label>
+<select id="rumourStatus">
+<option>UNVERIFIED</option>
+<option>CONFIRMED</option>
+<option>CREDIBLE BUT UNCONFIRMED</option>
+<option>MISLEADING</option>
+<option>FALSE</option>
+</select>
+
+<label for="rumourEvidence">Evidence for / against and what would confirm it</label>
+<textarea id="rumourEvidence"></textarea>
+
+<div class="actions">
+<button class="btn primary" id="addRumour">Save assessment</button>
+</div>
+
+</div>
+</section>
+
+<!-- PREPAREDNESS -->
+
+<section class="section" id="plan">
+
+<div class="grid">
+
+<div class="panel">
+<h2>Household readiness checklist</h2>
+<div id="checklist"></div>
+<div class="actions">
+<button class="btn" id="resetChecks">Reset checklist</button>
+</div>
+</div>
+
+<div class="panel">
+<h2>Personal plan notes</h2>
+<label for="planNotes">
+Household-specific arrangements
+</label>
+<textarea id="planNotes" placeholder="Emergency contacts, meeting point, medication arrangements, pets, heating and water contingencies..."></textarea>
+
+<div class="actions">
+<button class="btn primary" id="savePlan">Save plan</button>
+</div>
+
+<p class="muted">
+Stored on this device only. Do not store passwords or sensitive information.
+</p>
+</div>
+
+</div>
+</section>
+
+<!-- SOURCES -->
+
+<section class="section" id="sources">
+
+<div class="panel">
+<h2>Primary-source directory</h2>
+<p class="muted">Use these sources to verify claims. This is not a live feed.</p>
+<div id="sourceList"></div>
+</div>
+
+</section>
+
+</main>
+
+<footer>
+DOOMWATCH · Operation Containment · Personal open-source preparedness tool
+<br>
+Local browser storage · No accounts · No tracking · No external libraries
+</footer>
+
+<script>
+(()=>{
+'use strict';
+
+const KEY='doomwatch-v1';
+
+const defaults={
+notes:[],
+rumours:[],
+checks:{},
+plan:''
+};
+
+let data;
+
+try {
+data={...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')};
+} catch {
+data={...defaults};
+}
+
+const $=id=>document.getElementById(id);
+
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#39;'
+}[c]));
+
+const save=()=>{
+try {
+localStorage.setItem(KEY,JSON.stringify(data));
+} catch {
+alert('Storage is full. Export your notes and remove older entries.');
+}
+};
+
+$('today').textContent=new Date().toLocaleString(
+undefined,
+{weekday:'short',day:'numeric',month:'short',year:'numeric'}
+);
+
+document.querySelectorAll('nav button').forEach(b=>{
+b.addEventListener('click',()=>{
+document.querySelectorAll('nav button').forEach(x=>
+x.classList.toggle('active',x===b)
+);
+document.querySelectorAll('.section').forEach(s=>
+s.classList.toggle('active',s.id===b.dataset.tab)
+);
+});
+});
+
+const sources=[
+['NI Direct — emergencies','https://www.nidirect.gov.uk/articles/emergencies'],
+['Northern Ireland Executive','https://www.northernireland.gov.uk/'],
+['Department for the Economy NI','https://www.economy-ni.gov.uk/'],
+['DAERA','https://www.daera-ni.gov.uk/'],
+['NI Water — service updates','https://www.niwater.com/'],
+['NIE Networks — power cuts','https://www.nienetworks.co.uk/'],
+['SONI','https://www.soni.ltd.uk/'],
+['PSNI','https://www.psni.police.uk/'],
+['Northern Ireland Fire & Rescue Service','https://www.nifrs.org/'],
+['Public Health Agency NI','https://www.publichealth.hscni.net/'],
+['Met Office warnings','https://www.metoffice.gov.uk/weather/warnings-and-advice/uk-warnings'],
+['DfI Rivers','https://www.infrastructure-ni.gov.uk/topics/rivers-and-flooding'],
+['UK Cabinet Office','https://www.gov.uk/government/organisations/cabinet-office'],
+['UK Government emergency alerts','https://www.gov.uk/alerts'],
+['UKHSA','https://www.gov.uk/government/organisations/uk-health-security-agency'],
+['National Cyber Security Centre','https://www.ncsc.gov.uk/'],
+['National Energy System Operator','https://www.neso.energy/'],
+['DESNZ','https://www.gov.uk/government/organisations/department-for-energy-security-and-net-zero'],
+['Food Standards Agency','https://www.food.gov.uk/'],
+['Defra','https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs'],
+['NHS Supply Chain','https://www.supplychain.nhs.uk/']
+];
+
+$('sourceList').innerHTML=sources.map(([n,u])=>
+`<div class="item">
+<a href="${u}" target="_blank" rel="noopener">${esc(n)}</a>
+<div class="source muted">${u}</div>
+</div>`
+).join('');
+
+function renderNotes(){
+
+$('notesList').innerHTML=data.notes.length
+?data.notes.slice().reverse().map((n,i)=>`
+<div class="item">
+<span class="pill ${esc(n.level)}">${esc(n.level.toUpperCase())}</span>
+<strong>${esc(n.title)}</strong>
+<small>${esc(n.area)} · ${esc(n.date)}</small>
+<p>${esc(n.body)}</p>
+${n.source?`<a href="${esc(n.source)}" target="_blank" rel="noopener">Open source</a>`:''}
+<div><button class="btn" data-del-note="${data.notes.length-1-i}">Delete</button></div>
+</div>`
+).join('')
+:'<p class="empty">No local intelligence notes saved yet.</p>';
+
+}
+
+$('addNote').onclick=()=>{
+const title=$('noteTitle').value.trim();
+
+if(!title)return alert('Add a headline first.');
+
+data.notes.push({
+title,
+area:$('noteArea').value.trim(),
+level:$('noteLevel').value,
+body:$('noteBody').value.trim(),
+source:$('noteSource').value.trim(),
+date:new Date().toLocaleString()
+});
+
+save();
+
+['noteTitle','noteArea','noteBody','noteSource']
+.forEach(id=>$(id).value='');
+
+renderNotes();
+};
+
+$('notesList').onclick=e=>{
+const b=e.target.closest('[data-del-note]');
+
+if(b){
+data.notes.splice(Number(b.dataset.delNote),1);
+save();
+renderNotes();
+}
+};
+
+$('exportNotes').onclick=()=>{
+const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+const a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download='doomwatch-backup.json';
+a.click();
+URL.revokeObjectURL(a.href);
+};
+
+function renderRumours(){
+
+$('rumourList').innerHTML=data.rumours.length
+?data.rumours.slice().reverse().map((r,i)=>`
+<div class="item">
+<span class="pill watch">${esc(r.status)}</span>
+<strong>${esc(r.claim)}</strong>
+<small>${esc(r.where)} · ${esc(r.date)}</small>
+<p>${esc(r.evidence)}</p>
+<button class="btn" data-del-rumour="${data.rumours.length-1-i}">Delete</button>
+</div>`
+).join('')
+:'<p class="empty">No claims assessed yet.</p>';
+
+}
+
+$('addRumour').onclick=()=>{
+const claim=$('rumourClaim').value.trim();
+
+if(!claim)return alert('Enter the claim.');
+
+data.rumours.push({
+claim,
+where:$('rumourWhere').value.trim(),
+status:$('rumourStatus').value,
+evidence:$('rumourEvidence').value.trim(),
+date:new Date().toLocaleString()
+});
+
+save();
+
+['rumourClaim','rumourWhere','rumourEvidence']
+.forEach(id=>$(id).value='');
+
+renderRumours();
+};
+
+$('rumourList').onclick=e=>{
+const b=e.target.closest('[data-del-rumour]');
+
+if(b){
+data.rumours.splice(Number(b.dataset.delRumour),1);
+save();
+renderRumours();
+}
+};
+
+const tasks=[
+'Drinking water for household needs',
+'Ordinary non-perishable food for three days',
+'Essential medication and basic first aid',
+'Torch and spare batteries',
+'Charged power bank and charging cable',
+'Battery radio or alternative information source',
+'Important phone numbers available offline',
+'Heating-oil / household fuel delivery arrangements checked',
+'Household meeting point and contact plan agreed',
+'Arrangements for children, pets and vulnerable neighbours'
+];
+
+$('checklist').innerHTML=tasks.map((x,i)=>`
+<label class="check ${data.checks[i]?'done':''}">
+<input type="checkbox" data-check="${i}" ${data.checks[i]?'checked':''}>
+<span>${esc(x)}</span>
+</label>
+`).join('');
+
+$('checklist').onchange=e=>{
+const c=e.target.closest('[data-check]');
+
+if(c){
+data.checks[c.dataset.check]=c.checked;
+save();
+c.parentElement.classList.toggle('done',c.checked);
+}
+};
+
+$('resetChecks').onclick=()=>{
+if(confirm('Reset all checklist ticks?')){
+data.checks={};
+save();
+location.reload();
+}
+};
+
+$('planNotes').value=data.plan||'';
+
+$('savePlan').onclick=()=>{
+data.plan=$('planNotes').value;
+save();
+alert('Plan saved on this device.');
+};
+
+renderNotes();
+renderRumours();
+
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+window.addEventListener('load',()=>{
+navigator.serviceWorker.register('./sw.js').catch(()=>{});
+});
+}
+
+})();
+</script>
+
+</body>
+</html>
