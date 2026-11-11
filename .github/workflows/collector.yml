@@ -1,7 +1,6 @@
-
 name: DoomWatch Intelligence Collector
 
-on:
+"on":
   workflow_dispatch:
 
   schedule:
