@@ -1,6 +1,6 @@
 
 {
-  "version": 2,
+  "version": 3,
   "project": "DOOMWATCH",
   "feeds": [
     {
@@ -9,7 +9,8 @@
       "url": "https://weather.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/ni",
       "domain": 9,
       "region": "NI",
-      "priority": "critical"
+      "priority": "critical",
+      "tier": 1
     },
     {
       "id": "metoffice-uk",
@@ -17,7 +18,8 @@
       "url": "https://weather.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/UK",
       "domain": 9,
       "region": "UK",
-      "priority": "critical"
+      "priority": "critical",
+      "tier": 1
     },
     {
       "id": "ncsc-all",
@@ -25,7 +27,8 @@
       "url": "https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml",
       "domain": 8,
       "region": "UK",
-      "priority": "high"
+      "priority": "high",
+      "tier": 1
     },
     {
       "id": "gdacs-global",
@@ -33,8 +36,98 @@
       "url": "https://www.gdacs.org/xml/rss.xml",
       "domain": 11,
       "region": "International",
-      "priority": "medium"
+      "priority": "medium",
+      "tier": 1
+    },
+    {
+      "id": "trafficwatch-incidents",
+      "name": "TrafficWatchNI road incidents",
+      "url": "https://rss.trafficwatchni.com/trafficwatchni_incidents_rss.xml",
+      "domain": 6,
+      "region": "NI",
+      "priority": "high",
+      "tier": 1
+    },
+    {
+      "id": "trafficwatch-roadworks",
+      "name": "TrafficWatchNI roadworks",
+      "url": "https://rss.trafficwatchni.com/trafficwatchni_roadworks_rss.xml",
+      "domain": 6,
+      "region": "NI",
+      "priority": "medium",
+      "tier": 1
+    },
+    {
+      "id": "trafficwatch-events",
+      "name": "TrafficWatchNI planned events",
+      "url": "https://rss.trafficwatchni.com/trafficwatchni_events_rss.xml",
+      "domain": 6,
+      "region": "NI",
+      "priority": "medium",
+      "tier": 1
+    },
+    {
+      "id": "trafficwatch-news",
+      "name": "TrafficWatchNI news",
+      "url": "https://rss.trafficwatchni.com/trafficwatchni_news_rss.xml",
+      "domain": 6,
+      "region": "NI",
+      "priority": "medium",
+      "tier": 1
+    },
+    {
+      "id": "gov-cabinet-office",
+      "name": "Cabinet Office",
+      "url": "https://www.gov.uk/government/organisations/cabinet-office.atom",
+      "domain": 1,
+      "region": "UK",
+      "priority": "high",
+      "tier": 1
+    },
+    {
+      "id": "gov-defra",
+      "name": "Department for Environment Food and Rural Affairs",
+      "url": "https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs.atom",
+      "domain": 2,
+      "region": "UK",
+      "priority": "high",
+      "tier": 1
+    },
+    {
+      "id": "gov-desnz",
+      "name": "Department for Energy Security and Net Zero",
+      "url": "https://www.gov.uk/government/organisations/department-for-energy-security-and-net-zero.atom",
+      "domain": 3,
+      "region": "UK",
+      "priority": "high",
+      "tier": 1
+    },
+    {
+      "id": "gov-transport",
+      "name": "Department for Transport",
+      "url": "https://www.gov.uk/government/organisations/department-for-transport.atom",
+      "domain": 6,
+      "region": "UK",
+      "priority": "high",
+      "tier": 1
+    },
+    {
+      "id": "gov-health",
+      "name": "Department of Health and Social Care",
+      "url": "https://www.gov.uk/government/organisations/department-of-health-and-social-care.atom",
+      "domain": 7,
+      "region": "UK",
+      "priority": "high",
+      "tier": 1
+    },
+    {
+      "id": "bbc-ni",
+      "name": "BBC News Northern Ireland",
+      "url": "https://feeds.bbci.co.uk/news/northern_ireland/rss.xml",
+      "domain": 1,
+      "region": "NI",
+      "priority": "medium",
+      "tier": 3
     }
   ]
 }
-
