@@ -1,1 +1,46 @@
 
+name: DoomWatch Intelligence Collector
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: "17 */3 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: doomwatch-collector
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    name: Collect intelligence
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Run DoomWatch collector
+        run: python collector.py
+
+      - name: Save updated intelligence
+        run: |
+          git config user.name "DoomWatch Collector"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/intelligence.json
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update DoomWatch intelligence"
+            git push
+          fi
