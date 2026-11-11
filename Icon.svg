@@ -1,1 +1,46 @@
 
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#173c32"/>
+      <stop offset="1" stop-color="#07110f"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b5f5d0"/>
+      <stop offset="1" stop-color="#48b987"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="100" fill="url(#bg)"/>
+  <circle cx="256" cy="230" r="155"
+          fill="none" stroke="#397b62" stroke-width="5"/>
+  <circle cx="256" cy="230" r="125"
+          fill="none" stroke="#397b62" stroke-width="2"
+          stroke-dasharray="8 12"/>
+
+  <path d="M256 90 L365 145 L365 265
+           Q365 345 256 390
+           Q147 345 147 265 L147 145 Z"
+        fill="#10251f" stroke="url(#glow)" stroke-width="12"/>
+
+  <path d="M256 145 L256 310"
+        stroke="#b5f5d0" stroke-width="12"
+        stroke-linecap="round"/>
+  <path d="M190 225 L256 155 L322 225"
+        fill="none" stroke="#b5f5d0"
+        stroke-width="15" stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+  <circle cx="256" cy="230" r="18" fill="#b5f5d0"/>
+  <path d="M190 335 L322 335"
+        stroke="#48b987" stroke-width="8"
+        stroke-linecap="round"/>
+
+  <text x="256" y="450"
+        font-family="Arial, sans-serif"
+        font-size="43" font-weight="bold"
+        text-anchor="middle" letter-spacing="5"
+        fill="#d9f7e7">DOOMWATCH</text>
+</svg>
+
