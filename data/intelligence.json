@@ -1,1 +1,149 @@
 
+{
+  "generatedAt": "INITIAL DATASET - NOT A LIVE REPORT",
+  "overallStatus": "GREY",
+  "niStatus": "GREY",
+  "ukStatus": "GREY",
+  "report": {
+    "date": "Initial dashboard setup",
+    "status": "GREY",
+    "method": "Initial placeholder - awaiting automated collection",
+    "executiveSummary": "DoomWatch intelligence collection is not yet connected. No current national or regional risk assessment can be made from this dataset.",
+    "riskPicture": "All monitoring domains are awaiting verified source information. Grey indicates insufficient evidence, not an assurance that conditions are normal.",
+    "niAssessment": "Northern Ireland assessment pending verified official updates and source collection.",
+    "ukAssessment": "UK-wide assessment pending verified official updates and source collection."
+  },
+  "sections": [
+    {
+      "id": 1,
+      "status": "GREY",
+      "assessment": "Awaiting verified national resilience and civil contingencies updates.",
+      "niImpact": "Northern Ireland assessment pending.",
+      "ukContext": "UK-wide assessment pending.",
+      "confidence": "Insufficient evidence",
+      "updatedAt": "Awaiting collector"
+    },
+    {
+      "id": 2,
+      "status": "GREY",
+      "assessment": "Awaiting food availability, supply chain and agricultural updates.",
+      "niImpact": "Local supply and distribution assessment pending.",
+      "ukContext": "National food supply assessment pending.",
+      "confidence": "Insufficient evidence",
+      "updatedAt": "Awaiting collector"
+    },
+    {
+      "id": 3,
+      "status": "GREY",
+      "assessment": "Awaiting verified fuel availability and energy supply updates.",
+      "niImpact": "Petrol, diesel, heating oil and gas assessment pending.",
+      "ukContext": "National fuel and energy assessment pending.",
+      "confidence": "Insufficient evidence",
+      "updatedAt": "Awaiting collector"
+    },
+    {
+      "id": 4,
+      "status": "GREY",
+      "assessment": "Awaiting chemical, medicine and industrial input supply updates.",
+      "niImpact": "Regional availability and distribution assessment pending.",
+      "ukContext": "National supply chain assessment pending.",
+      "confidence": "Insufficient evidence",
+      "updatedAt": "Awaiting collector"
+    },
+    {
+      "id": 5,
+      "status": "GREY",
+      "assessment": "Awaiting electricity, gas, drinking water and wastewater updates.",
+      "niImpact": "Northern Ireland network and utility assessment pending.",
+      "ukContext": "UK infrastructure assessment pending.",
+      "confidence": "Insufficient evidence",
+      "updatedAt": "Awaiting collector"
+    },
+    {
+      "id": 6,
+      "status": "GREY",
+      "assessment": "Awaiting transport, ports, roads, rail and aviation updates.",
+      "niImpact": "Northern Ireland transport and port disruption assessment pending.",
+      "ukContext": "National logistics assessment pending.",
+      "confidence": "Insufficient evidence",
+      "updatedAt": "Awaiting collector"
+    },
+    {
+      "id": 7,
+      "status": "GREY",
+      "assessment": "Awaiting healthcare, medicines and public health updates.",
+      "niImpact": "Northern Ireland health service assessment pending.",
+      "ukContext": "UK public health assessment pending.",
+      "confidence": "Insufficient evidence",
+      "updatedAt": "Awaiting collector"
+    },
+    {
+      "id": 8,
+      "status": "GREY",
+      "assessment": "Awaiting telecommunications, cyber and critical infrastructure updates.",
+      "niImpact": "Regional infrastructure assessment pending.",
+      "ukContext": "National infrastructure assessment pending.",
+      "confidence": "Insufficient evidence",
+      "updatedAt": "Awaiting collector"
+    },
+    {
+      "id": 9,
+      "status": "GREY",
+      "assessment": "Awaiting Met Office, flood and natural hazard information.",
+      "niImpact": "Local weather and flooding assessment pending.",
+      "ukContext": "National hazard assessment pending.",
+      "confidence": "Insufficient evidence",
+      "updatedAt": "Awaiting collector"
+    },
+    {
+      "id": 10,
+      "status": "GREY",
+      "assessment": "Awaiting official civil defence, public warning and community preparedness updates.",
+      "niImpact": "Council and Northern Ireland emergency planning assessment pending.",
+      "ukContext": "National preparedness assessment pending.",
+      "confidence": "Insufficient evidence",
+      "updatedAt": "Awaiting collector"
+    },
+    {
+      "id": 11,
+      "status": "GREY",
+      "assessment": "Awaiting verified international developments with a credible UK or Northern Ireland disruption pathway.",
+      "niImpact": "Potential regional consequences pending assessment.",
+      "ukContext": "Potential national consequences pending assessment.",
+      "confidence": "Insufficient evidence",
+      "updatedAt": "Awaiting collector"
+    }
+  ],
+  "articles": [],
+  "rumours": [
+    {
+      "text": "No claims have yet been assessed. Unverified social media reports must not be treated as confirmed intelligence."
+    }
+  ],
+  "watchlist": [
+    {
+      "text": "Connect official UK and Northern Ireland source feeds."
+    },
+    {
+      "text": "Establish automated collection and publication."
+    },
+    {
+      "text": "Verify source timestamps, article links and regional relevance."
+    }
+  ],
+  "actions": [
+    {
+      "text": "Maintain normal household supplies and rotate food, water and essential items."
+    },
+    {
+      "text": "Keep emergency contact information and important documents accessible."
+    },
+    {
+      "text": "Monitor official government, emergency service and weather warnings."
+    },
+    {
+      "text": "Avoid panic buying and act on verified information."
+    }
+  ]
+}
+
