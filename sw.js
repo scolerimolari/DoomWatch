@@ -1,74 +1,90 @@
 
-const CACHE_NAME = "doomwatch-v1";
+const CACHE_NAME = "doomwatch-v2";
+
 const APP_FILES = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+  "./icon.svg"
 ];
 
-// Install and cache the core dashboard files
-self.addEventListener("install", (event) => {
+self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(APP_FILES);
-    })
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(APP_FILES))
   );
-
   self.skipWaiting();
 });
 
-// Remove old caches when the version changes
-self.addEventListener("activate", (event) => {
+self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => name.startsWith("doomwatch-") && name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
-      );
-    })
+    caches.keys().then(names =>
+      Promise.all(
+        names
+          .filter(name =>
+            name.startsWith("doomwatch-") &&
+            name !== CACHE_NAME
+          )
+          .map(name => caches.delete(name))
+      )
+    )
   );
-
   self.clients.claim();
 });
 
-// Serve cached files first, then try the network
-self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
+self.addEventListener("fetch", event => {
+  const request = event.request;
 
-  const requestUrl = new URL(event.request.url);
+  if (request.method !== "GET") return;
 
-  if (requestUrl.origin !== self.location.origin) return;
+  const url = new URL(request.url);
 
+  if (url.origin !== self.location.origin) return;
+
+  // Always try the network first for page navigation.
+  if (request.mode === "navigate") {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME)
+            .then(cache => cache.put(request, copy));
+          return response;
+        })
+        .catch(async () => {
+          return await caches.match(request) ||
+                 await caches.match("./index.html");
+        })
+    );
+    return;
+  }
+
+  // Network first for HTML files too.
+  if (url.pathname.endsWith(".html")) {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME)
+            .then(cache => cache.put(request, copy));
+          return response;
+        })
+        .catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // Cached resources first; otherwise use the network.
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) return cachedResponse;
-
-      return fetch(event.request).then((networkResponse) => {
-        if (
-          networkResponse &&
-          networkResponse.status === 200 &&
-          networkResponse.type === "basic"
-        ) {
-          const responseCopy = networkResponse.clone();
-
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseCopy);
-          });
+    caches.match(request).then(cached => {
+      return cached || fetch(request).then(response => {
+        if (response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME)
+            .then(cache => cache.put(request, copy));
         }
-
-        return networkResponse;
-      }).catch(() => {
-        if (event.request.mode === "navigate") {
-          return caches.match("./index.html");
-        }
-
-        return new Response("Offline — this resource is not cached.", {
-          status: 503,
-          headers: { "Content-Type": "text/plain" }
-        });
+        return response;
       });
     })
   );
 });
-
