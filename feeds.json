@@ -1,1 +1,40 @@
 
+{
+  "version": 2,
+  "project": "DOOMWATCH",
+  "feeds": [
+    {
+      "id": "metoffice-ni",
+      "name": "Met Office Northern Ireland warnings",
+      "url": "https://weather.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/ni",
+      "domain": 9,
+      "region": "NI",
+      "priority": "critical"
+    },
+    {
+      "id": "metoffice-uk",
+      "name": "Met Office UK warnings",
+      "url": "https://weather.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/UK",
+      "domain": 9,
+      "region": "UK",
+      "priority": "critical"
+    },
+    {
+      "id": "ncsc-all",
+      "name": "National Cyber Security Centre",
+      "url": "https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml",
+      "domain": 8,
+      "region": "UK",
+      "priority": "high"
+    },
+    {
+      "id": "gdacs-global",
+      "name": "Global Disaster Alert and Coordination System",
+      "url": "https://www.gdacs.org/xml/rss.xml",
+      "domain": 11,
+      "region": "International",
+      "priority": "medium"
+    }
+  ]
+}
+
