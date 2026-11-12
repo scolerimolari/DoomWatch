@@ -4,1108 +4,341 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#10120f">
-<meta name="description" content="DoomWatch markets, commodities and household essentials monitor">
 <title>DOOMWATCH // MARKETS & ESSENTIALS</title>
 <style>
-:root{
- --black:#10120f;--panel:#1b1f19;--panel2:#24291f;
- --olive:#626b38;--tan:#b69a69;--yellow:#f0c83e;
- --red:#c94a38;--green:#7dff86;--orange:#ff9b37;
- --muted:#999e8e;--line:#414738;
-}
+:root{--bg:#10120f;--panel:#1b1f19;--olive:#626b38;--tan:#b69a69;--yellow:#f0c83e;--red:#c94a38;--green:#7dff86;--orange:#ff9b37;--muted:#999e8e;--line:#414738}
 *{box-sizing:border-box}
-body{margin:0;background:var(--black);color:#e8e8d9;font:14px Consolas,Monaco,monospace}
-header{padding:17px;background:linear-gradient(120deg,#292c20,#11140f);border-bottom:3px solid var(--yellow)}
-.brand{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.logo{color:var(--yellow);font-size:clamp(25px,5vw,38px);font-weight:900;letter-spacing:3px}
+body{margin:0;background:var(--bg);color:#e8e8d9;font:14px Consolas,monospace}
+header{padding:16px;background:linear-gradient(120deg,#292c20,#11140f);border-bottom:3px solid var(--yellow)}
+.logo{color:var(--yellow);font-size:30px;font-weight:bold;letter-spacing:3px}
 .subtitle{color:var(--tan);font-size:11px;letter-spacing:2px;margin-top:5px}
-.classification{border:1px solid var(--red);color:var(--red);padding:7px 10px;letter-spacing:2px;font-weight:bold}
-.topline{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:15px;color:var(--green);font-size:11px}
-nav{display:flex;gap:7px;padding:10px;background:#191c16;border-bottom:1px solid var(--line);flex-wrap:wrap}
-nav a,.button{display:inline-block;padding:11px 13px;border:1px solid var(--line);background:#282d23;color:var(--tan);text-decoration:none;font:inherit}
-nav a.active,.button{background:var(--olive);color:white;border-color:var(--tan)}
-nav a:first-child{border-color:var(--yellow);color:var(--yellow)}
-main{max-width:1500px;margin:auto;padding:14px}
-h2{color:var(--yellow);font-size:17px;letter-spacing:2px;border-bottom:1px solid var(--olive);padding-bottom:10px;margin-top:27px}
-h3{color:var(--tan);font-size:13px;letter-spacing:1px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.panel{background:var(--panel);border:1px solid var(--line);padding:13px;min-width:0}
-.panel-title{color:var(--yellow);font-size:11px;letter-spacing:2px;margin-bottom:10px}
-.big{font-size:23px;font-weight:bold;color:var(--green);margin:8px 0;overflow-wrap:anywhere}
-.muted{color:var(--muted)}
-.green{color:var(--green)}.yellow{color:var(--yellow)}.red{color:var(--red)}
-.tan{color:var(--tan)}.orange{color:var(--orange)}
-.terminal{background:#080d09;border:1px solid #3b563b;color:var(--green);padding:13px;line-height:1.7;overflow-wrap:anywhere}
-.nixie{background:#080b08;border:1px solid #63451e;padding:14px;text-align:center;box-shadow:inset 0 0 20px #241607;min-width:0}
-.nixie .digits{color:var(--orange);text-shadow:0 0 5px #ff7a1a,0 0 14px #d64b16;font-size:clamp(25px,6vw,38px);letter-spacing:3px;font-weight:bold}
-.nixie small{display:block;color:var(--tan);margin-top:7px;letter-spacing:2px}
-.chart-wrap{height:230px;position:relative;margin-top:8px}
-.chart-wrap svg{width:100%;height:100%;overflow:visible}
-.chart-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-top:5px}
-.chart-key{display:flex;gap:15px;flex-wrap:wrap;color:var(--muted);font-size:10px;margin-top:8px}
+.topline{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;color:var(--green);font-size:11px}
+nav{display:flex;gap:7px;padding:10px;background:#191c16;flex-wrap:wrap}
+nav a{padding:9px 12px;border:1px solid var(--line);background:#282d23;color:var(--tan);text-decoration:none}
+main{max-width:1450px;margin:auto;padding:12px}
+.terminal{background:#080d09;border:1px solid #3b563b;color:var(--green);padding:12px;line-height:1.7;margin-bottom:12px}
+.tabs{position:sticky;top:0;z-index:20;display:flex;gap:6px;overflow-x:auto;padding:9px;background:#171b14;border-block:1px solid var(--olive);margin:0 -12px 12px}
+.tabs button{flex:0 0 auto;padding:11px 13px;border:1px solid var(--line);background:#24291f;color:var(--tan);font:inherit;font-size:11px}
+.tabs button.active{background:var(--olive);border-color:var(--yellow);color:white}
+.view{display:none}.view.active{display:block}
+.quickgrid,.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px}
+.quick{min-height:82px;text-align:left;padding:13px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--olive);color:#e8e8d9;font:inherit}
+.quick strong{display:block;color:var(--yellow);font-size:11px;margin-bottom:7px}
+.quick span{color:var(--muted);font-size:10px;line-height:1.4}
+h2{color:var(--yellow);font-size:16px;letter-spacing:1.5px;border-bottom:1px solid var(--olive);padding-bottom:9px;margin:18px 0 12px}
+h3{color:var(--tan);font-size:12px;letter-spacing:1px;margin:18px 0 9px}
+.panel{background:var(--panel);border:1px solid var(--line);padding:12px;min-width:0;margin:9px 0}
+.panel-title{color:var(--yellow);font-size:11px;letter-spacing:1.5px;margin-bottom:9px}
+.big{font-size:23px;font-weight:bold;color:var(--green);margin:7px 0;overflow-wrap:anywhere}
+.muted{color:var(--muted)}.green{color:var(--green)}.yellow{color:var(--yellow)}.red{color:var(--red)}.orange{color:var(--orange)}
+.nixie{background:#080b08;border:1px solid #63451e;padding:13px;text-align:center;box-shadow:inset 0 0 20px #241607}
+.digits{color:var(--orange);text-shadow:0 0 5px #ff7a1a,0 0 14px #d64b16;font-size:clamp(24px,6vw,36px);letter-spacing:2px;font-weight:bold}
+.nixie small{display:block;color:var(--tan);margin-top:7px;letter-spacing:1px}
+.chart-wrap{height:225px;position:relative;margin-top:8px;overflow:hidden}
+.chart-wrap svg{width:100%;height:100%}
+.chart-labels,.statrow,.selectors{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:10px;margin-top:8px}
+.chart-note,.note{font-size:10px;color:var(--muted);line-height:1.55;margin-top:9px}
+.warning{border-left:4px solid var(--yellow);background:#262317;padding:11px;line-height:1.5;margin:10px 0}
+select,input{background:#11150f;color:var(--green);border:1px solid var(--olive);padding:10px;font:inherit;max-width:100%}
+input.search{width:100%;margin:8px 0 10px}
 table{width:100%;border-collapse:collapse;font-size:12px}
-th,td{text-align:left;padding:9px 7px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:var(--yellow);font-weight:bold}
-a{color:var(--green)}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--yellow)}
+.tablewrap{overflow-x:auto}
+details.expand{margin:9px 0;border:1px solid var(--line);background:#171b14}
+details.expand summary{padding:12px;color:var(--yellow);cursor:pointer;font-size:11px;letter-spacing:1px;list-style:none}
+details.expand summary:after{content:"+";float:right;color:var(--orange);font-size:16px}
+details.expand[open] summary:after{content:"−"}
+details.expand>.panel{margin:0;border:0;border-top:1px solid var(--line)}
 .source{padding:10px 0;border-bottom:1px solid var(--line);line-height:1.5}
-.warning{border-left:4px solid var(--yellow);background:#262317;padding:11px;line-height:1.5}
-.error{border-left-color:var(--red);background:#291b18}
-.tag{display:inline-block;border:1px solid var(--olive);padding:3px 6px;margin:2px;color:var(--tan);font-size:10px}
-select{background:#11150f;color:var(--green);border:1px solid var(--olive);padding:9px;font:inherit;max-width:100%}
+.source a,a{color:var(--green)}
 footer{border-top:1px solid var(--olive);padding:20px;text-align:center;color:var(--muted);font-size:10px;letter-spacing:2px;margin-top:25px}
-.oil-stat{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
-.oil-stat strong{color:var(--orange)}
-.selector-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.selector-row label{color:var(--tan);font-size:11px}
-.chart-panel{margin-top:12px}
-.chart-note{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5}
-.food-stat{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
-.food-stat strong{color:var(--green)}
-.food-source{font-size:10px;color:var(--muted);line-height:1.6;margin-top:9px}
-.food-chart{border-left:3px solid var(--olive)}
-@media(max-width:600px){
- main{padding:9px}header{padding:13px}
- table{font-size:10px}th,td{padding:7px 5px}
- .chart-wrap{height:200px}
-}
+@media(max-width:600px){main{padding:9px}header{padding:13px}table{font-size:10px}th,td{padding:7px 5px}.chart-wrap{height:195px}.tabs{margin-inline:-9px}}
 </style>
 </head>
 <body>
-
 <header>
- <div class="brand">
-  <div>
-   <div class="logo">DOOMWATCH</div>
-   <div class="subtitle">OPERATION CONTAINMENT // MARKETS & ESSENTIALS</div>
-  </div>
-  <div class="classification">SUPPLY WATCH // ACTIVE</div>
- </div>
- <div class="topline">
-  <span>PRIORITY: NORTHERN IRELAND → UK → GLOBAL</span>
-  <span id="clock">SYSTEM TIME</span>
-  <span id="feed-status">MARKET DATA: AWAITING FEED</span>
- </div>
+<div class="logo">DOOMWATCH</div>
+<div class="subtitle">OPERATION CONTAINMENT // MARKETS & ESSENTIALS</div>
+<div class="topline">
+<span>PRIORITY: NORTHERN IRELAND → UK → GLOBAL</span>
+<span id="clock">SYSTEM TIME</span>
+<span id="feed-status">MARKET DATA: CONNECTING</span>
+</div>
 </header>
-
-<nav>
- <a href="./index.html">← COMMAND OVERVIEW</a>
- <a class="active" href="./markets.html">MARKETS & ESSENTIALS</a>
-</nav>
-
+<nav><a href="./index.html">← COMMAND OVERVIEW</a><a href="./markets.html">MARKETS & ESSENTIALS</a></nav>
 <main>
-<div class="terminal">
- DOOMWATCH MARKET INTELLIGENCE SYSTEM<br>
- FINANCIAL MARKETS // COMMODITIES // HOUSEHOLD COSTS<br>
- NORTHERN IRELAND HOME ENERGY // ROAD FUEL // FOOD SECURITY<br>
- DATA POLICY: OBSERVED VALUES ONLY — NO FABRICATED PRICES
+<div class="terminal">DOOMWATCH MARKET INTELLIGENCE SYSTEM<br>FINANCIAL MARKETS // COMMODITIES // HOUSEHOLD COSTS<br>NORTHERN IRELAND HOME ENERGY // ROAD FUEL // FOOD SECURITY<br>DATA POLICY: OBSERVED VALUES ONLY — NO FABRICATED PRICES</div>
+
+<div class="tabs" id="tabs">
+<button class="active" data-view="overview">OVERVIEW</button>
+<button data-view="markets">MARKETS</button>
+<button data-view="commodities">COMMODITIES</button>
+<button data-view="currency">CURRENCY</button>
+<button data-view="essentials">ESSENTIALS</button>
+<button data-view="energy">ENERGY</button>
+<button data-view="news">NEWS & RISK</button>
+<button data-view="sources">SOURCES</button>
 </div>
 
+<section class="view active" id="view-overview">
+<h2>QUICK ACCESS // OPERATIONAL AREAS</h2>
+<div class="quickgrid" id="quickgrid"></div>
+<h2>LIVE MONITOR STATUS</h2>
+<div class="panel">
+<div class="panel-title">DATA COLLECTION</div>
+<div id="overview-status" class="muted">Waiting for markets.json</div>
+<div class="note">Select an operational area above. Detailed charts and tables are grouped into shorter sections.</div>
+</div>
+</section>
+
+<section class="view" id="view-markets">
 <h2>01 // GLOBAL FINANCIAL MARKETS</h2>
-<div class="grid" id="index-cards"><div class="panel muted">Awaiting index data...</div></div>
-<div class="panel chart-panel">
- <div class="panel-title">MARKET HISTORY // SELECT INDEX</div>
- <select id="index-select">
-  <option value="^GSPC">S&P 500</option>
-  <option value="^IXIC">NASDAQ</option>
-  <option value="^FTSE">FTSE 100</option>
- </select>
- <div class="chart-wrap" id="index-chart"><div class="muted">Awaiting market history.</div></div>
- <div class="chart-labels"><span id="index-first">—</span><span id="index-last">—</span></div>
-</div>
-
-<h2>02 // COMMODITIES & PRECIOUS METALS</h2>
-<div class="grid" id="commodity-cards"><div class="panel muted">Awaiting commodity data...</div></div>
-<div class="panel chart-panel">
- <div class="panel-title">COMMODITY PRICE HISTORY</div>
- <select id="commodity-select">
-  <option value="GC=F">Gold</option>
-  <option value="SI=F">Silver</option>
-  <option value="BZ=F">Brent Crude</option>
- </select>
- <div class="chart-wrap" id="commodity-chart"><div class="muted">Awaiting commodity history.</div></div>
- <div class="chart-labels"><span id="commodity-first">—</span><span id="commodity-last">—</span></div>
- <div class="chart-note">Indicative quoted commodity prices. Contract and currency conventions depend on the source.</div>
-</div>
-
-<h2>03 // DIGITAL ASSETS</h2>
-<div class="grid" id="crypto-cards"><div class="panel muted">Awaiting digital asset data...</div></div>
-<div class="panel chart-panel">
- <div class="panel-title">DIGITAL ASSET HISTORY</div>
- <select id="crypto-select"><option value="BTC-USD">Bitcoin</option></select>
- <div class="chart-wrap" id="crypto-chart"><div class="muted">Awaiting Bitcoin history.</div></div>
- <div class="chart-labels"><span id="crypto-first">—</span><span id="crypto-last">—</span></div>
-</div>
-
-<h2>04 // CURRENCY MONITOR</h2>
-<div class="grid" id="fx-cards"><div class="panel muted">Awaiting exchange-rate data...</div></div>
-<div class="panel chart-panel">
- <div class="panel-title">EXCHANGE RATE HISTORY</div>
- <select id="fx-select">
-  <option value="GBPUSD">GBP / USD</option>
-  <option value="GBPEUR">GBP / EUR</option>
-  <option value="EURUSD">EUR / USD</option>
- </select>
- <div class="chart-wrap" id="fx-chart"><div class="muted">Awaiting currency history.</div></div>
- <div class="chart-labels"><span id="fx-first">—</span><span id="fx-last">—</span></div>
-</div>
-
+<div class="grid" id="index-cards"></div>
+<details class="expand" open><summary>MARKET HISTORY // SELECT INDEX</summary>
+<div class="panel">
+<select id="index-select"><option value="sp500">S&P 500</option><option value="nasdaq">NASDAQ</option><option value="ftse100">FTSE 100</option></select>
+<div class="chart-wrap" id="index-chart"></div>
+<div class="chart-labels"><span id="index-first">—</span><span id="index-last">—</span></div>
+</div></details>
 <h2>05 // TOP 10 STOCKS WATCH</h2>
-<div class="panel" style="overflow-x:auto">
- <div class="panel-title">SELECTED GLOBAL COMPANIES // MARKET QUOTES</div>
- <table>
-  <thead><tr><th>COMPANY</th><th>SYMBOL</th><th>PRICE</th><th>CHANGE</th><th>UPDATED</th></tr></thead>
-  <tbody id="stock-rows"><tr><td colspan="5" class="muted">Awaiting stock data...</td></tr></tbody>
- </table>
+<div class="panel">
+<div class="panel-title">SELECTED GLOBAL COMPANIES</div>
+<input class="search" id="stock-search" placeholder="Search company or ticker">
+<div class="tablewrap"><table><thead><tr><th>COMPANY</th><th>SYMBOL</th><th>PRICE</th><th>CHANGE</th><th>UPDATED</th></tr></thead><tbody id="stock-rows"></tbody></table></div>
 </div>
-<div class="panel chart-panel">
- <div class="panel-title">INDIVIDUAL STOCK PRICE HISTORY</div>
- <select id="stock-select"><option value="">Awaiting stock data</option></select>
- <div class="chart-wrap" id="stock-chart"><div class="muted">Awaiting stock history.</div></div>
- <div class="chart-labels"><span id="stock-first">—</span><span id="stock-last">—</span></div>
-</div>
+<details class="expand"><summary>INDIVIDUAL STOCK PRICE HISTORY</summary>
+<div class="panel"><select id="stock-select"></select><div class="chart-wrap" id="stock-chart"></div></div>
+</details>
+</section>
 
+<section class="view" id="view-commodities">
+<h2>02 // COMMODITIES & PRECIOUS METALS</h2>
+<div class="grid" id="commodity-cards"></div>
+<details class="expand" open><summary>COMMODITY PRICE HISTORY</summary>
+<div class="panel">
+<select id="commodity-select"><option value="gold">Gold</option><option value="silver">Silver</option><option value="brent">Brent Crude</option></select>
+<div class="chart-wrap" id="commodity-chart"></div>
+<div class="chart-labels"><span id="commodity-first">—</span><span id="commodity-last">—</span></div>
+<div class="note">Indicative quoted commodity prices. Contract and currency conventions depend on the source.</div>
+</div></details>
+<h2>09 // AGRICULTURAL & FOOD COMMODITIES</h2>
+<div class="grid" id="agri-cards"></div>
+</section>
+
+<section class="view" id="view-currency">
+<h2>03 // DIGITAL ASSETS</h2>
+<div class="grid" id="crypto-cards"></div>
+<details class="expand"><summary>BITCOIN PRICE HISTORY</summary>
+<div class="panel"><div class="chart-wrap" id="crypto-chart"></div></div></details>
+<h2>04 // CURRENCY MONITOR</h2>
+<div class="grid" id="fx-cards"></div>
+<details class="expand" open><summary>EXCHANGE RATE HISTORY</summary>
+<div class="panel">
+<select id="fx-select"><option value="GBPUSD">GBP / USD</option><option value="GBPEUR">GBP / EUR</option><option value="EURUSD">EUR / USD</option></select>
+<div class="chart-wrap" id="fx-chart"></div>
+<div class="chart-labels"><span id="fx-first">—</span><span id="fx-last">—</span></div>
+</div></details>
+</section>
+
+<section class="view" id="view-essentials">
 <h2>06 // HOUSEHOLD ESSENTIALS PRICE INTELLIGENCE</h2>
-<div class="warning">
- Individual grocery prices and historical basket trends require dated, comparable observations. No prices are estimated or invented. Retailer prices are not postcode-specific unless the source explicitly says so.
-</div>
-
+<div class="warning">Individual grocery prices and historical basket trends require dated, comparable observations. No prices are estimated or invented.</div>
 <h3>UK FOOD INFLATION // OFFICIAL CPIH DATA</h3>
 <div class="grid">
- <div class="panel">
-  <div class="panel-title">LATEST FOOD INFLATION</div>
-  <div class="big" id="food-inflation-value">—</div>
-  <div class="muted" id="food-inflation-date">Awaiting official observation</div>
-  <div class="food-source">UK food and non-alcoholic beverages // Year-on-year</div>
- </div>
- <div class="panel">
-  <div class="panel-title">OVERALL UK INFLATION</div>
-  <div class="big" id="overall-inflation-value">—</div>
-  <div class="muted" id="overall-inflation-date">Awaiting official observation</div>
-  <div class="food-source">CPIH overall inflation // Year-on-year</div>
- </div>
- <div class="panel">
-  <div class="panel-title">MONTHLY OBSERVATIONS</div>
-  <div class="big" id="food-observation-count">0</div>
-  <div class="muted">Official food inflation records</div>
- </div>
+<div class="panel"><div class="panel-title">LATEST FOOD INFLATION</div><div class="big" id="food-inflation-value">—</div><div id="food-inflation-date" class="muted">Awaiting observation</div><div class="note">UK-wide food and non-alcoholic beverages // % year-on-year</div></div>
+<div class="panel"><div class="panel-title">OVERALL UK INFLATION</div><div class="big" id="overall-inflation-value">—</div><div id="overall-inflation-date" class="muted">Awaiting observation</div><div class="note">CPIH overall // % year-on-year</div></div>
+<div class="panel"><div class="panel-title">MONTHLY OBSERVATIONS</div><div class="big" id="food-observation-count">0</div></div>
 </div>
-
-<div class="panel chart-panel food-chart">
- <div class="panel-title">FOOD INFLATION // MONTHLY HISTORY</div>
- <div class="chart-wrap" id="food-inflation-chart">
-  <div class="muted">Waiting for official food inflation history.</div>
- </div>
- <div class="chart-labels">
-  <span id="food-inflation-first">—</span>
-  <span id="food-inflation-last">—</span>
- </div>
- <div class="chart-key">
-  <span class="orange">● Food inflation</span>
-  <span>Percentage change against the same month a year earlier</span>
- </div>
+<details class="expand" open><summary>FOOD INFLATION // MONTHLY HISTORY</summary>
+<div class="panel"><div class="chart-wrap" id="food-inflation-chart"></div><div class="chart-labels"><span id="food-inflation-first">—</span><span id="food-inflation-last">—</span></div></div>
+</details>
+<details class="expand"><summary>FOOD VS OVERALL INFLATION</summary>
+<div class="panel"><div class="chart-wrap" id="food-comparison-chart"></div><div class="note">UK-wide CPIH comparison, not a Northern Ireland supermarket basket. Falling inflation means prices are rising more slowly; it does not necessarily mean prices are falling.</div></div>
+</details>
+<div class="panel"><div class="panel-title">OFFICIAL FOOD INFLATION SOURCE</div><div class="note" id="food-source-status">Awaiting collector data.</div><a href="https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket" target="_blank" rel="noopener">OPEN DEFRA FOOD STATISTICS ↗</a></div>
+<h3>HOUSEHOLD BASKET // PRICE HISTORY</h3>
+<div class="grid">
+<div class="panel"><div class="panel-title">LATEST BASKET TOTAL</div><div class="big" id="basket-total">—</div></div>
+<div class="panel"><div class="panel-title">PRICE OBSERVATIONS</div><div class="big" id="price-count">0</div></div>
+<div class="panel"><div class="panel-title">ITEMS TRACKED</div><div class="big" id="item-count">0</div></div>
+<div class="panel"><div class="panel-title">RETAILER COVERAGE</div><div class="big" id="retailer-count">0</div></div>
 </div>
-
-<div class="panel chart-panel food-chart">
- <div class="panel-title">FOOD VS OVERALL INFLATION // COMPARISON</div>
- <div class="chart-wrap" id="food-comparison-chart">
-  <div class="muted">Waiting for comparison history.</div>
- </div>
- <div class="chart-labels">
-  <span id="food-comparison-first">—</span>
-  <span id="food-comparison-last">—</span>
- </div>
- <div class="chart-key">
-  <span class="orange">● Food inflation</span>
-  <span class="green">● Overall inflation</span>
- </div>
- <div class="chart-note">
-  Shows whether food inflation is running above or below overall UK inflation.
-  A falling inflation rate does not necessarily mean prices are falling.
- </div>
-</div>
-
-<div class="panel chart-panel">
- <div class="panel-title">OFFICIAL FOOD INFLATION DATA SOURCE</div>
- <p class="muted">
-  Monthly UK-wide CPIH inflation statistics. The published figures are already
-  year-on-year percentages. They are not a food-price index and are not a
-  direct measurement of a Northern Ireland supermarket basket.
- </p>
- <a href="https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket" target="_blank" rel="noopener">OPEN DEFRA FOOD STATISTICS ↗</a>
- <br><br>
- <a href="https://www.ons.gov.uk/economy/inflationandpriceindices" target="_blank" rel="noopener">OPEN ONS INFLATION STATISTICS ↗</a>
- <div class="muted" id="food-source-status" style="font-size:10px;margin-top:10px">
-  Source status: awaiting collector data.
- </div>
-</div>
-
-<h3>FIXED HOUSEHOLD BASKET // HISTORICAL COST</h3>
-<div class="panel">
- <div class="panel-title">BASKET TOTAL // £</div>
- <div class="chart-wrap" id="basket-chart"><div class="muted">Waiting for dated basket history.</div></div>
- <div class="chart-labels"><span id="basket-first-date">—</span><span id="basket-last-date">—</span></div>
- <div class="chart-key"><span class="green">● Fixed basket total</span><span>Complete comparable baskets only</span></div>
-</div>
-
-<div class="grid" style="margin-top:12px">
- <div class="panel"><div class="panel-title">LATEST BASKET TOTAL</div><div class="big" id="basket-total">—</div><div class="muted" id="basket-date">Awaiting complete basket</div></div>
- <div class="panel"><div class="panel-title">PRICE OBSERVATIONS</div><div class="big" id="price-count">0</div><div class="muted">Dated item records</div></div>
- <div class="panel"><div class="panel-title">ITEMS TRACKED</div><div class="big" id="item-count">0</div><div class="muted">With usable price history</div></div>
- <div class="panel"><div class="panel-title">RETAILER COVERAGE</div><div class="big" id="retailer-count">0</div><div class="muted">Retailers represented</div></div>
-</div>
-
+<details class="expand" open><summary>HOUSEHOLD BASKET PRICE TREND</summary>
+<div class="panel"><div class="chart-wrap" id="basket-chart"></div></div>
+</details>
 <h3>INDIVIDUAL GROCERY PRICE TRENDS</h3>
-<div class="panel">
- <div class="panel-title">SELECT ESSENTIAL // HISTORICAL PRICE</div>
- <select id="item-select"><option value="">No item history loaded</option></select>
- <span class="muted" id="item-summary">Awaiting observations</span>
- <div class="chart-wrap" id="item-chart"><div class="muted">Item history will appear here.</div></div>
- <div class="chart-labels"><span id="item-first-date">—</span><span id="item-last-date">—</span></div>
-</div>
-
+<div class="panel"><select id="item-select"><option value="">No item history loaded</option></select><div id="item-summary" class="note">Awaiting observations</div><div class="chart-wrap" id="item-chart"></div></div>
 <h3>TOP 5 PRICE INCREASES</h3>
-<div class="panel">
- <div class="panel-title">BIGGEST RISES // LATEST VS PREVIOUS OBSERVATION</div>
- <div id="top-five" class="muted">Awaiting comparable price observations.</div>
- <p class="muted" style="font-size:10px">Ranked by percentage increase. Items without at least two dated observations are excluded.</p>
-</div>
-
+<div class="panel" id="top-five">Awaiting comparable price observations.</div>
 <h3>LATEST OBSERVED SHOPPING BASKET PRICES</h3>
-<div class="panel" style="overflow-x:auto">
- <table>
-  <thead><tr><th>ESSENTIAL</th><th>SIZE</th><th>QUANTITY</th><th>PRICE</th><th>RETAILER / SOURCE</th><th>DATE</th></tr></thead>
-  <tbody id="basket-rows"><tr><td colspan="6" class="muted">No household price observations loaded.</td></tr></tbody>
- </table>
-</div>
+<div class="panel"><input class="search" id="basket-search" placeholder="Search grocery item or retailer"><div class="tablewrap"><table><thead><tr><th>ESSENTIAL</th><th>SIZE</th><th>PRICE</th><th>RETAILER / SOURCE</th><th>DATE</th></tr></thead><tbody id="basket-rows"></tbody></table></div></div>
+</section>
 
+<section class="view" id="view-energy">
 <h2>07 // NORTHERN IRELAND HOME HEATING OIL</h2>
-<div class="warning">
- OFFICIAL CONSUMER COUNCIL NI PRICE OBSERVATIONS. National averages and Ballyclare regional observations are displayed separately. Prices include 5% VAT. Historical records are based on the published daily archive.
+<div class="warning">Consumer Council NI published price observations. National averages and Ballyclare observations are shown separately. Prices include 5% VAT.</div>
+<h3>NI NATIONAL AVERAGE</h3><div class="grid" id="oil-national-cards"></div>
+<h3>BALLYCLARE REGIONAL INDICATORS</h3><div class="grid" id="oil-regional-cards"></div>
+<details class="expand" open><summary>HEATING OIL PRICE HISTORY // REGION & ORDER SIZE</summary>
+<div class="panel">
+<div class="selectors">
+<label>REGION <select id="oil-region-select"><option value="ni">Northern Ireland average</option><option value="ballyclare">Ballyclare</option></select></label>
+<label>ORDER SIZE <select id="oil-volume-select"><option value="300">300 litres</option><option value="500" selected>500 litres</option><option value="900">900 litres</option></select></label>
 </div>
-
-<h3>LIVE PRICE INDICATORS // NATIONAL AVERAGE</h3>
-<div class="grid" id="oil-national-cards">
- <div class="nixie"><div class="digits">----</div><small>NI AVERAGE // AWAITING DATA</small></div>
-</div>
-
-<h3>REGIONAL PRICE INDICATORS // BALLYCLARE</h3>
-<div class="grid" id="oil-regional-cards">
- <div class="nixie"><div class="digits">----</div><small>REGIONAL DATA // AWAITING DATA</small></div>
-</div>
-
-<div class="panel chart-panel">
- <div class="panel-title">HEATING OIL PRICE HISTORY // SELECT REGION AND ORDER SIZE</div>
- <div class="selector-row">
-  <label for="oil-region-select">REGION</label>
-  <select id="oil-region-select">
-   <option value="ni">Northern Ireland average</option>
-   <option value="ballyclare">Ballyclare</option>
-  </select>
-  <label for="oil-volume-select">ORDER SIZE</label>
-  <select id="oil-volume-select">
-   <option value="300">300 litres</option>
-   <option value="500" selected>500 litres</option>
-   <option value="900">900 litres</option>
-  </select>
- </div>
- <div class="oil-stat">
-  <span class="muted">LATEST PRICE: <strong id="oil-latest-price">—</strong></span>
-  <span class="muted">PRICE / 100L: <strong id="oil-per-100">—</strong></span>
-  <span class="muted">OBSERVATIONS: <strong id="oil-record-count">0</strong></span>
- </div>
- <div class="chart-wrap" id="oil-chart"><div class="muted">Waiting for heating oil history.</div></div>
- <div class="chart-labels"><span id="oil-first-date">—</span><span id="oil-last-date">—</span></div>
- <div class="chart-key"><span class="orange">● Recorded heating oil price</span><span>Published observations</span></div>
-</div>
-
-<div class="panel chart-panel" style="overflow-x:auto">
- <div class="panel-title">HEATING OIL PRICE COMPARISON</div>
- <table>
-  <thead><tr><th>AREA</th><th>ORDER</th><th>PRICE</th><th>PER 100L</th><th>OBSERVATION</th></tr></thead>
-  <tbody id="oil-comparison-rows"><tr><td colspan="5" class="muted">Awaiting heating oil observations.</td></tr></tbody>
- </table>
-</div>
-
-<div class="panel chart-panel">
- <div class="panel-title">ORIGINAL DATA SOURCE</div>
- <p class="muted">Consumer Council Northern Ireland daily home heating oil price checker. The published daily archive is used for historical national averages.</p>
- <a href="https://www.consumercouncil.org.uk/home-heating/price-checker/daily" target="_blank" rel="noopener">OPEN DAILY PRICE ARCHIVE ↗</a><br><br>
- <a href="https://www.consumercouncil.org.uk/home-heating/price-checker" target="_blank" rel="noopener">OPEN REGIONAL PRICE CHECKER ↗</a>
-</div>
-
+<div class="statrow"><span>LATEST: <strong id="oil-latest-price">—</strong></span><span>PER 100L: <strong id="oil-per-100">—</strong></span><span>RECORDS: <strong id="oil-record-count">0</strong></span></div>
+<div class="chart-wrap" id="oil-chart"></div>
+<div class="chart-labels"><span id="oil-first-date">—</span><span id="oil-last-date">—</span></div>
+</div></details>
+<div class="panel"><div class="panel-title">HEATING OIL PRICE COMPARISON</div><div class="tablewrap"><table><thead><tr><th>AREA</th><th>ORDER</th><th>PRICE</th><th>PER 100L</th><th>OBSERVATION</th></tr></thead><tbody id="oil-comparison-rows"></tbody></table></div><a href="https://www.consumercouncil.org.uk/home-heating/price-checker/daily" target="_blank" rel="noopener">OPEN DAILY PRICE ARCHIVE ↗</a></div>
 <h2>08 // PETROL & DIESEL WATCH</h2>
-<div class="grid" id="fuel-cards">
- <div class="nixie"><div class="digits">----</div><small>PETROL // PRICE AWAITING DATA</small></div>
- <div class="nixie"><div class="digits">----</div><small>DIESEL // PRICE AWAITING DATA</small></div>
-</div>
-<div class="panel chart-panel">
- <div class="panel-title">ROAD FUEL PRICE HISTORY // 400 WEEKLY OBSERVATIONS</div>
- <div class="selector-row">
-  <label for="fuel-select">FUEL TYPE</label>
-  <select id="fuel-select">
-   <option value="uk-petrol">Unleaded petrol</option>
-   <option value="uk-diesel">Diesel</option>
-  </select>
- </div>
- <div class="oil-stat">
-  <span class="muted">LATEST: <strong id="fuel-latest">—</strong></span>
-  <span class="muted">OBSERVATIONS: <strong id="fuel-count">0</strong></span>
- </div>
- <div class="chart-wrap" id="fuel-chart"><div class="muted">Waiting for road fuel history.</div></div>
- <div class="chart-labels"><span id="fuel-first">—</span><span id="fuel-last">—</span></div>
- <div class="chart-key"><span class="orange">● Weekly average pump price</span><span>pence per litre</span></div>
-</div>
-<div class="panel chart-panel">
- <div class="panel-title">UK ROAD FUEL PRICE SOURCE</div>
- <p class="muted">Department for Energy Security and Net Zero weekly road-fuel statistics. These are UK averages, not guaranteed Northern Ireland pump prices.</p>
- <a href="https://www.gov.uk/government/statistics/weekly-road-fuel-prices" target="_blank" rel="noopener">OPEN OFFICIAL FUEL STATISTICS ↗</a>
-</div>
+<div class="grid" id="fuel-cards"></div>
+<details class="expand" open><summary>ROAD FUEL PRICE HISTORY</summary>
+<div class="panel"><label>FUEL TYPE <select id="fuel-select"><option value="uk-petrol">Unleaded petrol</option><option value="uk-diesel">Diesel</option></select></label><div class="statrow"><span>LATEST: <strong id="fuel-latest">—</strong></span><span>OBSERVATIONS: <strong id="fuel-count">0</strong></span></div><div class="chart-wrap" id="fuel-chart"></div><div class="chart-labels"><span id="fuel-first">—</span><span id="fuel-last">—</span></div><div class="note">Official UK weekly average pump prices, not Northern Ireland-only forecourt prices.</div><a href="https://www.gov.uk/government/statistics/weekly-road-fuel-prices" target="_blank" rel="noopener">OPEN DESNZ FUEL STATISTICS ↗</a></div>
+</details>
+</section>
 
-<h2>09 // AGRICULTURAL & FOOD COMMODITIES</h2>
-<div class="grid" id="agri-cards"><div class="panel muted">Awaiting agricultural commodity data.</div></div>
-
+<section class="view" id="view-news">
 <h2>10 // FINANCIAL & ECONOMIC NEWS</h2>
-<div class="panel"><div class="panel-title">LATEST FINANCIAL REPORTS</div><div id="finance-news" class="muted">Awaiting financial news feed...</div></div>
-
+<div class="panel"><div class="panel-title">LATEST FINANCIAL REPORTS</div><div id="finance-news" class="muted">Awaiting news feed...</div></div>
 <h2>11 // SUPPLY-CHAIN PRESSURE WATCH</h2>
 <div class="grid">
- <div class="panel"><div class="panel-title">FERTILISER & FARM INPUTS</div><div class="muted">Monitor fertiliser, fuel, energy and animal-feed input costs.</div></div>
- <div class="panel"><div class="panel-title">FOOD PRODUCTION</div><div class="muted">Monitor dairy, eggs, livestock, cereals and horticulture.</div></div>
- <div class="panel"><div class="panel-title">IMPORTS & LOGISTICS</div><div class="muted">Monitor shipping, ports, trade disruption and import dependency.</div></div>
+<div class="panel"><div class="panel-title">FERTILISER & FARM INPUTS</div><div class="muted">Monitor fertiliser, fuel, energy and animal-feed input costs.</div></div>
+<div class="panel"><div class="panel-title">FOOD PRODUCTION</div><div class="muted">Monitor dairy, eggs, livestock, cereals and horticulture.</div></div>
+<div class="panel"><div class="panel-title">IMPORTS & LOGISTICS</div><div class="muted">Monitor shipping, ports, trade disruption and import dependency.</div></div>
 </div>
-<div class="panel" style="margin-top:12px"><div class="panel-title">LATEST SUPPLY-CHAIN REPORTS</div><div id="supply-news" class="muted">Awaiting supply-chain reports...</div></div>
+<div class="panel"><div class="panel-title">LATEST SUPPLY-CHAIN REPORTS</div><div id="supply-news" class="muted">Awaiting reports...</div></div>
+</section>
 
+<section class="view" id="view-sources">
 <h2>12 // DATA SOURCES & MONITORING</h2>
 <div class="panel">
- <div class="source"><strong>Yahoo Finance market data</strong><br><span class="muted">Indicative market quotes and historical chart data. Unofficial data endpoint; availability may change.</span><br><a href="https://finance.yahoo.com/" target="_blank" rel="noopener">OPEN YAHOO FINANCE ↗</a></div>
- <div class="source"><strong>Consumer Council NI</strong><br><span class="muted">Northern Ireland domestic heating oil daily and regional price checker.</span><br><a href="https://www.consumercouncil.org.uk/home-heating/price-checker" target="_blank" rel="noopener">OPEN PRICE CHECKER ↗</a></div>
- <div class="source"><strong>DESNZ — Weekly road fuel prices</strong><br><span class="muted">Official UK petrol and diesel price statistics.</span><br><a href="https://www.gov.uk/government/statistics/weekly-road-fuel-prices" target="_blank" rel="noopener">OPEN OFFICIAL STATISTICS ↗</a></div>
- <div class="source"><strong>NI Food Compass</strong><br><span class="muted">Northern Ireland-focused supermarket product comparisons.</span><br><a href="https://nifoodcompass.com/" target="_blank" rel="noopener">OPEN NI FOOD COMPASS ↗</a></div>
- <div class="source"><strong>Food Foundation — Food Price Tracker</strong><br><span class="muted">Independent food price and household affordability tracking.</span><br><a href="https://foodfoundation.org.uk/initiatives/food-prices-tracking" target="_blank" rel="noopener">OPEN FOOD TRACKER ↗</a></div>
- <div class="source"><strong>ONS / DEFRA — Food inflation</strong><br><span class="muted">Official UK-wide CPIH food inflation and overall inflation history.</span><br><a href="https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket" target="_blank" rel="noopener">OPEN DEFRA FOOD STATISTICS ↗</a></div>
- <div class="source"><strong>ONS — Consumer price inflation</strong><br><span class="muted">Official UK inflation and food price statistics.</span><br><a href="https://www.ons.gov.uk/economy/inflationandpriceindices" target="_blank" rel="noopener">OPEN ONS ↗</a></div>
- <div class="source"><strong>DEFRA — Agricultural commodity prices</strong><br><span class="muted">UK agricultural prices including cereals, livestock and farm inputs.</span><br><a href="https://www.data.gov.uk/collections/business-and-economy/agricultural-commodity-prices" target="_blank" rel="noopener">OPEN DEFRA ↗</a></div>
+<div class="source"><strong>Yahoo Finance</strong><br><span class="muted">Indicative market quotes and historical chart data.</span><br><a href="https://finance.yahoo.com/" target="_blank">OPEN YAHOO FINANCE ↗</a></div>
+<div class="source"><strong>Consumer Council NI</strong><br><span class="muted">Northern Ireland domestic heating oil price checker.</span><br><a href="https://www.consumercouncil.org.uk/home-heating/price-checker" target="_blank">OPEN PRICE CHECKER ↗</a></div>
+<div class="source"><strong>DESNZ — Weekly road fuel prices</strong><br><a href="https://www.gov.uk/government/statistics/weekly-road-fuel-prices" target="_blank">OPEN OFFICIAL STATISTICS ↗</a></div>
+<div class="source"><strong>NI Food Compass</strong><br><span class="muted">Product comparison source checked; prices are not treated as live without capture dates.</span><br><a href="https://nifoodcompass.com/" target="_blank">OPEN NI FOOD COMPASS ↗</a></div>
+<div class="source"><strong>DEFRA food statistics</strong><br><a href="https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket" target="_blank">OPEN DEFRA ↗</a></div>
+<div class="source"><strong>ONS consumer price inflation</strong><br><a href="https://www.ons.gov.uk/economy/inflationandpriceindices" target="_blank">OPEN ONS ↗</a></div>
+<div class="source"><strong>DEFRA agricultural commodity prices</strong><br><a href="https://www.data.gov.uk/collections/business-and-economy/agricultural-commodity-prices" target="_blank">OPEN DEFRA ↗</a></div>
+<p class="note" id="source-status">Dashboard reads ./data/markets.json. Blank sections indicate data not currently collected.</p>
 </div>
-
-<p class="muted" style="font-size:11px;line-height:1.5">
- DATA STATUS: This dashboard reads ./data/markets.json. Historical trends require dated observations. Some sources do not provide automated price extraction; those sections remain blank until valid observations are collected.
-</p>
+</section>
 </main>
-
-<footer>
- DOOMWATCH // OPERATION CONTAINMENT<br>
- FINANCIAL INTELLIGENCE // HOUSEHOLD RESILIENCE // ENERGY SECURITY<br>
- INDICATIVE INTELLIGENCE — CHECK ORIGINAL SOURCES
-</footer>
+<footer>DOOMWATCH // OPERATION CONTAINMENT<br>FINANCIAL INTELLIGENCE // HOUSEHOLD RESILIENCE // ENERGY SECURITY<br>INDICATIVE INTELLIGENCE — CHECK ORIGINAL SOURCES</footer>
 
 <script>
 "use strict";
-
 const DATA_URL="./data/markets.json";
 const $=id=>document.getElementById(id);
-let marketData={};
-
-function esc(v){
- return String(v??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- }[c]));
+let D={};
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const n=v=>{if(v===null||v===undefined||v==="")return null;const x=Number(v);return Number.isFinite(x)?x:null};
+const fmt=(v,d=2)=>n(v)===null?"—":n(v).toLocaleString("en-GB",{minimumFractionDigits:d,maximumFractionDigits:d});
+const money=v=>n(v)===null?"—":"£"+fmt(v);
+const date=v=>{if(!v)return"Date unavailable";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString("en-GB")};
+const obj=v=>v&&typeof v==="object"?v:{};
+const values=v=>Array.isArray(v)?v:Object.values(obj(v));
+const history=x=>(Array.isArray(x?.history)?x.history:[]).map(p=>({date:p.date||p.timestamp,value:n(p.value??p.close??p.price)})).filter(p=>p.date&&p.value!==null).sort((a,b)=>new Date(a.date)-new Date(b.date));
+function chart(points,label,prefix="",suffix=""){
+ if(!points.length)return'<div class="muted">No dated observations available yet.</div>';
+ if(points.length===1)return`<div class="terminal">ONE OBSERVATION: ${esc(prefix+fmt(points[0].value)+suffix)} // ${esc(date(points[0].date))}<br>At least two dates are needed to show a trend.</div>`;
+ const w=900,h=220,p=48,vals=points.map(x=>x.value),mn=Math.min(...vals),mx=Math.max(...vals),r=(mx-mn)||Math.max(Math.abs(mx)*.08,.1),lo=mn-r*.08,hi=mx+r*.08,x=i=>p+i*(w-2*p)/(points.length-1),y=v=>h-p-(v-lo)*(h-2*p)/(hi-lo);
+ const coords=points.map((v,i)=>`${x(i)},${y(v.value)}`).join(" ");
+ const grid=[0,.5,1].map(t=>{let yy=p+t*(h-2*p),v=hi-t*(hi-lo);return`<line x1="${p}" y1="${yy}" x2="${w-p}" y2="${yy}" stroke="#414738" stroke-dasharray="4 5"/><text x="2" y="${yy+4}" fill="#999e8e" font-size="12">${esc(prefix+fmt(v)+suffix)}</text>`}).join("");
+ return`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label)}">${grid}<polyline points="${coords}" fill="none" stroke="#ff9b37" stroke-width="3" stroke-linejoin="round"/>${points.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v.value)}" r="2.5" fill="#7dff86"><title>${esc(date(v.date))}: ${esc(prefix+fmt(v.value)+suffix)}</title></circle>`).join("")}</svg>`;
 }
-
-function number(v){
- if(v===null||v===undefined||v==="")return null;
- const n=Number(v);
- return Number.isFinite(n)?n:null;
+function labels(points,a,b){if($(a))$(a).textContent=points.length?date(points[0].date):"—";if($(b))$(b).textContent=points.length?date(points.at(-1).date):"—"}
+function card(x,title){let v=n(x.price),c=n(x.changePct);return`<div class="panel"><div class="panel-title">${esc(title)}</div><div class="big">${v===null?"—":fmt(v)}</div><div class="${c>0?"green":c<0?"red":"muted"}">${c===null?"Change unavailable":fmt(c)+"%"}</div><div class="note">${esc(x.symbol||"")} // ${esc(date(x.observedAt))}</div></div>`}
+function showCards(source,target,names){let a=names.map(k=>[k,obj(source?.[k])]).filter(([k,x])=>x.price!==undefined);$(target).innerHTML=a.length?a.map(([k,x])=>card(x,k.toUpperCase())).join(""):'<div class="panel muted">No observations loaded.</div>'}
+function draw(obj,key,target,label,prefix="",suffix=""){let x=obj?.[key],h=history(x);$(target).innerHTML=chart(h,label,prefix,suffix)}
+function stockList(){let a=values(D.stocks);$("stock-rows").innerHTML=a.length?a.map(x=>`<tr><td>${esc(x.name||x.company||x.symbol)}</td><td>${esc(x.symbol)}</td><td>${esc(x.currency==="GBP"?"£":x.currency==="USD"?"$":"")}${fmt(x.price)}</td><td class="${n(x.changePct)>0?"green":n(x.changePct)<0?"red":"muted"}">${fmt(x.changePct)}%</td><td>${esc(date(x.observedAt))}</td></tr>`).join(""):'<tr><td colspan="5" class="muted">No stock observations loaded.</td></tr>';
+ let s=$("stock-select");s.innerHTML=a.map(x=>`<option value="${esc(x.symbol)}">${esc(x.name||x.symbol)} (${esc(x.symbol)})</option>`).join("");if(a.length)drawStock();
 }
-
-function fmt(v,decimals=2){
- const n=number(v);
- return n===null?"—":n.toLocaleString("en-GB",{
-  minimumFractionDigits:decimals,
-  maximumFractionDigits:decimals
- });
+function drawStock(){let x=values(D.stocks).find(x=>x.symbol===$("stock-select").value);$("stock-chart").innerHTML=chart(history(x),"Stock history","$")}
+function drawIndices(){draw(D.indices,$("index-select").value,"index-chart","Index history")}
+function drawCommodities(){draw(D.commodities,$("commodity-select").value,"commodity-chart","Commodity history","$")}
+function drawFx(){draw(D.fx,$("fx-select").value,"fx-chart","Currency history")}
+function inflationHistory(key){return values(D[key]).map(x=>({date:x.date||x.month,value:n(x.value??x.rate)})).filter(x=>x.date&&x.value!==null)}
+function renderInflation(){
+ let f=inflationHistory("foodInflationHistory"),o=inflationHistory("overallInflationHistory");
+ let latestFood=D.foodInflation||f.at(-1),latestOverall=D.overallInflation||o.at(-1);
+ $("food-inflation-value").textContent=latestFood?fmt(latestFood.value,1)+"%":"—";
+ $("food-inflation-date").textContent=latestFood?"Latest observation: "+date(latestFood.date):"No observation";
+ $("overall-inflation-value").textContent=latestOverall?fmt(latestOverall.value,1)+"%":"—";
+ $("overall-inflation-date").textContent=latestOverall?"Latest observation: "+date(latestOverall.date):"No observation";
+ $("food-observation-count").textContent=f.length;
+ $("food-inflation-chart").innerHTML=chart(f,"UK food inflation","", "%");
+ labels(f,"food-inflation-first","food-inflation-last");
+ $("food-comparison-chart").innerHTML=chart(f,"Food inflation");
+ let src=D.sources?.foodInflation||{};
+ $("food-source-status").textContent=src.status?`COLLECTOR: ${src.status.toUpperCase()} // CHECKED: ${date(src.checkedAt)} // ${src.observationsImported||f.length} observations`:"No source metadata found.";
 }
-
-function money(v){
- const n=number(v);
- return n===null?"—":"£"+n.toLocaleString("en-GB",{
-  minimumFractionDigits:2,maximumFractionDigits:2
- });
+function renderHousehold(){
+ let b=obj(D.householdBasket),items=values(b.items),rows=[];
+ for(let i of items)for(let p of (i.history||[]))rows.push({item:i.name,size:i.size,price:n(p.price??p.value),retailer:p.retailer||p.source,date:p.date||p.observedAt});
+ rows=rows.filter(x=>x.price!==null&&x.date);
+ $("price-count").textContent=rows.length;
+ $("item-count").textContent=new Set(rows.map(x=>x.item)).size;
+ $("retailer-count").textContent=new Set(rows.map(x=>x.retailer).filter(Boolean)).size;
+ $("basket-rows").innerHTML=rows.length?rows.slice().sort((a,b)=>new Date(b.date)-new Date(a.date)).map(x=>`<tr><td>${esc(x.item)}</td><td>${esc(x.size||"")}</td><td>${money(x.price)}</td><td>${esc(x.retailer||"Unspecified")}</td><td>${esc(date(x.date))}</td></tr>`).join(""):'<tr><td colspan="5" class="muted">No household price observations loaded.</td></tr>';
+ let sel=$("item-select");sel.innerHTML=items.map(i=>`<option value="${esc(i.name)}">${esc(i.name)}</option>`).join("")||'<option>No item history loaded</option>';
+ function drawItem(){let i=items.find(x=>x.name===sel.value),h=(i?.history||[]).map(p=>({date:p.date||p.observedAt,value:n(p.price??p.value)})).filter(p=>p.date&&p.value!==null);$("item-chart").innerHTML=chart(h,i?.name||"Item history","£");$("item-summary").textContent=h.length?`${h.length} dated observations // latest ${money(h.at(-1).value)}`:"No dated item history"}
+ sel.onchange=drawItem;drawItem();
+ let totals=values(b.history).map(p=>({date:p.date,value:n(p.total??p.value)})).filter(p=>p.date&&p.value!==null);
+ $("basket-chart").innerHTML=chart(totals,"Household basket","£");$("basket-total").textContent=totals.length?money(totals.at(-1).value):"—";
+ $("top-five").textContent="A valid increase ranking requires two dated observations for each comparable item.";
 }
-
-function date(v){
- if(!v)return"Date unavailable";
- const d=new Date(v);
- return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString("en-GB");
+function oilItem(region,volume){let id=(region==="ballyclare"?"ballyclare-":"ni-")+volume+"l";return values(D.heatingOil).find(x=>x.id===id||x.key===id)}
+function oilCard(x){return x?`<div class="nixie"><div class="digits">${money(x.price)}</div><small>${esc(x.name||x.volumeLitres+" litres")}</small><div class="note">${esc(date(x.observedAt||x.date))}</div></div>`:'<div class="nixie"><div class="digits">----</div><small>NO OBSERVATION</small></div>'}
+function renderOil(){
+ for(let r of ["ni","ballyclare"]){let target=r==="ni"?"oil-national-cards":"oil-regional-cards";$(target).innerHTML=[300,500,900].map(v=>oilCard(oilItem(r,v))).join("")}
+ let rows=[];for(let r of ["ni","ballyclare"])for(let v of [300,500,900]){let x=oilItem(r,v);if(x)rows.push(`<tr><td>${r==="ni"?"Northern Ireland":"Ballyclare"}</td><td>${v}L</td><td>${money(x.price)}</td><td>${money(x.pricePer100Litres)}</td><td>${esc(date(x.observedAt||x.date))}</td></tr>`)}
+ $("oil-comparison-rows").innerHTML=rows.join("")||'<tr><td colspan="5">No observations</td></tr>';drawOil();
 }
-
-function changeClass(v){
- const n=number(v);
- return n===null?"muted":n>0?"green":n<0?"red":"muted";
+function drawOil(){let r=$("oil-region-select").value,v=$("oil-volume-select").value,x=oilItem(r,v);let h=history(x);$("oil-chart").innerHTML=chart(h,"Heating oil history","£");$("oil-latest-price").textContent=x?money(x.price):"—";$("oil-per-100").textContent=x?money(x.pricePer100Litres):"—";$("oil-record-count").textContent=h.length;labels(h,"oil-first-date","oil-last-date")}
+function renderFuel(){let a=values(D.fuel);$("fuel-cards").innerHTML=a.length?a.map(x=>`<div class="nixie"><div class="digits">${fmt(x.price)}</div><small>${esc(x.name||x.id)}</small><div class="note">p/litre // ${esc(date(x.observedAt||x.date))}</div></div>`).join(""):'<div class="muted">No fuel data loaded</div>';drawFuel()}
+function drawFuel(){let x=values(D.fuel).find(x=>(x.id||x.key)===$("fuel-select").value);let h=history(x);$("fuel-chart").innerHTML=chart(h,"Road fuel price history","","p");$("fuel-latest").textContent=x?fmt(x.price)+"p/litre":"—";$("fuel-count").textContent=h.length;labels(h,"fuel-first","fuel-last")}
+function renderNews(a,id){a=values(a);$(id).innerHTML=a.length?a.slice(0,20).map(x=>`<div class="source"><strong>${esc(x.title||"Untitled report")}</strong><br><span class="muted">${esc(x.source||"Source")} // ${esc(date(x.publishedAt||x.date))}</span><br>${x.url?`<a href="${esc(x.url)}" target="_blank">OPEN REPORT ↗</a>`:""}</div>`).join(""):'<div class="muted">No reports currently loaded.</div>'}
+function render(){
+ showCards(D.indices,"index-cards",["sp500","nasdaq","ftse100"]);
+ showCards(D.commodities,"commodity-cards",["gold","silver","brent"]);
+ showCards(D.crypto,"crypto-cards",["bitcoin"]);
+ showCards(D.fx,"fx-cards",["GBPUSD","GBPEUR","EURUSD"]);
+ showCards(D.agriculture,"agri-cards",Object.keys(obj(D.agriculture)));
+ stockList();renderInflation();renderHousehold();renderOil();renderFuel();
+ renderNews(D.news,"finance-news");renderNews(D.supplyNews,"supply-news");
+ drawIndices();drawCommodities();drawFx();
+ $("feed-status").textContent="MARKET DATA: LOADED";$("feed-status").className="green";
+ $("overview-status").textContent="Last generated: "+date(D.generatedAt||D.updatedAt)+" // Data file loaded.";
+ $("source-status").textContent="DATA FILE: ./data/markets.json // LAST UPDATE: "+(D.updatedAt||"not supplied")+" // AUTO-REFRESH: 15 MINUTES";
 }
-
-function pct(a,b){
- if(b===null||b===0||a===null)return null;
- return ((a-b)/b)*100;
-}
-
-function records(value){
- if(Array.isArray(value))return value;
- if(value&&Array.isArray(value.items))return value.items;
- if(value&&typeof value==="object")return Object.values(value);
- return [];
-}
-
-function getName(x){
- return x.name||x.label||x.title||x.symbol||"Unknown";
-}
-
-function getPrice(x){
- return x.price??x.value??x.close??x.latest??x.regularMarketPrice;
-}
-
-function getChange(x){
- return x.changePercent??x.change_pct??x.percentChange??x.change;
-}
-
-function getHistory(item){
- const raw=Array.isArray(item.history)?item.history:
-  Array.isArray(item.prices)?item.prices:
-  Array.isArray(item.data)?item.data:[];
-
- return raw.map(p=>({
-  date:p.date||p.timestamp||p.observedAt,
-  value:number(p.value??p.close??p.price??p.y)
- })).filter(p=>p.date&&p.value!==null)
- .sort((a,b)=>new Date(a.date)-new Date(b.date));
-}
-
-function historyFor(collection,key){
- const arr=records(collection);
- const item=arr.find(x=>
-  x.symbol===key||x.ticker===key||x.id===key||
-  x.name===key||x.code===key
- );
- return item?getHistory(item):[];
-}
-
-function chartLabels(points,firstId,lastId){
- $(firstId).textContent=points.length?date(points[0].date):"—";
- $(lastId).textContent=points.length?date(points[points.length-1].date):"—";
-}
-
-function svgChart(points,label,prefix="",suffix=""){
- if(!points.length){
-  return '<div class="muted">No dated observations available yet.</div>';
- }
-
- if(points.length===1){
-  return `<div class="terminal">ONE OBSERVATION: ${esc(prefix+fmt(points[0].value)+suffix)} // ${esc(date(points[0].date))}<br>At least two dates are needed to show a trend.</div>`;
- }
-
- const w=900,h=220,pad=48;
- const vals=points.map(x=>x.value);
- const min=Math.min(...vals);
- const max=Math.max(...vals);
- const rawRange=max-min;
- const range=rawRange||Math.max(Math.abs(max)*.08,.1);
- const low=min-range*.08;
- const high=max+range*.08;
- const fullRange=high-low;
-
- const x=i=>pad+i*(w-2*pad)/(points.length-1);
- const y=v=>h-pad-(v-low)*(h-2*pad)/fullRange;
-
- const coords=points.map((p,i)=>
-  `${x(i).toFixed(1)},${y(p.value).toFixed(1)}`
- ).join(" ");
-
- const dots=points.map((p,i)=>
-  `<circle cx="${x(i).toFixed(1)}" cy="${y(p.value).toFixed(1)}" r="2.5" fill="#7dff86"><title>${esc(date(p.date))}: ${esc(prefix+fmt(p.value)+suffix)}</title></circle>`
- ).join("");
-
- const grid=[0,.5,1].map(t=>{
-  const yy=pad+t*(h-2*pad);
-  const v=high-t*fullRange;
-  return `<line x1="${pad}" y1="${yy}" x2="${w-pad}" y2="${yy}" stroke="#414738" stroke-dasharray="4 5"/>
-  <text x="2" y="${yy+4}" fill="#999e8e" font-size="12">${esc(prefix+fmt(v)+suffix)}</text>`;
- }).join("");
-
- return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label)}">
- ${grid}
- <polyline points="${coords}" fill="none" stroke="#ff9b37" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
- ${dots}
- </svg>`;
-}
-
-function renderMarketCards(collection,target,currency){
- const arr=records(collection);
- $(target).innerHTML=arr.length?arr.map(x=>{
-  const price=getPrice(x);
-  const change=getChange(x);
-  const unit=x.currency||x.unit||currency||"";
-  const formatted=price===null||price===undefined?"—":
-   (unit==="GBP"||unit==="£"?"£":unit==="USD"||unit==="$"?"$":"")+fmt(price);
-
-  return `<div class="panel">
-   <div class="panel-title">${esc(getName(x))}</div>
-   <div class="big">${esc(formatted)} <span style="font-size:11px">${esc(unit==="GBP"||unit==="USD"?"":unit)}</span></div>
-   <div class="${changeClass(change)}">${change===null||change===undefined?"Change unavailable":esc(fmt(change,2))+(String(change).includes("%")?"":"%")}</div>
-   <div class="muted" style="font-size:10px;margin-top:8px">${esc(x.symbol||x.ticker||"")} // ${esc(date(x.updatedAt||x.observedAt||x.date))}</div>
-  </div>`;
- }).join(""):'<div class="panel muted">No observations loaded yet.</div>';
-}
-
-function renderStocks(collection){
- const arr=records(collection);
- $("stock-rows").innerHTML=arr.length?arr.map(x=>{
-  const price=getPrice(x);
-  const change=getChange(x);
-  return `<tr>
-   <td>${esc(getName(x))}</td>
-   <td>${esc(x.symbol||x.ticker||"—")}</td>
-   <td>${esc(x.currency==="GBP"?"£":x.currency==="USD"?"$":"")}${esc(fmt(price))}</td>
-   <td class="${changeClass(change)}">${change===null||change===undefined?"—":esc(fmt(change,2))+"%"}</td>
-   <td>${esc(date(x.updatedAt||x.observedAt||x.date))}</td>
-  </tr>`;
- }).join(""):'<tr><td colspan="5" class="muted">No stock observations loaded.</td></tr>';
-
- const sel=$("stock-select");
- const previous=sel.value;
- sel.innerHTML=arr.length?arr.map(x=>{
-  const key=x.symbol||x.ticker||x.id||x.name;
-  return `<option value="${esc(key)}">${esc(getName(x))} (${esc(x.symbol||x.ticker||"")})</option>`;
- }).join(""):'<option value="">No stock history loaded</option>';
-
- if(arr.some(x=>(x.symbol||x.ticker||x.id||x.name)===previous))sel.value=previous;
- drawStockChart();
-}
-
-function drawStockChart(){
- const key=$("stock-select").value;
- const points=historyFor(marketData.stocks,key);
- $("stock-chart").innerHTML=svgChart(points,"Individual stock price history","$");
- chartLabels(points,"stock-first","stock-last");
-}
-
-function sortedHouseholdHistory(item){
- const raw=Array.isArray(item.history)?item.history:
-  Array.isArray(item.prices)?item.prices:[];
-
- return raw.map(p=>({
-  date:p.date||p.observedAt,
-  price:number(p.price??p.value),
-  retailer:p.retailer||p.source||""
- })).filter(p=>p.date&&p.price!==null)
- .sort((a,b)=>new Date(a.date)-new Date(b.date));
-}
-
-/* OFFICIAL CPIH FOOD AND OVERALL INFLATION */
-
-function normaliseFoodHistory(raw){
- return records(raw).map(p=>{
-  const d=p.date||p.month||p.period||p.observedAt;
-  const v=number(p.value??p.rate??p.inflation??p.yoy);
-  return {date:d,value:v};
- }).filter(p=>p.date&&p.value!==null)
- .sort((a,b)=>new Date(a.date)-new Date(b.date));
-}
-
-function latestFoodPoint(raw){
- if(!raw)return null;
-
- if(Array.isArray(raw)){
-  const points=normaliseFoodHistory(raw);
-  return points.length?points[points.length-1]:null;
- }
-
- if(typeof raw==="object"){
-  const d=raw.date||raw.month||raw.period||raw.observedAt;
-  const v=number(raw.value??raw.rate??raw.inflation??raw.yoy);
-  if(d&&v!==null)return {date:d,value:v};
- }
-
- return null;
-}
-
-function dualFoodChart(food,overall){
- if(!food.length&&!overall.length){
-  return '<div class="muted">No dated inflation observations available.</div>';
- }
-
- const all=[...food,...overall];
- const w=900,h=220,pad=48;
- const values=all.map(p=>p.value);
- const min=Math.min(0,...values);
- const max=Math.max(0,...values);
- const range=(max-min)||1;
- const low=min-range*.1;
- const high=max+range*.1;
- const fullRange=high-low;
-
- const dates=[...new Set(all.map(p=>p.date))].sort(
-  (a,b)=>new Date(a)-new Date(b)
- );
-
- const x=i=>pad+i*(w-2*pad)/Math.max(1,dates.length-1);
- const y=v=>h-pad-(v-low)*(h-2*pad)/fullRange;
-
- const foodMap=new Map(food.map(p=>[p.date,p.value]));
- const overallMap=new Map(overall.map(p=>[p.date,p.value]));
-
- function makeLine(map,color){
-  const points=dates
-   .map((d,i)=>map.has(d)?{date:d,value:map.get(d),x:x(i),y:y(map.get(d))}:null)
-   .filter(Boolean);
-
-  if(!points.length)return "";
-
-  const segments=[];
-  let current=[];
-
-  for(let i=0;i<dates.length;i++){
-   const d=dates[i];
-
-   if(map.has(d)){
-    current.push(`${x(i).toFixed(1)},${y(map.get(d)).toFixed(1)}`);
-   }else if(current.length){
-    segments.push(current.join(" "));
-    current=[];
-   }
-  }
-
-  if(current.length)segments.push(current.join(" "));
-
-  const lines=segments.map(segment=>
-   `<polyline points="${segment}" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`
-  ).join("");
-
-  const dots=points.map(p=>
-   `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2.5" fill="${color}"><title>${esc(date(p.date))}: ${esc(fmt(p.value))}%</title></circle>`
-  ).join("");
-
-  return lines+dots;
- }
-
- const grid=[0,.5,1].map(t=>{
-  const yy=pad+t*(h-2*pad);
-  const v=high-t*fullRange;
-
-  return `<line x1="${pad}" y1="${yy}" x2="${w-pad}" y2="${yy}" stroke="#414738" stroke-dasharray="4 5"/>
-  <text x="2" y="${yy+4}" fill="#999e8e" font-size="12">${esc(fmt(v))}%</text>`;
- }).join("");
-
- return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Food inflation compared with overall inflation">
- ${grid}
- ${makeLine(foodMap,"#ff9b37")}
- ${makeLine(overallMap,"#7dff86")}
- </svg>`;
-}
-
-function renderFoodPriceIntelligence(data){
- const basket=data.householdBasket||{};
-
- const foodHistory=normaliseFoodHistory(
-  data.foodInflationHistory||
-  basket.foodInflationHistory||
-  []
- );
-
- const overallHistory=normaliseFoodHistory(
-  data.overallInflationHistory||
-  basket.overallInflationHistory||
-  []
- );
-
- const foodLatest=latestFoodPoint(
-  data.foodInflation||basket.foodInflation
- )||(foodHistory.length?foodHistory[foodHistory.length-1]:null);
-
- const overallLatest=latestFoodPoint(
-  data.overallInflation||basket.overallInflation
- )||(overallHistory.length?overallHistory[overallHistory.length-1]:null);
-
- $("food-inflation-value").textContent=foodLatest?
-  fmt(foodLatest.value,1)+"%":"—";
-
- $("food-inflation-date").textContent=foodLatest?
-  "Latest observation: "+date(foodLatest.date):
-  "No official food inflation observation loaded";
-
- $("overall-inflation-value").textContent=overallLatest?
-  fmt(overallLatest.value,1)+"%":"—";
-
- $("overall-inflation-date").textContent=overallLatest?
-  "Latest observation: "+date(overallLatest.date):
-  "No overall inflation observation loaded";
-
- $("food-observation-count").textContent=foodHistory.length;
-
- $("food-inflation-chart").innerHTML=svgChart(
-  foodHistory,
-  "UK food inflation history",
-  "",
-  "%"
- );
-
- $("food-comparison-chart").innerHTML=dualFoodChart(
-  foodHistory,
-  overallHistory
- );
-
- chartLabels(
-  foodHistory,
-  "food-inflation-first",
-  "food-inflation-last"
- );
-
- const comparisonPoints=[
-  ...foodHistory,
-  ...overallHistory
- ].sort((a,b)=>new Date(a.date)-new Date(b.date));
-
- chartLabels(
-  comparisonPoints,
-  "food-comparison-first",
-  "food-comparison-last"
- );
-
- const sourceMeta=data.sources?.foodInflation||{};
-
- if(sourceMeta.status){
-  $("food-source-status").textContent=
-   "COLLECTOR STATUS: "+String(sourceMeta.status).toUpperCase()+
-   " // LAST CHECKED: "+date(sourceMeta.checkedAt)+
-   " // FOOD OBSERVATIONS: "+(sourceMeta.observationsImported??foodHistory.length);
- }else if(foodHistory.length){
-  $("food-source-status").textContent=
-   "DATA LOADED // "+foodHistory.length+
-   " MONTHLY FOOD INFLATION OBSERVATIONS // UK-WIDE CPIH SERIES";
- }else{
-  $("food-source-status").textContent=
-   "NO FOOD INFLATION HISTORY FOUND IN MARKETS.JSON. CHECK COLLECTOR RUN.";
- }
-}
-
-function renderHousehold(data){
- const basket=data.householdBasket||{};
- const items=records(basket.items);
- const all=items.flatMap(i=>sortedHouseholdHistory(i).map(p=>({...p,item:i.name})));
- const retailers=[...new Set(all.map(p=>p.retailer).filter(Boolean))];
- const usable=items.filter(i=>sortedHouseholdHistory(i).length);
-
- $("price-count").textContent=all.length;
- $("item-count").textContent=usable.length;
- $("retailer-count").textContent=retailers.length;
-
- const latestRows=items.map(i=>{
-  const h=sortedHouseholdHistory(i);
-  return {item:i,latest:h[h.length-1]};
- }).filter(x=>x.latest);
-
- $("basket-rows").innerHTML=latestRows.length?
-  latestRows.map(x=>`<tr>
-   <td>${esc(x.item.name)}</td><td>${esc(x.item.size||"")}</td>
-   <td>${esc(x.item.quantity??1)}</td><td>${money(x.latest.price)}</td>
-   <td>${esc(x.latest.retailer||"Unspecified")}</td><td>${esc(date(x.latest.date))}</td>
-  </tr>`).join("") :
-  '<tr><td colspan="6" class="muted">No household price observations loaded.</td></tr>';
-
- const sel=$("item-select");
- const previous=sel.value;
-
- sel.innerHTML=usable.length?
-  usable.map(i=>`<option value="${esc(i.id||i.name)}">${esc(i.name)}</option>`).join("") :
-  '<option value="">No item history loaded</option>';
-
- if(usable.some(i=>(i.id||i.name)===previous))sel.value=previous;
-
- function drawItem(){
-  const item=usable.find(i=>(i.id||i.name)===sel.value)||usable[0];
-
-  if(!item){
-   $("item-chart").innerHTML='<div class="muted">No item history loaded.</div>';
-   $("item-summary").textContent="Awaiting observations";
-   $("item-first-date").textContent="—";
-   $("item-last-date").textContent="—";
-   return;
-  }
-
-  const h=sortedHouseholdHistory(item);
-  const points=h.map(p=>({date:p.date,value:p.price}));
-  $("item-chart").innerHTML=svgChart(points,item.name+" price trend","£");
-  $("item-first-date").textContent=h.length?date(h[0].date):"—";
-  $("item-last-date").textContent=h.length?date(h[h.length-1].date):"—";
-
-  const change=h.length>1?pct(h[h.length-1].price,h[h.length-2].price):null;
-  $("item-summary").textContent=h.length>1?
-   `${money(h[h.length-1].price)} // ${change===null?"—":(change>=0?"+":"")+change.toFixed(1)+"% vs previous"} // ${h.length} records`:
-   "One dated observation";
- }
-
- sel.onchange=drawItem;
- drawItem();
-
- const top=usable.map(i=>{
-  const h=sortedHouseholdHistory(i);
-  if(h.length<2)return null;
-  const a=h[h.length-1],b=h[h.length-2];
-  return {name:i.name,now:a.price,prev:b.price,change:pct(a.price,b.price),date:a.date};
- }).filter(x=>x&&x.change!==null&&x.change>0)
- .sort((a,b)=>b.change-a.change).slice(0,5);
-
- $("top-five").innerHTML=top.length?
-  `<table><thead><tr><th>RANK</th><th>ITEM</th><th>PREVIOUS</th><th>LATEST</th><th>CHANGE</th></tr></thead><tbody>
-  ${top.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.name)}</td><td>${money(x.prev)}</td><td>${money(x.now)}</td><td class="red">+${x.change.toFixed(1)}%</td></tr>`).join("")}</tbody></table>`:
-  '<div class="muted">No increases can be ranked yet. Each item needs two dated comparable observations.</div>';
-
- const hist=records(basket.history).map(x=>({
-  date:x.date||x.observedAt,value:number(x.total??x.value)
- })).filter(x=>x.date&&x.value!==null).sort((a,b)=>new Date(a.date)-new Date(b.date));
-
- $("basket-chart").innerHTML=svgChart(hist,"Household basket total","£");
- $("basket-first-date").textContent=hist.length?date(hist[0].date):"—";
- $("basket-last-date").textContent=hist.length?date(hist[hist.length-1].date):"—";
-
- if(hist.length){
-  $("basket-total").textContent=money(hist[hist.length-1].value);
-  $("basket-date").textContent="Latest complete basket: "+date(hist[hist.length-1].date);
- }else{
-  $("basket-total").textContent="—";
-  $("basket-date").textContent="Awaiting complete dated basket history";
- }
-}
-
-function renderEnergy(collection,target,label){
- const arr=records(collection);
- $(target).innerHTML=arr.length?arr.map(x=>{
-  const price=number(getPrice(x));
-  const unit=x.unit||"";
-  return `<div class="nixie">
-   <div class="digits">${price===null?"----":esc(fmt(price))}</div>
-   <small>${esc(x.name||label)}</small>
-   <div class="muted" style="font-size:10px;margin-top:8px">${esc(unit)} // ${esc(date(x.observedAt||x.date))}</div>
-  </div>`;
- }).join(""):`<div class="nixie"><div class="digits">----</div><small>${esc(label)} // AWAITING DATA</small></div>`;
-}
-
-/* HEATING OIL INTELLIGENCE */
-
-function findOilItem(region,volume){
- const items=records(marketData.heatingOil);
- const id=(region==="ballyclare"?"ballyclare-":"ni-")+volume+"l";
- return items.find(x=>x.id===id)||null;
-}
-
-function oilCard(item){
- if(!item)return `<div class="nixie"><div class="digits">----</div><small>NO DATA</small></div>`;
- const price=number(item.price);
- const per100=number(item.pricePer100Litres) ??
-  (price!==null&&number(item.volumeLitres)?price/number(item.volumeLitres)*100:null);
-
- return `<div class="nixie">
-  <div class="digits">${price===null?"----":esc(money(price))}</div>
-  <small>${esc(item.name)}</small>
-  <div class="muted" style="font-size:10px;margin-top:8px">${esc(date(item.observedAt||item.date))}</div>
-  <div class="muted" style="font-size:10px;margin-top:5px">${per100===null?"":esc(money(per100))+" per 100L"}</div>
- </div>`;
-}
-
-function renderHeatingOil(){
- const national=[300,500,900].map(v=>findOilItem("ni",v)).filter(Boolean);
- const regional=[300,500,900].map(v=>findOilItem("ballyclare",v)).filter(Boolean);
-
- $("oil-national-cards").innerHTML=national.length?
-  national.map(oilCard).join("") :
-  '<div class="nixie"><div class="digits">----</div><small>NI AVERAGE // AWAITING DATA</small></div>';
-
- $("oil-regional-cards").innerHTML=regional.length?
-  regional.map(oilCard).join("") :
-  '<div class="nixie"><div class="digits">----</div><small>BALLYCLARE // REGIONAL DATA NOT AVAILABLE</small></div>';
-
- const rows=[];
- for(const region of ["ni","ballyclare"]){
-  for(const volume of [300,500,900]){
-   const item=findOilItem(region,volume);
-   if(!item)continue;
-   const price=number(item.price);
-   const per100=number(item.pricePer100Litres) ??
-    (price!==null?price/volume*100:null);
-
-   rows.push(`<tr>
-    <td>${region==="ni"?"Northern Ireland":"Ballyclare"}</td>
-    <td>${volume}L</td>
-    <td>${money(price)}</td>
-    <td>${money(per100)}</td>
-    <td>${esc(date(item.observedAt||item.date))}</td>
-   </tr>`);
-  }
- }
-
- $("oil-comparison-rows").innerHTML=rows.length?rows.join("") :
-  '<tr><td colspan="5" class="muted">No heating oil observations loaded.</td></tr>';
-
- drawOilChart();
-}
-
-function drawOilChart(){
- const region=$("oil-region-select").value;
- const volume=$("oil-volume-select").value;
- const item=findOilItem(region,volume);
-
- if(!item){
-  $("oil-chart").innerHTML=region==="ballyclare"?
-   '<div class="warning">Ballyclare regional prices have not been extracted successfully yet. National NI history remains available.</div>':
-   '<div class="muted">No heating oil history loaded. Run the markets collector.</div>';
-
-  $("oil-latest-price").textContent="—";
-  $("oil-per-100").textContent="—";
-  $("oil-record-count").textContent="0";
-  $("oil-first-date").textContent="—";
-  $("oil-last-date").textContent="—";
-  return;
- }
-
- const history=getHistory(item);
- const points=history.map(p=>({date:p.date,value:p.value}));
-
- $("oil-chart").innerHTML=svgChart(
-  points,
-  (region==="ni"?"Northern Ireland":"Ballyclare")+" "+volume+" litre heating oil history",
-  "£"
- );
-
- const price=number(item.price);
- const per100=number(item.pricePer100Litres) ??
-  (price!==null?price/Number(volume)*100:null);
-
- $("oil-latest-price").textContent=money(price);
- $("oil-per-100").textContent=money(per100);
- $("oil-record-count").textContent=history.length;
- chartLabels(points,"oil-first-date","oil-last-date");
-}
-
-/* ROAD FUEL HISTORY */
-
-function findFuelItem(key){
- return records(marketData.fuel).find(x=>
-  x.id===key||x.symbol===key||x.ticker===key
- )||null;
-}
-
-function drawFuelChart(){
- const key=$("fuel-select").value;
- const item=findFuelItem(key);
-
- if(!item){
-  $("fuel-chart").innerHTML='<div class="muted">No road fuel history loaded. Check the collector output.</div>';
-  $("fuel-latest").textContent="—";
-  $("fuel-count").textContent="0";
-  $("fuel-first").textContent="—";
-  $("fuel-last").textContent="—";
-  return;
- }
-
- const points=getHistory(item);
- $("fuel-chart").innerHTML=svgChart(points,getName(item)+" weekly price history","", "p");
- $("fuel-latest").textContent=fmt(getPrice(item))+"p/litre";
- $("fuel-count").textContent=points.length;
- chartLabels(points,"fuel-first","fuel-last");
-}
-
-/* OTHER SELECTABLE MARKET CHARTS */
-
-function drawOneChart(collection,key,target,label,prefix,first,last){
- const points=historyFor(collection,key);
- $(target).innerHTML=svgChart(points,label,prefix||"");
- chartLabels(points,first,last);
-}
-
-function drawSelectedChart(){
- drawOneChart(marketData.indices,$("index-select").value,
-  "index-chart","Index history","","index-first","index-last");
-
- drawOneChart(marketData.commodities,$("commodity-select").value,
-  "commodity-chart","Commodity history","$","commodity-first","commodity-last");
-
- drawOneChart(marketData.crypto,$("crypto-select").value,
-  "crypto-chart","Digital asset history","$","crypto-first","crypto-last");
-
- drawOneChart(marketData.fx,$("fx-select").value,
-  "fx-chart","Currency exchange history","","fx-first","fx-last");
-
- drawStockChart();
- drawFuelChart();
-}
-
-function renderNews(collection,target){
- const arr=records(collection);
- $(target).innerHTML=arr.length?arr.slice(0,20).map(n=>`
-  <div class="source">
-   <strong>${esc(n.title||"Untitled report")}</strong><br>
-   <span class="muted">${esc(n.source||"Source")} // ${esc(date(n.publishedAt||n.date))}</span><br>
-   ${n.url?`<a href="${esc(n.url)}" target="_blank" rel="noopener">OPEN REPORT ↗</a>`:""}
-  </div>
- `).join(""):'<div class="muted">No reports currently loaded.</div>';
-}
-
-function render(data){
- marketData=data;
-
- renderMarketCards(data.indices,"index-cards");
- renderMarketCards(data.commodities,"commodity-cards");
- renderMarketCards(data.crypto,"crypto-cards");
- renderMarketCards(data.fx,"fx-cards");
-
- renderStocks(data.stocks);
- renderFoodPriceIntelligence(data);
- renderHousehold(data);
- renderHeatingOil();
- renderEnergy(data.fuel,"fuel-cards","ROAD FUEL");
- renderMarketCards(data.agriculture,"agri-cards");
- renderNews(data.news,"finance-news");
- renderNews(data.supplyNews,"supply-news");
-
- drawSelectedChart();
-
- $("feed-status").textContent="MARKET DATA: LOADED";
- $("feed-status").className="green";
-}
-
 async function load(){
  try{
-  const response=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
-  if(!response.ok)throw new Error("HTTP "+response.status);
-  const data=await response.json();
-  render(data);
- }catch(error){
-  $("feed-status").textContent="MARKET DATA: AWAITING COLLECTOR";
-  $("feed-status").className="yellow";
-  console.error("DoomWatch markets:",error);
+  let r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
+  if(!r.ok)throw Error("HTTP "+r.status);
+  D=await r.json();render();
+ }catch(e){
+  $("feed-status").textContent="MARKET DATA: LOAD FAILED";
+  $("overview-status").textContent="Could not read ./data/markets.json. Check that the collector has generated the file.";
+  console.error("DoomWatch markets",e);
  }
 }
-
-function clock(){
- $("clock").textContent=new Date().toLocaleString("en-GB");
+function show(id){
+ document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+id));
+ document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
+ window.scrollTo({top:0,behavior:"smooth"});
 }
-
-/* SELECTOR EVENTS */
-
-[
- "index-select","commodity-select","crypto-select","fx-select"
-].forEach(id=>{
- $(id).addEventListener("change",drawSelectedChart);
-});
-
-$("stock-select").addEventListener("change",drawStockChart);
-$("fuel-select").addEventListener("change",drawFuelChart);
-$("oil-region-select").addEventListener("change",drawOilChart);
-$("oil-volume-select").addEventListener("change",drawOilChart);
-
-clock();
-setInterval(clock,1000);
-load();
-setInterval(load,15*60*1000);
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.view)));
+const quick=[["markets","GLOBAL MARKETS","Indices, market history and top ten stocks"],["commodities","COMMODITIES","Gold, silver, Brent and agriculture"],["currency","CURRENCY & DIGITAL","GBP, euro, dollar and Bitcoin"],["essentials","HOUSEHOLD ESSENTIALS","Food inflation, basket and item prices"],["energy","HOUSEHOLD ENERGY","NI heating oil, petrol and diesel"],["news","NEWS & RISK","Financial news and supply-chain pressure"],["sources","DATA SOURCES","Origins, updates and data quality"]];
+$("quickgrid").innerHTML=quick.map(x=>`<button class="quick" data-go="${x[0]}"><strong>${x[1]}</strong><span>${x[2]}</span></button>`).join("");
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.go)));
+$("index-select").onchange=drawIndices;$("commodity-select").onchange=drawCommodities;$("fx-select").onchange=drawFx;
+$("stock-select").onchange=drawStock;$("fuel-select").onchange=drawFuel;
+$("oil-region-select").onchange=drawOil;$("oil-volume-select").onchange=drawOil;
+$("stock-search").addEventListener("input",e=>document.querySelectorAll("#stock-rows tr").forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(e.target.value.toLowerCase())));
+$("basket-search").addEventListener("input",e=>document.querySelectorAll("#basket-rows tr").forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(e.target.value.toLowerCase())));
+function clock(){$("clock").textContent=new Date().toLocaleString("en-GB")}
+clock();setInterval(clock,1000);load();setInterval(load,15*60*1000);
 </script>
-<script src="./markets-layout.js"></script>
 </body>
 </html>
