@@ -38,33 +38,26 @@ YAHOO_URL = (
     "{}?range=1y&interval=1d"
 )
 
-# Financial markets and commodities
-
 MARKETS = {
     "commodities": {
         "gold": ("GC=F", "USD / troy oz"),
         "silver": ("SI=F", "USD / troy oz"),
         "brent": ("BZ=F", "USD / barrel"),
     },
-
     "indices": {
         "sp500": ("^GSPC", "index points"),
         "nasdaq": ("^IXIC", "index points"),
         "ftse100": ("^FTSE", "index points"),
     },
-
     "crypto": {
         "bitcoin": ("BTC-USD", "USD"),
     },
-
     "fx": {
         "GBPUSD": ("GBPUSD=X", "USD per GBP"),
         "GBPEUR": ("GBPEUR=X", "EUR per GBP"),
         "EURUSD": ("EURUSD=X", "USD per EUR"),
     },
 }
-
-# Top ten share watchlist
 
 STOCKS = [
     ("Apple", "AAPL"),
@@ -79,11 +72,14 @@ STOCKS = [
     ("Tesla", "TSLA"),
 ]
 
-# Official source pages
-
 HEATING_OIL_URL = (
     "https://www.consumercouncil.org.uk/"
     "home-heating/price-checker"
+)
+
+HEATING_OIL_DAILY_URL = (
+    "https://www.consumercouncil.org.uk/"
+    "home-heating/price-checker/daily"
 )
 
 FUEL_URL = (
@@ -192,6 +188,71 @@ def merge_history(old_history, new_history):
 
 
 # --------------------------------------------------
+# HTML TEXT EXTRACTION
+# --------------------------------------------------
+
+class TextExtractor(HTMLParser):
+
+    BLOCK_TAGS = {
+        "p", "div", "br", "tr", "td", "th",
+        "li", "h1", "h2", "h3", "h4",
+        "section", "article"
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.parts = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag.lower() in self.BLOCK_TAGS:
+            self.parts.append("\n")
+
+    def handle_endtag(self, tag):
+        if tag.lower() in self.BLOCK_TAGS:
+            self.parts.append("\n")
+
+    def handle_data(self, data):
+        self.parts.append(data)
+
+    def get_text(self):
+        return html.unescape(
+            "\n".join(self.parts)
+        )
+
+
+def html_to_text(raw):
+
+    parser = TextExtractor()
+
+    parser.feed(
+        raw.decode("utf-8", errors="replace")
+    )
+
+    return parser.get_text()
+
+
+def parse_money(value):
+
+    try:
+        cleaned = (
+            str(value)
+            .replace("£", "")
+            .replace(",", "")
+            .strip()
+        )
+
+        number = float(cleaned)
+
+        if number <= 0 or number > 100000:
+            return None
+
+        return round(number, 2)
+
+    except (TypeError, ValueError):
+        return None
+
+
+# --------------------------------------------------
 # FINANCIAL MARKET DATA
 # --------------------------------------------------
 
@@ -206,9 +267,7 @@ def get_yahoo_data(symbol):
     )
 
     result = raw["chart"]["result"][0]
-
     meta = result.get("meta", {})
-
     timestamps = result.get("timestamp", [])
 
     closes = (
@@ -292,12 +351,9 @@ def collect_markets(data):
             try:
 
                 item = get_yahoo_data(symbol)
-
                 item["unit"] = unit
 
-                previous = data[category].get(
-                    name, {}
-                )
+                previous = data[category].get(name, {})
 
                 item["history"] = merge_history(
                     previous.get("history", []),
@@ -313,9 +369,7 @@ def collect_markets(data):
                     item["price"]
                 )
 
-                data["sources"][
-                    category + "." + name
-                ] = {
+                data["sources"][category + "." + name] = {
                     "status": "ok",
                     "checkedAt": timestamp(),
                 }
@@ -329,9 +383,7 @@ def collect_markets(data):
                     str(error)[:200]
                 )
 
-                data["sources"][
-                    category + "." + name
-                ] = {
+                data["sources"][category + "." + name] = {
                     "status": "failed",
                     "error": str(error)[:200],
                     "checkedAt": timestamp(),
@@ -357,7 +409,6 @@ def collect_stocks(data):
         try:
 
             item = get_yahoo_data(symbol)
-
             item["name"] = name
 
             old = existing.get(symbol, {})
@@ -386,43 +437,337 @@ def collect_stocks(data):
 
 
 # --------------------------------------------------
-# HEATING OIL SOURCE MONITOR
+# NORTHERN IRELAND HEATING OIL
 # --------------------------------------------------
+
+def parse_daily_oil_archive(text):
+
+    observations = []
+
+    pattern = re.compile(
+        r"(\d{1,2}\s+[A-Za-z]+\s+\d{4})"
+        r"\s+£?\s*([\d,]+\.\d{2})"
+        r"\s+£?\s*([\d,]+\.\d{2})"
+        r"\s+£?\s*([\d,]+\.\d{2})",
+        re.IGNORECASE
+    )
+
+    for match in pattern.finditer(text):
+
+        try:
+            day = datetime.strptime(
+                match.group(1),
+                "%d %B %Y"
+            ).date().isoformat()
+
+            prices = [
+                parse_money(match.group(i))
+                for i in (2, 3, 4)
+            ]
+
+            if any(value is None for value in prices):
+                continue
+
+            observations.append({
+                "date": day,
+                "prices": prices,
+            })
+
+        except ValueError:
+            continue
+
+    # Remove duplicate dates while retaining valid records.
+
+    unique = {}
+
+    for observation in observations:
+        unique[observation["date"]] = observation
+
+    return [
+        unique[day]
+        for day in sorted(unique)
+    ]
+
+
+def parse_ballyclare_prices(text):
+
+    positions = [
+        match.start()
+        for match in re.finditer(
+            "Ballyclare",
+            text,
+            re.IGNORECASE
+        )
+    ]
+
+    for position in positions:
+
+        section = text[position:position + 2500]
+
+        heading = re.search(
+            r"300l\s+Average.*?"
+            r"500l\s+Average.*?"
+            r"900l\s+Average",
+            section,
+            re.IGNORECASE | re.DOTALL
+        )
+
+        if not heading:
+            continue
+
+        price_section = section[heading.end():]
+
+        values = re.findall(
+            r"£\s*([\d,]+\.\d{2})",
+            price_section
+        )
+
+        prices = [
+            parse_money(value)
+            for value in values[:3]
+        ]
+
+        if len(prices) == 3 and all(
+            value is not None for value in prices
+        ):
+            return prices
+
+    return None
+
+
+def oil_item(
+    item_id,
+    name,
+    litres,
+    price,
+    day,
+    source,
+    old_item=None
+):
+
+    old_item = old_item or {}
+
+    history = merge_history(
+        old_item.get("history", []),
+        [{
+            "date": day,
+            "price": price,
+            "source": source,
+        }]
+    )
+
+    return {
+        "id": item_id,
+        "name": name,
+        "price": price,
+        "currency": "GBP",
+        "unit": "GBP",
+        "volumeLitres": litres,
+        "pricePerLitre": round(price / litres, 4),
+        "pricePer100Litres": round(
+            price / litres * 100,
+            2
+        ),
+        "observedAt": day,
+        "date": day,
+        "source": source,
+        "url": HEATING_OIL_DAILY_URL,
+        "history": history,
+    }
+
 
 def collect_heating_oil(data):
 
+    print("HEATING OIL: collecting Consumer Council data")
+
     try:
 
-        fetch(HEATING_OIL_URL, "text/html")
+        # Daily archive provides national historical prices.
 
-        existing = data.get(
-            "heatingOil",
-            {}
-        ).get("items", [])
+        daily_raw = fetch(
+            HEATING_OIL_DAILY_URL,
+            "text/html"
+        )
+
+        daily_text = html_to_text(daily_raw)
+
+        archive = parse_daily_oil_archive(daily_text)
+
+        if not archive:
+            raise ValueError(
+                "No valid dated national oil observations found"
+            )
+
+        latest = archive[-1]
+        latest_day = latest["date"]
+
+        existing_items = (
+            data.get("heatingOil", {})
+            .get("items", [])
+        )
+
+        existing = {
+            item.get("id"): item
+            for item in existing_items
+            if isinstance(item, dict) and item.get("id")
+        }
+
+        items = []
+
+        volumes = [300, 500, 900]
+
+        labels = {
+            300: "NI average 300 litres",
+            500: "NI average 500 litres",
+            900: "NI average 900 litres",
+        }
+
+        # Import the full dated national archive.
+
+        for index, litres in enumerate(volumes):
+
+            item_id = f"ni-{litres}l"
+
+            old = existing.get(item_id, {})
+
+            historical_points = [
+                {
+                    "date": observation["date"],
+                    "price": observation["prices"][index],
+                    "source": "Consumer Council NI daily archive",
+                }
+                for observation in archive
+            ]
+
+            history = merge_history(
+                old.get("history", []),
+                historical_points
+            )
+
+            price = latest["prices"][index]
+
+            item = oil_item(
+                item_id,
+                labels[litres],
+                litres,
+                price,
+                latest_day,
+                "Consumer Council Northern Ireland",
+                old
+            )
+
+            item["history"] = history
+
+            items.append(item)
+
+            print(
+                "OK HEATING OIL:",
+                litres,
+                "litres",
+                price,
+                "history:",
+                len(history)
+            )
+
+        # Regional comparison: Ballyclare.
+
+        regional_raw = fetch(
+            HEATING_OIL_URL,
+            "text/html"
+        )
+
+        regional_text = html_to_text(regional_raw)
+
+        ballyclare = parse_ballyclare_prices(
+            regional_text
+        )
+
+        if ballyclare:
+
+            for index, litres in enumerate(volumes):
+
+                item_id = f"ballyclare-{litres}l"
+                old = existing.get(item_id, {})
+
+                item = oil_item(
+                    item_id,
+                    f"Ballyclare {litres} litres",
+                    litres,
+                    ballyclare[index],
+                    latest_day,
+                    "Consumer Council NI — Ballyclare",
+                    old
+                )
+
+                items.append(item)
+
+                print(
+                    "OK BALLYCLARE:",
+                    litres,
+                    "litres",
+                    ballyclare[index]
+                )
+
+        else:
+
+            print(
+                "WARNING: Ballyclare regional prices "
+                "were not extracted"
+            )
+
+            # Retain existing Ballyclare records if source layout changes.
+
+            for item_id, old in existing.items():
+                if item_id.startswith("ballyclare-"):
+                    if item_id not in {
+                        item.get("id") for item in items
+                    }:
+                        items.append(old)
 
         data["heatingOil"] = {
-            "items": existing
+            "items": items,
+            "updatedAt": timestamp(),
+            "source": "Consumer Council Northern Ireland",
+            "sourceUrl": HEATING_OIL_URL,
+            "dailyArchiveUrl": HEATING_OIL_DAILY_URL,
+            "vatIncluded": True,
+            "vatRate": 5,
         }
 
         data["sources"]["heatingOil"] = {
-            "status": "source_checked",
+            "status": "ok",
             "checkedAt": timestamp(),
             "url": HEATING_OIL_URL,
+            "dailyArchiveUrl": HEATING_OIL_DAILY_URL,
+            "observationsImported": len(archive),
+            "latestObservation": latest_day,
             "note": (
-                "Consumer Council NI source checked. "
-                "No new price is added unless a dated "
-                "published observation can be verified."
+                "Consumer Council NI published averages. "
+                "Prices include 5% VAT. "
+                "National and Ballyclare observations "
+                "are kept separately."
             ),
         }
 
-        print("OK: Heating oil source checked")
+        print(
+            "HEATING OIL COMPLETE:",
+            len(archive),
+            "dated national observations"
+        )
 
     except Exception as error:
 
         print(
             "FAILED: Heating oil",
-            str(error)[:200]
+            str(error)[:250]
         )
+
+        data["sources"]["heatingOil"] = {
+            "status": "failed",
+            "checkedAt": timestamp(),
+            "url": HEATING_OIL_URL,
+            "error": str(error)[:250],
+        }
 
 
 # --------------------------------------------------
@@ -529,8 +874,6 @@ def collect_news(data):
                 )
             )
 
-            # RSS feeds
-
             for item in root.findall(".//item"):
 
                 title = (
@@ -565,8 +908,6 @@ def collect_news(data):
 
                 if source == "DEFRA":
                     supply.append(article)
-
-            # Atom feeds
 
             namespace = {
                 "a": "http://www.w3.org/2005/Atom"
@@ -668,21 +1009,14 @@ def main():
     data.setdefault("sources", {})
 
     collect_markets(data)
-
     collect_stocks(data)
-
     collect_heating_oil(data)
-
     collect_fuel(data)
-
     collect_groceries(data)
-
     collect_news(data)
 
     data["schemaVersion"] = 1
-
     data["updatedAt"] = timestamp()
-
     data["generatedAt"] = data["updatedAt"]
 
     DATA_DIR.mkdir(
