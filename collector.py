@@ -304,7 +304,65 @@ def main():
     config = load_json(FEEDS_FILE, {})
     intelligence = load_json(DATA_FILE, {})
 
+    
     feeds = config.get("feeds", [])
+
+    # ADDITIVE SOURCE REGISTER SUPPORT
+    # Existing feeds always take priority. New eligible RSS
+    # sources are appended without changing the existing feed list.
+
+    SOURCES_FILE = ROOT / "sources.json"
+    additional_count = 0
+
+    if SOURCES_FILE.exists():
+        source_register = load_json(SOURCES_FILE, {})
+        registered_sources = source_register.get("sources", [])
+
+        existing_ids = {
+            item.get("id") for item in feeds
+        }
+
+        existing_urls = {
+            item.get("url") for item in feeds
+        }
+
+        for item in registered_sources:
+            endpoint = item.get("endpoint")
+            source_id = item.get("id")
+
+            if item.get("status") != "candidate":
+                continue
+
+            if item.get("method") != "rss":
+                continue
+
+            if not endpoint or not endpoint.startswith("https://"):
+                continue
+
+            if not source_id or source_id in existing_ids:
+                continue
+
+            if endpoint in existing_urls:
+                continue
+
+            sectors = item.get("sectors", [])
+
+            feeds.append({
+                "id": source_id,
+                "name": item.get("name", source_id),
+                "url": endpoint,
+                "domain": sectors[0] if sectors else None,
+                "region": item.get("region", "Unknown"),
+                "priority": "medium",
+                "tier": 3
+            })
+
+            existing_ids.add(source_id)
+            existing_urls.add(endpoint)
+            additional_count += 1
+
+    print("Additional RSS sources enabled:", additional_count)
+
     collected = []
     source_status = []
 
