@@ -1,51 +1,51 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T20:29:50+00:00",
-  "generatedAt": "2026-11-12T20:29:50+00:00",
+  "updatedAt": "2026-11-12T20:56:51+00:00",
+  "generatedAt": "2026-11-12T20:56:51+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-12T20:29:44+00:00"
+      "checkedAt": "2026-11-12T20:56:45+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-12T20:29:44+00:00"
+      "checkedAt": "2026-11-12T20:56:45+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-12T20:29:44+00:00"
+      "checkedAt": "2026-11-12T20:56:45+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-12T20:29:44+00:00"
+      "checkedAt": "2026-11-12T20:56:45+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-12T20:29:44+00:00"
+      "checkedAt": "2026-11-12T20:56:45+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-12T20:29:44+00:00"
+      "checkedAt": "2026-11-12T20:56:46+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-12T20:29:44+00:00"
+      "checkedAt": "2026-11-12T20:56:46+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-12T20:29:44+00:00"
+      "checkedAt": "2026-11-12T20:56:46+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-12T20:29:44+00:00"
+      "checkedAt": "2026-11-12T20:56:46+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-12T20:29:44+00:00"
+      "checkedAt": "2026-11-12T20:56:46+00:00"
     },
     "heatingOil": {
       "status": "ok",
-      "checkedAt": "2026-11-12T20:29:46+00:00",
+      "checkedAt": "2026-11-12T20:56:47+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
       "observationsImported": 178,
@@ -54,7 +54,7 @@
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-12T20:29:46+00:00",
+      "checkedAt": "2026-11-12T20:56:47+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
       "observationsImported": 463,
@@ -63,24 +63,36 @@
     },
     "foodCompass": {
       "status": "source_checked",
-      "checkedAt": "2026-11-12T20:29:50+00:00",
+      "checkedAt": "2026-11-12T20:56:51+00:00",
       "url": "https://nifoodcompass.com/",
       "note": "NI product comparison source checked. Product prices are not treated as live or current without their capture dates."
     },
     "foodInflation": {
-      "status": "failed",
-      "checkedAt": "2026-11-12T20:29:47+00:00",
+      "status": "ok",
+      "checkedAt": "2026-11-12T20:56:49+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
-      "error": "No valid monthly food-price observations found in the Defra CSV"
+      "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
+      "observationsImported": 76,
+      "latestObservation": "2026-04-01",
+      "note": "Official UK-wide CPIH food and non-alcoholic beverage year-on-year inflation. The CSV already contains inflation percentages; no second inflation calculation is applied. This is not a local supermarket basket or NI-only measure."
+    },
+    "overallInflation": {
+      "status": "ok",
+      "checkedAt": "2026-11-12T20:56:49+00:00",
+      "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
+      "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
+      "observationsImported": 76,
+      "latestObservation": "2026-04-01",
+      "note": "Official UK-wide CPIH overall year-on-year inflation, supplied for comparison with food."
     }
   },
   "commodities": {
     "gold": {
       "symbol": "GC=F",
-      "price": 3890.4,
-      "changePct": -7.67,
+      "price": 3883.6,
+      "changePct": -7.832,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:19:40+00:00",
+      "observedAt": "2026-11-12T20:46:42+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -1088,7 +1100,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 3890.399902
+          "value": 3883.600098
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -1098,10 +1110,10 @@
     },
     "silver": {
       "symbol": "SI=F",
-      "price": 50.06,
-      "changePct": -6.135,
+      "price": 49.995,
+      "changePct": -6.257,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:19:21+00:00",
+      "observedAt": "2026-11-12T20:46:42+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -2109,7 +2121,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 50.060001
+          "value": 49.994999
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -2119,10 +2131,10 @@
     },
     "brent": {
       "symbol": "BZ=F",
-      "price": 95.98,
-      "changePct": 53.054,
+      "price": 96.14,
+      "changePct": 53.309,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:19:40+00:00",
+      "observedAt": "2026-11-12T20:46:36+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -3130,7 +3142,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 95.980003
+          "value": 96.139999
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -3142,10 +3154,10 @@
   "indices": {
     "sp500": {
       "symbol": "^GSPC",
-      "price": 7594.6,
-      "changePct": 10.855,
+      "price": 7587.65,
+      "changePct": 10.754,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:43+00:00",
+      "observedAt": "2026-11-12T20:56:45+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -4153,7 +4165,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 7594.600098
+          "value": 7587.649902
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -4163,10 +4175,10 @@
     },
     "nasdaq": {
       "symbol": "^IXIC",
-      "price": 25341.408,
-      "changePct": 8.267,
+      "price": 25344.578,
+      "changePct": 8.28,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:42+00:00",
+      "observedAt": "2026-11-12T20:56:44+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -5174,7 +5186,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 25341.408203
+          "value": 25344.578125
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -6215,10 +6227,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 71349.75,
-      "changePct": -29.818,
+      "price": 71362.59,
+      "changePct": -29.805,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:42+00:00",
+      "observedAt": "2026-11-12T20:56:42+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -7682,7 +7694,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 71349.75
+          "value": 71362.59375
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -7694,10 +7706,10 @@
   "fx": {
     "GBPUSD": {
       "symbol": "GBPUSD=X",
-      "price": 1.3236,
-      "changePct": 0.631,
+      "price": 1.3238,
+      "changePct": 0.646,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:32+00:00",
+      "observedAt": "2026-11-12T20:56:32+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -8737,7 +8749,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 1.323644
+          "value": 1.323784
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -8747,10 +8759,10 @@
     },
     "GBPEUR": {
       "symbol": "GBPEUR=X",
-      "price": 1.1968,
-      "changePct": 5.482,
+      "price": 1.1967,
+      "changePct": 5.473,
       "currency": "EUR",
-      "observedAt": "2026-11-12T20:29:32+00:00",
+      "observedAt": "2026-11-12T20:55:32+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -9790,7 +9802,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 1.1968
+          "value": 1.1967
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -9800,10 +9812,10 @@
     },
     "EURUSD": {
       "symbol": "EURUSD=X",
-      "price": 1.1058,
-      "changePct": -4.565,
+      "price": 1.1059,
+      "changePct": -4.557,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:32+00:00",
+      "observedAt": "2026-11-12T20:56:32+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -10843,7 +10855,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 1.105828
+          "value": 1.10595
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -10855,10 +10867,10 @@
   "stocks": [
     {
       "symbol": "AAPL",
-      "price": 355.5,
-      "changePct": 29.996,
+      "price": 354.705,
+      "changePct": 29.705,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:43+00:00",
+      "observedAt": "2026-11-12T20:56:45+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -11866,7 +11878,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 355.5
+          "value": 354.704987
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -11876,10 +11888,10 @@
     },
     {
       "symbol": "MSFT",
-      "price": 522.322,
-      "changePct": 2.188,
+      "price": 522.65,
+      "changePct": 2.252,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:42+00:00",
+      "observedAt": "2026-11-12T20:56:46+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -12887,7 +12899,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 522.321716
+          "value": 522.650024
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -12897,10 +12909,10 @@
     },
     {
       "symbol": "NVDA",
-      "price": 164.0,
-      "changePct": -15.377,
+      "price": 165.23,
+      "changePct": -14.742,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:44+00:00",
+      "observedAt": "2026-11-12T20:56:45+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -13908,7 +13920,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 164.0
+          "value": 165.229996
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -13918,10 +13930,10 @@
     },
     {
       "symbol": "AMZN",
-      "price": 268.07,
-      "changePct": 9.775,
+      "price": 267.41,
+      "changePct": 9.505,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:43+00:00",
+      "observedAt": "2026-11-12T20:56:45+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -14929,7 +14941,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 268.070007
+          "value": 267.410004
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -14939,10 +14951,10 @@
     },
     {
       "symbol": "GOOGL",
-      "price": 299.44,
-      "changePct": 4.44,
+      "price": 298.765,
+      "changePct": 4.205,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:45+00:00",
+      "observedAt": "2026-11-12T20:56:46+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -15950,7 +15962,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 299.439911
+          "value": 298.765015
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -15960,10 +15972,10 @@
     },
     {
       "symbol": "META",
-      "price": 621.437,
-      "changePct": 2.041,
+      "price": 622.6,
+      "changePct": 2.231,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:42+00:00",
+      "observedAt": "2026-11-12T20:56:43+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -16971,7 +16983,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 621.437073
+          "value": 622.599976
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -16981,10 +16993,10 @@
     },
     {
       "symbol": "BRK-B",
-      "price": 589.77,
-      "changePct": 17.391,
+      "price": 589.12,
+      "changePct": 17.261,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:39+00:00",
+      "observedAt": "2026-11-12T20:56:44+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -17992,7 +18004,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 589.77002
+          "value": 589.119995
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -18002,10 +18014,10 @@
     },
     {
       "symbol": "JPM",
-      "price": 343.37,
-      "changePct": 7.166,
+      "price": 342.71,
+      "changePct": 6.96,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:44+00:00",
+      "observedAt": "2026-11-12T20:56:45+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -19013,7 +19025,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 343.369904
+          "value": 342.709991
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -19023,10 +19035,10 @@
     },
     {
       "symbol": "AVGO",
-      "price": 361.93,
-      "changePct": 1.889,
+      "price": 364.42,
+      "changePct": 2.59,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:45+00:00",
+      "observedAt": "2026-11-12T20:56:46+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -20034,7 +20046,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 361.929993
+          "value": 364.420013
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -20044,10 +20056,10 @@
     },
     {
       "symbol": "TSLA",
-      "price": 398.31,
-      "changePct": -7.499,
+      "price": 397.13,
+      "changePct": -7.773,
       "currency": "USD",
-      "observedAt": "2026-11-12T20:29:44+00:00",
+      "observedAt": "2026-11-12T20:56:46+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -21055,7 +21067,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 398.309998
+          "value": 397.130005
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -23848,7 +23860,7 @@
         ]
       }
     ],
-    "updatedAt": "2026-11-12T20:29:46+00:00",
+    "updatedAt": "2026-11-12T20:56:47+00:00",
     "source": "Consumer Council Northern Ireland",
     "sourceUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker",
     "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
@@ -27892,7 +27904,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-12T20:29:46+00:00",
+    "updatedAt": "2026-11-12T20:56:47+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
@@ -27902,9 +27914,644 @@
   },
   "householdBasket": {
     "items": [],
-    "history": []
+    "history": [],
+    "foodInflationHistory": [
+      {
+        "date": "2020-01-01",
+        "value": 1.4
+      },
+      {
+        "date": "2020-02-01",
+        "value": 1.3
+      },
+      {
+        "date": "2020-03-01",
+        "value": 1.3
+      },
+      {
+        "date": "2020-04-01",
+        "value": 1.4
+      },
+      {
+        "date": "2020-05-01",
+        "value": 1.9
+      },
+      {
+        "date": "2020-06-01",
+        "value": 1.2
+      },
+      {
+        "date": "2020-07-01",
+        "value": 0.8
+      },
+      {
+        "date": "2020-08-01",
+        "value": 0.4
+      },
+      {
+        "date": "2020-09-01",
+        "value": 0.0
+      },
+      {
+        "date": "2020-10-01",
+        "value": 0.6
+      },
+      {
+        "date": "2020-11-01",
+        "value": -0.5
+      },
+      {
+        "date": "2020-12-01",
+        "value": -1.4
+      },
+      {
+        "date": "2021-01-01",
+        "value": -0.7
+      },
+      {
+        "date": "2021-02-01",
+        "value": -0.6
+      },
+      {
+        "date": "2021-03-01",
+        "value": -1.4
+      },
+      {
+        "date": "2021-04-01",
+        "value": -0.5
+      },
+      {
+        "date": "2021-05-01",
+        "value": -1.3
+      },
+      {
+        "date": "2021-06-01",
+        "value": -0.6
+      },
+      {
+        "date": "2021-07-01",
+        "value": -0.6
+      },
+      {
+        "date": "2021-08-01",
+        "value": 0.3
+      },
+      {
+        "date": "2021-09-01",
+        "value": 0.8
+      },
+      {
+        "date": "2021-10-01",
+        "value": 1.3
+      },
+      {
+        "date": "2021-11-01",
+        "value": 2.5
+      },
+      {
+        "date": "2021-12-01",
+        "value": 4.2
+      },
+      {
+        "date": "2022-01-01",
+        "value": 4.4
+      },
+      {
+        "date": "2022-02-01",
+        "value": 5.1
+      },
+      {
+        "date": "2022-03-01",
+        "value": 5.9
+      },
+      {
+        "date": "2022-04-01",
+        "value": 6.7
+      },
+      {
+        "date": "2022-05-01",
+        "value": 8.7
+      },
+      {
+        "date": "2022-06-01",
+        "value": 9.8
+      },
+      {
+        "date": "2022-07-01",
+        "value": 12.7
+      },
+      {
+        "date": "2022-08-01",
+        "value": 13.1
+      },
+      {
+        "date": "2022-09-01",
+        "value": 14.6
+      },
+      {
+        "date": "2022-10-01",
+        "value": 16.4
+      },
+      {
+        "date": "2022-11-01",
+        "value": 16.5
+      },
+      {
+        "date": "2022-12-01",
+        "value": 16.9
+      },
+      {
+        "date": "2023-01-01",
+        "value": 16.8
+      },
+      {
+        "date": "2023-02-01",
+        "value": 18.2
+      },
+      {
+        "date": "2023-03-01",
+        "value": 19.2
+      },
+      {
+        "date": "2023-04-01",
+        "value": 19.1
+      },
+      {
+        "date": "2023-05-01",
+        "value": 18.4
+      },
+      {
+        "date": "2023-06-01",
+        "value": 17.4
+      },
+      {
+        "date": "2023-07-01",
+        "value": 14.9
+      },
+      {
+        "date": "2023-08-01",
+        "value": 13.6
+      },
+      {
+        "date": "2023-09-01",
+        "value": 12.2
+      },
+      {
+        "date": "2023-10-01",
+        "value": 10.1
+      },
+      {
+        "date": "2023-11-01",
+        "value": 9.2
+      },
+      {
+        "date": "2023-12-01",
+        "value": 8.0
+      },
+      {
+        "date": "2024-01-01",
+        "value": 7.0
+      },
+      {
+        "date": "2024-02-01",
+        "value": 5.0
+      },
+      {
+        "date": "2024-03-01",
+        "value": 4.0
+      },
+      {
+        "date": "2024-04-01",
+        "value": 2.9
+      },
+      {
+        "date": "2024-05-01",
+        "value": 1.7
+      },
+      {
+        "date": "2024-06-01",
+        "value": 1.5
+      },
+      {
+        "date": "2024-07-01",
+        "value": 1.5
+      },
+      {
+        "date": "2024-08-01",
+        "value": 1.3
+      },
+      {
+        "date": "2024-09-01",
+        "value": 1.8
+      },
+      {
+        "date": "2024-10-01",
+        "value": 1.9
+      },
+      {
+        "date": "2024-11-01",
+        "value": 2.0
+      },
+      {
+        "date": "2024-12-01",
+        "value": 2.0
+      },
+      {
+        "date": "2025-01-01",
+        "value": 3.3
+      },
+      {
+        "date": "2025-02-01",
+        "value": 3.3
+      },
+      {
+        "date": "2025-03-01",
+        "value": 3.0
+      },
+      {
+        "date": "2025-04-01",
+        "value": 3.4
+      },
+      {
+        "date": "2025-05-01",
+        "value": 4.4
+      },
+      {
+        "date": "2025-06-01",
+        "value": 4.5
+      },
+      {
+        "date": "2025-07-01",
+        "value": 4.9
+      },
+      {
+        "date": "2025-08-01",
+        "value": 5.1
+      },
+      {
+        "date": "2025-09-01",
+        "value": 4.5
+      },
+      {
+        "date": "2025-10-01",
+        "value": 4.9
+      },
+      {
+        "date": "2025-11-01",
+        "value": 4.2
+      },
+      {
+        "date": "2025-12-01",
+        "value": 4.5
+      },
+      {
+        "date": "2026-01-01",
+        "value": 3.6
+      },
+      {
+        "date": "2026-02-01",
+        "value": 3.3
+      },
+      {
+        "date": "2026-03-01",
+        "value": 3.7
+      },
+      {
+        "date": "2026-04-01",
+        "value": 3.0
+      }
+    ],
+    "overallInflationHistory": [
+      {
+        "date": "2020-01-01",
+        "value": 1.8
+      },
+      {
+        "date": "2020-02-01",
+        "value": 1.7
+      },
+      {
+        "date": "2020-03-01",
+        "value": 1.5
+      },
+      {
+        "date": "2020-04-01",
+        "value": 0.9
+      },
+      {
+        "date": "2020-05-01",
+        "value": 0.7
+      },
+      {
+        "date": "2020-06-01",
+        "value": 0.8
+      },
+      {
+        "date": "2020-07-01",
+        "value": 1.1
+      },
+      {
+        "date": "2020-08-01",
+        "value": 0.5
+      },
+      {
+        "date": "2020-09-01",
+        "value": 0.7
+      },
+      {
+        "date": "2020-10-01",
+        "value": 0.9
+      },
+      {
+        "date": "2020-11-01",
+        "value": 0.6
+      },
+      {
+        "date": "2020-12-01",
+        "value": 0.8
+      },
+      {
+        "date": "2021-01-01",
+        "value": 0.9
+      },
+      {
+        "date": "2021-02-01",
+        "value": 0.7
+      },
+      {
+        "date": "2021-03-01",
+        "value": 1.0
+      },
+      {
+        "date": "2021-04-01",
+        "value": 1.6
+      },
+      {
+        "date": "2021-05-01",
+        "value": 2.1
+      },
+      {
+        "date": "2021-06-01",
+        "value": 2.4
+      },
+      {
+        "date": "2021-07-01",
+        "value": 2.1
+      },
+      {
+        "date": "2021-08-01",
+        "value": 3.0
+      },
+      {
+        "date": "2021-09-01",
+        "value": 2.9
+      },
+      {
+        "date": "2021-10-01",
+        "value": 3.8
+      },
+      {
+        "date": "2021-11-01",
+        "value": 4.6
+      },
+      {
+        "date": "2021-12-01",
+        "value": 4.8
+      },
+      {
+        "date": "2022-01-01",
+        "value": 4.9
+      },
+      {
+        "date": "2022-02-01",
+        "value": 5.5
+      },
+      {
+        "date": "2022-03-01",
+        "value": 6.2
+      },
+      {
+        "date": "2022-04-01",
+        "value": 7.8
+      },
+      {
+        "date": "2022-05-01",
+        "value": 7.9
+      },
+      {
+        "date": "2022-06-01",
+        "value": 8.2
+      },
+      {
+        "date": "2022-07-01",
+        "value": 8.8
+      },
+      {
+        "date": "2022-08-01",
+        "value": 8.6
+      },
+      {
+        "date": "2022-09-01",
+        "value": 8.8
+      },
+      {
+        "date": "2022-10-01",
+        "value": 9.6
+      },
+      {
+        "date": "2022-11-01",
+        "value": 9.3
+      },
+      {
+        "date": "2022-12-01",
+        "value": 9.2
+      },
+      {
+        "date": "2023-01-01",
+        "value": 8.8
+      },
+      {
+        "date": "2023-02-01",
+        "value": 9.2
+      },
+      {
+        "date": "2023-03-01",
+        "value": 8.9
+      },
+      {
+        "date": "2023-04-01",
+        "value": 7.8
+      },
+      {
+        "date": "2023-05-01",
+        "value": 7.9
+      },
+      {
+        "date": "2023-06-01",
+        "value": 7.3
+      },
+      {
+        "date": "2023-07-01",
+        "value": 6.4
+      },
+      {
+        "date": "2023-08-01",
+        "value": 6.3
+      },
+      {
+        "date": "2023-09-01",
+        "value": 6.3
+      },
+      {
+        "date": "2023-10-01",
+        "value": 4.7
+      },
+      {
+        "date": "2023-11-01",
+        "value": 4.2
+      },
+      {
+        "date": "2023-12-01",
+        "value": 4.2
+      },
+      {
+        "date": "2024-01-01",
+        "value": 4.2
+      },
+      {
+        "date": "2024-02-01",
+        "value": 3.8
+      },
+      {
+        "date": "2024-03-01",
+        "value": 3.8
+      },
+      {
+        "date": "2024-04-01",
+        "value": 3.0
+      },
+      {
+        "date": "2024-05-01",
+        "value": 2.8
+      },
+      {
+        "date": "2024-06-01",
+        "value": 2.8
+      },
+      {
+        "date": "2024-07-01",
+        "value": 3.1
+      },
+      {
+        "date": "2024-08-01",
+        "value": 3.1
+      },
+      {
+        "date": "2024-09-01",
+        "value": 2.6
+      },
+      {
+        "date": "2024-10-01",
+        "value": 3.2
+      },
+      {
+        "date": "2024-11-01",
+        "value": 3.5
+      },
+      {
+        "date": "2024-12-01",
+        "value": 3.5
+      },
+      {
+        "date": "2025-01-01",
+        "value": 3.9
+      },
+      {
+        "date": "2025-02-01",
+        "value": 3.7
+      },
+      {
+        "date": "2025-03-01",
+        "value": 3.4
+      },
+      {
+        "date": "2025-04-01",
+        "value": 4.1
+      },
+      {
+        "date": "2025-05-01",
+        "value": 4.0
+      },
+      {
+        "date": "2025-06-01",
+        "value": 4.1
+      },
+      {
+        "date": "2025-07-01",
+        "value": 4.2
+      },
+      {
+        "date": "2025-08-01",
+        "value": 4.1
+      },
+      {
+        "date": "2025-09-01",
+        "value": 4.1
+      },
+      {
+        "date": "2025-10-01",
+        "value": 3.8
+      },
+      {
+        "date": "2025-11-01",
+        "value": 3.5
+      },
+      {
+        "date": "2025-12-01",
+        "value": 3.6
+      },
+      {
+        "date": "2026-01-01",
+        "value": 3.2
+      },
+      {
+        "date": "2026-02-01",
+        "value": 3.2
+      },
+      {
+        "date": "2026-03-01",
+        "value": 3.4
+      },
+      {
+        "date": "2026-04-01",
+        "value": 3.0
+      }
+    ],
+    "foodInflation": {
+      "name": "CPIH food inflation",
+      "value": 3.0,
+      "date": "2026-04-01",
+      "unit": "% year-on-year",
+      "source": "ONS / Defra CPIH",
+      "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket"
+    },
+    "overallInflation": {
+      "name": "CPIH overall inflation",
+      "value": 3.0,
+      "date": "2026-04-01",
+      "unit": "% year-on-year",
+      "source": "ONS / Defra CPIH",
+      "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket"
+    },
+    "updatedAt": "2026-11-12T20:56:49+00:00"
   },
   "news": [
+    {
+      "title": "US envoys head to meet Zelensky after talks with Putin in Moscow",
+      "url": "https://www.bbc.co.uk/news/articles/cwrkgmymk55zo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-12T20:37:36+00:00"
+    },
     {
       "title": "Jensen Huang has resigned, what's next for Nvidia?",
       "url": "https://www.bbc.co.uk/news/videos/c6wy9l859r94o?at_medium=RSS&at_campaign=rss",
@@ -27934,12 +28581,6 @@
       "url": "https://www.bbc.co.uk/news/articles/cmvg2r3dq7xno?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-12T18:47:35+00:00"
-    },
-    {
-      "title": "US envoys head to meet Zelensky after talks with Putin in Moscow",
-      "url": "https://www.bbc.co.uk/news/articles/cwrkgmymk55zo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-12T18:28:59+00:00"
     },
     {
       "title": "Bird flu (avian influenza): latest situation in England",
@@ -28207,5 +28848,633 @@
       "source": "DEFRA",
       "publishedAt": "2026-11-11T14:59:13Z"
     }
-  ]
+  ],
+  "foodInflationHistory": [
+    {
+      "date": "2020-01-01",
+      "value": 1.4
+    },
+    {
+      "date": "2020-02-01",
+      "value": 1.3
+    },
+    {
+      "date": "2020-03-01",
+      "value": 1.3
+    },
+    {
+      "date": "2020-04-01",
+      "value": 1.4
+    },
+    {
+      "date": "2020-05-01",
+      "value": 1.9
+    },
+    {
+      "date": "2020-06-01",
+      "value": 1.2
+    },
+    {
+      "date": "2020-07-01",
+      "value": 0.8
+    },
+    {
+      "date": "2020-08-01",
+      "value": 0.4
+    },
+    {
+      "date": "2020-09-01",
+      "value": 0.0
+    },
+    {
+      "date": "2020-10-01",
+      "value": 0.6
+    },
+    {
+      "date": "2020-11-01",
+      "value": -0.5
+    },
+    {
+      "date": "2020-12-01",
+      "value": -1.4
+    },
+    {
+      "date": "2021-01-01",
+      "value": -0.7
+    },
+    {
+      "date": "2021-02-01",
+      "value": -0.6
+    },
+    {
+      "date": "2021-03-01",
+      "value": -1.4
+    },
+    {
+      "date": "2021-04-01",
+      "value": -0.5
+    },
+    {
+      "date": "2021-05-01",
+      "value": -1.3
+    },
+    {
+      "date": "2021-06-01",
+      "value": -0.6
+    },
+    {
+      "date": "2021-07-01",
+      "value": -0.6
+    },
+    {
+      "date": "2021-08-01",
+      "value": 0.3
+    },
+    {
+      "date": "2021-09-01",
+      "value": 0.8
+    },
+    {
+      "date": "2021-10-01",
+      "value": 1.3
+    },
+    {
+      "date": "2021-11-01",
+      "value": 2.5
+    },
+    {
+      "date": "2021-12-01",
+      "value": 4.2
+    },
+    {
+      "date": "2022-01-01",
+      "value": 4.4
+    },
+    {
+      "date": "2022-02-01",
+      "value": 5.1
+    },
+    {
+      "date": "2022-03-01",
+      "value": 5.9
+    },
+    {
+      "date": "2022-04-01",
+      "value": 6.7
+    },
+    {
+      "date": "2022-05-01",
+      "value": 8.7
+    },
+    {
+      "date": "2022-06-01",
+      "value": 9.8
+    },
+    {
+      "date": "2022-07-01",
+      "value": 12.7
+    },
+    {
+      "date": "2022-08-01",
+      "value": 13.1
+    },
+    {
+      "date": "2022-09-01",
+      "value": 14.6
+    },
+    {
+      "date": "2022-10-01",
+      "value": 16.4
+    },
+    {
+      "date": "2022-11-01",
+      "value": 16.5
+    },
+    {
+      "date": "2022-12-01",
+      "value": 16.9
+    },
+    {
+      "date": "2023-01-01",
+      "value": 16.8
+    },
+    {
+      "date": "2023-02-01",
+      "value": 18.2
+    },
+    {
+      "date": "2023-03-01",
+      "value": 19.2
+    },
+    {
+      "date": "2023-04-01",
+      "value": 19.1
+    },
+    {
+      "date": "2023-05-01",
+      "value": 18.4
+    },
+    {
+      "date": "2023-06-01",
+      "value": 17.4
+    },
+    {
+      "date": "2023-07-01",
+      "value": 14.9
+    },
+    {
+      "date": "2023-08-01",
+      "value": 13.6
+    },
+    {
+      "date": "2023-09-01",
+      "value": 12.2
+    },
+    {
+      "date": "2023-10-01",
+      "value": 10.1
+    },
+    {
+      "date": "2023-11-01",
+      "value": 9.2
+    },
+    {
+      "date": "2023-12-01",
+      "value": 8.0
+    },
+    {
+      "date": "2024-01-01",
+      "value": 7.0
+    },
+    {
+      "date": "2024-02-01",
+      "value": 5.0
+    },
+    {
+      "date": "2024-03-01",
+      "value": 4.0
+    },
+    {
+      "date": "2024-04-01",
+      "value": 2.9
+    },
+    {
+      "date": "2024-05-01",
+      "value": 1.7
+    },
+    {
+      "date": "2024-06-01",
+      "value": 1.5
+    },
+    {
+      "date": "2024-07-01",
+      "value": 1.5
+    },
+    {
+      "date": "2024-08-01",
+      "value": 1.3
+    },
+    {
+      "date": "2024-09-01",
+      "value": 1.8
+    },
+    {
+      "date": "2024-10-01",
+      "value": 1.9
+    },
+    {
+      "date": "2024-11-01",
+      "value": 2.0
+    },
+    {
+      "date": "2024-12-01",
+      "value": 2.0
+    },
+    {
+      "date": "2025-01-01",
+      "value": 3.3
+    },
+    {
+      "date": "2025-02-01",
+      "value": 3.3
+    },
+    {
+      "date": "2025-03-01",
+      "value": 3.0
+    },
+    {
+      "date": "2025-04-01",
+      "value": 3.4
+    },
+    {
+      "date": "2025-05-01",
+      "value": 4.4
+    },
+    {
+      "date": "2025-06-01",
+      "value": 4.5
+    },
+    {
+      "date": "2025-07-01",
+      "value": 4.9
+    },
+    {
+      "date": "2025-08-01",
+      "value": 5.1
+    },
+    {
+      "date": "2025-09-01",
+      "value": 4.5
+    },
+    {
+      "date": "2025-10-01",
+      "value": 4.9
+    },
+    {
+      "date": "2025-11-01",
+      "value": 4.2
+    },
+    {
+      "date": "2025-12-01",
+      "value": 4.5
+    },
+    {
+      "date": "2026-01-01",
+      "value": 3.6
+    },
+    {
+      "date": "2026-02-01",
+      "value": 3.3
+    },
+    {
+      "date": "2026-03-01",
+      "value": 3.7
+    },
+    {
+      "date": "2026-04-01",
+      "value": 3.0
+    }
+  ],
+  "overallInflationHistory": [
+    {
+      "date": "2020-01-01",
+      "value": 1.8
+    },
+    {
+      "date": "2020-02-01",
+      "value": 1.7
+    },
+    {
+      "date": "2020-03-01",
+      "value": 1.5
+    },
+    {
+      "date": "2020-04-01",
+      "value": 0.9
+    },
+    {
+      "date": "2020-05-01",
+      "value": 0.7
+    },
+    {
+      "date": "2020-06-01",
+      "value": 0.8
+    },
+    {
+      "date": "2020-07-01",
+      "value": 1.1
+    },
+    {
+      "date": "2020-08-01",
+      "value": 0.5
+    },
+    {
+      "date": "2020-09-01",
+      "value": 0.7
+    },
+    {
+      "date": "2020-10-01",
+      "value": 0.9
+    },
+    {
+      "date": "2020-11-01",
+      "value": 0.6
+    },
+    {
+      "date": "2020-12-01",
+      "value": 0.8
+    },
+    {
+      "date": "2021-01-01",
+      "value": 0.9
+    },
+    {
+      "date": "2021-02-01",
+      "value": 0.7
+    },
+    {
+      "date": "2021-03-01",
+      "value": 1.0
+    },
+    {
+      "date": "2021-04-01",
+      "value": 1.6
+    },
+    {
+      "date": "2021-05-01",
+      "value": 2.1
+    },
+    {
+      "date": "2021-06-01",
+      "value": 2.4
+    },
+    {
+      "date": "2021-07-01",
+      "value": 2.1
+    },
+    {
+      "date": "2021-08-01",
+      "value": 3.0
+    },
+    {
+      "date": "2021-09-01",
+      "value": 2.9
+    },
+    {
+      "date": "2021-10-01",
+      "value": 3.8
+    },
+    {
+      "date": "2021-11-01",
+      "value": 4.6
+    },
+    {
+      "date": "2021-12-01",
+      "value": 4.8
+    },
+    {
+      "date": "2022-01-01",
+      "value": 4.9
+    },
+    {
+      "date": "2022-02-01",
+      "value": 5.5
+    },
+    {
+      "date": "2022-03-01",
+      "value": 6.2
+    },
+    {
+      "date": "2022-04-01",
+      "value": 7.8
+    },
+    {
+      "date": "2022-05-01",
+      "value": 7.9
+    },
+    {
+      "date": "2022-06-01",
+      "value": 8.2
+    },
+    {
+      "date": "2022-07-01",
+      "value": 8.8
+    },
+    {
+      "date": "2022-08-01",
+      "value": 8.6
+    },
+    {
+      "date": "2022-09-01",
+      "value": 8.8
+    },
+    {
+      "date": "2022-10-01",
+      "value": 9.6
+    },
+    {
+      "date": "2022-11-01",
+      "value": 9.3
+    },
+    {
+      "date": "2022-12-01",
+      "value": 9.2
+    },
+    {
+      "date": "2023-01-01",
+      "value": 8.8
+    },
+    {
+      "date": "2023-02-01",
+      "value": 9.2
+    },
+    {
+      "date": "2023-03-01",
+      "value": 8.9
+    },
+    {
+      "date": "2023-04-01",
+      "value": 7.8
+    },
+    {
+      "date": "2023-05-01",
+      "value": 7.9
+    },
+    {
+      "date": "2023-06-01",
+      "value": 7.3
+    },
+    {
+      "date": "2023-07-01",
+      "value": 6.4
+    },
+    {
+      "date": "2023-08-01",
+      "value": 6.3
+    },
+    {
+      "date": "2023-09-01",
+      "value": 6.3
+    },
+    {
+      "date": "2023-10-01",
+      "value": 4.7
+    },
+    {
+      "date": "2023-11-01",
+      "value": 4.2
+    },
+    {
+      "date": "2023-12-01",
+      "value": 4.2
+    },
+    {
+      "date": "2024-01-01",
+      "value": 4.2
+    },
+    {
+      "date": "2024-02-01",
+      "value": 3.8
+    },
+    {
+      "date": "2024-03-01",
+      "value": 3.8
+    },
+    {
+      "date": "2024-04-01",
+      "value": 3.0
+    },
+    {
+      "date": "2024-05-01",
+      "value": 2.8
+    },
+    {
+      "date": "2024-06-01",
+      "value": 2.8
+    },
+    {
+      "date": "2024-07-01",
+      "value": 3.1
+    },
+    {
+      "date": "2024-08-01",
+      "value": 3.1
+    },
+    {
+      "date": "2024-09-01",
+      "value": 2.6
+    },
+    {
+      "date": "2024-10-01",
+      "value": 3.2
+    },
+    {
+      "date": "2024-11-01",
+      "value": 3.5
+    },
+    {
+      "date": "2024-12-01",
+      "value": 3.5
+    },
+    {
+      "date": "2025-01-01",
+      "value": 3.9
+    },
+    {
+      "date": "2025-02-01",
+      "value": 3.7
+    },
+    {
+      "date": "2025-03-01",
+      "value": 3.4
+    },
+    {
+      "date": "2025-04-01",
+      "value": 4.1
+    },
+    {
+      "date": "2025-05-01",
+      "value": 4.0
+    },
+    {
+      "date": "2025-06-01",
+      "value": 4.1
+    },
+    {
+      "date": "2025-07-01",
+      "value": 4.2
+    },
+    {
+      "date": "2025-08-01",
+      "value": 4.1
+    },
+    {
+      "date": "2025-09-01",
+      "value": 4.1
+    },
+    {
+      "date": "2025-10-01",
+      "value": 3.8
+    },
+    {
+      "date": "2025-11-01",
+      "value": 3.5
+    },
+    {
+      "date": "2025-12-01",
+      "value": 3.6
+    },
+    {
+      "date": "2026-01-01",
+      "value": 3.2
+    },
+    {
+      "date": "2026-02-01",
+      "value": 3.2
+    },
+    {
+      "date": "2026-03-01",
+      "value": 3.4
+    },
+    {
+      "date": "2026-04-01",
+      "value": 3.0
+    }
+  ],
+  "foodInflation": {
+    "name": "CPIH food inflation",
+    "value": 3.0,
+    "date": "2026-04-01",
+    "unit": "% year-on-year",
+    "source": "ONS / Defra CPIH",
+    "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket"
+  },
+  "overallInflation": {
+    "name": "CPIH overall inflation",
+    "value": 3.0,
+    "date": "2026-04-01",
+    "unit": "% year-on-year",
+    "source": "ONS / Defra CPIH",
+    "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket"
+  }
 }
