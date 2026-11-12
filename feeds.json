@@ -1,3 +1,4 @@
+
 {
   "version": 3,
   "feeds": [
@@ -124,6 +125,51 @@
       "url": "https://feeds.bbci.co.uk/news/northern_ireland/rss.xml",
       "domain": 1,
       "region": "Northern Ireland",
+      "priority": "medium",
+      "tier": 3
+    },
+    {
+      "id": "prepper-ready",
+      "name": "Prepper Ready",
+      "url": "https://prepperready.co.uk/feed.xml",
+      "domain": 10,
+      "region": "UK",
+      "priority": "medium",
+      "tier": 3
+    },
+    {
+      "id": "bbc-uk",
+      "name": "BBC UK News",
+      "url": "https://feeds.bbci.co.uk/news/uk/rss.xml",
+      "domain": 1,
+      "region": "UK",
+      "priority": "medium",
+      "tier": 3
+    },
+    {
+      "id": "sky-news",
+      "name": "Sky News",
+      "url": "https://feeds.skynews.com/feeds/rss/home.xml",
+      "domain": 1,
+      "region": "UK",
+      "priority": "medium",
+      "tier": 3
+    },
+    {
+      "id": "guardian-uk",
+      "name": "The Guardian UK",
+      "url": "https://www.theguardian.com/uk/rss",
+      "domain": 1,
+      "region": "UK",
+      "priority": "medium",
+      "tier": 3
+    },
+    {
+      "id": "aljazeera-world",
+      "name": "Al Jazeera English",
+      "url": "https://www.aljazeera.com/xml/rss/all.xml",
+      "domain": 11,
+      "region": "International",
       "priority": "medium",
       "tier": 3
     }
