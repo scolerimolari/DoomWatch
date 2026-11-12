@@ -3,11 +3,12 @@
 DOOMWATCH - MARKETS COLLECTOR
 Independent of collector.py.
 Writes historical market data to data/markets.json.
-Uses Python standard library only.
+Python standard library only.
 """
 
 import csv
 import html
+import io
 import json
 import re
 import time
@@ -231,6 +232,77 @@ def html_to_text(raw):
     return parser.get_text()
 
 
+class LinkExtractor(HTMLParser):
+
+    def __init__(self):
+        super().__init__()
+        self.links = []
+
+    def handle_starttag(self, tag, attrs):
+
+        if tag.lower() != "a":
+            return
+
+        attributes = dict(attrs)
+        href = attributes.get("href")
+
+        if href:
+            self.links.append(html.unescape(href))
+
+
+def find_fuel_csv(page):
+
+    parser = LinkExtractor()
+
+    parser.feed(
+        page.decode("utf-8", errors="replace")
+    )
+
+    candidates = []
+
+    for link in parser.links:
+
+        lower = link.lower()
+
+        if ".csv" not in lower:
+            continue
+
+        if "2018" in lower or "weekly" in lower or "csv" in lower:
+            absolute = urllib.parse.urljoin(FUEL_URL, link)
+            candidates.append(absolute)
+
+    if candidates:
+        # Prefer the current 2018 onwards dataset.
+        for candidate in candidates:
+            if "2018" in candidate or "2018_-" in candidate:
+                return candidate
+
+        return candidates[0]
+
+    # Fallback for page markup where links are embedded unusually.
+    text = page.decode("utf-8", errors="replace")
+
+    match = re.search(
+        r"""href=["']([^"']+\.csv[^"']*)["']""",
+        text,
+        re.IGNORECASE
+    )
+
+    if match:
+        return urllib.parse.urljoin(
+            FUEL_URL,
+            html.unescape(match.group(1))
+        )
+
+    raise ValueError(
+        "Could not locate the official road fuel CSV link"
+    )
+
+
+# --------------------------------------------------
+# MONEY AND DATE PARSING
+# --------------------------------------------------
+
 def parse_money(value):
 
     try:
@@ -250,6 +322,26 @@ def parse_money(value):
 
     except (TypeError, ValueError):
         return None
+
+
+def parse_fuel_date(value):
+
+    value = str(value).strip()
+
+    for pattern in (
+        "%d/%m/%Y",
+        "%d-%m-%Y",
+        "%Y-%m-%d",
+    ):
+        try:
+            return datetime.strptime(
+                value,
+                pattern
+            ).date().isoformat()
+        except ValueError:
+            pass
+
+    return None
 
 
 # --------------------------------------------------
@@ -476,8 +568,6 @@ def parse_daily_oil_archive(text):
         except ValueError:
             continue
 
-    # Remove duplicate dates while retaining valid records.
-
     unique = {}
 
     for observation in observations:
@@ -582,15 +672,12 @@ def collect_heating_oil(data):
 
     try:
 
-        # Daily archive provides national historical prices.
-
         daily_raw = fetch(
             HEATING_OIL_DAILY_URL,
             "text/html"
         )
 
         daily_text = html_to_text(daily_raw)
-
         archive = parse_daily_oil_archive(daily_text)
 
         if not archive:
@@ -613,7 +700,6 @@ def collect_heating_oil(data):
         }
 
         items = []
-
         volumes = [300, 500, 900]
 
         labels = {
@@ -622,12 +708,9 @@ def collect_heating_oil(data):
             900: "NI average 900 litres",
         }
 
-        # Import the full dated national archive.
-
         for index, litres in enumerate(volumes):
 
             item_id = f"ni-{litres}l"
-
             old = existing.get(item_id, {})
 
             historical_points = [
@@ -657,7 +740,6 @@ def collect_heating_oil(data):
             )
 
             item["history"] = history
-
             items.append(item)
 
             print(
@@ -669,18 +751,13 @@ def collect_heating_oil(data):
                 len(history)
             )
 
-        # Regional comparison: Ballyclare.
-
         regional_raw = fetch(
             HEATING_OIL_URL,
             "text/html"
         )
 
         regional_text = html_to_text(regional_raw)
-
-        ballyclare = parse_ballyclare_prices(
-            regional_text
-        )
+        ballyclare = parse_ballyclare_prices(regional_text)
 
         if ballyclare:
 
@@ -714,8 +791,6 @@ def collect_heating_oil(data):
                 "WARNING: Ballyclare regional prices "
                 "were not extracted"
             )
-
-            # Retain existing Ballyclare records if source layout changes.
 
             for item_id, old in existing.items():
                 if item_id.startswith("ballyclare-"):
@@ -771,43 +846,265 @@ def collect_heating_oil(data):
 
 
 # --------------------------------------------------
-# PETROL AND DIESEL SOURCE MONITOR
+# PETROL AND DIESEL - OFFICIAL DESNZ HISTORY
 # --------------------------------------------------
+
+def parse_fuel_csv(raw):
+
+    text = raw.decode(
+        "utf-8-sig",
+        errors="replace"
+    )
+
+    reader = csv.DictReader(
+        io.StringIO(text)
+    )
+
+    if not reader.fieldnames:
+        raise ValueError("Fuel CSV has no column headings")
+
+    fields = {
+        str(name).strip().lower(): name
+        for name in reader.fieldnames
+        if name
+    }
+
+    date_column = next(
+        (
+            original for lower, original in fields.items()
+            if lower == "date"
+        ),
+        None
+    )
+
+    petrol_column = next(
+        (
+            original for lower, original in fields.items()
+            if "ulsp" in lower and "pump price" in lower
+        ),
+        None
+    )
+
+    diesel_column = next(
+        (
+            original for lower, original in fields.items()
+            if "ulsd" in lower and "pump price" in lower
+        ),
+        None
+    )
+
+    if not all([date_column, petrol_column, diesel_column]):
+        raise ValueError(
+            "Could not identify date, petrol and diesel columns "
+            + str(reader.fieldnames)
+        )
+
+    observations = []
+
+    for row in reader:
+
+        day = parse_fuel_date(
+            row.get(date_column, "")
+        )
+
+        petrol = parse_money(
+            row.get(petrol_column, "")
+        )
+
+        diesel = parse_money(
+            row.get(diesel_column, "")
+        )
+
+        if not day or petrol is None or diesel is None:
+            continue
+
+        observations.append({
+            "date": day,
+            "petrol": petrol,
+            "diesel": diesel,
+        })
+
+    unique = {}
+
+    for observation in observations:
+        unique[observation["date"]] = observation
+
+    result = [
+        unique[day]
+        for day in sorted(unique)
+    ]
+
+    if not result:
+        raise ValueError(
+            "No valid dated petrol and diesel prices in CSV"
+        )
+
+    return result
+
 
 def collect_fuel(data):
 
+    print("ROAD FUEL: collecting official DESNZ CSV")
+
     try:
 
-        fetch(FUEL_URL, "text/html")
+        # Discover the current CSV attachment from GOV.UK.
+        page = fetch(FUEL_URL, "text/html")
+        csv_url = find_fuel_csv(page)
 
-        existing = data.get(
-            "fuel",
-            {}
-        ).get("items", [])
+        print("FUEL CSV:", csv_url)
+
+        raw_csv = fetch(
+            csv_url,
+            "text/csv, application/octet-stream, */*"
+        )
+
+        observations = parse_fuel_csv(raw_csv)
+
+        latest = observations[-1]
+        latest_day = latest["date"]
+
+        old_items = (
+            data.get("fuel", {})
+            .get("items", [])
+        )
+
+        existing = {
+            item.get("id"): item
+            for item in old_items
+            if isinstance(item, dict) and item.get("id")
+        }
+
+        items = []
+
+        definitions = [
+            (
+                "petrol",
+                "Unleaded petrol",
+                "petrol",
+                "ULSP"
+            ),
+            (
+                "diesel",
+                "Diesel",
+                "diesel",
+                "ULSD"
+            ),
+        ]
+
+        for item_id, name, key, code in definitions:
+
+            old = existing.get(item_id, {})
+
+            history = [
+                {
+                    "date": observation["date"],
+                    "price": observation[key],
+                    "value": observation[key],
+                }
+                for observation in observations
+            ]
+
+            history = merge_history(
+                old.get("history", []),
+                history
+            )
+
+            price = latest[key]
+
+            previous_price = None
+
+            if len(observations) > 1:
+                previous_price = observations[-2][key]
+
+            change = None
+
+            if previous_price:
+                change = round(
+                    price - previous_price,
+                    2
+                )
+
+            item = {
+                "id": item_id,
+                "name": name,
+                "symbol": code,
+                "price": price,
+                "unit": "p/litre",
+                "currency": "GBP",
+                "change": change,
+                "changePct": (
+                    round(
+                        (price / previous_price - 1) * 100,
+                        2
+                    )
+                    if previous_price else None
+                ),
+                "observedAt": latest_day,
+                "date": latest_day,
+                "history": history,
+                "source": (
+                    "DESNZ weekly road fuel prices"
+                ),
+                "sourceType": "Official UK average",
+                "url": FUEL_URL,
+            }
+
+            items.append(item)
+
+            print(
+                "OK FUEL:",
+                name,
+                price,
+                "p/litre",
+                "history:",
+                len(history)
+            )
 
         data["fuel"] = {
-            "items": existing
+            "items": items,
+            "updatedAt": timestamp(),
+            "source": "DESNZ weekly road fuel prices",
+            "sourceUrl": FUEL_URL,
+            "csvUrl": csv_url,
+            "latestObservation": latest_day,
+            "geographicScope": "United Kingdom average",
+            "unit": "pence per litre",
         }
 
         data["sources"]["roadFuel"] = {
-            "status": "source_checked",
+            "status": "ok",
             "checkedAt": timestamp(),
             "url": FUEL_URL,
+            "csvUrl": csv_url,
+            "observationsImported": len(observations),
+            "latestObservation": latest_day,
             "note": (
-                "Official DESNZ weekly road-fuel "
-                "statistics. UK averages are not "
-                "Northern Ireland-only prices."
+                "Official UK weekly average pump prices. "
+                "Not Northern Ireland-only or local forecourt prices. "
+                "Prices are in pence per litre."
             ),
         }
 
-        print("OK: Official road fuel source checked")
+        print(
+            "ROAD FUEL COMPLETE:",
+            len(observations),
+            "weekly observations"
+        )
 
     except Exception as error:
 
         print(
             "FAILED: Road fuel",
-            str(error)[:200]
+            str(error)[:250]
         )
+
+        data["sources"]["roadFuel"] = {
+            "status": "failed",
+            "checkedAt": timestamp(),
+            "url": FUEL_URL,
+            "error": str(error)[:250],
+        }
 
 
 # --------------------------------------------------
