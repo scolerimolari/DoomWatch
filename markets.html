@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#171914">
+<title>DOOMWATCH | Markets & Household Intelligence</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+  --bg:#171914;
+  --panel:#22251e;
+  --panel2:#292d24;
+  --green:#8fbd69;
+  --bright:#b5e68b;
+  --yellow:#e2bd52;
+  --red:#d75c49;
+  --tan:#c2a77b;
+  --muted:#929987;
+  --line:#454b3c;
+}
+
+* {box-sizing:border-box}
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:#e8e9dc;
+  font-family:Arial,sans-serif;
+}
+
+header {
+  padding:20px 16px;
+  background:#20231c;
+  border-bottom:3px solid var(--yellow);
+}
+
+.brand {
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:3px;
+  color:var(--yellow);
+}
+
+.subtitle {
+  color:var(--green);
+  font-size:11px;
+  letter-spacing:2px;
+  margin-top:5px;
+}
+
+.topline {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+nav {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:16px;
+}
+
+nav a {
+  color:var(--bright);
+  text-decoration:none;
+  background:#30352a;
+  border:1px solid var(--line);
+  padding:9px 12px;
+  font-size:12px;
+  border-radius:3px;
+}
+
+nav a.active {
+  background:#56653c;
+  color:white;
+  border-color:var(--yellow);
+}
+
+main {
+  max-width:1450px;
+  margin:auto;
+  padding:15px;
+}
+
+.section {
+  margin:24px 0;
+}
+
+.section-title {
+  color:var(--yellow);
+  font-size:15px;
+  letter-spacing:2px;
+  font-weight:bold;
+  border-bottom:1px solid var(--line);
+  padding-bottom:9px;
+  margin-bottom:12px;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:11px;
+}
+
+.card {
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:14px;
+  min-width:0;
+}
+
+.card h3 {
+  margin:0 0 12px;
+  color:var(--green);
+  font-size:12px;
+  letter-spacing:1px;
+}
+
+.value {
+  color:var(--bright);
+  font-size:25px;
+  font-weight:bold;
+  font-family:monospace;
+  overflow-wrap:anywhere;
+}
+
+.change {
+  font-size:12px;
+  margin-top:7px;
+  color:var(--muted);
+}
+
+.positive {color:var(--green)}
+.negative {color:var(--red)}
+.neutral {color:var(--muted)}
+
+.chart-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+  gap:12px;
+}
+
+.chart-card {
+  background:var(--panel);
+  border:1px solid var(--line);
+  padding:14px;
+  min-width:0;
+  height:290px;
+}
+
+.chart-card h3 {
+  font-size:12px;
+  color:var(--yellow);
+  letter-spacing:1px;
+  margin:0 0 12px;
+}
+
+.chart-wrap {
+  height:220px;
+  position:relative;
+}
+
+.chart-card canvas {
+  width:100%!important;
+  height:100%!important;
+}
+
+.status {
+  background:#25291f;
+  border:1px solid var(--line);
+  padding:12px;
+  margin:12px 0;
+  font-family:monospace;
+  font-size:12px;
+  color:var(--green);
+  overflow-wrap:anywhere;
+}
+
+.warning {color:var(--yellow)}
+.error {color:var(--red)}
+
+.table-wrap {
+  overflow-x:auto;
+}
+
+table {
+  border-collapse:collapse;
+  width:100%;
+  min-width:420px;
+  font-size:12px;
+}
+
+th,td {
+  padding:11px 9px;
+  text-align:left;
+  border-bottom:1px solid var(--line);
+}
+
+th {
+  color:var(--yellow);
+  background:#292d24;
+}
+
+td {color:#e1e3d7}
+
+.empty {
+  color:var(--muted);
+  font-family:monospace;
+  font-size:12px;
+  padding:15px 0;
+}
+
+.news-item {
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.news-item a {
+  color:var(--bright);
+  text-decoration:none;
+  font-weight:bold;
+  font-size:13px;
+}
+
+.news-item small {
+  display:block;
+  color:var(--muted);
+  margin-top:5px;
+}
+
+footer {
+  padding:20px;
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:1px;
+  border-top:1px solid var(--line);
+}
+
+@media(max-width:480px) {
+  .brand {font-size:21px}
+  .value {font-size:21px}
+  main {padding:10px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="topline">
+    <div>
+      <div class="brand">DOOMWATCH</div>
+      <div class="subtitle">OPERATION CONTAINMENT // MARKET INTELLIGENCE</div>
+    </div>
+    <div style="text-align:right;font-family:monospace">
+      <div style="color:var(--yellow);font-size:12px">MARKET MONITOR</div>
+      <div id="clock" style="color:var(--green);font-size:12px"></div>
+    </div>
+  </div>
+
+  <nav>
+    <a href="index.html">MAIN SYSTEM</a>
+    <a href="markets.html" class="active">MARKETS</a>
+  </nav>
+</header>
+
+<main>
+
+<div class="status" id="systemStatus">
+  SYSTEM INITIALISING // CONNECTING TO MARKET DATA
+</div>
+
+<!-- GLOBAL MARKETS -->
+
+<section class="section">
+  <div class="section-title">01 // GLOBAL MARKET INDICATORS</div>
+  <div class="grid" id="globalCards"></div>
+</section>
+
+<section class="section">
+  <div class="section-title">02 // COMMODITIES & PRECIOUS METALS</div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>GOLD // PRICE HISTORY</h3>
+      <div class="chart-wrap"><canvas id="goldChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>SILVER // PRICE HISTORY</h3>
+      <div class="chart-wrap"><canvas id="silverChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>BRENT CRUDE // PRICE HISTORY</h3>
+      <div class="chart-wrap"><canvas id="brentChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- STOCK MARKETS -->
+
+<section class="section">
+  <div class="section-title">03 // GLOBAL STOCK INDICES</div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>S&P 500</h3>
+      <div class="chart-wrap"><canvas id="spChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>NASDAQ</h3>
+      <div class="chart-wrap"><canvas id="nasdaqChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>FTSE 100</h3>
+      <div class="chart-wrap"><canvas id="ftseChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRENCY AND CRYPTO -->
+
+<section class="section">
+  <div class="section-title">04 // CURRENCY & DIGITAL ASSETS</div>
+  <div class="grid" id="currencyCards"></div>
+  <div class="chart-grid" style="margin-top:12px">
+    <div class="chart-card">
+      <h3>BITCOIN // PRICE HISTORY</h3>
+      <div class="chart-wrap"><canvas id="bitcoinChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>FOREIGN EXCHANGE // GBP / EUR / USD</h3>
+      <div class="chart-wrap"><canvas id="fxChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOP STOCKS -->
+
+<section class="section">
+  <div class="section-title">05 // TOP 10 STOCK WATCHLIST</div>
+  <div class="card table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>COMPANY / TICKER</th>
+          <th>PRICE</th>
+          <th>CHANGE</th>
+        </tr>
+      </thead>
+      <tbody id="stocksTable">
+        <tr><td colspan="3" class="empty">AWAITING MARKET DATA</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- NORTHERN IRELAND ENERGY -->
+
+<section class="section">
+  <div class="section-title">06 // NORTHERN IRELAND ENERGY WATCH</div>
+  <div class="grid" id="energyCards"></div>
+
+  <div class="chart-grid" style="margin-top:12px">
+    <div class="chart-card">
+      <h3>HOME HEATING OIL // BT39</h3>
+      <div class="chart-wrap"><canvas id="heatingChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>PETROL & DIESEL // PRICE HISTORY</h3>
+      <div class="chart-wrap"><canvas id="fuelChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOUSEHOLD BASKET -->
+
+<section class="section">
+  <div class="section-title">07 // HOUSEHOLD COST OF LIVING MONITOR</div>
+
+  <div class="card">
+    <h3>AVERAGE HOUSEHOLD BASKET // PRICE TREND</h3>
+    <div class="value" id="basketValue">AWAITING DATA</div>
+    <div class="change" id="basketChange">
+      Historical average basket price
+    </div>
+    <div style="height:240px;margin-top:15px">
+      <canvas id="basketChart"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-grid" style="margin-top:12px">
+    <div class="chart-card">
+      <h3>GROCERY ITEM PRICE TRENDS</h3>
+      <div class="chart-wrap"><canvas id="groceryChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>HOUSEHOLD ESSENTIALS // CURRENT PRICES</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>ITEM</th><th>UNIT</th><th>PRICE</th></tr>
+          </thead>
+          <tbody id="groceryTable">
+            <tr><td colspan="3" class="empty">AWAITING DATA</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINANCIAL NEWS -->
+
+<section class="section">
+  <div class="section-title">08 // FINANCIAL & ECONOMIC INTELLIGENCE</div>
+  <div class="card" id="financeNews">
+    <div class="empty">AWAITING FINANCIAL NEWS FEED</div>
+  </div>
+</section>
+
+<div class="status">
+  DATA INTEGRITY: UNVERIFIED DATA IS NEVER DISPLAYED AS A LIVE PRICE.<br>
+  SOURCE TIMESTAMPS AND LAST UPDATE TIMES WILL BE SHOWN WHEN PROVIDED.
+</div>
+
+</main>
+
+<footer>
+DOOMWATCH // OPERATION CONTAINMENT<br>
+MARKET & HOUSEHOLD INTELLIGENCE MODULE<br>
+LOCAL DASHBOARD // DATA SOURCE: MARKETS.JSON
+</footer>
+
+<script>
+"use strict";
+
+const DATA_URL = "data/markets.json";
+let marketData = {};
+const charts = {};
+
+function get(obj, path, fallback = []) {
+  return path.split(".").reduce(
+    (value, key) => value && value[key] !== undefined
+      ? value[key] : undefined,
+    obj
+  ) ?? fallback;
+}
+
+function number(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
+function money(value, currency = "£") {
+  const n = number(value);
+  return n === null ? "—" :
+    currency + n.toLocaleString("en-GB", {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    });
+}
+
+function changeText(value) {
+  const n = number(value);
+  if (n === null) return "Change unavailable";
+  return (n > 0 ? "+" : "") + n.toFixed(2) + "%";
+}
+
+function changeClass(value) {
+  const n = number(value);
+  return n === null ? "neutral" :
+    n > 0 ? "positive" :
+    n < 0 ? "negative" : "neutral";
+}
+
+function card(name, value, change, unit = "") {
+  return `
+    <div class="card">
+      <h3>${safe(name)}</h3>
+      <div class="value">${safe(value)}${safe(unit)}</div>
+      <div class="change ${changeClass(change)}">
+        ${changeText(change)}
+      </div>
+    </div>`;
+}
+
+function safe(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#039;"
+  })[char]);
+}
+
+function historyPoints(item) {
+  const history = item?.history || item?.prices || [];
+  return history.map(point => ({
+    x: point.date || point.timestamp || point.label || "",
+    y: number(point.value ?? point.price ?? point.close)
+  })).filter(point => point.y !== null);
+}
+
+function makeChart(id, datasets, prefix = "", suffix = "") {
+  const canvas = document.getElementById(id);
+  if (!canvas || typeof Chart === "undefined") return;
+
+  if (charts[id]) charts[id].destroy();
+
+  const usable = datasets.filter(set =>
+    set.data && set.data.length
+  );
+
+  if (!usable.length) return;
+
+  charts[id] = new Chart(canvas, {
+    type:"line",
+    data:{
+      datasets:usable.map((set,index) => ({
+        label:set.label,
+        data:set.data,
+        borderColor:[
+          "#a9db7e","#e2bd52","#d75c49",
+          "#c2a77b","#76b9bd"
+        ][index % 5],
+        backgroundColor:"transparent",
+        borderWidth:2,
+        pointRadius:0,
+        tension:0.25,
+        fill:false
+      }))
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      parsing:false,
+      interaction:{intersect:false,mode:"index"},
+      plugins:{
+        legend:{
+          display:usable.length > 1,
+          labels:{color:"#d8ddca",boxWidth:12,font:{size:10}}
+        }
+      },
+      scales:{
+        x:{
+          type:"category",
+          ticks:{color:"#929987",maxTicksLimit:6},
+          grid:{color:"#353b30"}
+        },
+        y:{
+          ticks:{
+            color:"#929987",
+            callback:value => prefix + value + suffix
+          },
+          grid:{color:"#353b30"}
+        }
+      }
+    }
+  });
+}
+
+function renderGlobal() {
+  const groups = [
+    ["S&P 500","indices.sp500"],
+    ["NASDAQ","indices.nasdaq"],
+    ["FTSE 100","indices.ftse100"],
+    ["GOLD","commodities.gold"],
+    ["SILVER","commodities.silver"],
+    ["BRENT CRUDE","commodities.brent"],
+    ["BITCOIN","crypto.bitcoin"]
+  ];
+
+  document.getElementById("globalCards").innerHTML =
+    groups.map(([name,path]) => {
+      const item = get(marketData,path,{});
+      return card(name,
+        item.price !== undefined ? item.price : "—",
+        item.changePct
+      );
+    }).join("");
+
+  const fx = get(marketData,"fx",{});
+  document.getElementById("currencyCards").innerHTML =
+    ["GBPUSD","GBPEUR","EURUSD"].map(key => {
+      const item = fx[key] || {};
+      return card(key,
+        item.rate !== undefined ? item.rate : "—",
+        item.changePct
+      );
+    }).join("");
+}
+
+function renderCommodityCharts() {
+  ["gold","silver","brent"].forEach(key => {
+    const item = get(marketData,"commodities."+key,{});
+    makeChart(key+"Chart",[
+      {label:key.toUpperCase(),data:historyPoints(item)}
+    ]);
+  });
+}
+
+function renderIndices() {
+  [
+    ["spChart","sp500"],
+    ["nasdaqChart","nasdaq"],
+    ["ftseChart","ftse100"]
+  ].forEach(([id,key]) => {
+    const item = get(marketData,"indices."+key,{});
+    makeChart(id,[{
+      label:key.toUpperCase(),
+      data:historyPoints(item)
+    }]);
+  });
+}
+
+function renderCurrency() {
+  const bitcoin = get(marketData,"crypto.bitcoin",{});
+  makeChart("bitcoinChart",[{
+    label:"BITCOIN",
+    data:historyPoints(bitcoin)
+  }]);
+
+  const fx = get(marketData,"fx",{});
+  makeChart("fxChart",[
+    {label:"GBP/USD",data:historyPoints(fx.GBPUSD)},
+    {label:"GBP/EUR",data:historyPoints(fx.GBPEUR)},
+    {label:"EUR/USD",data:historyPoints(fx.EURUSD)}
+  ]);
+}
+
+function renderStocks() {
+  const stocks = get(marketData,"stocks",[]);
+  const tbody = document.getElementById("stocksTable");
+
+  if (!Array.isArray(stocks) || !stocks.length) {
+    tbody.innerHTML =
+      '<tr><td colspan="3" class="empty">AWAITING STOCK FEED</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = stocks.slice(0,10).map(stock => `
+    <tr>
+      <td>${safe(stock.name || stock.symbol)}</td>
+      <td>${safe(stock.price ?? "—")}</td>
+      <td class="${changeClass(stock.changePct)}">
+        ${changeText(stock.changePct)}
+      </td>
+    </tr>
+  `).join("");
+}
+
+function renderEnergy() {
+  const heating = get(marketData,"heatingOil",{});
+  const fuel = get(marketData,"fuel",{});
+
+  const heatingItems = heating.items || [];
+  const cards = heatingItems.map(item =>
+    card(
+      "HEATING OIL "+item.litres+"L",
+      money(item.price),
+      item.changePct
+    )
+  );
+
+  const fuelItems = fuel.items || [];
+  fuelItems.forEach(item => {
+    cards.push(card(
+      item.name || "FUEL",
+      money(item.price),
+      item.changePct
+    ));
+  });
+
+  document.getElementById("energyCards").innerHTML =
+    cards.length ? cards.join("") :
+    '<div class="empty">AWAITING NORTHERN IRELAND ENERGY DATA</div>';
+
+  makeChart("heatingChart",
+    heatingItems.map(item => ({
+      label:item.litres+"L",
+      data:historyPoints(item)
+    }))
+  );
+
+  makeChart("fuelChart",
+    fuelItems.map(item => ({
+      label:item.name,
+      data:historyPoints(item)
+    }))
+  );
+}
+
+function renderHousehold() {
+  const basket = get(marketData,"householdBasket",{});
+  const history = basket.history || [];
+  const items = basket.items || [];
+
+  const latest = history.length
+    ? history[history.length-1] : null;
+
+  document.getElementById("basketValue").textContent =
+    latest && number(latest.average ?? latest.total) !== null
+      ? money(latest.average ?? latest.total)
+      : "AWAITING DATA";
+
+  document.getElementById("basketChange").textContent =
+    latest?.date
+      ? "Latest recorded basket: "+latest.date
+      : "No verified basket history recorded yet";
+
+  makeChart("basketChart",[{
+    label:"AVERAGE BASKET PRICE",
+    data:history.map(point => ({
+      x:point.date,
+      y:number(point.average ?? point.total)
+    })).filter(point => point.y !== null)
+  }],"£");
+
+  makeChart("groceryChart",
+    items.map(item => ({
+      label:item.name,
+      data:historyPoints(item)
+    }))
+  );
+
+  const tbody = document.getElementById("groceryTable");
+
+  tbody.innerHTML = items.length
+    ? items.map(item => `
+      <tr>
+        <td>${safe(item.name)}</td>
+        <td>${safe(item.unit || "—")}</td>
+        <td>${money(item.price)}</td>
+      </tr>
+    `).join("")
+    : '<tr><td colspan="3" class="empty">AWAITING GROCERY PRICE DATA</td></tr>';
+}
+
+function renderNews() {
+  const news = get(marketData,"news",[]);
+  const container = document.getElementById("financeNews");
+
+  if (!Array.isArray(news) || !news.length) {
+    container.innerHTML =
+      '<div class="empty">AWAITING FINANCIAL NEWS FEED</div>';
+    return;
+  }
+
+  container.innerHTML = news.slice(0,20).map(item => `
+    <div class="news-item">
+      <a href="${safe(item.url || "#")}"
+         target="_blank" rel="noopener noreferrer">
+        ${safe(item.title || "Untitled report")}
+      </a>
+      <small>
+        ${safe(item.source || "Unknown source")}
+        ${item.date ? " // "+safe(item.date) : ""}
+      </small>
+    </div>
+  `).join("");
+}
+
+function renderAll() {
+  renderGlobal();
+  renderCommodityCharts();
+  renderIndices();
+  renderCurrency();
+  renderStocks();
+  renderEnergy();
+  renderHousehold();
+  renderNews();
+}
+
+async function loadData() {
+  const status = document.getElementById("systemStatus");
+
+  try {
+    const response = await fetch(DATA_URL+"?t="+Date.now(),{
+      cache:"no-store"
+    });
+
+    if (!response.ok) {
+      throw new Error("HTTP "+response.status);
+    }
+
+    marketData = await response.json();
+    renderAll();
+
+    const updated = marketData.updatedAt
+      ? " // LAST UPDATE: "+marketData.updatedAt
+      : "";
+
+    status.textContent =
+      "MARKET DATA CONNECTED // SOURCE: MARKETS.JSON"+updated;
+
+  } catch(error) {
+    status.innerHTML =
+      '<span class="warning">MARKET DATA NOT YET AVAILABLE</span>' +
+      ' // EXPECTING data/markets.json // '+
+      safe(error.message);
+
+    renderAll();
+  }
+}
+
+function updateClock() {
+  document.getElementById("clock").textContent =
+    new Date().toLocaleString("en-GB");
+}
+
+updateClock();
+setInterval(updateClock,1000);
+loadData();
+setInterval(loadData,300000);
+</script>
+
+</body>
+</html>
