@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,6 +59,10 @@ footer{border-top:1px solid var(--olive);padding:20px;text-align:center;color:va
 .selector-row label{color:var(--tan);font-size:11px}
 .chart-panel{margin-top:12px}
 .chart-note{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5}
+.food-stat{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+.food-stat strong{color:var(--green)}
+.food-source{font-size:10px;color:var(--muted);line-height:1.6;margin-top:9px}
+.food-chart{border-left:3px solid var(--olive)}
 @media(max-width:600px){
  main{padding:9px}header{padding:13px}
  table{font-size:10px}th,td{padding:7px 5px}
@@ -166,11 +169,75 @@ footer{border-top:1px solid var(--olive);padding:20px;text-align:center;color:va
  Individual grocery prices and historical basket trends require dated, comparable observations. No prices are estimated or invented. Retailer prices are not postcode-specific unless the source explicitly says so.
 </div>
 
-<div class="grid" style="margin-top:12px">
- <div class="panel"><div class="panel-title">LATEST BASKET TOTAL</div><div class="big" id="basket-total">—</div><div class="muted" id="basket-date">Awaiting complete basket</div></div>
- <div class="panel"><div class="panel-title">PRICE OBSERVATIONS</div><div class="big" id="price-count">0</div><div class="muted">Dated item records</div></div>
- <div class="panel"><div class="panel-title">ITEMS TRACKED</div><div class="big" id="item-count">0</div><div class="muted">With usable price history</div></div>
- <div class="panel"><div class="panel-title">RETAILER COVERAGE</div><div class="big" id="retailer-count">0</div><div class="muted">Retailers represented</div></div>
+<!-- NEW: UK FOOD PRICE INDEX AND INFLATION -->
+
+<h3>UK FOOD PRICE INDEX // HISTORICAL TREND</h3>
+<div class="grid">
+ <div class="panel">
+  <div class="panel-title">LATEST FOOD PRICE INDEX</div>
+  <div class="big" id="food-index-value">—</div>
+  <div class="muted" id="food-index-date">Awaiting official observation</div>
+  <div class="food-source">UK-wide index. Base year and units are taken from the source dataset.</div>
+ </div>
+ <div class="panel">
+  <div class="panel-title">ANNUAL FOOD INFLATION</div>
+  <div class="big" id="food-inflation-value">—</div>
+  <div class="muted" id="food-inflation-date">Awaiting annual comparison</div>
+  <div class="food-source">Calculated from the food-price index using the equivalent month one year earlier.</div>
+ </div>
+ <div class="panel">
+  <div class="panel-title">MONTHLY OBSERVATIONS</div>
+  <div class="big" id="food-observation-count">0</div>
+  <div class="muted">Food index records collected</div>
+ </div>
+</div>
+
+<div class="panel chart-panel food-chart">
+ <div class="panel-title">FOOD PRICE INDEX // MONTHLY HISTORY</div>
+ <div class="chart-wrap" id="food-index-chart">
+  <div class="muted">Waiting for official food-price index history.</div>
+ </div>
+ <div class="chart-labels">
+  <span id="food-index-first">—</span>
+  <span id="food-index-last">—</span>
+ </div>
+ <div class="chart-key">
+  <span class="green">● UK food price index</span>
+  <span>Monthly observations</span>
+  <span>Higher index = higher prices against the base period</span>
+ </div>
+ <div class="chart-note" id="food-index-note">
+  Official UK-wide food-price index. This is not a local supermarket basket price.
+ </div>
+</div>
+
+<div class="panel chart-panel food-chart">
+ <div class="panel-title">ANNUAL FOOD INFLATION // YEAR-ON-YEAR CHANGE</div>
+ <div class="chart-wrap" id="food-inflation-chart">
+  <div class="muted">Waiting for annual food inflation history.</div>
+ </div>
+ <div class="chart-labels">
+  <span id="food-inflation-first">—</span>
+  <span id="food-inflation-last">—</span>
+ </div>
+ <div class="chart-key">
+  <span class="orange">● Annual food inflation</span>
+  <span>Percentage change against the same month a year earlier</span>
+ </div>
+ <div class="chart-note">
+  A positive value means food prices were higher than the same month a year earlier. A falling inflation rate does not necessarily mean prices are falling.
+ </div>
+</div>
+
+<div class="panel chart-panel">
+ <div class="panel-title">OFFICIAL FOOD PRICE DATA SOURCE</div>
+ <p class="muted">
+  The index and annual inflation series are UK-wide official statistics. They provide a broad measure of food-price pressure and should not be interpreted as the exact cost of a Northern Ireland household shopping basket.
+ </p>
+ <a href="https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket" target="_blank" rel="noopener">OPEN DEFRA FOOD STATISTICS ↗</a>
+ <br><br>
+ <a href="https://www.ons.gov.uk/economy/inflationandpriceindices" target="_blank" rel="noopener">OPEN ONS INFLATION STATISTICS ↗</a>
+ <div class="muted" id="food-source-status" style="font-size:10px;margin-top:10px">Source status: awaiting collector data.</div>
 </div>
 
 <h3>FIXED HOUSEHOLD BASKET // HISTORICAL COST</h3>
@@ -179,6 +246,13 @@ footer{border-top:1px solid var(--olive);padding:20px;text-align:center;color:va
  <div class="chart-wrap" id="basket-chart"><div class="muted">Waiting for dated basket history.</div></div>
  <div class="chart-labels"><span id="basket-first-date">—</span><span id="basket-last-date">—</span></div>
  <div class="chart-key"><span class="green">● Fixed basket total</span><span>Complete comparable baskets only</span></div>
+</div>
+
+<div class="grid" style="margin-top:12px">
+ <div class="panel"><div class="panel-title">LATEST BASKET TOTAL</div><div class="big" id="basket-total">—</div><div class="muted" id="basket-date">Awaiting complete basket</div></div>
+ <div class="panel"><div class="panel-title">PRICE OBSERVATIONS</div><div class="big" id="price-count">0</div><div class="muted">Dated item records</div></div>
+ <div class="panel"><div class="panel-title">ITEMS TRACKED</div><div class="big" id="item-count">0</div><div class="muted">With usable price history</div></div>
+ <div class="panel"><div class="panel-title">RETAILER COVERAGE</div><div class="big" id="retailer-count">0</div><div class="muted">Retailers represented</div></div>
 </div>
 
 <h3>INDIVIDUAL GROCERY PRICE TRENDS</h3>
@@ -309,6 +383,7 @@ footer{border-top:1px solid var(--olive);padding:20px;text-align:center;color:va
  <div class="source"><strong>DESNZ — Weekly road fuel prices</strong><br><span class="muted">Official UK petrol and diesel price statistics.</span><br><a href="https://www.gov.uk/government/statistics/weekly-road-fuel-prices" target="_blank" rel="noopener">OPEN OFFICIAL STATISTICS ↗</a></div>
  <div class="source"><strong>NI Food Compass</strong><br><span class="muted">Northern Ireland-focused supermarket product comparisons.</span><br><a href="https://nifoodcompass.com/" target="_blank" rel="noopener">OPEN NI FOOD COMPASS ↗</a></div>
  <div class="source"><strong>Food Foundation — Food Price Tracker</strong><br><span class="muted">Independent food price and household affordability tracking.</span><br><a href="https://foodfoundation.org.uk/initiatives/food-prices-tracking" target="_blank" rel="noopener">OPEN FOOD TRACKER ↗</a></div>
+ <div class="source"><strong>ONS / DEFRA — Food price index and inflation</strong><br><span class="muted">Official UK-wide food-price index and annual inflation history.</span><br><a href="https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket" target="_blank" rel="noopener">OPEN DEFRA FOOD STATISTICS ↗</a></div>
  <div class="source"><strong>ONS — Consumer price inflation</strong><br><span class="muted">Official UK inflation and food price statistics.</span><br><a href="https://www.ons.gov.uk/economy/inflationandpriceindices" target="_blank" rel="noopener">OPEN ONS ↗</a></div>
  <div class="source"><strong>DEFRA — Agricultural commodity prices</strong><br><span class="muted">UK agricultural prices including cereals, livestock and farm inputs.</span><br><a href="https://www.data.gov.uk/collections/business-and-economy/agricultural-commodity-prices" target="_blank" rel="noopener">OPEN DEFRA ↗</a></div>
 </div>
@@ -523,6 +598,111 @@ function sortedHouseholdHistory(item){
   retailer:p.retailer||p.source||""
  })).filter(p=>p.date&&p.price!==null)
  .sort((a,b)=>new Date(a.date)-new Date(b.date));
+}
+
+/* UK FOOD PRICE INDEX AND INFLATION */
+
+function normaliseFoodHistory(raw){
+ return records(raw).map(p=>{
+  const d=p.date||p.month||p.period||p.observedAt;
+  const v=number(
+   p.value??p.index??p.priceIndex??p.rate??p.inflation??p.yoy
+  );
+  return {date:d,value:v};
+ }).filter(p=>p.date&&p.value!==null)
+ .sort((a,b)=>new Date(a.date)-new Date(b.date));
+}
+
+function latestFoodPoint(raw){
+ if(!raw)return null;
+
+ if(Array.isArray(raw)){
+  const points=normaliseFoodHistory(raw);
+  return points.length?points[points.length-1]:null;
+ }
+
+ if(typeof raw==="object"){
+  const d=raw.date||raw.month||raw.period||raw.observedAt;
+  const v=number(
+   raw.value??raw.index??raw.priceIndex??raw.rate??raw.inflation??raw.yoy
+  );
+  if(d&&v!==null)return {date:d,value:v};
+ }
+ return null;
+}
+
+function renderFoodPriceIntelligence(data){
+ const basket=data.householdBasket||{};
+
+ const indexHistory=normaliseFoodHistory(
+  basket.priceIndexHistory||data.priceIndexHistory||[]
+ );
+
+ const inflationHistory=normaliseFoodHistory(
+  basket.inflationHistory||data.inflationHistory||[]
+ );
+
+ const indexLatest=latestFoodPoint(basket.foodPriceIndex||data.foodPriceIndex)||
+  (indexHistory.length?indexHistory[indexHistory.length-1]:null);
+
+ const inflationLatest=latestFoodPoint(basket.foodInflation||data.foodInflation)||
+  (inflationHistory.length?inflationHistory[inflationHistory.length-1]:null);
+
+ $("food-index-value").textContent=indexLatest?
+  fmt(indexLatest.value,2):"—";
+
+ $("food-index-date").textContent=indexLatest?
+  "Latest observation: "+date(indexLatest.date):
+  "No official index observation loaded";
+
+ $("food-inflation-value").textContent=inflationLatest?
+  fmt(inflationLatest.value,2)+"%":"—";
+
+ $("food-inflation-date").textContent=inflationLatest?
+  "Latest annual comparison: "+date(inflationLatest.date):
+  "No annual inflation observation loaded";
+
+ $("food-observation-count").textContent=indexHistory.length;
+
+ $("food-index-chart").innerHTML=svgChart(
+  indexHistory,
+  "UK food price index history",
+  ""
+ );
+
+ $("food-inflation-chart").innerHTML=svgChart(
+  inflationHistory,
+  "UK annual food inflation history",
+  "",
+  "%"
+ );
+
+ chartLabels(indexHistory,"food-index-first","food-index-last");
+ chartLabels(inflationHistory,"food-inflation-first","food-inflation-last");
+
+ const indexMeta=basket.foodPriceIndex||data.foodPriceIndex||{};
+ const sourceMeta=data.sources?.foodInflation||data.sources?.foodPriceIndex||{};
+
+ if(indexMeta.baseYear){
+  $("food-index-note").textContent=
+   "UK-wide index // Base year: "+indexMeta.baseYear+
+   " // "+(indexMeta.unit||"Index points")+
+   " // Source: "+(indexMeta.source||"ONS / DEFRA");
+ }
+
+ if(sourceMeta.status){
+  $("food-source-status").textContent=
+   "COLLECTOR STATUS: "+String(sourceMeta.status).toUpperCase()+
+   " // LAST CHECKED: "+date(sourceMeta.checkedAt)+
+   " // OBSERVATIONS IMPORTED: "+(sourceMeta.observationsImported??indexHistory.length);
+ }else if(indexHistory.length){
+  $("food-source-status").textContent=
+   "DATA LOADED // "+indexHistory.length+
+   " MONTHLY INDEX OBSERVATIONS // UK-WIDE SERIES";
+ }else{
+  $("food-source-status").textContent=
+   "NO FOOD INDEX HISTORY FOUND IN MARKETS.JSON. CHECK COLLECTOR RUN.";
+ }
 }
 
 function renderHousehold(data){
@@ -796,6 +976,7 @@ function render(data){
  renderMarketCards(data.fx,"fx-cards");
 
  renderStocks(data.stocks);
+ renderFoodPriceIntelligence(data);
  renderHousehold(data);
  renderHeatingOil();
  renderEnergy(data.fuel,"fuel-cards","ROAD FUEL");
@@ -845,4 +1026,4 @@ load();
 setInterval(load,15*60*1000);
 </script>
 </body>
-</html>
+ </html>
