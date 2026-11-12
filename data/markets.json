@@ -1,51 +1,51 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T21:45:17+00:00",
-  "generatedAt": "2026-11-12T21:45:17+00:00",
+  "updatedAt": "2026-11-12T23:34:25+00:00",
+  "generatedAt": "2026-11-12T23:34:25+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:13+00:00"
+      "checkedAt": "2026-11-12T23:34:21+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:13+00:00"
+      "checkedAt": "2026-11-12T23:34:21+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:13+00:00"
+      "checkedAt": "2026-11-12T23:34:21+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:13+00:00"
+      "checkedAt": "2026-11-12T23:34:21+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:13+00:00"
+      "checkedAt": "2026-11-12T23:34:21+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:13+00:00"
+      "checkedAt": "2026-11-12T23:34:21+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:14+00:00"
+      "checkedAt": "2026-11-12T23:34:22+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:14+00:00"
+      "checkedAt": "2026-11-12T23:34:22+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:14+00:00"
+      "checkedAt": "2026-11-12T23:34:22+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:14+00:00"
+      "checkedAt": "2026-11-12T23:34:22+00:00"
     },
     "heatingOil": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:15+00:00",
+      "checkedAt": "2026-11-12T23:34:23+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
       "observationsImported": 178,
@@ -54,7 +54,7 @@
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:16+00:00",
+      "checkedAt": "2026-11-12T23:34:24+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
       "observationsImported": 463,
@@ -63,7 +63,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:17+00:00",
+      "checkedAt": "2026-11-12T23:34:25+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -72,7 +72,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-12T21:45:17+00:00",
+      "checkedAt": "2026-11-12T23:34:25+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -83,10 +83,10 @@
   "commodities": {
     "gold": {
       "symbol": "GC=F",
-      "price": 3878.5,
-      "changePct": -7.953,
+      "price": 3879.4,
+      "changePct": -7.931,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:35:04+00:00",
+      "observedAt": "2026-11-12T23:24:17+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -1094,7 +1094,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 3878.5
+          "value": 3879.399902
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -1104,10 +1104,10 @@
     },
     "silver": {
       "symbol": "SI=F",
-      "price": 49.93,
-      "changePct": -6.379,
+      "price": 49.89,
+      "changePct": -6.454,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:35:10+00:00",
+      "observedAt": "2026-11-12T23:23:57+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -2115,7 +2115,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 49.93
+          "value": 49.889999
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -2125,10 +2125,10 @@
     },
     "brent": {
       "symbol": "BZ=F",
-      "price": 95.86,
-      "changePct": 52.862,
+      "price": 95.92,
+      "changePct": 52.958,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:32:54+00:00",
+      "observedAt": "2026-11-12T23:23:08+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -3136,7 +3136,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 95.860001
+          "value": 95.919998
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -3151,7 +3151,7 @@
       "price": 7592.4,
       "changePct": 10.823,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:20:01+00:00",
+      "observedAt": "2026-11-12T21:58:23+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -4172,7 +4172,7 @@
       "price": 25366.094,
       "changePct": 8.372,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:45:12+00:00",
+      "observedAt": "2026-11-12T22:15:59+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -6221,10 +6221,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 71478.5,
-      "changePct": -29.691,
+      "price": 71269.72,
+      "changePct": -29.896,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:45:10+00:00",
+      "observedAt": "2026-11-12T23:34:16+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -7688,7 +7688,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 71478.5
+          "value": 71269.71875
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -7700,10 +7700,10 @@
   "fx": {
     "GBPUSD": {
       "symbol": "GBPUSD=X",
-      "price": 1.3236,
-      "changePct": 0.631,
+      "price": 1.3235,
+      "changePct": 0.623,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:44:33+00:00",
+      "observedAt": "2026-11-12T23:33:30+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -8743,7 +8743,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 1.323644
+          "value": 1.323487
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -8753,10 +8753,10 @@
     },
     "GBPEUR": {
       "symbol": "GBPEUR=X",
-      "price": 1.1969,
-      "changePct": 5.491,
+      "price": 1.1968,
+      "changePct": 5.482,
       "currency": "EUR",
-      "observedAt": "2026-11-12T21:43:33+00:00",
+      "observedAt": "2026-11-12T23:33:30+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -9796,7 +9796,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 1.1969
+          "value": 1.1968
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -9806,10 +9806,10 @@
     },
     "EURUSD": {
       "symbol": "EURUSD=X",
-      "price": 1.1057,
-      "changePct": -4.574,
+      "price": 1.1056,
+      "changePct": -4.583,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:44:33+00:00",
+      "observedAt": "2026-11-12T23:33:30+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -10849,7 +10849,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 1.105705
+          "value": 1.105583
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -23854,7 +23854,7 @@
         ]
       }
     ],
-    "updatedAt": "2026-11-12T21:45:15+00:00",
+    "updatedAt": "2026-11-12T23:34:23+00:00",
     "source": "Consumer Council Northern Ireland",
     "sourceUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker",
     "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
@@ -27898,7 +27898,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-12T21:45:16+00:00",
+    "updatedAt": "2026-11-12T23:34:24+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
@@ -28537,9 +28537,21 @@
       "source": "ONS / Defra CPIH",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket"
     },
-    "updatedAt": "2026-11-12T21:45:17+00:00"
+    "updatedAt": "2026-11-12T23:34:25+00:00"
   },
   "news": [
+    {
+      "title": "Official Statistics: Agri-environment scheme uptake in protected landscapes",
+      "url": "https://www.gov.uk/government/statistics/announcements/agri-environment-scheme-uptake-in-protected-landscapes",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-12T23:12:39Z"
+    },
+    {
+      "title": "Some under-25s should get fewer benefits, Milburn review to say",
+      "url": "https://www.bbc.co.uk/news/articles/cwn70l1628l0o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-12T22:51:18+00:00"
+    },
     {
       "title": "Search for British woman missing from Tui cruise in Atlantic called off",
       "url": "https://www.bbc.co.uk/news/articles/cmy0enrkwkklo?at_medium=RSS&at_campaign=rss",
@@ -28547,7 +28559,7 @@
       "publishedAt": "2026-11-12T21:27:21+00:00"
     },
     {
-      "title": "US envoys head to meet Zelensky after talks with Putin in Moscow",
+      "title": "US envoys meet Zelensky in Dublin after talks with Putin in Moscow",
       "url": "https://www.bbc.co.uk/news/articles/cwrkgmymk55zo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-12T21:00:42+00:00"
@@ -28587,12 +28599,6 @@
       "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
       "source": "DEFRA",
       "publishedAt": "2026-11-12T18:20:39Z"
-    },
-    {
-      "title": "Some under-25s should get fewer benefits, Milburn review to say",
-      "url": "https://www.bbc.co.uk/news/articles/cwn70l1628l0o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-12T17:32:14+00:00"
     },
     {
       "title": "The rise and fall of Jensen Huang - how the tech superstar became mired in scandal",
@@ -28713,15 +28719,15 @@
       "url": "https://www.gov.uk/government/publications/multi-annual-national-control-plan-mancp-annual-reports",
       "source": "DEFRA",
       "publishedAt": "2026-11-12T09:30:09Z"
-    },
-    {
-      "title": "Process for exporting cell-cultivated products of animal origin from Great Britain to non-EU countries",
-      "url": "https://www.gov.uk/guidance/process-for-exporting-cell-cultivated-products-of-animal-origin-from-great-britain-to-non-eu-countries",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-12T09:30:08Z"
     }
   ],
   "supplyNews": [
+    {
+      "title": "Official Statistics: Agri-environment scheme uptake in protected landscapes",
+      "url": "https://www.gov.uk/government/statistics/announcements/agri-environment-scheme-uptake-in-protected-landscapes",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-12T23:12:39Z"
+    },
     {
       "title": "Bird flu (avian influenza): latest situation in England",
       "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
@@ -28835,12 +28841,6 @@
       "url": "https://www.gov.uk/government/statistics/announcements/united-kingdom-milk-prices-and-composition-of-milk-statistics-data-for-march-2027",
       "source": "DEFRA",
       "publishedAt": "2026-11-11T14:59:33Z"
-    },
-    {
-      "title": "Accredited official statistics: United Kingdom milk prices and composition of milk statistics (data for February 2027)",
-      "url": "https://www.gov.uk/government/statistics/announcements/united-kingdom-milk-prices-and-composition-of-milk-statistics-data-for-february-2027",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-11T14:59:13Z"
     }
   ],
   "foodInflationHistory": [
