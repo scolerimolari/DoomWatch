@@ -95,6 +95,13 @@ DEFRA_FOOD_URL = (
     "food-statistics-pocketbook/food-statistics-in-your-pocket"
 )
 
+# The direct CSV download, NOT the GOV.UK /preview page.
+DEFRA_FOOD_CSV_URL = (
+    "https://assets.publishing.service.gov.uk/media/"
+    "6a3cfd9ada47783d87723a5d/"
+    "fsp-csv-cpih-inflation-09jul2026.csv"
+)
+
 NEWS_FEEDS = [
     (
         "BBC Business",
@@ -117,14 +124,12 @@ NEWS_FEEDS = [
 # --------------------------------------------------
 
 def timestamp():
-
     return datetime.now(timezone.utc).replace(
         microsecond=0
     ).isoformat()
 
 
 def fetch(url, accept="*/*"):
-
     request = urllib.request.Request(
         url,
         headers={
@@ -137,34 +142,21 @@ def fetch(url, accept="*/*"):
         request,
         timeout=TIMEOUT
     ) as response:
-
         return response.read()
 
 
 def load_data():
-
-    DATA_DIR.mkdir(
-        parents=True,
-        exist_ok=True
-    )
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     if DATA_FILE.exists():
-
         try:
-
             data = json.loads(
                 DATA_FILE.read_text(encoding="utf-8")
             )
-
             if isinstance(data, dict):
                 return data
-
         except Exception as error:
-
-            print(
-                "Existing markets file unreadable:",
-                error
-            )
+            print("Existing markets file unreadable:", error)
 
     return {
         "schemaVersion": 1,
@@ -180,7 +172,7 @@ def load_data():
         "fuel": {"items": []},
         "householdBasket": {
             "items": [],
-            "history": []
+            "history": [],
         },
         "news": [],
         "supplyNews": [],
@@ -188,16 +180,13 @@ def load_data():
 
 
 def merge_history(old_history, new_history):
-
     points = {}
 
     for point in old_history or []:
-
         if isinstance(point, dict) and point.get("date"):
             points[point["date"]] = point
 
     for point in new_history or []:
-
         if isinstance(point, dict) and point.get("date"):
             points[point["date"]] = point
 
@@ -220,51 +209,37 @@ class TextExtractor(HTMLParser):
     }
 
     def __init__(self):
-
         super().__init__()
         self.parts = []
 
     def handle_starttag(self, tag, attrs):
-
         if tag.lower() in self.BLOCK_TAGS:
             self.parts.append("\n")
 
     def handle_endtag(self, tag):
-
         if tag.lower() in self.BLOCK_TAGS:
             self.parts.append("\n")
 
     def handle_data(self, data):
-
         self.parts.append(data)
 
     def get_text(self):
-
-        return html.unescape(
-            "\n".join(self.parts)
-        )
+        return html.unescape("\n".join(self.parts))
 
 
 def html_to_text(raw):
-
     parser = TextExtractor()
-
-    parser.feed(
-        raw.decode("utf-8", errors="replace")
-    )
-
+    parser.feed(raw.decode("utf-8", errors="replace"))
     return parser.get_text()
 
 
 class LinkExtractor(HTMLParser):
 
     def __init__(self):
-
         super().__init__()
         self.links = []
 
     def handle_starttag(self, tag, attrs):
-
         if tag.lower() != "a":
             return
 
@@ -272,67 +247,29 @@ class LinkExtractor(HTMLParser):
         href = attributes.get("href")
 
         if href:
-            self.links.append(
-                html.unescape(href)
-            )
+            self.links.append(html.unescape(href))
 
 
 def find_fuel_csv(page):
-
     parser = LinkExtractor()
-
-    parser.feed(
-        page.decode("utf-8", errors="replace")
-    )
+    parser.feed(page.decode("utf-8", errors="replace"))
 
     candidates = []
 
     for link in parser.links:
-
         lower = link.lower()
 
         if ".csv" not in lower:
             continue
 
-        if (
-            "2018" in lower
-            or "weekly" in lower
-            or "csv" in lower
-        ):
-
-            absolute = urllib.parse.urljoin(
-                FUEL_URL,
-                link
-            )
-
-            candidates.append(absolute)
+        absolute = urllib.parse.urljoin(FUEL_URL, link)
+        candidates.append(absolute)
 
     if candidates:
-
         for candidate in candidates:
-
-            if "2018" in candidate or "2018_-" in candidate:
+            if "2018" in candidate:
                 return candidate
-
         return candidates[0]
-
-    text = page.decode(
-        "utf-8",
-        errors="replace"
-    )
-
-    match = re.search(
-        r"""href=["']([^"']+\.csv[^"']*)["']""",
-        text,
-        re.IGNORECASE
-    )
-
-    if match:
-
-        return urllib.parse.urljoin(
-            FUEL_URL,
-            html.unescape(match.group(1))
-        )
 
     raise ValueError(
         "Could not locate the official road fuel CSV link"
@@ -344,9 +281,7 @@ def find_fuel_csv(page):
 # --------------------------------------------------
 
 def parse_money(value):
-
     try:
-
         cleaned = (
             str(value)
             .replace("£", "")
@@ -362,12 +297,10 @@ def parse_money(value):
         return round(number, 2)
 
     except (TypeError, ValueError):
-
         return None
 
 
 def parse_fuel_date(value):
-
     value = str(value).strip()
 
     for pattern in (
@@ -375,14 +308,10 @@ def parse_fuel_date(value):
         "%d-%m-%Y",
         "%Y-%m-%d",
     ):
-
         try:
-
             return datetime.strptime(
-                value,
-                pattern
+                value, pattern
             ).date().isoformat()
-
         except ValueError:
             pass
 
@@ -394,18 +323,11 @@ def parse_fuel_date(value):
 # --------------------------------------------------
 
 def get_yahoo_data(symbol):
-
     url = YAHOO_URL.format(
-        urllib.parse.quote(
-            symbol,
-            safe="=^.-"
-        )
+        urllib.parse.quote(symbol, safe="=^.-")
     )
 
-    raw = json.loads(
-        fetch(url, "application/json")
-    )
-
+    raw = json.loads(fetch(url, "application/json"))
     result = raw["chart"]["result"][0]
 
     meta = result.get("meta", {})
@@ -420,18 +342,16 @@ def get_yahoo_data(symbol):
     history = []
 
     for stamp, close in zip(timestamps, closes):
-
         if close is None:
             continue
 
         day = datetime.fromtimestamp(
-            stamp,
-            timezone.utc
+            stamp, timezone.utc
         ).date().isoformat()
 
         history.append({
             "date": day,
-            "value": round(float(close), 6)
+            "value": round(float(close), 6),
         })
 
     price = meta.get("regularMarketPrice")
@@ -447,17 +367,14 @@ def get_yahoo_data(symbol):
     change = None
 
     if price is not None and previous:
-
         change = round(
-            (
-                float(price) / float(previous) - 1
-            ) * 100,
-            3
+            (float(price) / float(previous) - 1) * 100,
+            3,
         )
 
     market_time = meta.get(
         "regularMarketTime",
-        int(time.time())
+        int(time.time()),
     )
 
     return {
@@ -469,55 +386,39 @@ def get_yahoo_data(symbol):
         "changePct": change,
         "currency": meta.get("currency"),
         "observedAt": datetime.fromtimestamp(
-            market_time,
-            timezone.utc
+            market_time, timezone.utc
         ).isoformat(),
         "history": history[-MAX_HISTORY:],
         "source": "Yahoo Finance chart data",
         "sourceType": "Unofficial market data endpoint",
         "url": (
             "https://finance.yahoo.com/quote/"
-            + urllib.parse.quote(
-                symbol,
-                safe="=^.-"
-            )
+            + urllib.parse.quote(symbol, safe="=^.-")
         ),
     }
 
 
 def collect_markets(data):
-
     for category, instruments in MARKETS.items():
-
         data.setdefault(category, {})
 
         for name, details in instruments.items():
-
             symbol, unit = details
 
             try:
-
                 item = get_yahoo_data(symbol)
                 item["unit"] = unit
 
-                previous = data[category].get(
-                    name,
-                    {}
-                )
+                previous = data[category].get(name, {})
 
                 item["history"] = merge_history(
                     previous.get("history", []),
-                    item["history"]
+                    item["history"],
                 )
 
                 data[category][name] = item
 
-                print(
-                    "OK:",
-                    category,
-                    name,
-                    item["price"]
-                )
+                print("OK:", category, name, item["price"])
 
                 data["sources"][category + "." + name] = {
                     "status": "ok",
@@ -525,12 +426,11 @@ def collect_markets(data):
                 }
 
             except Exception as error:
-
                 print(
                     "FAILED:",
                     category,
                     name,
-                    str(error)[:200]
+                    str(error)[:200],
                 )
 
                 data["sources"][category + "." + name] = {
@@ -545,7 +445,6 @@ def collect_markets(data):
 # --------------------------------------------------
 
 def collect_stocks(data):
-
     existing = {
         item.get("symbol"): item
         for item in data.get("stocks", [])
@@ -555,9 +454,7 @@ def collect_stocks(data):
     stocks = []
 
     for name, symbol in STOCKS:
-
         try:
-
             item = get_yahoo_data(symbol)
             item["name"] = name
 
@@ -565,19 +462,17 @@ def collect_stocks(data):
 
             item["history"] = merge_history(
                 old.get("history", []),
-                item["history"]
+                item["history"],
             )
 
             stocks.append(item)
-
             print("OK STOCK:", symbol)
 
         except Exception as error:
-
             print(
                 "FAILED STOCK:",
                 symbol,
-                str(error)[:150]
+                str(error)[:150],
             )
 
             if symbol in existing:
@@ -591,7 +486,6 @@ def collect_stocks(data):
 # --------------------------------------------------
 
 def parse_daily_oil_archive(text):
-
     observations = []
 
     pattern = re.compile(
@@ -599,16 +493,13 @@ def parse_daily_oil_archive(text):
         r"\s+£?\s*([\d,]+\.\d{2})"
         r"\s+£?\s*([\d,]+\.\d{2})"
         r"\s+£?\s*([\d,]+\.\d{2})",
-        re.IGNORECASE
+        re.IGNORECASE,
     )
 
     for match in pattern.finditer(text):
-
         try:
-
             day = datetime.strptime(
-                match.group(1),
-                "%d %B %Y"
+                match.group(1), "%d %B %Y"
             ).date().isoformat()
 
             prices = [
@@ -616,9 +507,7 @@ def parse_daily_oil_archive(text):
                 for i in (2, 3, 4)
             ]
 
-            if any(
-                value is None for value in prices
-            ):
+            if any(value is None for value in prices):
                 continue
 
             observations.append({
@@ -629,10 +518,10 @@ def parse_daily_oil_archive(text):
         except ValueError:
             continue
 
-    unique = {}
-
-    for observation in observations:
-        unique[observation["date"]] = observation
+    unique = {
+        observation["date"]: observation
+        for observation in observations
+    }
 
     return [
         unique[day]
@@ -641,18 +530,14 @@ def parse_daily_oil_archive(text):
 
 
 def parse_ballyclare_prices(text):
-
     positions = [
         match.start()
         for match in re.finditer(
-            "Ballyclare",
-            text,
-            re.IGNORECASE
+            "Ballyclare", text, re.IGNORECASE
         )
     ]
 
     for position in positions:
-
         section = text[position:position + 2500]
 
         heading = re.search(
@@ -660,7 +545,7 @@ def parse_ballyclare_prices(text):
             r"500l\s+Average.*?"
             r"900l\s+Average",
             section,
-            re.IGNORECASE | re.DOTALL
+            re.IGNORECASE | re.DOTALL,
         )
 
         if not heading:
@@ -670,7 +555,7 @@ def parse_ballyclare_prices(text):
 
         values = re.findall(
             r"£\s*([\d,]+\.\d{2})",
-            price_section
+            price_section,
         )
 
         prices = [
@@ -682,7 +567,6 @@ def parse_ballyclare_prices(text):
             len(prices) == 3
             and all(value is not None for value in prices)
         ):
-
             return prices
 
     return None
@@ -695,9 +579,8 @@ def oil_item(
     price,
     day,
     source,
-    old_item=None
+    old_item=None,
 ):
-
     old_item = old_item or {}
 
     history = merge_history(
@@ -706,7 +589,7 @@ def oil_item(
             "date": day,
             "price": price,
             "source": source,
-        }]
+        }],
     )
 
     return {
@@ -716,14 +599,8 @@ def oil_item(
         "currency": "GBP",
         "unit": "GBP",
         "volumeLitres": litres,
-        "pricePerLitre": round(
-            price / litres,
-            4
-        ),
-        "pricePer100Litres": round(
-            price / litres * 100,
-            2
-        ),
+        "pricePerLitre": round(price / litres, 4),
+        "pricePer100Litres": round(price / litres * 100, 2),
         "observedAt": day,
         "date": day,
         "source": source,
@@ -733,26 +610,14 @@ def oil_item(
 
 
 def collect_heating_oil(data):
-
-    print(
-        "HEATING OIL: collecting Consumer Council data"
-    )
+    print("HEATING OIL: collecting Consumer Council data")
 
     try:
-
-        daily_raw = fetch(
-            HEATING_OIL_DAILY_URL,
-            "text/html"
-        )
-
+        daily_raw = fetch(HEATING_OIL_DAILY_URL, "text/html")
         daily_text = html_to_text(daily_raw)
-
-        archive = parse_daily_oil_archive(
-            daily_text
-        )
+        archive = parse_daily_oil_archive(daily_text)
 
         if not archive:
-
             raise ValueError(
                 "No valid dated national oil observations found"
             )
@@ -761,8 +626,7 @@ def collect_heating_oil(data):
         latest_day = latest["date"]
 
         existing_items = (
-            data.get("heatingOil", {})
-            .get("items", [])
+            data.get("heatingOil", {}).get("items", [])
         )
 
         existing = {
@@ -781,7 +645,6 @@ def collect_heating_oil(data):
         }
 
         for index, litres in enumerate(volumes):
-
             item_id = f"ni-{litres}l"
             old = existing.get(item_id, {})
 
@@ -789,28 +652,24 @@ def collect_heating_oil(data):
                 {
                     "date": observation["date"],
                     "price": observation["prices"][index],
-                    "source": (
-                        "Consumer Council NI daily archive"
-                    ),
+                    "source": "Consumer Council NI daily archive",
                 }
                 for observation in archive
             ]
 
             history = merge_history(
                 old.get("history", []),
-                historical_points
+                historical_points,
             )
-
-            price = latest["prices"][index]
 
             item = oil_item(
                 item_id,
                 labels[litres],
                 litres,
-                price,
+                latest["prices"][index],
                 latest_day,
                 "Consumer Council Northern Ireland",
-                old
+                old,
             )
 
             item["history"] = history
@@ -820,28 +679,18 @@ def collect_heating_oil(data):
                 "OK HEATING OIL:",
                 litres,
                 "litres",
-                price,
+                latest["prices"][index],
                 "history:",
-                len(history)
+                len(history),
             )
 
-        regional_raw = fetch(
-            HEATING_OIL_URL,
-            "text/html"
-        )
+        regional_raw = fetch(HEATING_OIL_URL, "text/html")
+        regional_text = html_to_text(regional_raw)
 
-        regional_text = html_to_text(
-            regional_raw
-        )
-
-        ballyclare = parse_ballyclare_prices(
-            regional_text
-        )
+        ballyclare = parse_ballyclare_prices(regional_text)
 
         if ballyclare:
-
             for index, litres in enumerate(volumes):
-
                 item_id = f"ballyclare-{litres}l"
                 old = existing.get(item_id, {})
 
@@ -852,7 +701,7 @@ def collect_heating_oil(data):
                     ballyclare[index],
                     latest_day,
                     "Consumer Council NI — Ballyclare",
-                    old
+                    old,
                 )
 
                 items.append(item)
@@ -861,26 +710,25 @@ def collect_heating_oil(data):
                     "OK BALLYCLARE:",
                     litres,
                     "litres",
-                    ballyclare[index]
+                    ballyclare[index],
                 )
 
         else:
-
             print(
                 "WARNING: Ballyclare regional prices "
                 "were not extracted"
             )
 
+            present = {
+                item.get("id") for item in items
+            }
+
             for item_id, old in existing.items():
-
-                if item_id.startswith("ballyclare-"):
-
-                    if item_id not in {
-                        item.get("id")
-                        for item in items
-                    }:
-
-                        items.append(old)
+                if (
+                    item_id.startswith("ballyclare-")
+                    and item_id not in present
+                ):
+                    items.append(old)
 
         data["heatingOil"] = {
             "items": items,
@@ -901,24 +749,19 @@ def collect_heating_oil(data):
             "latestObservation": latest_day,
             "note": (
                 "Consumer Council NI published averages. "
-                "Prices include 5% VAT. "
-                "National and Ballyclare observations "
-                "are kept separately."
+                "Prices include 5% VAT. National and Ballyclare "
+                "observations are kept separately."
             ),
         }
 
         print(
             "HEATING OIL COMPLETE:",
             len(archive),
-            "dated national observations"
+            "dated national observations",
         )
 
     except Exception as error:
-
-        print(
-            "FAILED: Heating oil",
-            str(error)[:250]
-        )
+        print("FAILED: Heating oil", str(error)[:250])
 
         data["sources"]["heatingOil"] = {
             "status": "failed",
@@ -933,21 +776,11 @@ def collect_heating_oil(data):
 # --------------------------------------------------
 
 def parse_fuel_csv(raw):
-
-    text = raw.decode(
-        "utf-8-sig",
-        errors="replace"
-    )
-
-    reader = csv.DictReader(
-        io.StringIO(text)
-    )
+    text = raw.decode("utf-8-sig", errors="replace")
+    reader = csv.DictReader(io.StringIO(text))
 
     if not reader.fieldnames:
-
-        raise ValueError(
-            "Fuel CSV has no column headings"
-        )
+        raise ValueError("Fuel CSV has no column headings")
 
     fields = {
         str(name).strip().lower(): name
@@ -955,39 +788,25 @@ def parse_fuel_csv(raw):
         if name
     }
 
-    date_column = next(
-        (
-            original
-            for lower, original in fields.items()
-            if lower == "date"
-        ),
-        None
-    )
+    date_column = fields.get("date")
 
     petrol_column = next(
         (
-            original
-            for lower, original in fields.items()
+            original for lower, original in fields.items()
             if "ulsp" in lower and "pump price" in lower
         ),
-        None
+        None,
     )
 
     diesel_column = next(
         (
-            original
-            for lower, original in fields.items()
+            original for lower, original in fields.items()
             if "ulsd" in lower and "pump price" in lower
         ),
-        None
+        None,
     )
 
-    if not all([
-        date_column,
-        petrol_column,
-        diesel_column
-    ]):
-
+    if not all([date_column, petrol_column, diesel_column]):
         raise ValueError(
             "Could not identify date, petrol and diesel columns "
             + str(reader.fieldnames)
@@ -996,24 +815,11 @@ def parse_fuel_csv(raw):
     observations = []
 
     for row in reader:
+        day = parse_fuel_date(row.get(date_column, ""))
+        petrol = parse_money(row.get(petrol_column, ""))
+        diesel = parse_money(row.get(diesel_column, ""))
 
-        day = parse_fuel_date(
-            row.get(date_column, "")
-        )
-
-        petrol = parse_money(
-            row.get(petrol_column, "")
-        )
-
-        diesel = parse_money(
-            row.get(diesel_column, "")
-        )
-
-        if (
-            not day
-            or petrol is None
-            or diesel is None
-        ):
+        if not day or petrol is None or diesel is None:
             continue
 
         observations.append({
@@ -1022,18 +828,16 @@ def parse_fuel_csv(raw):
             "diesel": diesel,
         })
 
-    unique = {}
-
-    for observation in observations:
-        unique[observation["date"]] = observation
+    unique = {
+        observation["date"]: observation
+        for observation in observations
+    }
 
     result = [
-        unique[day]
-        for day in sorted(unique)
+        unique[day] for day in sorted(unique)
     ]
 
     if not result:
-
         raise ValueError(
             "No valid dated petrol and diesel prices in CSV"
         )
@@ -1042,38 +846,24 @@ def parse_fuel_csv(raw):
 
 
 def collect_fuel(data):
-
-    print(
-        "ROAD FUEL: collecting official DESNZ CSV"
-    )
+    print("ROAD FUEL: collecting official DESNZ CSV")
 
     try:
-
-        page = fetch(
-            FUEL_URL,
-            "text/html"
-        )
-
+        page = fetch(FUEL_URL, "text/html")
         csv_url = find_fuel_csv(page)
 
         print("FUEL CSV:", csv_url)
 
         raw_csv = fetch(
             csv_url,
-            "text/csv, application/octet-stream, */*"
+            "text/csv, application/octet-stream, */*",
         )
 
-        observations = parse_fuel_csv(
-            raw_csv
-        )
-
+        observations = parse_fuel_csv(raw_csv)
         latest = observations[-1]
         latest_day = latest["date"]
 
-        old_items = (
-            data.get("fuel", {})
-            .get("items", [])
-        )
+        old_items = data.get("fuel", {}).get("items", [])
 
         existing = {
             item.get("id"): item
@@ -1084,22 +874,11 @@ def collect_fuel(data):
         items = []
 
         definitions = [
-            (
-                "petrol",
-                "Unleaded petrol",
-                "petrol",
-                "ULSP"
-            ),
-            (
-                "diesel",
-                "Diesel",
-                "diesel",
-                "ULSD"
-            ),
+            ("petrol", "Unleaded petrol", "petrol", "ULSP"),
+            ("diesel", "Diesel", "diesel", "ULSD"),
         ]
 
         for item_id, name, key, code in definitions:
-
             old = existing.get(item_id, {})
 
             history = [
@@ -1113,24 +892,19 @@ def collect_fuel(data):
 
             history = merge_history(
                 old.get("history", []),
-                history
+                history,
             )
 
             price = latest[key]
-
-            previous_price = None
-
-            if len(observations) > 1:
-                previous_price = observations[-2][key]
+            previous_price = (
+                observations[-2][key]
+                if len(observations) > 1 else None
+            )
 
             change = None
 
             if previous_price:
-
-                change = round(
-                    price - previous_price,
-                    2
-                )
+                change = round(price - previous_price, 2)
 
             item = {
                 "id": item_id,
@@ -1142,19 +916,15 @@ def collect_fuel(data):
                 "change": change,
                 "changePct": (
                     round(
-                        (
-                            price / previous_price - 1
-                        ) * 100,
-                        2
+                        (price / previous_price - 1) * 100,
+                        2,
                     )
                     if previous_price else None
                 ),
                 "observedAt": latest_day,
                 "date": latest_day,
                 "history": history,
-                "source": (
-                    "DESNZ weekly road fuel prices"
-                ),
+                "source": "DESNZ weekly road fuel prices",
                 "sourceType": "Official UK average",
                 "url": FUEL_URL,
             }
@@ -1167,7 +937,7 @@ def collect_fuel(data):
                 price,
                 "p/litre",
                 "history:",
-                len(history)
+                len(history),
             )
 
         data["fuel"] = {
@@ -1198,15 +968,11 @@ def collect_fuel(data):
         print(
             "ROAD FUEL COMPLETE:",
             len(observations),
-            "weekly observations"
+            "weekly observations",
         )
 
     except Exception as error:
-
-        print(
-            "FAILED: Road fuel",
-            str(error)[:250]
-        )
+        print("FAILED: Road fuel", str(error)[:250])
 
         data["sources"]["roadFuel"] = {
             "status": "failed",
@@ -1217,21 +983,20 @@ def collect_fuel(data):
 
 
 # --------------------------------------------------
-# OFFICIAL FOOD PRICE INDEX
+# OFFICIAL CPIH FOOD AND OVERALL INFLATION
 # --------------------------------------------------
 
 def find_food_index_csv(page):
-
+    """
+    Find the GOV.UK CPIH CSV and convert its preview URL
+    into the direct raw CSV download URL.
+    """
     parser = LinkExtractor()
-
-    parser.feed(
-        page.decode("utf-8", errors="replace")
-    )
+    parser.feed(page.decode("utf-8", errors="replace"))
 
     candidates = []
 
     for link in parser.links:
-
         lower = link.lower()
 
         if (
@@ -1239,374 +1004,260 @@ def find_food_index_csv(page):
             and "cpih" in lower
             and "inflation" in lower
         ):
-
             absolute = urllib.parse.urljoin(
                 DEFRA_FOOD_URL,
-                link
+                link,
+            )
+
+            # GOV.UK links may point to /preview.
+            absolute = re.sub(
+                r"/preview/?$",
+                "",
+                absolute,
+                flags=re.IGNORECASE,
             )
 
             candidates.append(absolute)
 
-    if not candidates:
+    if candidates:
+        for candidate in candidates:
+            if "cpih-inflation" in candidate.lower():
+                return candidate
 
+        return candidates[0]
+
+    # Known direct official CSV fallback.
+    return DEFRA_FOOD_CSV_URL
+
+
+def parse_food_inflation_csv(raw):
+    """
+    The official CSV has columns:
+        date, cdid, value
+
+    It contains separate monthly rows for:
+        CPIH - Food inflation
+        CPIH - Overall inflation
+
+    These values are already year-on-year percentages.
+    Do not calculate another inflation rate from them.
+    """
+    text = raw.decode("utf-8-sig", errors="replace")
+
+    reader = csv.DictReader(io.StringIO(text))
+
+    if not reader.fieldnames:
         raise ValueError(
-            "Could not find the official Defra CPIH food CSV"
+            "Food inflation CSV has no column headings"
         )
 
-    # Prefer the link specifically for the food-price chart.
-    for candidate in candidates:
-
-        if "cpih-inflation" in candidate.lower():
-            return candidate
-
-    return candidates[0]
-
-
-def parse_food_month(value):
-
-    value = str(value).strip()
-
-    if not value:
-        return None
-
-    patterns = [
-        "%Y-%m",
-        "%Y/%m",
-        "%Y %b",
-        "%Y %B",
-        "%b %Y",
-        "%B %Y",
-        "%b-%y",
-        "%B-%y",
-        "%Y-%b",
-        "%Y-%B",
-        "%d/%m/%Y",
-        "%Y-%m-%d",
-    ]
-
-    for pattern in patterns:
-
-        try:
-
-            parsed = datetime.strptime(
-                value,
-                pattern
-            )
-
-            return (
-                f"{parsed.year:04d}-"
-                f"{parsed.month:02d}-01"
-            )
-
-        except ValueError:
-            pass
-
-    # Handle month names and year embedded in other text.
-    month_names = {
-        name.lower(): number
-        for number, name in enumerate(
-            [
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December",
-            ],
-            1
-        )
+    # Normalize headings to tolerate whitespace/BOM.
+    field_map = {
+        str(field).strip().lower(): field
+        for field in reader.fieldnames
+        if field
     }
 
-    match = re.search(
-        r"\b([A-Za-z]+)\s+(20\d{2})\b",
-        value
-    )
+    date_column = field_map.get("date")
+    cdid_column = field_map.get("cdid")
+    value_column = field_map.get("value")
 
-    if match:
-
-        month = month_names.get(
-            match.group(1).lower()
+    if not all([date_column, cdid_column, value_column]):
+        raise ValueError(
+            "Unexpected food CSV columns: "
+            + str(reader.fieldnames)
         )
 
-        if month:
-
-            return (
-                f"{match.group(2)}-"
-                f"{month:02d}-01"
-            )
-
-    match = re.search(
-        r"\b(20\d{2})\s+([A-Za-z]+)\b",
-        value
-    )
-
-    if match:
-
-        month = month_names.get(
-            match.group(2).lower()
-        )
-
-        if month:
-
-            return (
-                f"{match.group(1)}-"
-                f"{month:02d}-01"
-            )
-
-    return None
-
-
-def parse_food_index_csv(raw):
-
-    text = raw.decode(
-        "utf-8-sig",
-        errors="replace"
-    )
-
-    reader = csv.reader(
-        io.StringIO(text)
-    )
-
-    observations = []
+    food = {}
+    overall = {}
 
     for row in reader:
+        raw_date = str(row.get(date_column, "")).strip()
+        raw_code = str(row.get(cdid_column, "")).strip()
+        raw_value = str(row.get(value_column, "")).strip()
 
-        if not row:
-            continue
+        try:
+            day = datetime.strptime(
+                raw_date[:10],
+                "%Y-%m-%d",
+            ).date().replace(day=1).isoformat()
 
-        date_index = None
-        day = None
-
-        for index, cell in enumerate(row):
-
-            parsed_day = parse_food_month(cell)
-
-            if parsed_day:
-
-                day = parsed_day
-                date_index = index
-                break
-
-        if not day:
-            continue
-
-        # Find the first valid numeric value after the date.
-        value = None
-
-        for cell in row[date_index + 1:]:
-
-            candidate = (
-                str(cell)
-                .strip()
-                .replace(",", "")
-                .replace("%", "")
+            value = float(
+                raw_value.replace(",", "").replace("%", "")
             )
 
-            try:
-
-                number = float(candidate)
-
-                if 0 < number < 1000:
-
-                    value = number
-                    break
-
-            except ValueError:
-                continue
-
-        if value is None:
+        except (ValueError, TypeError):
             continue
 
-        observations.append({
+        code = raw_code.lower()
+
+        point = {
             "date": day,
-            "value": round(value, 3),
-        })
+            "value": round(value, 2),
+        }
 
-    unique = {}
+        if "food inflation" in code and "overall" not in code:
+            food[day] = point
 
-    for observation in observations:
-        unique[observation["date"]] = observation
+        elif "overall inflation" in code:
+            overall[day] = point
 
-    result = [
-        unique[day]
-        for day in sorted(unique)
+    food_history = [
+        food[day] for day in sorted(food)
     ]
 
-    if not result:
+    overall_history = [
+        overall[day] for day in sorted(overall)
+    ]
 
+    if not food_history:
         raise ValueError(
-            "No valid monthly food-price observations found "
-            "in the Defra CSV"
+            "No CPIH Food inflation rows found in the CSV"
         )
 
-    return result
-
-
-def build_food_inflation_history(index_history):
-
-    by_date = {
-        point["date"][:7]: point["value"]
-        for point in index_history
-    }
-
-    output = []
-
-    for point in index_history:
-
-        year, month = map(
-            int,
-            point["date"][:7].split("-")
+    if not overall_history:
+        raise ValueError(
+            "No CPIH Overall inflation rows found in the CSV"
         )
 
-        previous_year = (
-            f"{year - 1:04d}-{month:02d}"
-        )
+    return food_history, overall_history
 
-        previous = by_date.get(previous_year)
-
-        if previous is None or previous == 0:
-            continue
-
-        rate = (
-            point["value"] / previous - 1
-        ) * 100
-
-        output.append({
-            "date": point["date"],
-            "value": round(rate, 2),
-        })
-
-    return output
-
-
-# --------------------------------------------------
-# GROCERY PRICE COLLECTION
-# --------------------------------------------------
 
 def collect_groceries(data):
-
     basket = data.setdefault(
         "householdBasket",
         {
             "items": [],
             "history": [],
-        }
+        },
     )
 
     basket.setdefault("items", [])
     basket.setdefault("history", [])
 
-    # ----------------------------------------------
-    # OFFICIAL DEFRA FOOD PRICE INDEX
-    # ----------------------------------------------
+    print("GROCERIES: collecting official CPIH food inflation")
 
     try:
-
-        print(
-            "GROCERIES: collecting official food price index"
-        )
-
-        page = fetch(
-            DEFRA_FOOD_URL,
-            "text/html"
-        )
-
+        # Discover the current CSV link from the official page.
+        page = fetch(DEFRA_FOOD_URL, "text/html")
         csv_url = find_food_index_csv(page)
 
-        print(
-            "FOOD INDEX CSV:",
-            csv_url
-        )
+        print("FOOD INFLATION CSV:", csv_url)
 
         raw = fetch(
             csv_url,
-            "text/csv, application/octet-stream, */*"
+            "text/csv, application/octet-stream, */*",
         )
 
-        observations = parse_food_index_csv(raw)
-
-        old_index = basket.get(
-            "priceIndexHistory",
-            []
+        food_history, overall_history = (
+            parse_food_inflation_csv(raw)
         )
 
-        index_history = merge_history(
-            old_index,
-            observations
+        # Preserve previous observations if the current feed
+        # temporarily returns a shorter history.
+        old_food = data.get("foodInflationHistory", [])
+        old_overall = data.get("overallInflationHistory", [])
+
+        food_history = merge_history(
+            old_food,
+            food_history,
         )
 
-        inflation_history = (
-            build_food_inflation_history(
-                index_history
-            )
+        overall_history = merge_history(
+            old_overall,
+            overall_history,
         )
 
-        latest = index_history[-1]
+        latest_food = food_history[-1]
+        latest_overall = overall_history[-1]
 
-        basket["priceIndexHistory"] = index_history
+        # New, correctly named top-level data.
+        data["foodInflationHistory"] = food_history
+        data["overallInflationHistory"] = overall_history
 
-        basket["inflationHistory"] = (
-            inflation_history
-        )
-
-        basket["foodPriceIndex"] = {
-            "name": (
-                "UK food and non-alcoholic "
-                "beverage price index"
-            ),
-            "value": latest["value"],
-            "date": latest["date"],
-            "baseYear": 2015,
-            "unit": "Index, 2015=100",
+        data["foodInflation"] = {
+            "name": "CPIH food inflation",
+            "value": latest_food["value"],
+            "date": latest_food["date"],
+            "unit": "% year-on-year",
             "source": "ONS / Defra CPIH",
             "url": DEFRA_FOOD_URL,
         }
 
-        basket["foodInflation"] = (
-            inflation_history[-1]
-            if inflation_history else None
-        )
+        data["overallInflation"] = {
+            "name": "CPIH overall inflation",
+            "value": latest_overall["value"],
+            "date": latest_overall["date"],
+            "unit": "% year-on-year",
+            "source": "ONS / Defra CPIH",
+            "url": DEFRA_FOOD_URL,
+        }
 
+        # Also retain the histories inside householdBasket
+        # for compatibility with existing dashboard code.
+        basket["foodInflationHistory"] = food_history
+        basket["overallInflationHistory"] = overall_history
+        basket["foodInflation"] = data["foodInflation"]
+        basket["overallInflation"] = data["overallInflation"]
         basket["updatedAt"] = timestamp()
+
+        # Remove the old misleading index fields.
+        # They must not be presented as a 2015=100 index.
+        basket.pop("priceIndexHistory", None)
+        basket.pop("inflationHistory", None)
+        basket.pop("foodPriceIndex", None)
 
         data["sources"]["foodInflation"] = {
             "status": "ok",
             "checkedAt": timestamp(),
             "url": DEFRA_FOOD_URL,
             "csvUrl": csv_url,
-            "observationsImported": len(index_history),
-            "latestObservation": latest["date"],
+            "observationsImported": len(food_history),
+            "latestObservation": latest_food["date"],
             "note": (
-                "Official UK-wide food and non-alcoholic "
-                "beverage CPIH index. Annual inflation "
-                "is calculated from the index. "
-                "This is not a local supermarket basket."
+                "Official UK-wide CPIH food and non-alcoholic "
+                "beverage year-on-year inflation. The CSV already "
+                "contains inflation percentages; no second "
+                "inflation calculation is applied. This is not "
+                "a local supermarket basket or NI-only measure."
+            ),
+        }
+
+        data["sources"]["overallInflation"] = {
+            "status": "ok",
+            "checkedAt": timestamp(),
+            "url": DEFRA_FOOD_URL,
+            "csvUrl": csv_url,
+            "observationsImported": len(overall_history),
+            "latestObservation": latest_overall["date"],
+            "note": (
+                "Official UK-wide CPIH overall year-on-year "
+                "inflation, supplied for comparison with food."
             ),
         }
 
         print(
-            "OK FOOD INDEX:",
-            latest["date"],
-            latest["value"],
-            "annual inflation:",
-            (
-                inflation_history[-1]["value"]
-                if inflation_history
-                else "not available"
-            )
+            "OK FOOD INFLATION:",
+            latest_food["date"],
+            latest_food["value"],
+            "%",
+            "history:",
+            len(food_history),
+        )
+
+        print(
+            "OK OVERALL INFLATION:",
+            latest_overall["date"],
+            latest_overall["value"],
+            "%",
+            "history:",
+            len(overall_history),
         )
 
     except Exception as error:
-
         print(
-            "FAILED: Official food index",
-            str(error)[:250]
+            "FAILED: Official food inflation",
+            str(error)[:250],
         )
 
         data["sources"]["foodInflation"] = {
@@ -1621,11 +1272,7 @@ def collect_groceries(data):
     # ----------------------------------------------
 
     try:
-
-        fetch(
-            FOOD_URL,
-            "text/html"
-        )
+        fetch(FOOD_URL, "text/html")
 
         data["sources"]["foodCompass"] = {
             "status": "source_checked",
@@ -1633,20 +1280,17 @@ def collect_groceries(data):
             "url": FOOD_URL,
             "note": (
                 "NI product comparison source checked. "
-                "Product prices are not treated as live "
-                "or current without their capture dates."
+                "Product prices are not treated as live or "
+                "current without their capture dates."
             ),
         }
 
-        print(
-            "OK: NI Food Compass source checked"
-        )
+        print("OK: NI Food Compass source checked")
 
     except Exception as error:
-
         print(
             "FAILED: NI Food Compass",
-            str(error)[:200]
+            str(error)[:200],
         )
 
         data["sources"]["foodCompass"] = {
@@ -1662,49 +1306,31 @@ def collect_groceries(data):
 # --------------------------------------------------
 
 def collect_news(data):
-
     finance = []
     supply = []
 
     for source, url in NEWS_FEEDS:
-
         try:
-
             root = ET.fromstring(
                 fetch(
                     url,
-                    "application/rss+xml, application/atom+xml"
+                    "application/rss+xml, application/atom+xml",
                 )
             )
 
             # RSS
             for item in root.findall(".//item"):
-
-                title = (
-                    item.findtext("title")
-                    or "Untitled"
-                )
-
-                link = (
-                    item.findtext("link")
-                    or ""
-                )
-
-                pub = (
-                    item.findtext("pubDate")
-                    or ""
-                )
+                title = item.findtext("title") or "Untitled"
+                link = item.findtext("link") or ""
+                pub = item.findtext("pubDate") or ""
 
                 try:
-
                     published = (
                         parsedate_to_datetime(pub)
                         .astimezone(timezone.utc)
                         .isoformat()
                     )
-
                 except Exception:
-
                     published = None
 
                 article = {
@@ -1724,38 +1350,30 @@ def collect_news(data):
                 "a": "http://www.w3.org/2005/Atom"
             }
 
-            for item in root.findall(
-                ".//a:entry",
-                namespace
-            ):
-
+            for item in root.findall(".//a:entry", namespace):
                 title = item.findtext(
                     "a:title",
                     default="",
-                    namespaces=namespace
+                    namespaces=namespace,
                 )
 
-                link_node = item.find(
-                    "a:link",
-                    namespace
-                )
+                link_node = item.find("a:link", namespace)
 
                 link = (
                     link_node.attrib.get("href", "")
-                    if link_node is not None
-                    else ""
+                    if link_node is not None else ""
                 )
 
                 published = (
                     item.findtext(
                         "a:published",
                         default="",
-                        namespaces=namespace
+                        namespaces=namespace,
                     )
                     or item.findtext(
                         "a:updated",
                         default="",
-                        namespaces=namespace
+                        namespaces=namespace,
                     )
                 )
 
@@ -1771,35 +1389,28 @@ def collect_news(data):
                 if source == "DEFRA":
                     supply.append(article)
 
-            print(
-                "OK NEWS:",
-                source
-            )
+            print("OK NEWS:", source)
 
         except Exception as error:
-
             print(
                 "FAILED NEWS:",
                 source,
-                str(error)[:150]
+                str(error)[:150],
             )
 
     def unique(items):
-
         seen = set()
         output = []
 
         items.sort(
-            key=lambda x: x.get("publishedAt") or "",
-            reverse=True
+            key=lambda item: item.get("publishedAt") or "",
+            reverse=True,
         )
 
         for item in items:
-
             link = item.get("url")
 
             if link and link not in seen:
-
                 seen.add(link)
                 output.append(item)
 
@@ -1814,17 +1425,12 @@ def collect_news(data):
 # --------------------------------------------------
 
 def main():
-
     print("================================")
     print("DOOMWATCH MARKETS COLLECTION")
     print("================================")
 
     data = load_data()
-
-    data.setdefault(
-        "sources",
-        {}
-    )
+    data.setdefault("sources", {})
 
     collect_markets(data)
     collect_stocks(data)
@@ -1837,27 +1443,21 @@ def main():
     data["updatedAt"] = timestamp()
     data["generatedAt"] = data["updatedAt"]
 
-    DATA_DIR.mkdir(
-        parents=True,
-        exist_ok=True
-    )
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     DATA_FILE.write_text(
         json.dumps(
             data,
             ensure_ascii=False,
-            indent=2
+            indent=2,
         ) + "\n",
-        encoding="utf-8"
+        encoding="utf-8",
     )
 
     print("================================")
     print("MARKETS COLLECTION COMPLETE")
     print("================================")
-    print(
-        "Output:",
-        DATA_FILE
-    )
+    print("Output:", DATA_FILE)
 
 
 if __name__ == "__main__":
