@@ -4,819 +4,709 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#171914">
-<title>DOOMWATCH | Markets & Household Intelligence</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<title>DOOMWATCH // MARKETS & ESSENTIALS</title>
 <style>
-:root {
-  --bg:#171914;
-  --panel:#22251e;
-  --panel2:#292d24;
-  --green:#8fbd69;
-  --bright:#b5e68b;
-  --yellow:#e2bd52;
-  --red:#d75c49;
-  --tan:#c2a77b;
-  --muted:#929987;
-  --line:#454b3c;
+:root{
+ --black:#10120f;--panel:#1b1f19;--panel2:#252a20;
+ --olive:#626b38;--tan:#b69a69;--yellow:#f0c83e;
+ --red:#c94a38;--green:#7dff86;--orange:#ff963b;
+ --muted:#999e8e;--line:#414738
 }
-
-* {box-sizing:border-box}
-
-body {
-  margin:0;
-  background:var(--bg);
-  color:#e8e9dc;
-  font-family:Arial,sans-serif;
-}
-
-header {
-  padding:20px 16px;
-  background:#20231c;
-  border-bottom:3px solid var(--yellow);
-}
-
-.brand {
-  font-size:25px;
-  font-weight:900;
-  letter-spacing:3px;
-  color:var(--yellow);
-}
-
-.subtitle {
-  color:var(--green);
-  font-size:11px;
-  letter-spacing:2px;
-  margin-top:5px;
-}
-
-.topline {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-nav {
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:16px;
-}
-
-nav a {
-  color:var(--bright);
-  text-decoration:none;
-  background:#30352a;
-  border:1px solid var(--line);
-  padding:9px 12px;
-  font-size:12px;
-  border-radius:3px;
-}
-
-nav a.active {
-  background:#56653c;
-  color:white;
-  border-color:var(--yellow);
-}
-
-main {
-  max-width:1450px;
-  margin:auto;
-  padding:15px;
-}
-
-.section {
-  margin:24px 0;
-}
-
-.section-title {
-  color:var(--yellow);
-  font-size:15px;
-  letter-spacing:2px;
-  font-weight:bold;
-  border-bottom:1px solid var(--line);
-  padding-bottom:9px;
-  margin-bottom:12px;
-}
-
-.grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:11px;
-}
-
-.card {
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:4px;
-  padding:14px;
-  min-width:0;
-}
-
-.card h3 {
-  margin:0 0 12px;
-  color:var(--green);
-  font-size:12px;
-  letter-spacing:1px;
-}
-
-.value {
-  color:var(--bright);
-  font-size:25px;
-  font-weight:bold;
-  font-family:monospace;
-  overflow-wrap:anywhere;
-}
-
-.change {
-  font-size:12px;
-  margin-top:7px;
-  color:var(--muted);
-}
-
-.positive {color:var(--green)}
-.negative {color:var(--red)}
-.neutral {color:var(--muted)}
-
-.chart-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
-  gap:12px;
-}
-
-.chart-card {
-  background:var(--panel);
-  border:1px solid var(--line);
-  padding:14px;
-  min-width:0;
-  height:290px;
-}
-
-.chart-card h3 {
-  font-size:12px;
-  color:var(--yellow);
-  letter-spacing:1px;
-  margin:0 0 12px;
-}
-
-.chart-wrap {
-  height:220px;
-  position:relative;
-}
-
-.chart-card canvas {
-  width:100%!important;
-  height:100%!important;
-}
-
-.status {
-  background:#25291f;
-  border:1px solid var(--line);
-  padding:12px;
-  margin:12px 0;
-  font-family:monospace;
-  font-size:12px;
-  color:var(--green);
-  overflow-wrap:anywhere;
-}
-
-.warning {color:var(--yellow)}
-.error {color:var(--red)}
-
-.table-wrap {
-  overflow-x:auto;
-}
-
-table {
-  border-collapse:collapse;
-  width:100%;
-  min-width:420px;
-  font-size:12px;
-}
-
-th,td {
-  padding:11px 9px;
-  text-align:left;
-  border-bottom:1px solid var(--line);
-}
-
-th {
-  color:var(--yellow);
-  background:#292d24;
-}
-
-td {color:#e1e3d7}
-
-.empty {
-  color:var(--muted);
-  font-family:monospace;
-  font-size:12px;
-  padding:15px 0;
-}
-
-.news-item {
-  padding:12px 0;
-  border-bottom:1px solid var(--line);
-}
-
-.news-item a {
-  color:var(--bright);
-  text-decoration:none;
-  font-weight:bold;
-  font-size:13px;
-}
-
-.news-item small {
-  display:block;
-  color:var(--muted);
-  margin-top:5px;
-}
-
-footer {
-  padding:20px;
-  text-align:center;
-  color:var(--muted);
-  font-size:10px;
-  letter-spacing:1px;
-  border-top:1px solid var(--line);
-}
-
-@media(max-width:480px) {
-  .brand {font-size:21px}
-  .value {font-size:21px}
-  main {padding:10px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--black);color:#e8e8d9;font:13px Consolas,Monaco,monospace}
+header{padding:17px;background:linear-gradient(120deg,#292c20,#11140f);border-bottom:3px solid var(--yellow)}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{color:var(--yellow);font-size:clamp(25px,5vw,38px);font-weight:900;letter-spacing:3px}
+.subtitle{color:var(--tan);font-size:10px;letter-spacing:2px;margin-top:5px}
+.classification{border:1px solid var(--red);color:var(--red);padding:8px;font-weight:bold;letter-spacing:2px}
+.topline{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:15px;color:var(--green);font-size:10px}
+nav{display:flex;gap:7px;padding:10px;background:#191c16;border-bottom:1px solid var(--line);flex-wrap:wrap}
+nav a,.btn{padding:10px 12px;border:1px solid var(--line);background:#282d23;color:var(--tan);text-decoration:none;font:inherit}
+nav a.active{background:var(--olive);color:white}
+main{max-width:1500px;margin:auto;padding:14px}
+h2{color:var(--yellow);font-size:16px;letter-spacing:2px;border-bottom:1px solid var(--olive);padding-bottom:9px;margin-top:27px}
+h3{color:var(--tan);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:11px}
+.panel{background:var(--panel);border:1px solid var(--line);padding:13px;min-width:0}
+.panel-title{color:var(--yellow);font-size:10px;letter-spacing:2px;margin-bottom:10px}
+.big{font-size:24px;font-weight:bold;color:var(--green);margin:8px 0;overflow-wrap:anywhere}
+.value{font-size:19px;color:var(--green);font-weight:bold}
+.muted{color:var(--muted);line-height:1.5}
+.green{color:var(--green)}.yellow{color:var(--yellow)}
+.red{color:var(--red)}.tan{color:var(--tan)}
+.orange{color:var(--orange)}
+.terminal{background:#080d09;border:1px solid #3b563b;color:var(--green);padding:13px;line-height:1.7;overflow-wrap:anywhere}
+.nixie{background:#080b08;border:1px solid #63451e;padding:13px;text-align:center;box-shadow:inset 0 0 20px #241607}
+.nixie .digits{color:var(--orange);text-shadow:0 0 5px #ff7a1a,0 0 14px #d64b16;font-size:clamp(24px,5vw,34px);font-weight:bold;letter-spacing:2px}
+.nixie small{display:block;color:var(--tan);margin-top:7px;letter-spacing:2px}
+.chart{height:205px;margin-top:10px;position:relative}
+.chart svg{width:100%;height:100%;overflow:visible}
+.chart-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--yellow)}
+.table-wrap{overflow-x:auto}
+.tag{display:inline-block;border:1px solid var(--olive);padding:3px 6px;margin:2px;color:var(--tan);font-size:9px}
+.warning{border-left:4px solid var(--yellow);background:#262317;padding:11px;line-height:1.5}
+.error{border-left-color:var(--red);background:#291b18}
+.source{padding:10px 0;border-bottom:1px solid var(--line);line-height:1.6}
+a{color:var(--green)}
+select{background:#11150f;color:var(--green);border:1px solid var(--olive);padding:9px;font:inherit;max-width:100%}
+button{cursor:pointer}
+footer{border-top:1px solid var(--olive);padding:20px;text-align:center;color:var(--muted);font-size:10px;letter-spacing:2px;margin-top:30px;line-height:1.8}
+@media(max-width:600px){
+ main{padding:9px}header{padding:13px}
+ .chart{height:180px}table{font-size:10px}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="topline">
-    <div>
-      <div class="brand">DOOMWATCH</div>
-      <div class="subtitle">OPERATION CONTAINMENT // MARKET INTELLIGENCE</div>
-    </div>
-    <div style="text-align:right;font-family:monospace">
-      <div style="color:var(--yellow);font-size:12px">MARKET MONITOR</div>
-      <div id="clock" style="color:var(--green);font-size:12px"></div>
-    </div>
+ <div class="brand">
+  <div>
+   <div class="logo">DOOMWATCH</div>
+   <div class="subtitle">OPERATION CONTAINMENT // MARKETS & ESSENTIALS</div>
   </div>
-
-  <nav>
-    <a href="index.html">MAIN SYSTEM</a>
-    <a href="markets.html" class="active">MARKETS</a>
-  </nav>
+  <div class="classification">ECONOMIC WATCH // ACTIVE</div>
+ </div>
+ <div class="topline">
+  <span>PRIORITY: NORTHERN IRELAND → UK → GLOBAL</span>
+  <span id="clock">SYSTEM TIME</span>
+  <span id="status">MARKET FEED: WAITING</span>
+ </div>
 </header>
+
+<nav>
+ <a href="./index.html">← COMMAND OVERVIEW</a>
+ <a class="active" href="./markets.html">MARKETS & ESSENTIALS</a>
+</nav>
 
 <main>
 
-<div class="status" id="systemStatus">
-  SYSTEM INITIALISING // CONNECTING TO MARKET DATA
+<div class="terminal">
+ DOOMWATCH ECONOMIC & HOUSEHOLD INTELLIGENCE SYSTEM<br>
+ GLOBAL MARKETS // COMMODITIES // CURRENCIES // FOOD SECURITY<br>
+ NI ENERGY COSTS // RETAIL PRICE PRESSURE // FINANCIAL NEWS<br>
+ DATA POLICY: OBSERVED VALUES ONLY — NO FABRICATED LIVE PRICES
 </div>
 
-<!-- GLOBAL MARKETS -->
+<h2>01 // GLOBAL MARKET PICTURE</h2>
+<div class="grid" id="indices">
+ <div class="panel muted">Waiting for market data...</div>
+</div>
 
-<section class="section">
-  <div class="section-title">01 // GLOBAL MARKET INDICATORS</div>
-  <div class="grid" id="globalCards"></div>
-</section>
+<h2>02 // MARKET PERFORMANCE GRAPHS</h2>
+<div class="grid">
+ <div class="panel">
+  <div class="panel-title">S&P 500 // UNITED STATES</div>
+  <div class="value" id="sp-value">—</div>
+  <div class="muted" id="sp-change">Awaiting data</div>
+  <div class="chart" id="sp-chart"></div>
+ </div>
+ <div class="panel">
+  <div class="panel-title">NASDAQ COMPOSITE // UNITED STATES</div>
+  <div class="value" id="nas-value">—</div>
+  <div class="muted" id="nas-change">Awaiting data</div>
+  <div class="chart" id="nas-chart"></div>
+ </div>
+ <div class="panel">
+  <div class="panel-title">FTSE 100 // UNITED KINGDOM</div>
+  <div class="value" id="ftse-value">—</div>
+  <div class="muted" id="ftse-change">Awaiting data</div>
+  <div class="chart" id="ftse-chart"></div>
+ </div>
+</div>
 
-<section class="section">
-  <div class="section-title">02 // COMMODITIES & PRECIOUS METALS</div>
-  <div class="chart-grid">
-    <div class="chart-card">
-      <h3>GOLD // PRICE HISTORY</h3>
-      <div class="chart-wrap"><canvas id="goldChart"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <h3>SILVER // PRICE HISTORY</h3>
-      <div class="chart-wrap"><canvas id="silverChart"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <h3>BRENT CRUDE // PRICE HISTORY</h3>
-      <div class="chart-wrap"><canvas id="brentChart"></canvas></div>
-    </div>
-  </div>
-</section>
+<h2>03 // PRECIOUS METALS & ENERGY</h2>
+<div class="grid" id="commodity-cards">
+ <div class="panel muted">Waiting for commodity records...</div>
+</div>
 
-<!-- STOCK MARKETS -->
+<div class="grid" style="margin-top:12px">
+ <div class="panel">
+  <div class="panel-title">GOLD // HISTORICAL PRICE</div>
+  <div class="value" id="gold-value">—</div>
+  <div class="chart" id="gold-chart"></div>
+ </div>
+ <div class="panel">
+  <div class="panel-title">SILVER // HISTORICAL PRICE</div>
+  <div class="value" id="silver-value">—</div>
+  <div class="chart" id="silver-chart"></div>
+ </div>
+ <div class="panel">
+  <div class="panel-title">BRENT CRUDE // HISTORICAL PRICE</div>
+  <div class="value" id="oil-value">—</div>
+  <div class="chart" id="oil-chart"></div>
+ </div>
+</div>
 
-<section class="section">
-  <div class="section-title">03 // GLOBAL STOCK INDICES</div>
-  <div class="chart-grid">
-    <div class="chart-card">
-      <h3>S&P 500</h3>
-      <div class="chart-wrap"><canvas id="spChart"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <h3>NASDAQ</h3>
-      <div class="chart-wrap"><canvas id="nasdaqChart"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <h3>FTSE 100</h3>
-      <div class="chart-wrap"><canvas id="ftseChart"></canvas></div>
-    </div>
-  </div>
-</section>
+<h2>04 // CRYPTOCURRENCY & FOREIGN EXCHANGE</h2>
+<div class="grid" id="currency-cards">
+ <div class="panel muted">Waiting for currency data...</div>
+</div>
 
-<!-- CURRENCY AND CRYPTO -->
+<div class="grid" style="margin-top:12px">
+ <div class="panel">
+  <div class="panel-title">BITCOIN // BTC-USD</div>
+  <div class="value" id="btc-value">—</div>
+  <div class="chart" id="btc-chart"></div>
+ </div>
+ <div class="panel">
+  <div class="panel-title">GBP / USD</div>
+  <div class="value" id="gbpusd-value">—</div>
+  <div class="chart" id="gbpusd-chart"></div>
+ </div>
+ <div class="panel">
+  <div class="panel-title">GBP / EUR</div>
+  <div class="value" id="gbpeur-value">—</div>
+  <div class="chart" id="gbpeur-chart"></div>
+ </div>
+</div>
 
-<section class="section">
-  <div class="section-title">04 // CURRENCY & DIGITAL ASSETS</div>
-  <div class="grid" id="currencyCards"></div>
-  <div class="chart-grid" style="margin-top:12px">
-    <div class="chart-card">
-      <h3>BITCOIN // PRICE HISTORY</h3>
-      <div class="chart-wrap"><canvas id="bitcoinChart"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <h3>FOREIGN EXCHANGE // GBP / EUR / USD</h3>
-      <div class="chart-wrap"><canvas id="fxChart"></canvas></div>
-    </div>
-  </div>
-</section>
+<h2>05 // TOP TEN STOCKS WATCHLIST</h2>
+<div class="panel">
+ <div class="panel-title">LARGE-CAP EQUITY MONITOR</div>
+ <div class="table-wrap">
+  <table>
+   <thead><tr>
+    <th>COMPANY</th><th>TICKER</th><th>LATEST</th>
+    <th>DAILY CHANGE</th><th>OBSERVATION</th>
+   </tr></thead>
+   <tbody id="stocks">
+    <tr><td colspan="5" class="muted">Awaiting stock market records.</td></tr>
+   </tbody>
+  </table>
+ </div>
+ <div class="muted" style="margin-top:10px">Watchlist: Apple, Microsoft, NVIDIA, Amazon, Alphabet, Meta, Berkshire Hathaway, JPMorgan Chase, Broadcom and Tesla.</div>
+</div>
 
-<!-- TOP STOCKS -->
+<div class="panel" style="margin-top:12px">
+ <div class="panel-title">SELECT STOCK // HISTORICAL PRICE</div>
+ <select id="stock-select"><option value="">No stock history loaded</option></select>
+ <div class="chart" id="stock-chart"></div>
+ <div class="muted" id="stock-summary">Awaiting observations</div>
+</div>
 
-<section class="section">
-  <div class="section-title">05 // TOP 10 STOCK WATCHLIST</div>
-  <div class="card table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>COMPANY / TICKER</th>
-          <th>PRICE</th>
-          <th>CHANGE</th>
-        </tr>
-      </thead>
-      <tbody id="stocksTable">
-        <tr><td colspan="3" class="empty">AWAITING MARKET DATA</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+<h2>06 // NORTHERN IRELAND HOME ENERGY WATCH</h2>
+<div class="grid">
+ <div class="nixie">
+  <div class="digits" id="heating-price">—</div>
+  <small>HOME HEATING OIL // NI</small>
+ </div>
+ <div class="panel">
+  <div class="panel-title">HEATING OIL DATA STATUS</div>
+  <div class="value" id="heating-status">AWAITING</div>
+  <div class="muted" id="heating-detail">No verified price observation loaded.</div>
+ </div>
+ <div class="nixie">
+  <div class="digits" id="petrol-price">—</div>
+  <small>PETROL // UK AVERAGE</small>
+ </div>
+ <div class="nixie">
+  <div class="digits" id="diesel-price">—</div>
+  <small>DIESEL // UK AVERAGE</small>
+ </div>
+</div>
 
-<!-- NORTHERN IRELAND ENERGY -->
+<div class="panel" style="margin-top:12px">
+ <div class="panel-title">ENERGY PRICE HISTORY</div>
+ <div class="chart" id="heating-chart"></div>
+ <div class="muted" id="fuel-detail">Fuel observations will appear here when available.</div>
+</div>
 
-<section class="section">
-  <div class="section-title">06 // NORTHERN IRELAND ENERGY WATCH</div>
-  <div class="grid" id="energyCards"></div>
+<div class="warning" style="margin-top:12px">
+ IMPORTANT: The collector currently checks the Consumer Council NI heating-oil price checker and the UK government's weekly road-fuel statistics. Checking a source is not the same as extracting a verified price. This dashboard will show a price only when a dated value exists in the data file. UK fuel averages are not NI-specific.
+</div>
 
-  <div class="chart-grid" style="margin-top:12px">
-    <div class="chart-card">
-      <h3>HOME HEATING OIL // BT39</h3>
-      <div class="chart-wrap"><canvas id="heatingChart"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <h3>PETROL & DIESEL // PRICE HISTORY</h3>
-      <div class="chart-wrap"><canvas id="fuelChart"></canvas></div>
-    </div>
-  </div>
-</section>
+<h2>07 // GROCERY PRICE INTELLIGENCE</h2>
+<div class="grid">
+ <div class="panel">
+  <div class="panel-title">LATEST FIXED BASKET TOTAL</div>
+  <div class="big" id="basket-total">—</div>
+  <div class="muted" id="basket-date">Awaiting complete basket</div>
+ </div>
+ <div class="panel">
+  <div class="panel-title">ITEM PRICE OBSERVATIONS</div>
+  <div class="big" id="price-count">0</div>
+  <div class="muted">Dated records</div>
+ </div>
+ <div class="panel">
+  <div class="panel-title">ITEMS TRACKED</div>
+  <div class="big" id="item-count">0</div>
+  <div class="muted">With price history</div>
+ </div>
+ <div class="panel">
+  <div class="panel-title">RETAILERS REPRESENTED</div>
+  <div class="big" id="retailer-count">0</div>
+  <div class="muted">In available records</div>
+ </div>
+</div>
 
-<!-- HOUSEHOLD BASKET -->
+<div class="panel" style="margin-top:12px">
+ <div class="panel-title">FIXED HOUSEHOLD BASKET // HISTORICAL COST</div>
+ <div class="chart" id="basket-chart"></div>
+ <div class="chart-labels"><span id="basket-first">—</span><span id="basket-last">—</span></div>
+</div>
 
-<section class="section">
-  <div class="section-title">07 // HOUSEHOLD COST OF LIVING MONITOR</div>
+<div class="panel" style="margin-top:12px">
+ <div class="panel-title">INDIVIDUAL ESSENTIAL PRICE HISTORY</div>
+ <select id="item-select"><option value="">No item history loaded</option></select>
+ <div class="chart" id="item-chart"></div>
+ <div class="muted" id="item-summary">Awaiting dated observations</div>
+</div>
 
-  <div class="card">
-    <h3>AVERAGE HOUSEHOLD BASKET // PRICE TREND</h3>
-    <div class="value" id="basketValue">AWAITING DATA</div>
-    <div class="change" id="basketChange">
-      Historical average basket price
-    </div>
-    <div style="height:240px;margin-top:15px">
-      <canvas id="basketChart"></canvas>
-    </div>
-  </div>
+<h3>TOP FIVE PRICE INCREASES</h3>
+<div class="panel">
+ <div class="table-wrap">
+  <table>
+   <thead><tr><th>ITEM</th><th>PREVIOUS</th><th>LATEST</th><th>CHANGE</th><th>DATE</th></tr></thead>
+   <tbody id="top-five">
+    <tr><td colspan="5" class="muted">Requires two comparable observations per item.</td></tr>
+   </tbody>
+  </table>
+ </div>
+</div>
 
-  <div class="chart-grid" style="margin-top:12px">
-    <div class="chart-card">
-      <h3>GROCERY ITEM PRICE TRENDS</h3>
-      <div class="chart-wrap"><canvas id="groceryChart"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <h3>HOUSEHOLD ESSENTIALS // CURRENT PRICES</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>ITEM</th><th>UNIT</th><th>PRICE</th></tr>
-          </thead>
-          <tbody id="groceryTable">
-            <tr><td colspan="3" class="empty">AWAITING DATA</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</section>
+<h3>LATEST OBSERVED GROCERY PRICES</h3>
+<div class="panel">
+ <div class="table-wrap">
+  <table>
+   <thead><tr><th>ITEM</th><th>SIZE</th><th>QUANTITY</th><th>PRICE</th><th>RETAILER / SOURCE</th><th>DATE</th></tr></thead>
+   <tbody id="grocery-rows">
+    <tr><td colspan="6" class="muted">No grocery observations loaded.</td></tr>
+   </tbody>
+  </table>
+ </div>
+</div>
 
-<!-- FINANCIAL NEWS -->
+<h2>08 // FINANCE & SUPPLY-CHAIN NEWS</h2>
+<div class="grid">
+ <div class="panel">
+  <div class="panel-title">FINANCIAL NEWS FEED</div>
+  <div id="finance-news" class="muted">Awaiting news records.</div>
+ </div>
+ <div class="panel">
+  <div class="panel-title">SUPPLY-CHAIN & FOOD SECURITY</div>
+  <div id="supply-news" class="muted">Awaiting supply reports.</div>
+ </div>
+</div>
 
-<section class="section">
-  <div class="section-title">08 // FINANCIAL & ECONOMIC INTELLIGENCE</div>
-  <div class="card" id="financeNews">
-    <div class="empty">AWAITING FINANCIAL NEWS FEED</div>
-  </div>
-</section>
+<h2>09 // SOURCE DIRECTORY</h2>
+<div class="panel">
+ <div class="source">
+  <strong>NI Consumer Council — Home Heating Oil</strong><br>
+  <a href="https://www.consumercouncil.org.uk/home-heating/price-checker" target="_blank" rel="noopener">OPEN NI HEATING OIL PRICE CHECKER ↗</a>
+ </div>
+ <div class="source">
+  <strong>UK Government — Weekly Road Fuel Prices</strong><br>
+  <a href="https://www.gov.uk/government/statistics/weekly-road-fuel-prices" target="_blank" rel="noopener">OPEN FUEL PRICE STATISTICS ↗</a>
+ </div>
+ <div class="source">
+  <strong>NI Food Compass</strong><br>
+  <a href="https://nifoodcompass.com/" target="_blank" rel="noopener">OPEN NI FOOD PRICE COMPARISON ↗</a>
+ </div>
+ <div class="source">
+  <strong>Food Foundation — Food Price Tracker</strong><br>
+  <a href="https://foodfoundation.org.uk/initiatives/food-prices-tracking" target="_blank" rel="noopener">OPEN FOOD PRICE TRACKER ↗</a>
+ </div>
+ <div class="source">
+  <strong>ONS — Inflation & Price Indices</strong><br>
+  <a href="https://www.ons.gov.uk/economy/inflationandpriceindices" target="_blank" rel="noopener">OPEN ONS STATISTICS ↗</a>
+ </div>
+ <div class="source">
+  <strong>DEFRA — Agricultural Commodity Prices</strong><br>
+  <a href="https://www.data.gov.uk/collections/business-and-economy/agricultural-commodity-prices" target="_blank" rel="noopener">OPEN AGRICULTURAL DATA ↗</a>
+ </div>
+ <div class="source">
+  <strong>Yahoo Finance — Market Data Provider</strong><br>
+  <a href="https://finance.yahoo.com/" target="_blank" rel="noopener">OPEN MARKET DATA ↗</a>
+ </div>
+</div>
 
-<div class="status">
-  DATA INTEGRITY: UNVERIFIED DATA IS NEVER DISPLAYED AS A LIVE PRICE.<br>
-  SOURCE TIMESTAMPS AND LAST UPDATE TIMES WILL BE SHOWN WHEN PROVIDED.
+<div class="warning" style="margin-top:15px">
+ DATA INTEGRITY NOTICE: Market quotes are indicative and may be delayed. Commodity and equity prices may be quoted in different currencies and units. Do not compare values without checking their units. Grocery comparisons require consistent pack sizes and dated observations. This is an intelligence dashboard, not investment advice.
 </div>
 
 </main>
 
 <footer>
-DOOMWATCH // OPERATION CONTAINMENT<br>
-MARKET & HOUSEHOLD INTELLIGENCE MODULE<br>
-LOCAL DASHBOARD // DATA SOURCE: MARKETS.JSON
+ DOOMWATCH // OPERATION CONTAINMENT<br>
+ ECONOMIC RESILIENCE // HOUSEHOLD SECURITY // MARKET INTELLIGENCE<br>
+ OBSERVE // VERIFY // PREPARE
 </footer>
 
 <script>
 "use strict";
 
-const DATA_URL = "data/markets.json";
-let marketData = {};
-const charts = {};
+const DATA_URL="./data/markets.json";
+const $=id=>document.getElementById(id);
 
-function get(obj, path, fallback = []) {
-  return path.split(".").reduce(
-    (value, key) => value && value[key] !== undefined
-      ? value[key] : undefined,
-    obj
-  ) ?? fallback;
+function esc(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
 }
 
-function number(value) {
-  const n = Number(value);
-  return Number.isFinite(n) ? n : null;
+function num(v){
+ if(v===null||v===undefined||v==="")return null;
+ const n=Number(v);
+ return Number.isFinite(n)?n:null;
 }
 
-function money(value, currency = "£") {
-  const n = number(value);
-  return n === null ? "—" :
-    currency + n.toLocaleString("en-GB", {
-      minimumFractionDigits:2,
-      maximumFractionDigits:2
-    });
+function money(v,currency="USD"){
+ const n=num(v);
+ if(n===null)return "—";
+ try{return new Intl.NumberFormat("en-GB",{style:"currency",currency,maximumFractionDigits:2}).format(n);}
+ catch{return n.toFixed(2);}
 }
 
-function changeText(value) {
-  const n = number(value);
-  if (n === null) return "Change unavailable";
-  return (n > 0 ? "+" : "") + n.toFixed(2) + "%";
+function date(v){
+ if(!v)return "Date unavailable";
+ const d=new Date(v);
+ return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString("en-GB");
 }
 
-function changeClass(value) {
-  const n = number(value);
-  return n === null ? "neutral" :
-    n > 0 ? "positive" :
-    n < 0 ? "negative" : "neutral";
+function pct(v){
+ const n=num(v);
+ if(n===null)return "—";
+ return (n>0?"+":"")+n.toFixed(2)+"%";
 }
 
-function card(name, value, change, unit = "") {
-  return `
-    <div class="card">
-      <h3>${safe(name)}</h3>
-      <div class="value">${safe(value)}${safe(unit)}</div>
-      <div class="change ${changeClass(change)}">
-        ${changeText(change)}
-      </div>
-    </div>`;
+function changeClass(v){
+ const n=num(v);
+ return n===null?"muted":n>0?"green":n<0?"red":"muted";
 }
 
-function safe(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",
-    '"':"&quot;","'":"&#039;"
-  })[char]);
+function getHistory(obj){
+ if(!obj)return [];
+ let raw=Array.isArray(obj)?obj:
+  Array.isArray(obj.history)?obj.history:
+  Array.isArray(obj.prices)?obj.prices:[];
+
+ return raw.map(p=>({
+  date:p.date||p.observedAt||p.timestamp,
+  value:num(p.price??p.close??p.value??p.total),
+  retailer:p.retailer||p.source||""
+ })).filter(p=>p.date&&p.value!==null)
+ .sort((a,b)=>new Date(a.date)-new Date(b.date));
 }
 
-function historyPoints(item) {
-  const history = item?.history || item?.prices || [];
-  return history.map(point => ({
-    x: point.date || point.timestamp || point.label || "",
-    y: number(point.value ?? point.price ?? point.close)
-  })).filter(point => point.y !== null);
+function latest(obj){
+ const h=getHistory(obj);
+ if(h.length)return h[h.length-1];
+ if(obj&&typeof obj==="object"){
+  const value=num(obj.price??obj.value??obj.latest??obj.close);
+  if(value!==null)return {value,date:obj.observedAt||obj.date,retailer:obj.source||""};
+ }
+ return null;
 }
 
-function makeChart(id, datasets, prefix = "", suffix = "") {
-  const canvas = document.getElementById(id);
-  if (!canvas || typeof Chart === "undefined") return;
-
-  if (charts[id]) charts[id].destroy();
-
-  const usable = datasets.filter(set =>
-    set.data && set.data.length
-  );
-
-  if (!usable.length) return;
-
-  charts[id] = new Chart(canvas, {
-    type:"line",
-    data:{
-      datasets:usable.map((set,index) => ({
-        label:set.label,
-        data:set.data,
-        borderColor:[
-          "#a9db7e","#e2bd52","#d75c49",
-          "#c2a77b","#76b9bd"
-        ][index % 5],
-        backgroundColor:"transparent",
-        borderWidth:2,
-        pointRadius:0,
-        tension:0.25,
-        fill:false
-      }))
-    },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      parsing:false,
-      interaction:{intersect:false,mode:"index"},
-      plugins:{
-        legend:{
-          display:usable.length > 1,
-          labels:{color:"#d8ddca",boxWidth:12,font:{size:10}}
-        }
-      },
-      scales:{
-        x:{
-          type:"category",
-          ticks:{color:"#929987",maxTicksLimit:6},
-          grid:{color:"#353b30"}
-        },
-        y:{
-          ticks:{
-            color:"#929987",
-            callback:value => prefix + value + suffix
-          },
-          grid:{color:"#353b30"}
-        }
-      }
-    }
-  });
+function findRecord(collection,terms){
+ if(!collection)return null;
+ if(Array.isArray(collection)){
+  return collection.find(x=>terms.some(t=>
+   String(x.id||"").toLowerCase()===t.toLowerCase()||
+   String(x.symbol||"").toLowerCase()===t.toLowerCase()||
+   String(x.name||"").toLowerCase().includes(t.toLowerCase())
+  ))||null;
+ }
+ for(const key of terms){
+  if(collection[key])return collection[key];
+ }
+ return null;
 }
 
-function renderGlobal() {
-  const groups = [
-    ["S&P 500","indices.sp500"],
-    ["NASDAQ","indices.nasdaq"],
-    ["FTSE 100","indices.ftse100"],
-    ["GOLD","commodities.gold"],
-    ["SILVER","commodities.silver"],
-    ["BRENT CRUDE","commodities.brent"],
-    ["BITCOIN","crypto.bitcoin"]
-  ];
+function chart(points,label){
+ if(!points.length)return '<div class="muted">No historical observations available.</div>';
+ if(points.length===1)return `<div class="terminal">ONE OBSERVATION // ${esc(date(points[0].date))}<br>${esc(points[0].value)}</div>`;
 
-  document.getElementById("globalCards").innerHTML =
-    groups.map(([name,path]) => {
-      const item = get(marketData,path,{});
-      return card(name,
-        item.price !== undefined ? item.price : "—",
-        item.changePct
-      );
-    }).join("");
+ const w=800,h=190,p=35;
+ const vals=points.map(x=>x.value);
+ const min=Math.min(...vals),max=Math.max(...vals);
+ const range=max-min||Math.max(Math.abs(max)*.05,.01);
+ const x=i=>p+i*(w-p*2)/(points.length-1);
+ const y=v=>h-p-(v-min)*(h-p*2)/range;
+ const coords=points.map((a,i)=>`${x(i)},${y(a.value)}`).join(" ");
+ const dots=points.map((a,i)=>`<circle cx="${x(i)}" cy="${y(a.value)}" r="3" fill="#7dff86"><title>${esc(date(a.date))}: ${esc(a.value)}</title></circle>`).join("");
+ const lines=[0,.5,1].map(t=>{
+  const yy=p+t*(h-p*2);
+  return `<line x1="${p}" y1="${yy}" x2="${w-p}" y2="${yy}" stroke="#414738" stroke-dasharray="4 5"/>`;
+ }).join("");
 
-  const fx = get(marketData,"fx",{});
-  document.getElementById("currencyCards").innerHTML =
-    ["GBPUSD","GBPEUR","EURUSD"].map(key => {
-      const item = fx[key] || {};
-      return card(key,
-        item.rate !== undefined ? item.rate : "—",
-        item.changePct
-      );
-    }).join("");
+ return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label)}">
+ ${lines}
+ <polyline points="${coords}" fill="none" stroke="#7dff86" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+ ${dots}</svg>`;
 }
 
-function renderCommodityCharts() {
-  ["gold","silver","brent"].forEach(key => {
-    const item = get(marketData,"commodities."+key,{});
-    makeChart(key+"Chart",[
-      {label:key.toUpperCase(),data:historyPoints(item)}
-    ]);
-  });
+function drawSeries(data,key,chartId,valueId,currency="USD"){
+ const obj=findRecord(data,key);
+ const h=getHistory(obj);
+ const last=latest(obj);
+ $(valueId).textContent=last?money(last.value,currency):"—";
+ $(chartId).innerHTML=chart(h.map(p=>({date:p.date,value:p.value})),key+" history");
 }
 
-function renderIndices() {
-  [
-    ["spChart","sp500"],
-    ["nasdaqChart","nasdaq"],
-    ["ftseChart","ftse100"]
-  ].forEach(([id,key]) => {
-    const item = get(marketData,"indices."+key,{});
-    makeChart(id,[{
-      label:key.toUpperCase(),
-      data:historyPoints(item)
-    }]);
-  });
+function card(name,value,detail,unit=""){
+ return `<div class="panel">
+ <div class="panel-title">${esc(name)}</div>
+ <div class="big">${esc(value??"—")} <span style="font-size:11px">${esc(unit)}</span></div>
+ <div class="muted">${esc(detail||"No additional data")}</div>
+ </div>`;
 }
 
-function renderCurrency() {
-  const bitcoin = get(marketData,"crypto.bitcoin",{});
-  makeChart("bitcoinChart",[{
-    label:"BITCOIN",
-    data:historyPoints(bitcoin)
-  }]);
+function renderIndices(data){
+ const indices=data.indices||{};
+ const definitions=[
+  ["S&P 500","sp500","USD"],
+  ["NASDAQ","nasdaq","USD"],
+  ["FTSE 100","ftse100","GBP"]
+ ];
+ $("indices").innerHTML=definitions.map(([name,key])=>{
+  const o=findRecord(indices,[key]);
+  const l=latest(o);
+  return card(name,l?Number(l.value).toLocaleString("en-GB",{maximumFractionDigits:2}):"—",
+   l?date(l.date):"Awaiting quote");
+ }).join("");
 
-  const fx = get(marketData,"fx",{});
-  makeChart("fxChart",[
-    {label:"GBP/USD",data:historyPoints(fx.GBPUSD)},
-    {label:"GBP/EUR",data:historyPoints(fx.GBPEUR)},
-    {label:"EUR/USD",data:historyPoints(fx.EURUSD)}
-  ]);
+ drawSeries(indices,"sp500","sp-chart","sp-value");
+ drawSeries(indices,"nasdaq","nas-chart","nas-value");
+ drawSeries(indices,"ftse100","ftse-chart","ftse-value","GBP");
 }
 
-function renderStocks() {
-  const stocks = get(marketData,"stocks",[]);
-  const tbody = document.getElementById("stocksTable");
+function renderCommodities(data){
+ const items=data.commodities||[];
+ const wanted=[
+  ["Gold",["gold","GC=F"]],
+  ["Silver",["silver","SI=F"]],
+  ["Brent Crude",["brent","BZ=F"]]
+ ];
+ $("commodity-cards").innerHTML=wanted.map(([name,keys])=>{
+  const o=findRecord(items,keys);
+  const l=latest(o);
+  const unit=o?.unit||"";
+  return card(name,l?Number(l.value).toFixed(2):"—",
+   l?date(l.date):"No observation",unit);
+ }).join("");
 
-  if (!Array.isArray(stocks) || !stocks.length) {
-    tbody.innerHTML =
-      '<tr><td colspan="3" class="empty">AWAITING STOCK FEED</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = stocks.slice(0,10).map(stock => `
-    <tr>
-      <td>${safe(stock.name || stock.symbol)}</td>
-      <td>${safe(stock.price ?? "—")}</td>
-      <td class="${changeClass(stock.changePct)}">
-        ${changeText(stock.changePct)}
-      </td>
-    </tr>
-  `).join("");
+ drawSeries(items,["gold","GC=F"],"gold-chart","gold-value");
+ drawSeries(items,["silver","SI=F"],"silver-chart","silver-value");
+ drawSeries(items,["brent","BZ=F"],"oil-chart","oil-value");
 }
 
-function renderEnergy() {
-  const heating = get(marketData,"heatingOil",{});
-  const fuel = get(marketData,"fuel",{});
+function renderFX(data){
+ const fx=data.fx||{};
+ const crypto=data.crypto||{};
+ const btc=findRecord(crypto,["bitcoin","BTC-USD"]);
+ const gbpUSD=findRecord(fx,["GBPUSD","GBPUSD=X"]);
+ const gbpEUR=findRecord(fx,["GBPEUR","GBPEUR=X"]);
+ const eurUSD=findRecord(fx,["EURUSD","EURUSD=X"]);
 
-  const heatingItems = heating.items || [];
-  const cards = heatingItems.map(item =>
-    card(
-      "HEATING OIL "+item.litres+"L",
-      money(item.price),
-      item.changePct
-    )
-  );
+ function val(o){const l=latest(o);return l?Number(l.value).toFixed(4):"—";}
+ $("currency-cards").innerHTML=
+  card("GBP / USD",val(gbpUSD),"Pound sterling against US dollar")+
+  card("GBP / EUR",val(gbpEUR),"Pound sterling against euro")+
+  card("EUR / USD",val(eurUSD),"Euro against US dollar");
 
-  const fuelItems = fuel.items || [];
-  fuelItems.forEach(item => {
-    cards.push(card(
-      item.name || "FUEL",
-      money(item.price),
-      item.changePct
-    ));
-  });
+ const btcLast=latest(btc);
+ $("btc-value").textContent=btcLast?money(btcLast.value):"—";
+ $("btc-chart").innerHTML=chart(getHistory(btc).map(p=>({date:p.date,value:p.value})),"Bitcoin history");
 
-  document.getElementById("energyCards").innerHTML =
-    cards.length ? cards.join("") :
-    '<div class="empty">AWAITING NORTHERN IRELAND ENERGY DATA</div>';
-
-  makeChart("heatingChart",
-    heatingItems.map(item => ({
-      label:item.litres+"L",
-      data:historyPoints(item)
-    }))
-  );
-
-  makeChart("fuelChart",
-    fuelItems.map(item => ({
-      label:item.name,
-      data:historyPoints(item)
-    }))
-  );
+ for(const [id,obj] of [["gbpusd",gbpUSD],["gbpeur",gbpEUR]]){
+  const l=latest(obj);
+  $(id+"-value").textContent=l?Number(l.value).toFixed(4):"—";
+  $(id+"-chart").innerHTML=chart(getHistory(obj).map(p=>({date:p.date,value:p.value})),id+" history");
+ }
 }
 
-function renderHousehold() {
-  const basket = get(marketData,"householdBasket",{});
-  const history = basket.history || [];
-  const items = basket.items || [];
+function renderStocks(data){
+ const stocks=Array.isArray(data.stocks)?data.stocks:[];
+ $("stocks").innerHTML=stocks.length?stocks.map(s=>{
+  const l=latest(s);
+  const change=num(s.changePercent??s.change);
+  return `<tr>
+   <td>${esc(s.name||s.title||"—")}</td>
+   <td>${esc(s.symbol||s.id||"—")}</td>
+   <td>${l?esc(Number(l.value).toFixed(2)):"—"}</td>
+   <td class="${changeClass(change)}">${pct(change)}</td>
+   <td>${esc(date(l?.date))}</td>
+  </tr>`;
+ }).join(""):'<tr><td colspan="5" class="muted">No stock records loaded.</td></tr>';
 
-  const latest = history.length
-    ? history[history.length-1] : null;
+ const select=$("stock-select");
+ select.innerHTML=stocks.length?stocks.map((s,i)=>
+  `<option value="${i}">${esc(s.name||s.symbol||"Stock "+(i+1))}</option>`
+ ).join(""):'<option value="">No stock history loaded</option>';
 
-  document.getElementById("basketValue").textContent =
-    latest && number(latest.average ?? latest.total) !== null
-      ? money(latest.average ?? latest.total)
-      : "AWAITING DATA";
-
-  document.getElementById("basketChange").textContent =
-    latest?.date
-      ? "Latest recorded basket: "+latest.date
-      : "No verified basket history recorded yet";
-
-  makeChart("basketChart",[{
-    label:"AVERAGE BASKET PRICE",
-    data:history.map(point => ({
-      x:point.date,
-      y:number(point.average ?? point.total)
-    })).filter(point => point.y !== null)
-  }],"£");
-
-  makeChart("groceryChart",
-    items.map(item => ({
-      label:item.name,
-      data:historyPoints(item)
-    }))
-  );
-
-  const tbody = document.getElementById("groceryTable");
-
-  tbody.innerHTML = items.length
-    ? items.map(item => `
-      <tr>
-        <td>${safe(item.name)}</td>
-        <td>${safe(item.unit || "—")}</td>
-        <td>${money(item.price)}</td>
-      </tr>
-    `).join("")
-    : '<tr><td colspan="3" class="empty">AWAITING GROCERY PRICE DATA</td></tr>';
+ function drawStock(){
+  const s=stocks[Number(select.value)||0];
+  if(!s){$("stock-chart").innerHTML="";return;}
+  const h=getHistory(s);
+  $("stock-chart").innerHTML=chart(h.map(p=>({date:p.date,value:p.value})),s.name||"Stock");
+  const l=latest(s);
+  $("stock-summary").textContent=l?
+   `${s.symbol||""} // Latest: ${Number(l.value).toFixed(2)} // ${date(l.date)}`:
+   "No dated stock quote";
+ }
+ select.addEventListener("change",drawStock);
+ drawStock();
 }
 
-function renderNews() {
-  const news = get(marketData,"news",[]);
-  const container = document.getElementById("financeNews");
+function renderEnergy(data){
+ const oil=data.heatingOil||{};
+ const fuel=data.fuel||{};
+ const oilItems=oil.items||[];
+ const oilRecord=findRecord(oilItems,["heating-oil","home-heating-oil","oil"]);
+ const oilLatest=latest(oilRecord);
 
-  if (!Array.isArray(news) || !news.length) {
-    container.innerHTML =
-      '<div class="empty">AWAITING FINANCIAL NEWS FEED</div>';
-    return;
-  }
+ $("heating-price").textContent=oilLatest?money(oilLatest.value,"GBP"):"—";
+ $("heating-status").textContent=oilLatest?"PRICE LOADED":"NO VERIFIED PRICE";
+ $("heating-detail").textContent=oilLatest?
+  `Observed ${date(oilLatest.date)} // ${oilLatest.retailer||"Source not specified"}`:
+  "Source checked, but no extracted dated price is available.";
 
-  container.innerHTML = news.slice(0,20).map(item => `
-    <div class="news-item">
-      <a href="${safe(item.url || "#")}"
-         target="_blank" rel="noopener noreferrer">
-        ${safe(item.title || "Untitled report")}
-      </a>
-      <small>
-        ${safe(item.source || "Unknown source")}
-        ${item.date ? " // "+safe(item.date) : ""}
-      </small>
-    </div>
-  `).join("");
+ const fuelItems=fuel.items||[];
+ const petrol=findRecord(fuelItems,["petrol","unleaded"]);
+ const diesel=findRecord(fuelItems,["diesel"]);
+ const p=latest(petrol),d=latest(diesel);
+
+ $("petrol-price").textContent=p?Number(p.value).toFixed(1)+"p":"—";
+ $("diesel-price").textContent=d?Number(d.value).toFixed(1)+"p":"—";
+
+ const h=getHistory(oilRecord);
+ $("heating-chart").innerHTML=chart(h.map(x=>({date:x.date,value:x.value})),"Heating oil history");
+ $("fuel-detail").textContent=
+  `Petrol: ${p?Number(p.value).toFixed(1)+"p/litre":"No price loaded"} // `+
+  `Diesel: ${d?Number(d.value).toFixed(1)+"p/litre":"No price loaded"}`;
 }
 
-function renderAll() {
-  renderGlobal();
-  renderCommodityCharts();
-  renderIndices();
-  renderCurrency();
-  renderStocks();
-  renderEnergy();
-  renderHousehold();
-  renderNews();
+function itemHistory(item){
+ return getHistory(item);
 }
 
-async function loadData() {
-  const status = document.getElementById("systemStatus");
+function renderGroceries(data){
+ const basket=data.householdBasket||{};
+ const items=Array.isArray(basket.items)?basket.items:[];
+ const all=items.flatMap(i=>itemHistory(i).map(p=>({...p,item:i.name})));
+ const retailers=[...new Set(all.map(x=>x.retailer).filter(Boolean))];
+ const usable=items.filter(i=>itemHistory(i).length);
 
-  try {
-    const response = await fetch(DATA_URL+"?t="+Date.now(),{
-      cache:"no-store"
-    });
+ $("price-count").textContent=all.length;
+ $("item-count").textContent=usable.length;
+ $("retailer-count").textContent=retailers.length;
 
-    if (!response.ok) {
-      throw new Error("HTTP "+response.status);
-    }
+ const rows=items.map(i=>({item:i,last:itemHistory(i).slice(-1)[0]})).filter(x=>x.last);
+ $("grocery-rows").innerHTML=rows.length?rows.map(x=>`
+ <tr>
+ <td>${esc(x.item.name)}</td><td>${esc(x.item.size||"—")}</td>
+ <td>${esc(x.item.quantity??1)}</td>
+ <td>${money(x.last.value,"GBP")}</td>
+ <td>${esc(x.last.retailer||"Unspecified")}</td>
+ <td>${esc(date(x.last.date))}</td>
+ </tr>`).join(""):'<tr><td colspan="6" class="muted">No dated grocery observations.</td></tr>';
 
-    marketData = await response.json();
-    renderAll();
+ const sel=$("item-select");
+ sel.innerHTML=usable.length?usable.map((i,n)=>
+  `<option value="${n}">${esc(i.name)}</option>`
+ ).join(""):'<option value="">No item history loaded</option>';
 
-    const updated = marketData.updatedAt
-      ? " // LAST UPDATE: "+marketData.updatedAt
-      : "";
+ function drawItem(){
+  const item=usable[Number(sel.value)||0];
+  const h=item?itemHistory(item):[];
+  $("item-chart").innerHTML=chart(h.map(x=>({date:x.date,value:x.value})),"Grocery item price");
+  if(h.length){
+   const previous=h.length>1?h[h.length-2]:null;
+   const last=h[h.length-1];
+   const change=previous&&previous.value!==0?
+    ((last.value-previous.value)/previous.value*100):null;
+   $("item-summary").textContent=
+    `${item.name} // ${money(last.value,"GBP")} // ${date(last.date)} // `+
+    (change===null?"Need another observation":pct(change)+" since previous");
+  }else $("item-summary").textContent="Awaiting dated observations";
+ }
+ sel.addEventListener("change",drawItem);
+ drawItem();
 
-    status.textContent =
-      "MARKET DATA CONNECTED // SOURCE: MARKETS.JSON"+updated;
+ const rises=usable.map(i=>{
+  const h=itemHistory(i);
+  if(h.length<2)return null;
+  const a=h[h.length-1],b=h[h.length-2];
+  return {name:i.name,now:a.value,prev:b.value,date:a.date,change:b.value?((a.value-b.value)/b.value*100):null};
+ }).filter(x=>x&&x.change>0).sort((a,b)=>b.change-a.change).slice(0,5);
 
-  } catch(error) {
-    status.innerHTML =
-      '<span class="warning">MARKET DATA NOT YET AVAILABLE</span>' +
-      ' // EXPECTING data/markets.json // '+
-      safe(error.message);
+ $("top-five").innerHTML=rises.length?rises.map(x=>`
+ <tr><td>${esc(x.name)}</td><td>${money(x.prev,"GBP")}</td>
+ <td>${money(x.now,"GBP")}</td><td class="red">+${x.change.toFixed(1)}%</td>
+ <td>${esc(date(x.date))}</td></tr>`).join(""):'<tr><td colspan="5" class="muted">No comparable increases to rank yet.</td></tr>';
 
-    renderAll();
-  }
+ const history=Array.isArray(basket.history)?basket.history:[];
+ const points=history.map(x=>({date:x.date||x.observedAt,value:num(x.total)}))
+  .filter(x=>x.date&&x.value!==null).sort((a,b)=>new Date(a.date)-new Date(b.date));
+
+ $("basket-chart").innerHTML=chart(points,"Household basket history");
+ if(points.length){
+  const last=points[points.length-1];
+  $("basket-total").textContent=money(last.value,"GBP");
+  $("basket-date").textContent="Latest complete basket: "+date(last.date);
+  $("basket-first").textContent=date(points[0].date);
+  $("basket-last").textContent=date(last.date);
+ }else{
+  $("basket-total").textContent="—";
+  $("basket-date").textContent="Awaiting complete basket history";
+ }
 }
 
-function updateClock() {
-  document.getElementById("clock").textContent =
-    new Date().toLocaleString("en-GB");
+function renderNews(data){
+ const finance=Array.isArray(data.news)?data.news:[];
+ const supply=Array.isArray(data.supplyNews)?data.supplyNews:[];
+
+ function makeNews(items){
+  return items.length?items.slice(0,15).map(n=>`
+   <div class="source">
+    <strong>${esc(n.title||"Untitled report")}</strong><br>
+    <span class="muted">${esc(n.source||"Source")} // ${esc(date(n.publishedAt||n.date))}</span><br>
+    ${n.url?`<a href="${esc(n.url)}" target="_blank" rel="noopener">OPEN REPORT ↗</a>`:""}
+   </div>`).join(""):"No reports currently loaded.";
+ }
+ $("finance-news").innerHTML=makeNews(finance);
+ $("supply-news").innerHTML=makeNews(supply);
 }
 
-updateClock();
-setInterval(updateClock,1000);
-loadData();
-setInterval(loadData,300000);
+function render(data){
+ renderIndices(data);
+ renderCommodities(data);
+ renderFX(data);
+ renderStocks(data);
+ renderEnergy(data);
+ renderGroceries(data);
+ renderNews(data);
+
+ $("status").textContent="MARKET FEED: LOADED";
+ $("status").className="green";
+}
+
+async function load(){
+ try{
+  const response=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const data=await response.json();
+  render(data);
+ }catch(error){
+  $("status").textContent="MARKET FEED: NOT YET AVAILABLE";
+  $("status").className="yellow";
+  console.error("DoomWatch market data:",error);
+ }
+}
+
+function clock(){
+ $("clock").textContent=new Date().toLocaleString("en-GB");
+}
+
+clock();
+setInterval(clock,1000);
+load();
+setInterval(load,15*60*1000);
 </script>
-
 </body>
 </html>
