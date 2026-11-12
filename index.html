@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -336,6 +335,7 @@ footer {
   <button data-page="sections">11 SECTORS</button>
   <button data-page="preparedness">PREPAREDNESS</button>
   <button data-page="sources">SOURCES</button>
+  <button type="button" id="markets-button">MARKETS</button>
 </nav>
 
 <main>
@@ -888,7 +888,7 @@ function showPage(name) {
     page.classList.toggle("active",page.id === name)
   );
 
-  document.querySelectorAll("nav button").forEach(button =>
+  document.querySelectorAll("nav button[data-page]").forEach(button =>
     button.classList.toggle("active",button.dataset.page === name)
   );
 }
@@ -943,8 +943,16 @@ async function loadIntelligence() {
   }
 }
 
-document.querySelectorAll("nav button").forEach(button => {
+/* DASHBOARD NAVIGATION */
+
+document.querySelectorAll("nav button[data-page]").forEach(button => {
   button.addEventListener("click",() => showPage(button.dataset.page));
+});
+
+/* MARKETS OPENS AS A SEPARATE PAGE */
+
+$("markets-button").addEventListener("click",() => {
+  window.location.href = "./markets.html";
 });
 
 document.querySelectorAll("[data-filter]").forEach(button => {
