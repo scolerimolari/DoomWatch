@@ -1,15 +1,13 @@
-
 {
   "version": 3,
-  "project": "DOOMWATCH",
   "feeds": [
     {
       "id": "metoffice-ni",
       "name": "Met Office Northern Ireland warnings",
       "url": "https://weather.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/ni",
       "domain": 9,
-      "region": "NI",
-      "priority": "critical",
+      "region": "Northern Ireland",
+      "priority": "high",
       "tier": 1
     },
     {
@@ -18,13 +16,13 @@
       "url": "https://weather.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/UK",
       "domain": 9,
       "region": "UK",
-      "priority": "critical",
+      "priority": "high",
       "tier": 1
     },
     {
       "id": "ncsc-all",
       "name": "National Cyber Security Centre",
-      "url": "https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml",
+      "url": "https://www.ncsc.gov.uk/api/1/services/v1/report-rss-feed.xml",
       "domain": 8,
       "region": "UK",
       "priority": "high",
@@ -32,7 +30,7 @@
     },
     {
       "id": "gdacs-global",
-      "name": "Global Disaster Alert and Coordination ,
+      "name": "Global Disaster Alert and Coordination System",
       "url": "https://www.gdacs.org/contentdata/xml/rss_24h.xml",
       "domain": 11,
       "region": "International",
@@ -44,7 +42,7 @@
       "name": "TrafficWatchNI road incidents",
       "url": "https://rss.trafficwatchni.com/trafficwatchni_incidents_rss.xml",
       "domain": 6,
-      "region": "NI",
+      "region": "Northern Ireland",
       "priority": "high",
       "tier": 1
     },
@@ -53,16 +51,16 @@
       "name": "TrafficWatchNI roadworks",
       "url": "https://rss.trafficwatchni.com/trafficwatchni_roadworks_rss.xml",
       "domain": 6,
-      "region": "NI",
+      "region": "Northern Ireland",
       "priority": "medium",
       "tier": 1
     },
     {
       "id": "trafficwatch-events",
-      "name": "TrafficWatchNI planned events",
+      "name": "TrafficWatchNI events",
       "url": "https://rss.trafficwatchni.com/trafficwatchni_events_rss.xml",
       "domain": 6,
-      "region": "NI",
+      "region": "Northern Ireland",
       "priority": "medium",
       "tier": 1
     },
@@ -71,18 +69,18 @@
       "name": "TrafficWatchNI news",
       "url": "https://rss.trafficwatchni.com/trafficwatchni_news_rss.xml",
       "domain": 6,
-      "region": "NI",
+      "region": "Northern Ireland",
       "priority": "medium",
       "tier": 1
     },
     {
       "id": "gov-cabinet-office",
-      "name": "Cabinet Office",
+      "name": "UK Cabinet Office",
       "url": "https://www.gov.uk/government/organisations/cabinet-office.atom",
       "domain": 1,
       "region": "UK",
       "priority": "high",
-      "tier": 1
+      "tier": 2
     },
     {
       "id": "gov-defra",
@@ -91,16 +89,16 @@
       "domain": 2,
       "region": "UK",
       "priority": "high",
-      "tier": 1
+      "tier": 2
     },
     {
       "id": "gov-desnz",
       "name": "Department for Energy Security and Net Zero",
       "url": "https://www.gov.uk/government/organisations/department-for-energy-security-and-net-zero.atom",
-      "domain": 3,
+      "domain": 5,
       "region": "UK",
       "priority": "high",
-      "tier": 1
+      "tier": 2
     },
     {
       "id": "gov-transport",
@@ -109,7 +107,7 @@
       "domain": 6,
       "region": "UK",
       "priority": "high",
-      "tier": 1
+      "tier": 2
     },
     {
       "id": "gov-health",
@@ -118,14 +116,14 @@
       "domain": 7,
       "region": "UK",
       "priority": "high",
-      "tier": 1
+      "tier": 2
     },
     {
       "id": "bbc-ni",
-      "name": "BBC News Northern Ireland",
+      "name": "BBC Northern Ireland",
       "url": "https://feeds.bbci.co.uk/news/northern_ireland/rss.xml",
       "domain": 1,
-      "region": "NI",
+      "region": "Northern Ireland",
       "priority": "medium",
       "tier": 3
     }
