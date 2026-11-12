@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,11 +6,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#171914">
 <title>DOOMWATCH // MARKETS</title>
+
 <style>
 :root{
---bg:#171914;--panel:#20241e;--panel2:#252b23;
---line:#41483a;--text:#e5e8dc;--muted:#9ba58e;
---green:#a6d17a;--red:#e27d70;--amber:#e5bd68;
+--bg:#171914;
+--panel:#20241e;
+--panel2:#252b23;
+--line:#41483a;
+--text:#e5e8dc;
+--muted:#9ba58e;
+--green:#a6d17a;
+--red:#e27d70;
+--amber:#e5bd68;
 --blue:#83b9d5;
 }
 *{box-sizing:border-box}
@@ -21,16 +29,20 @@ header{
 padding:20px 16px;background:#11140f;
 border-bottom:2px solid var(--green);
 }
-header h1{margin:0;color:var(--green);font-size:24px;letter-spacing:2px}
+header h1{
+margin:0;color:var(--green);
+font-size:24px;letter-spacing:2px
+}
 header p{margin:4px 0;color:var(--muted);font-size:12px}
 nav{
 display:flex;gap:8px;overflow-x:auto;padding:12px;
 background:#1c201a;border-bottom:1px solid var(--line);
 }
 nav a{
-white-space:nowrap;color:var(--green);text-decoration:none;
-padding:7px 12px;border:1px solid var(--line);
-border-radius:4px;font-size:12px;
+white-space:nowrap;color:var(--green);
+text-decoration:none;padding:7px 12px;
+border:1px solid var(--line);border-radius:4px;
+font-size:12px;
 }
 main{max-width:1250px;margin:auto;padding:14px}
 section{margin:22px 0;scroll-margin-top:12px}
@@ -40,47 +52,53 @@ border-bottom:1px solid var(--line);padding-bottom:8px;
 }
 h3{font-size:13px;color:var(--amber);margin:0 0 10px}
 .grid{
-display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(155px,1fr));
 gap:10px;
 }
 .card{
 background:var(--panel);border:1px solid var(--line);
 border-radius:5px;padding:13px;min-width:0;
 }
-.card .name{color:var(--muted);font-size:11px;text-transform:uppercase}
+.card .name{
+color:var(--muted);font-size:11px;text-transform:uppercase
+}
 .card .price{font-size:21px;font-weight:700;margin:5px 0}
 .card .change{font-size:12px}
-.up{color:var(--green)}.down{color:var(--red)}
+.up{color:var(--green)}
+.down{color:var(--red)}
 .neutral{color:var(--muted)}
 .small{font-size:11px;color:var(--muted)}
 .panel{
 background:var(--panel);border:1px solid var(--line);
 border-radius:5px;padding:14px;margin:12px 0;
 }
-canvas{width:100%;height:230px;display:block}
 .chart-wrap{position:relative;width:100%;height:230px}
+canvas{width:100%;height:230px;display:block}
 .chart-title{font-size:12px;color:var(--muted);margin-bottom:8px}
 table{width:100%;border-collapse:collapse;font-size:12px}
-th,td{padding:9px 7px;text-align:left;border-bottom:1px solid var(--line)}
+th,td{
+padding:9px 7px;text-align:left;
+border-bottom:1px solid var(--line)
+}
 th{color:var(--muted);font-weight:500}
 td a{color:var(--green);text-decoration:none}
 .scroll{overflow-x:auto}
 .news-item{padding:10px 0;border-bottom:1px solid var(--line)}
-.news-item a{color:var(--text);text-decoration:none;font-weight:600}
+.news-item a{
+color:var(--text);text-decoration:none;font-weight:600
+}
 .news-item a:hover{color:var(--green)}
 .news-item .small{margin-top:4px}
 .status{
-display:inline-block;padding:3px 7px;border:1px solid var(--line);
-border-radius:3px;font-size:10px;color:var(--muted)
+display:inline-block;padding:3px 7px;
+border:1px solid var(--line);border-radius:3px;
+font-size:10px;color:var(--muted)
 }
 .warning{color:var(--amber)}
 footer{
 text-align:center;padding:25px;color:var(--muted);
 border-top:1px solid var(--line);font-size:11px
-}
-button{
-background:var(--panel2);color:var(--green);
-border:1px solid var(--line);padding:7px 12px;border-radius:3px;
 }
 @media(max-width:500px){
 header h1{font-size:20px}
@@ -89,6 +107,7 @@ main{padding:10px}
 }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -114,6 +133,7 @@ main{padding:10px}
 <section id="overview">
 <h2>01 // MARKET OVERVIEW</h2>
 <div class="grid" id="overviewCards"></div>
+
 <div class="panel">
 <h3>MARKET DATA STATUS</h3>
 <div id="marketStatus" class="small">Waiting for data...</div>
@@ -148,7 +168,14 @@ main{padding:10px}
 <h2>06 // TOP 10 STOCKS</h2>
 <div class="scroll">
 <table>
-<thead><tr><th>COMPANY</th><th>SYMBOL</th><th>PRICE</th><th>CHANGE</th></tr></thead>
+<thead>
+<tr>
+<th>COMPANY</th>
+<th>SYMBOL</th>
+<th>PRICE</th>
+<th>CHANGE</th>
+</tr>
+</thead>
 <tbody id="stockRows"></tbody>
 </table>
 </div>
@@ -156,29 +183,53 @@ main{padding:10px}
 
 <section id="household">
 <h2>07 // HOUSEHOLD COST INTELLIGENCE</h2>
+
 <div class="panel">
 <h3>GROCERY BASKET // PRICE MONITOR</h3>
-<p class="small">Monitoring household food costs and basket price movements.</p>
+<p class="small">
+Individual observed supermarket prices, not estimated prices.
+</p>
 <div class="grid" id="basketCards"></div>
+<div id="basketStatus" class="small"></div>
 </div>
 
 <div class="panel">
-<h3>AVERAGE GROCERY PRICE TREND</h3>
+<h3>FIXED HOUSEHOLD BASKET // HISTORICAL COST</h3>
+<div id="basketSummary" class="small"></div>
+<div class="chart-wrap">
+<canvas id="basketChart"></canvas>
+</div>
+</div>
+
+<div class="panel">
+<h3>OFFICIAL FOOD INFLATION // CPIH</h3>
 <div id="foodInflationSummary" class="small"></div>
-<div class="chart-wrap"><canvas id="foodChart"></canvas></div>
+<div class="chart-wrap">
+<canvas id="foodChart"></canvas>
+</div>
 </div>
 
 <div class="panel">
-<h3>OVERALL INFLATION</h3>
+<h3>OVERALL UK INFLATION // CPIH</h3>
 <div id="overallInflationSummary" class="small"></div>
-<div class="chart-wrap"><canvas id="inflationChart"></canvas></div>
+<div class="chart-wrap">
+<canvas id="inflationChart"></canvas>
+</div>
 </div>
 
 <div class="panel">
 <h3>GROCERY ITEM HISTORY</h3>
 <div class="scroll">
 <table>
-<thead><tr><th>ITEM</th><th>PRICE</th><th>UNIT</th><th>UPDATED</th></tr></thead>
+<thead>
+<tr>
+<th>ITEM</th>
+<th>PRICE</th>
+<th>UNIT</th>
+<th>RETAILER</th>
+<th>DATE</th>
+</tr>
+</thead>
 <tbody id="basketRows"></tbody>
 </table>
 </div>
@@ -196,17 +247,21 @@ main{padding:10px}
 </div>
 
 <div class="panel">
-<h3>PETROL & DIESEL</h3>
+<h3>PETROL & DIESEL // UK AVERAGES</h3>
+<div class="small" id="fuelStatus"></div>
 <div class="grid" id="fuelCards"></div>
+<div id="fuelCharts"></div>
 </div>
 </section>
 
 <section id="news">
 <h2>09 // FINANCIAL INTELLIGENCE</h2>
+
 <div class="panel">
 <h3>FINANCIAL NEWS</h3>
 <div id="financialNews"></div>
 </div>
+
 <div class="panel">
 <h3>SUPPLY CHAIN & ECONOMIC PRESSURE</h3>
 <div id="supplyNews"></div>
@@ -229,300 +284,632 @@ DATA SUBJECT TO SOURCE AVAILABILITY AND COLLECTION FREQUENCY
 </footer>
 
 <script>
+"use strict";
+
 const DATA_URL="./data/markets.json";
 let D={};
 
 const $=id=>document.getElementById(id);
 
 function safe(v){
-if(v===null||v===undefined||v==="")return "—";
-return String(v);
-}
-
-function money(v,currency="USD"){
-if(v===null||v===undefined||v==="")return "—";
-let n=Number(v);
-if(!Number.isFinite(n))return safe(v);
-return new Intl.NumberFormat("en-GB",{
-style:"currency",currency:currency,maximumFractionDigits:2
-}).format(n);
+ if(v===null||v===undefined||v==="")return "—";
+ return String(v);
 }
 
 function number(v){
-if(v===null||v===undefined||v==="")return "—";
-return Number.isFinite(Number(v))?Number(v).toLocaleString("en-GB",{maximumFractionDigits:2}):safe(v);
+ if(v===null||v===undefined||v==="")return "—";
+ const n=Number(v);
+ return Number.isFinite(n)
+ ? n.toLocaleString("en-GB",{maximumFractionDigits:2})
+ : safe(v);
+}
+
+function money(v,currency="GBP"){
+ const n=Number(v);
+ if(!Number.isFinite(n))return "—";
+ try{
+  return new Intl.NumberFormat("en-GB",{
+   style:"currency",
+   currency:currency,
+   maximumFractionDigits:2
+  }).format(n);
+ }catch(e){
+  return number(v);
+ }
+}
+
+function date(v){
+ if(!v)return "—";
+ const d=new Date(v);
+ return Number.isNaN(d.getTime())
+ ? String(v)
+ : d.toLocaleDateString("en-GB");
 }
 
 function pct(v){
-if(v===null||v===undefined||v==="")return "—";
-let n=Number(v);
-return (n>0?"+":"")+n.toFixed(2)+"%";
+ if(v===null||v===undefined||v==="")return "—";
+ const n=Number(v);
+ if(!Number.isFinite(n))return "—";
+ return (n>0?"+":"")+n.toFixed(2)+"%";
 }
 
-function values(obj){
-if(Array.isArray(obj))return obj;
-if(obj&&Array.isArray(obj.items))return obj.items;
-if(obj&&typeof obj==="object")return Object.values(obj);
-return [];
+function pretty(key){
+ return String(key)
+ .replace(/([A-Z])/g," $1")
+ .replace(/[_-]/g," ")
+ .replace(/\b\w/g,c=>c.toUpperCase());
+}
+
+// Convert keyed market objects into displayable records.
+// Retain the original data structure.
+function displayItems(obj){
+ if(Array.isArray(obj))return obj;
+
+ if(obj&&Array.isArray(obj.items)){
+  return obj.items;
+ }
+
+ if(obj&&typeof obj==="object"){
+  return Object.entries(obj)
+   .filter(([key,value])=>
+    value&&typeof value==="object"&&!Array.isArray(value)
+   )
+   .map(([key,value])=>({
+    ...value,
+    name:value.name||pretty(key)
+   }));
+ }
+
+ return [];
 }
 
 function label(item){
-return item.name||item.label||item.symbol||item.id||"UNKNOWN";
+ return item.name||item.label||item.symbol||item.id||"UNKNOWN";
 }
 
 function price(item){
-return item.price??item.value??item.latestPrice??item.latest??null;
+ return item.price??item.value??item.latestPrice??item.latest??null;
 }
 
 function currency(item){
-return item.currency||"USD";
+ return item.currency||null;
+}
+
+function priceDisplay(item){
+ const p=price(item);
+ return currency(item)
+ ? money(p,currency(item))
+ : number(p);
 }
 
 function movement(item){
-let v=item.changePct??item.changePercent??item.change;
-let n=Number(v);
-let cls=!Number.isFinite(n)?"neutral":n>0?"up":n<0?"down":"neutral";
-return `<span class="${cls}">${pct(v)}</span>`;
+ const v=item.changePct??item.changePercent;
+ const n=Number(v);
+
+ const cls=!Number.isFinite(n)
+ ? "neutral"
+ : n>0 ? "up"
+ : n<0 ? "down"
+ : "neutral";
+
+ return `<span class="${cls}">${pct(v)}</span>`;
 }
 
 function card(item){
-return `<div class="card">
-<div class="name">${safe(label(item))}</div>
-<div class="price">${money(price(item),currency(item))}</div>
-<div class="change">${movement(item)}</div>
-<div class="small">${safe(item.observedAt||item.updatedAt||item.date||"")}</div>
-</div>`;
+ return `
+ <div class="card">
+  <div class="name">${safe(label(item))}</div>
+  <div class="price">${priceDisplay(item)}</div>
+  <div class="change">${movement(item)}</div>
+  <div class="small">${safe(date(item.observedAt||item.updatedAt||item.date))}</div>
+ </div>`;
 }
 
 function renderCards(id,data){
-$(id).innerHTML=values(data).map(card).join("")||'<div class="small">No data available.</div>';
+ $(id).innerHTML=displayItems(data)
+ .map(card).join("")
+ ||'<div class="small">No data available.</div>';
 }
 
-function chart(canvasId,history){
-const canvas=$(canvasId);
-if(!canvas)return;
-const ctx=canvas.getContext("2d");
-const rect=canvas.getBoundingClientRect();
-const w=Math.max(300,rect.width);
-const h=230;
-const ratio=window.devicePixelRatio||1;
-canvas.width=w*ratio;
-canvas.height=h*ratio;
-ctx.scale(ratio,ratio);
-ctx.clearRect(0,0,w,h);
+// Historical chart.
+// Accepts both value and price observations.
+function chart(canvasId,history,unit=""){
+ const canvas=$(canvasId);
+ if(!canvas)return;
 
-const points=values(history).map(p=>({
-date:p.date||p.timestamp||"",
-value:Number(p.value??p.price??p.average??p.index)
-})).filter(p=>Number.isFinite(p.value));
+ const ctx=canvas.getContext("2d");
+ const rect=canvas.getBoundingClientRect();
+ const w=Math.max(300,rect.width);
+ const h=230;
+ const ratio=window.devicePixelRatio||1;
 
-if(points.length<2){
-ctx.fillStyle="#9ba58e";
-ctx.font="12px Arial";
-ctx.fillText("Insufficient historical observations for chart.",12,35);
-return;
-}
+ canvas.width=w*ratio;
+ canvas.height=h*ratio;
 
-const vals=points.map(p=>p.value);
-let min=Math.min(...vals),max=Math.max(...vals);
-if(min===max){min*=.95;max*=1.05;}
-const pad=30;
-const x=i=>pad+i*(w-pad*2)/(points.length-1);
-const y=v=>h-pad-(v-min)*(h-pad*2)/(max-min);
+ ctx.setTransform(ratio,0,0,ratio,0,0);
+ ctx.clearRect(0,0,w,h);
 
-ctx.strokeStyle="#41483a";
-ctx.lineWidth=1;
-for(let i=0;i<5;i++){
-let yy=pad+i*(h-pad*2)/4;
-ctx.beginPath();ctx.moveTo(pad,yy);ctx.lineTo(w-pad,yy);ctx.stroke();
-}
+ const points=displayItems(history)
+ .map(p=>({
+  date:p.date||p.timestamp||p.observedAt||"",
+  value:Number(p.value??p.price??p.average??p.index)
+ }))
+ .filter(p=>p.date&&Number.isFinite(p.value))
+ .sort((a,b)=>String(a.date).localeCompare(String(b.date)));
 
-ctx.strokeStyle="#a6d17a";
-ctx.lineWidth=2;
-ctx.beginPath();
-points.forEach((p,i)=>{
-if(i===0)ctx.moveTo(x(i),y(p.value));
-else ctx.lineTo(x(i),y(p.value));
-});
-ctx.stroke();
+ if(points.length<2){
+  ctx.fillStyle="#9ba58e";
+  ctx.font="12px Arial";
+  ctx.fillText(
+   points.length===1
+   ?"One historical observation only."
+   :"Insufficient historical observations for chart.",
+   12,35
+  );
+  return;
+ }
 
-ctx.fillStyle="#a6d17a";
-points.forEach((p,i)=>{
-if(i===points.length-1){
-ctx.beginPath();ctx.arc(x(i),y(p.value),3,0,Math.PI*2);ctx.fill();
-}
-});
+ const vals=points.map(p=>p.value);
+ let min=Math.min(...vals);
+ let max=Math.max(...vals);
 
-ctx.fillStyle="#9ba58e";
-ctx.font="10px Arial";
-ctx.fillText(number(max),4,pad);
-ctx.fillText(number(min),4,h-pad);
-ctx.fillText(points[0].date, pad,h-5);
-ctx.textAlign="right";
-ctx.fillText(points[points.length-1].date,w-pad,h-5);
-ctx.textAlign="left";
+ if(min===max){
+  const padding=Math.max(Math.abs(max)*.05,.1);
+  min-=padding;
+  max+=padding;
+ }
+
+ const pad=35;
+ const x=i=>pad+i*(w-pad*2)/(points.length-1);
+ const y=v=>h-pad-(v-min)*(h-pad*2)/(max-min);
+
+ ctx.strokeStyle="#41483a";
+ ctx.lineWidth=1;
+
+ for(let i=0;i<5;i++){
+  const yy=pad+i*(h-pad*2)/4;
+  ctx.beginPath();
+  ctx.moveTo(pad,yy);
+  ctx.lineTo(w-pad,yy);
+  ctx.stroke();
+ }
+
+ ctx.strokeStyle="#a6d17a";
+ ctx.lineWidth=2;
+ ctx.beginPath();
+
+ points.forEach((p,i)=>{
+  if(i===0)ctx.moveTo(x(i),y(p.value));
+  else ctx.lineTo(x(i),y(p.value));
+ });
+
+ ctx.stroke();
+
+ ctx.fillStyle="#a6d17a";
+ const last=points.length-1;
+
+ ctx.beginPath();
+ ctx.arc(x(last),y(points[last].value),4,0,Math.PI*2);
+ ctx.fill();
+
+ ctx.fillStyle="#9ba58e";
+ ctx.font="10px Arial";
+
+ ctx.fillText(number(max)+unit,3,pad);
+ ctx.fillText(number(min)+unit,3,h-pad);
+
+ ctx.fillText(date(points[0].date),pad,h-5);
+
+ ctx.textAlign="right";
+ ctx.fillText(date(points[last].date),w-pad,h-5);
+ ctx.textAlign="left";
 }
 
 function historyOf(item){
-return item&&Array.isArray(item.history)?item.history:[];
+ return item&&Array.isArray(item.history)
+ ?item.history:[];
 }
+
+// --------------------------------------------------
+// COMMODITIES
+// --------------------------------------------------
 
 function renderCommodityCharts(){
-let data=values(D.commodities);
-$("commodityCharts").innerHTML="";
-data.forEach((item,i)=>{
-let id="commodityChart"+i;
-let panel=document.createElement("div");
-panel.className="panel";
-panel.innerHTML=`<div class="chart-title">${safe(label(item))} // PRICE HISTORY</div><div class="chart-wrap"><canvas id="${id}"></canvas></div>`;
-$("commodityCharts").appendChild(panel);
-chart(id,historyOf(item));
-});
+ const items=displayItems(D.commodities);
+ $("commodityCharts").innerHTML="";
+
+ items.forEach((item,i)=>{
+  const id="commodityChart"+i;
+
+  const panel=document.createElement("div");
+  panel.className="panel";
+
+  panel.innerHTML=`
+   <div class="chart-title">
+    ${safe(label(item))} // PRICE HISTORY
+   </div>
+   <div class="chart-wrap">
+    <canvas id="${id}"></canvas>
+   </div>`;
+
+  $("commodityCharts").appendChild(panel);
+
+  chart(id,historyOf(item));
+ });
 }
 
+// --------------------------------------------------
+// INDICES, STOCKS, CRYPTO AND CURRENCIES
+// --------------------------------------------------
+
 function renderIndices(){
-renderCards("indexCards",D.indices);
+ renderCards("indexCards",D.indices);
 }
 
 function renderStocks(){
-$("stockRows").innerHTML=values(D.stocks).map(s=>`
-<tr>
-<td>${safe(s.name||s.label||s.symbol)}</td>
-<td>${safe(s.symbol)}</td>
-<td>${money(price(s),currency(s))}</td>
-<td>${movement(s)}</td>
-</tr>`).join("")||'<tr><td colspan="4">No stock data.</td></tr>';
+ $("stockRows").innerHTML=displayItems(D.stocks)
+ .map(s=>`
+ <tr>
+  <td>${safe(s.name||s.label||s.symbol)}</td>
+  <td>${safe(s.symbol)}</td>
+  <td>${priceDisplay(s)}</td>
+  <td>${movement(s)}</td>
+ </tr>`)
+ .join("")
+ ||'<tr><td colspan="4">No stock data.</td></tr>';
+}
+
+// --------------------------------------------------
+// HOUSEHOLD BASKET AND INFLATION
+// --------------------------------------------------
+
+function latestHistory(item){
+ const h=historyOf(item)
+ .filter(p=>p.date&&Number.isFinite(Number(p.price)))
+ .sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+
+ if(h.length)return h[h.length-1];
+
+ if(item.price!==undefined){
+  return {
+   date:item.observedAt||item.date,
+   price:item.price,
+   retailer:item.retailer||item.source
+  };
+ }
+
+ return null;
 }
 
 function renderBasket(){
-const basket=D.householdBasket||{};
-const items=values(basket);
-renderCards("basketCards",items);
-$("basketRows").innerHTML=items.map(i=>`
-<tr>
-<td>${safe(label(i))}</td>
-<td>${money(price(i),i.currency||"GBP")}</td>
-<td>${safe(i.unit)}</td>
-<td>${safe(i.observedAt||i.date||i.updatedAt)}</td>
-</tr>`).join("")||'<tr><td colspan="4">No individual grocery prices collected.</td></tr>';
+ const basket=D.householdBasket||{};
+ const items=Array.isArray(basket.items)?basket.items:[];
 
-let food=D.foodInflationHistory||basket.foodInflationHistory||basket.history||[];
-let overall=D.overallInflationHistory||basket.overallInflationHistory||[];
+ // Actual product-level grocery prices.
+ if(items.length){
+  $("basketCards").innerHTML=items.map(item=>{
+   const latest=latestHistory(item);
 
-$("foodInflationSummary").textContent=
-"Latest food inflation: "+safe(D.foodInflation?.value??D.foodInflation?.rate??D.foodInflation??"Not available");
+   return `
+   <div class="card">
+    <div class="name">${safe(label(item))}</div>
+    <div class="price">
+     ${latest?money(latest.price,item.currency||"GBP"):"—"}
+    </div>
+    <div class="small">${safe(item.size||item.unit)}</div>
+    <div class="small">${safe(latest?.retailer||latest?.source)}</div>
+    <div class="small">${safe(date(latest?.date))}</div>
+   </div>`;
+  }).join("");
+ }else{
+  $("basketCards").innerHTML=
+  '<div class="small warning">No individual supermarket product prices have been collected yet.</div>';
+ }
 
-$("overallInflationSummary").textContent=
-"Latest overall inflation: "+safe(D.overallInflation?.value??D.overallInflation?.rate??D.overallInflation??"Not available");
+ $("basketStatus").textContent=
+ `Tracked products: ${items.length} // Historical basket observations: ${(basket.history||[]).length}`;
 
-chart("foodChart",food);
-chart("inflationChart",overall);
+ // Latest item price table.
+ const rows=items.map(item=>{
+  const latest=latestHistory(item);
+  if(!latest)return "";
+
+  return `
+  <tr>
+   <td>${safe(label(item))}</td>
+   <td>${money(latest.price,item.currency||"GBP")}</td>
+   <td>${safe(item.unit||item.size)}</td>
+   <td>${safe(latest.retailer||latest.source||item.source)}</td>
+   <td>${safe(date(latest.date))}</td>
+  </tr>`;
+ }).filter(Boolean);
+
+ $("basketRows").innerHTML=rows.join("")
+ ||'<tr><td colspan="5">No individual grocery prices collected.</td></tr>';
+
+ // Fixed basket total history.
+ const basketHistory=Array.isArray(basket.history)
+ ?basket.history:[ ];
+
+ $("basketSummary").textContent=
+ basketHistory.length
+ ? "Latest complete basket: "+date(basketHistory[basketHistory.length-1].date)
+ : "No complete dated shopping-basket totals available yet.";
+
+ chart("basketChart",basketHistory);
+
+ // Official food inflation history.
+ const foodHistory=basket.foodInflationHistory||[];
+ const overallHistory=basket.overallInflationHistory||[];
+
+ const foodLatest=basket.foodInflation||{};
+ const overallLatest=basket.overallInflation||{};
+
+ $("foodInflationSummary").textContent=
+ `${safe(foodLatest.name||"UK food CPIH")}:
+ ${safe(foodLatest.value)}% year-on-year //
+ ${date(foodLatest.date)} //
+ ${safe(foodLatest.source)}`;
+
+ $("overallInflationSummary").textContent=
+ `${safe(overallLatest.name||"UK overall CPIH")}:
+ ${safe(overallLatest.value)}% year-on-year //
+ ${date(overallLatest.date)} //
+ ${safe(overallLatest.source)}`;
+
+ chart("foodChart",foodHistory,"%");
+ chart("inflationChart",overallHistory,"%");
 }
+
+// --------------------------------------------------
+// NORTHERN IRELAND HOME HEATING OIL
+// --------------------------------------------------
 
 function renderOil(){
-const oil=D.heatingOil||{};
-const items=values(oil);
+ const oil=D.heatingOil||{};
+ const items=Array.isArray(oil.items)?oil.items:[];
+ const source=(D.sources||{}).heatingOil||{};
 
-$("oilStatus").innerHTML=
-`Collection status: ${safe(oil.status)}<br>
-Last checked: ${safe(oil.checkedAt)}<br>
-Imported observations: ${safe(oil.observationsImported)}<br>
-${safe(oil.note)}`;
+ $("oilStatus").innerHTML=`
+ Collection status: ${safe(source.status)}<br>
+ Last checked: ${safe(date(source.checkedAt))}<br>
+ Latest observation: ${safe(oil.items?.[0]?.observedAt||source.latestObservation)}<br>
+ Historical observations imported: ${safe(source.observationsImported)}<br>
+ VAT included: ${oil.vatIncluded===true?"Yes (5%)":"Unconfirmed"}<br>
+ ${safe(source.note||oil.source)}
+ `;
 
-renderCards("oilCards",items);
+ $("oilCards").innerHTML=items.map(item=>`
+ <div class="card">
+  <div class="name">${safe(label(item))}</div>
+  <div class="price">${money(item.price,"GBP")}</div>
+  <div class="change">${safe(item.volumeLitres)} litres</div>
+  <div class="small">
+   ${money(item.pricePerLitre,"GBP")} per litre
+  </div>
+  <div class="small">
+   ${money(item.pricePer100Litres,"GBP")} per 100 litres
+  </div>
+  <div class="small">${safe(date(item.observedAt))}</div>
+ </div>
+ `).join("")
+ ||'<div class="small warning">No verified heating-oil prices available.</div>';
 
-$("oilCharts").innerHTML="";
-items.forEach((item,i)=>{
-let id="oilChart"+i;
-let panel=document.createElement("div");
-panel.className="panel";
-panel.innerHTML=`<h3>${safe(label(item))} // PRICE HISTORY</h3><div class="chart-wrap"><canvas id="${id}"></canvas></div>`;
-$("oilCharts").appendChild(panel);
-chart(id,historyOf(item));
-});
+ $("oilCharts").innerHTML="";
 
-if(!items.length){
-$("oilCards").innerHTML='<div class="small warning">No verified heating-oil prices currently available. Source metadata is retained; no estimated prices are displayed.</div>';
+ items.forEach((item,i)=>{
+  const id="oilChart"+i;
+
+  const panel=document.createElement("div");
+  panel.className="panel";
+
+  panel.innerHTML=`
+   <h3>${safe(label(item))} // PRICE HISTORY</h3>
+   <div class="chart-wrap">
+    <canvas id="${id}"></canvas>
+   </div>`;
+
+  $("oilCharts").appendChild(panel);
+
+  chart(id,historyOf(item));
+ });
 }
-}
+
+// --------------------------------------------------
+// PETROL AND DIESEL
+// --------------------------------------------------
 
 function renderFuel(){
-renderCards("fuelCards",D.fuel);
+ const fuel=D.fuel||{};
+ const items=Array.isArray(fuel.items)?fuel.items:[];
+ const source=(D.sources||{}).roadFuel||{};
+
+ $("fuelStatus").innerHTML=`
+ Source: ${safe(fuel.source)}<br>
+ Geographic coverage: ${safe(fuel.geographicScope)}<br>
+ Latest observation: ${safe(date(fuel.latestObservation))}<br>
+ Historical observations imported: ${safe(source.observationsImported)}<br>
+ Prices are pence per litre, UK averages rather than NI forecourt quotes.
+ `;
+
+ $("fuelCards").innerHTML=items.map(item=>`
+ <div class="card">
+  <div class="name">${safe(label(item))}</div>
+  <div class="price">${number(item.price)}p</div>
+  <div class="change">${movement(item)}</div>
+  <div class="small">Per litre</div>
+  <div class="small">${safe(date(item.observedAt))}</div>
+ </div>
+ `).join("")
+ ||'<div class="small">No road-fuel data available.</div>';
+
+ $("fuelCharts").innerHTML="";
+
+ items.forEach((item,i)=>{
+  const id="fuelChart"+i;
+
+  const panel=document.createElement("div");
+  panel.className="panel";
+
+  panel.innerHTML=`
+   <h3>${safe(label(item))} // WEEKLY PRICE HISTORY</h3>
+   <div class="chart-wrap">
+    <canvas id="${id}"></canvas>
+   </div>`;
+
+  $("fuelCharts").appendChild(panel);
+
+  chart(id,historyOf(item),"p");
+ });
 }
+
+// --------------------------------------------------
+// NEWS
+// --------------------------------------------------
 
 function renderNews(id,items){
-$(id).innerHTML=values(items).map(n=>`
-<div class="news-item">
-<a href="${safe(n.url)}" target="_blank" rel="noopener">${safe(n.title||n.headline)}</a>
-<div class="small">${safe(n.source)} · ${safe(n.publishedAt||n.date)}</div>
-</div>`).join("")||'<div class="small">No articles collected.</div>';
+ $(id).innerHTML=displayItems(items).map(n=>`
+ <div class="news-item">
+  <a href="${safe(n.url)}" target="_blank" rel="noopener">
+   ${safe(n.title||n.headline)}
+  </a>
+  <div class="small">
+   ${safe(n.source)} · ${safe(date(n.publishedAt||n.date))}
+  </div>
+ </div>
+ `).join("")
+ ||'<div class="small">No articles collected.</div>';
 }
+
+// --------------------------------------------------
+// SOURCE STATUS
+// --------------------------------------------------
 
 function renderSources(){
-let src=D.sources||{};
-$("sourceList").innerHTML=Object.entries(src).map(([key,val])=>{
-if(typeof val==="string")return `<div>${key}: ${val}</div>`;
-return `<div>${key}: ${safe(val.url||val.name||JSON.stringify(val))}</div>`;
-}).join("")||"Source directory unavailable.";
+ const sources=D.sources||{};
+
+ $("sourceList").innerHTML=Object.entries(sources)
+ .map(([key,val])=>{
+  const status=safe(val.status);
+  const cls=status==="ok"?"up":
+             status==="failed"?"down":"neutral";
+
+  return `
+  <div style="padding:9px 0;border-bottom:1px solid #41483a">
+   <strong>${safe(pretty(key))}</strong><br>
+   Status: <span class="${cls}">${status}</span><br>
+   Checked: ${safe(date(val.checkedAt))}<br>
+   Observations: ${safe(val.observationsImported)}<br>
+   Latest: ${safe(date(val.latestObservation))}<br>
+   ${safe(val.note)}<br>
+   ${val.url?`<a href="${safe(val.url)}" target="_blank" rel="noopener">OPEN SOURCE</a>`:""}
+  </div>`;
+ }).join("")
+ ||"Source directory unavailable.";
 }
+
+// --------------------------------------------------
+// SYSTEM STATUS
+// --------------------------------------------------
 
 function renderStatus(){
-$("updated").textContent="LAST COLLECTION: "+safe(D.updatedAt||D.generatedAt);
-$("marketStatus").innerHTML=`
-Schema version: ${safe(D.schemaVersion)}<br>
-Generated: ${safe(D.generatedAt)}<br>
-Updated: ${safe(D.updatedAt)}<br>
-Commodities: ${values(D.commodities).length}<br>
-Indices: ${values(D.indices).length}<br>
-Crypto assets: ${values(D.crypto).length}<br>
-Currencies: ${values(D.fx).length}<br>
-Stocks: ${values(D.stocks).length}<br>
-Heating oil records: ${values(D.heatingOil).length}<br>
-Fuel records: ${values(D.fuel).length}<br>
-Grocery records: ${values(D.householdBasket).length}`;
+ $("updated").textContent=
+ "LAST COLLECTION: "+safe(date(D.updatedAt||D.generatedAt));
+
+ const basket=D.householdBasket||{};
+ const oil=D.heatingOil||{};
+ const fuel=D.fuel||{};
+
+ $("marketStatus").innerHTML=`
+ Schema version: ${safe(D.schemaVersion)}<br>
+ Generated: ${safe(D.generatedAt)}<br>
+ Updated: ${safe(D.updatedAt)}<br>
+ Commodities: ${displayItems(D.commodities).length}<br>
+ Indices: ${displayItems(D.indices).length}<br>
+ Crypto assets: ${displayItems(D.crypto).length}<br>
+ Currencies: ${displayItems(D.fx).length}<br>
+ Stocks: ${displayItems(D.stocks).length}<br>
+ Heating oil products: ${(oil.items||[]).length}<br>
+ Heating oil history: ${(oil.items||[]).reduce((n,i)=>n+(i.history||[]).length,0)}<br>
+ Road fuel products: ${(fuel.items||[]).length}<br>
+ Road fuel history: ${(fuel.items||[]).reduce((n,i)=>n+(i.history||[]).length,0)}<br>
+ Grocery products: ${(basket.items||[]).length}<br>
+ Food inflation observations: ${(basket.foodInflationHistory||[]).length}<br>
+ Overall inflation observations: ${(basket.overallInflationHistory||[]).length}
+ `;
 }
+
+// --------------------------------------------------
+// LOAD DATA
+// --------------------------------------------------
 
 async function load(){
-try{
-const response=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
-if(!response.ok)throw new Error("HTTP "+response.status);
-D=await response.json();
+ try{
+  const response=await fetch(
+   DATA_URL+"?t="+Date.now(),
+   {cache:"no-store"}
+  );
 
-renderStatus();
-renderCards("overviewCards",[
-...values(D.commodities),
-...values(D.indices).slice(0,3),
-...values(D.crypto).slice(0,1)
-]);
-renderCards("commodityCards",D.commodities);
-renderCommodityCharts();
-renderIndices();
-renderCards("cryptoCards",D.crypto);
-renderCards("fxCards",D.fx);
-renderStocks();
-renderBasket();
-renderOil();
-renderFuel();
-renderNews("financialNews",D.news);
-renderNews("supplyNews",D.supplyNews);
-renderSources();
+  if(!response.ok){
+   throw new Error("HTTP "+response.status);
+  }
 
-}catch(error){
-$("updated").textContent="DATA ERROR";
-$("marketStatus").innerHTML=
-`Unable to load markets.json: ${safe(error.message)}<br>
-Check that data/markets.json exists and the collector has completed successfully.`;
-}
+  D=await response.json();
+
+  renderStatus();
+
+  const overview=[
+   ...displayItems(D.commodities),
+   ...displayItems(D.indices).slice(0,3),
+   ...displayItems(D.crypto)
+  ];
+
+  renderCards("overviewCards",overview);
+  renderCards("commodityCards",D.commodities);
+  renderCommodityCharts();
+
+  renderIndices();
+
+  renderCards("cryptoCards",D.crypto);
+  renderCards("fxCards",D.fx);
+
+  renderStocks();
+  renderBasket();
+  renderOil();
+  renderFuel();
+
+  renderNews("financialNews",D.news);
+  renderNews("supplyNews",D.supplyNews);
+
+  renderSources();
+
+ }catch(error){
+  $("updated").textContent="DATA ERROR";
+
+  $("marketStatus").innerHTML=`
+   Unable to load markets.json: ${safe(error.message)}<br>
+   Check that data/markets.json exists and the collector has completed.
+  `;
+ }
 }
 
 load();
+
+let resizeTimer;
+
 window.addEventListener("resize",()=>{
-if(D.householdBasket){
-renderBasket();
-renderCommodityCharts();
-renderOil();
-}
+ clearTimeout(resizeTimer);
+
+ resizeTimer=setTimeout(()=>{
+  if(!D||!Object.keys(D).length)return;
+
+  renderCommodityCharts();
+  renderBasket();
+  renderOil();
+  renderFuel();
+ },200);
 });
+
 </script>
 </body>
 </html>
