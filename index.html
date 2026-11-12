@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,288 +22,116 @@
   --muted:#999e8e;
   --line:#414738;
 }
-
 * {box-sizing:border-box}
-
 body {
-  margin:0;
-  background:var(--black);
-  color:#e8e8d9;
-  font-family:Consolas,Monaco,monospace;
-  font-size:14px;
+  margin:0;background:var(--black);color:#e8e8d9;
+  font-family:Consolas,Monaco,monospace;font-size:14px;
 }
-
 header {
   background:linear-gradient(120deg,#292c20,#11140f);
-  border-bottom:3px solid var(--yellow);
-  padding:18px;
+  border-bottom:3px solid var(--yellow);padding:18px;
 }
-
 .brand {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;flex-wrap:wrap;
 }
-
 .logo {
-  color:var(--yellow);
-  font-size:clamp(25px,5vw,42px);
-  font-weight:900;
-  letter-spacing:3px;
+  color:var(--yellow);font-size:clamp(25px,5vw,42px);
+  font-weight:900;letter-spacing:3px;
 }
-
-.subtitle {
-  color:var(--tan);
-  letter-spacing:3px;
-  font-size:11px;
-  margin-top:5px;
-}
-
+.subtitle {color:var(--tan);letter-spacing:3px;font-size:11px;margin-top:5px}
 .classification {
-  color:var(--red);
-  border:1px solid var(--red);
-  padding:7px 10px;
-  font-weight:bold;
-  letter-spacing:2px;
+  color:var(--red);border:1px solid var(--red);
+  padding:7px 10px;font-weight:bold;letter-spacing:2px;
 }
-
 .topline {
-  display:flex;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:17px;
-  color:var(--green);
-  font-size:11px;
+  display:flex;justify-content:space-between;flex-wrap:wrap;
+  gap:10px;margin-top:17px;color:var(--green);font-size:11px;
 }
-
 nav {
-  display:flex;
-  overflow-x:auto;
-  gap:6px;
-  padding:10px;
-  background:#191c16;
-  border-bottom:1px solid var(--line);
+  display:flex;overflow-x:auto;gap:6px;padding:10px;
+  background:#191c16;border-bottom:1px solid var(--line);
 }
-
 nav button {
-  flex:0 0 auto;
-  background:#282d23;
-  color:var(--tan);
-  border:1px solid var(--line);
-  padding:11px 15px;
-  font:inherit;
-  cursor:pointer;
+  flex:0 0 auto;background:#282d23;color:var(--tan);
+  border:1px solid var(--line);padding:11px 15px;font:inherit;cursor:pointer;
 }
-
-nav button.active {
-  background:var(--olive);
-  border-color:var(--yellow);
-  color:white;
-}
-
-main {
-  max-width:1450px;
-  margin:auto;
-  padding:14px;
-}
-
+nav button.active {background:var(--olive);border-color:var(--yellow);color:white}
+main {max-width:1450px;margin:auto;padding:14px}
 .page {display:none}
 .page.active {display:block}
-
 h2 {
-  color:var(--yellow);
-  font-size:18px;
-  letter-spacing:2px;
-  border-bottom:1px solid var(--olive);
-  padding-bottom:10px;
+  color:var(--yellow);font-size:18px;letter-spacing:2px;
+  border-bottom:1px solid var(--olive);padding-bottom:10px;
 }
-
-h3 {
-  color:var(--tan);
-  font-size:14px;
-  letter-spacing:1px;
-}
-
+h3 {color:var(--tan);font-size:14px;letter-spacing:1px}
 .grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-  gap:12px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;
 }
-
-.panel {
-  background:var(--panel);
-  border:1px solid var(--line);
-  padding:14px;
-  min-width:0;
-}
-
-.panel-title {
-  color:var(--yellow);
-  font-size:11px;
-  letter-spacing:2px;
-  margin-bottom:10px;
-}
-
-.big-status {
-  font-size:22px;
-  font-weight:bold;
-  color:var(--green);
-  margin:8px 0;
-}
-
+.panel {background:var(--panel);border:1px solid var(--line);padding:14px;min-width:0}
+.panel-title {color:var(--yellow);font-size:11px;letter-spacing:2px;margin-bottom:10px}
+.big-status {font-size:22px;font-weight:bold;color:var(--green);margin:8px 0;overflow-wrap:anywhere}
 .muted {color:var(--muted)}
 .green {color:var(--green)}
 .yellow {color:var(--yellow)}
 .red {color:var(--red)}
 .tan {color:var(--tan)}
-
-.warning {
-  border-left:4px solid var(--red);
-  padding:10px;
-  background:#291b18;
-}
-
+.warning {border-left:4px solid var(--red);padding:10px;background:#291b18}
 .terminal {
-  background:#080d09;
-  border:1px solid #3b563b;
-  color:var(--green);
-  padding:13px;
-  line-height:1.6;
-  overflow-wrap:anywhere;
+  background:#080d09;border:1px solid #3b563b;color:var(--green);
+  padding:13px;line-height:1.6;overflow-wrap:anywhere;
 }
-
 .intel-window {
-  height:540px;
-  max-height:70vh;
-  overflow-y:auto;
-  overscroll-behavior:contain;
-  border:1px solid var(--olive);
-  background:#10140f;
-  padding:10px;
-  scrollbar-color:var(--olive) #10140f;
-  scrollbar-width:thin;
+  height:540px;max-height:70vh;overflow-y:auto;overscroll-behavior:contain;
+  border:1px solid var(--olive);background:#10140f;padding:10px;
+  scrollbar-color:var(--olive) #10140f;scrollbar-width:thin;
 }
-
 .intel-window::-webkit-scrollbar {width:9px}
 .intel-window::-webkit-scrollbar-track {background:#10140f}
 .intel-window::-webkit-scrollbar-thumb {background:var(--olive)}
-
 .intel-card {
-  background:var(--panel);
-  border-left:3px solid var(--olive);
-  padding:13px;
-  margin-bottom:10px;
+  background:var(--panel);border-left:3px solid var(--olive);
+  padding:13px;margin-bottom:10px;overflow-wrap:anywhere;
 }
-
 .intel-card.high {border-left-color:var(--red)}
 .intel-card.medium {border-left-color:var(--yellow)}
 .intel-card.low {border-left-color:var(--green)}
-
 .intel-card h3 {margin:0 0 8px}
 .intel-card p {line-height:1.5}
-
-.meta {
-  font-size:11px;
-  color:var(--muted);
-  margin-top:9px;
-}
-
-a {
-  color:var(--green);
-  text-decoration:none;
-}
-
+.meta {font-size:11px;color:var(--muted);margin-top:9px}
+a {color:var(--green);text-decoration:none}
 a:hover {text-decoration:underline}
-
 .tag {
-  display:inline-block;
-  padding:3px 6px;
-  margin:2px;
-  border:1px solid var(--olive);
-  color:var(--tan);
-  font-size:10px;
+  display:inline-block;padding:3px 6px;margin:2px;
+  border:1px solid var(--olive);color:var(--tan);font-size:10px;
 }
-
-.controls {
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin:12px 0;
-}
-
-button,input,textarea,select {
-  font:inherit;
-}
-
+.controls {display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+button,input,textarea,select {font:inherit}
 .controls button,.action-button {
-  background:var(--olive);
-  color:white;
-  border:1px solid var(--tan);
-  padding:9px 12px;
-  cursor:pointer;
+  background:var(--olive);color:white;border:1px solid var(--tan);
+  padding:9px 12px;cursor:pointer;
 }
-
-.controls button.active {
-  background:var(--yellow);
-  color:#111;
-}
-
+.controls button.active {background:var(--yellow);color:#111}
 input,textarea,select {
-  width:100%;
-  background:#0e120d;
-  border:1px solid var(--olive);
-  color:white;
-  padding:10px;
-  margin:5px 0 12px;
+  width:100%;background:#0e120d;border:1px solid var(--olive);
+  color:white;padding:10px;margin:5px 0 12px;
 }
-
 textarea {min-height:85px;resize:vertical}
-
 .checkline {
-  display:flex;
-  gap:10px;
-  align-items:center;
-  padding:9px;
+  display:flex;gap:10px;align-items:center;padding:9px;
   border-bottom:1px solid var(--line);
 }
-
-.checkline input {
-  width:auto;
-  margin:0;
-}
-
+.checkline input {width:auto;margin:0}
 .section-card {
-  background:var(--panel);
-  border:1px solid var(--line);
-  margin-bottom:10px;
-  padding:12px;
+  background:var(--panel);border:1px solid var(--line);
+  margin-bottom:10px;padding:12px;
 }
-
-.section-card summary {
-  color:var(--yellow);
-  cursor:pointer;
-  font-weight:bold;
-  line-height:1.5;
-}
-
-.section-body {
-  padding-top:12px;
-  line-height:1.6;
-}
-
+.section-card summary {color:var(--yellow);cursor:pointer;font-weight:bold;line-height:1.5}
+.section-body {padding-top:12px;line-height:1.6}
 footer {
-  border-top:1px solid var(--olive);
-  padding:20px;
-  text-align:center;
-  color:var(--muted);
-  font-size:10px;
-  letter-spacing:2px;
-  margin-top:25px;
+  border-top:1px solid var(--olive);padding:20px;text-align:center;
+  color:var(--muted);font-size:10px;letter-spacing:2px;margin-top:25px;
 }
-
 @media(max-width:600px) {
   main {padding:9px}
   header {padding:13px}
@@ -321,7 +150,6 @@ footer {
     </div>
     <div class="classification">FIELD SYSTEM // ACTIVE</div>
   </div>
-
   <div class="topline">
     <span>REGION: NORTHERN IRELAND / UNITED KINGDOM</span>
     <span id="clock">SYSTEM TIME</span>
@@ -340,30 +168,24 @@ footer {
 
 <main>
 
-<!-- OVERVIEW -->
-
 <section class="page active" id="overview">
   <h2>01 // COMMAND OVERVIEW</h2>
-
   <div class="grid">
     <div class="panel">
       <div class="panel-title">NORTHERN IRELAND</div>
       <div class="big-status" id="ni-status">AWAITING DATA</div>
       <div class="muted">Regional intelligence assessment</div>
     </div>
-
     <div class="panel">
       <div class="panel-title">UNITED KINGDOM</div>
       <div class="big-status" id="uk-status">AWAITING DATA</div>
       <div class="muted">National intelligence assessment</div>
     </div>
-
     <div class="panel">
       <div class="panel-title">INTELLIGENCE RECORDS</div>
       <div class="big-status" id="article-count">0</div>
       <div class="muted">Records received from collector</div>
     </div>
-
     <div class="panel">
       <div class="panel-title">LAST COLLECTION</div>
       <div class="big-status" style="font-size:15px" id="last-update">PENDING</div>
@@ -372,22 +194,17 @@ footer {
   </div>
 
   <h2>02 // SITUATION REPORT</h2>
-
   <div class="panel">
     <div class="panel-title">CURRENT INTELLIGENCE ASSESSMENT</div>
-    <div class="terminal" id="report">
-      Awaiting intelligence collection...
-    </div>
+    <div class="terminal" id="report">Awaiting intelligence collection...</div>
   </div>
 
   <h2>03 // PRIORITY ALERTS</h2>
-
   <div id="priority-alerts">
     <div class="panel muted">No priority alerts loaded.</div>
   </div>
 
   <h2>04 // SYSTEM DIAGNOSTICS</h2>
-
   <div class="grid">
     <div class="panel">
       <div class="panel-title">COLLECTOR</div>
@@ -404,11 +221,8 @@ footer {
   </div>
 </section>
 
-<!-- INTELLIGENCE -->
-
 <section class="page" id="intelligence">
   <h2>05 // INTELLIGENCE OPERATIONS</h2>
-
   <div class="terminal">
     DOOMWATCH INTELLIGENCE TERMINAL<br>
     PRIORITY: NORTHERN IRELAND → UNITED KINGDOM<br>
@@ -424,63 +238,46 @@ footer {
     <button id="refresh-button">REFRESH DATA</button>
   </div>
 
-  <input id="search" type="search"
-    placeholder="Search intelligence records...">
+  <input id="search" type="search" placeholder="Search intelligence records...">
 
   <div class="panel">
-    <div class="panel-title">
-      LIVE INTELLIGENCE STREAM // SCROLL INDEPENDENTLY
-    </div>
-
+    <div class="panel-title">LIVE INTELLIGENCE STREAM // SCROLL INDEPENDENTLY</div>
     <div class="intel-window" id="intel-feed">
       <div class="muted">Waiting for intelligence feed...</div>
     </div>
   </div>
 </section>
 
-<!-- ELEVEN SECTORS -->
-
 <section class="page" id="sections">
   <h2>06 // SECTOR MONITORING</h2>
-
   <div class="terminal">
     ELEVEN CRITICAL RESILIENCE DOMAINS<br>
     SELECT A SECTOR TO EXPAND ITS INTELLIGENCE RECORDS.
   </div>
-
   <div id="sector-list"></div>
 </section>
 
-<!-- PREPAREDNESS -->
-
 <section class="page" id="preparedness">
   <h2>07 // PERSONAL PREPAREDNESS</h2>
-
   <div class="warning">
     Preparedness is about practical resilience, not panic.
     Prioritise realistic local risks and official safety advice.
   </div>
 
   <h3>PERSONAL READINESS CHECKLIST</h3>
-
   <div class="panel" id="checklist"></div>
 
   <h3>OPERATIONAL NOTES</h3>
-
   <div class="panel">
     <label for="note-title">NOTE TITLE</label>
     <input id="note-title" placeholder="Enter title">
-
     <label for="note-body">NOTE</label>
     <textarea id="note-body" placeholder="Enter operational note"></textarea>
-
     <button class="action-button" id="save-note">SAVE NOTE</button>
-
     <div id="notes-list"></div>
   </div>
 
   <h3>RUMOUR AND CLAIM MONITOR</h3>
-
   <div class="panel">
     <input id="rumour-claim" placeholder="Claim or rumour">
     <input id="rumour-source" placeholder="Where was it reported?">
@@ -490,17 +287,13 @@ footer {
   </div>
 </section>
 
-<!-- SOURCES -->
-
 <section class="page" id="sources">
   <h2>08 // SOURCE DIRECTORY</h2>
-
   <div class="warning">
     Official sources and independent reporting should be assessed
     separately. A source appearing here does not mean its claims
     have been independently verified.
   </div>
-
   <div id="source-list"></div>
 </section>
 
@@ -574,7 +367,6 @@ const STORE_KEY = "doomwatch-v1";
 
 let intelligence = null;
 let articles = [];
-let sections = [];
 let activeFilter = "ALL";
 
 let saved = {
@@ -611,11 +403,18 @@ function loadSaved() {
   try {
     const data = JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
     saved = {...saved,...data};
+    if (!Array.isArray(saved.notes)) saved.notes = [];
+    if (!Array.isArray(saved.rumours)) saved.rumours = [];
+    if (!saved.checks || typeof saved.checks !== "object") saved.checks = {};
   } catch {}
 }
 
 function saveSaved() {
-  localStorage.setItem(STORE_KEY,JSON.stringify(saved));
+  try {
+    localStorage.setItem(STORE_KEY,JSON.stringify(saved));
+  } catch(error) {
+    alert("Could not save local data: " + error.message);
+  }
 }
 
 function valueOf(object, keys, fallback="") {
@@ -630,9 +429,9 @@ function valueOf(object, keys, fallback="") {
 function asText(value) {
   if (typeof value === "string") return value;
   if (typeof value === "number") return String(value);
-  if (Array.isArray(value)) return value.map(asText).join("\n");
+  if (Array.isArray(value)) return value.map(asText).join(", ");
   if (value && typeof value === "object") {
-    return value.text || value.summary || value.description || "";
+    return asText(value.text || value.summary || value.description || value.name || "");
   }
   return "";
 }
@@ -644,14 +443,14 @@ function dateText(value) {
 }
 
 function severity(item) {
-  const value = String(valueOf(item,["severity","priority","level","risk"],"low")).toLowerCase();
+  const value = asText(valueOf(item,["severity","priority","level","risk"],"low")).toLowerCase();
   if (/critical|severe|high|urgent|red/.test(value)) return "high";
   if (/medium|moderate|elevated|amber/.test(value)) return "medium";
   return "low";
 }
 
 function locationOf(item) {
-  const value = String(valueOf(item,["area","region","location","geography","country"],""));
+  const value = asText(valueOf(item,["area","region","location","geography","country"],""));
   if (/northern ireland|\bNI\b/i.test(value)) return "NI";
   if (/international|global|world/i.test(value)) return "INTERNATIONAL";
   if (/uk|united kingdom|britain|england|scotland|wales/i.test(value)) return "UK";
@@ -660,19 +459,22 @@ function locationOf(item) {
 
 function normalizeArticle(item) {
   if (typeof item === "string") {
-    return {title:item,summary:"",url:"",area:"UK",date:"",source:"Unknown",severity:"low"};
+    return {
+      title:item,summary:"",url:"",area:"UK",date:"",
+      source:"Unknown",severity:"low",category:"",status:""
+    };
   }
 
   return {
-    title:valueOf(item,["title","headline","name","claim"],"Untitled intelligence record"),
+    title:asText(valueOf(item,["title","headline","name","claim"],"Untitled intelligence record")),
     summary:asText(valueOf(item,["summary","description","content","body","text","snippet"],"")),
     url:safeURL(valueOf(item,["url","link","sourceUrl","articleUrl"],"")),
     area:locationOf(item),
     date:valueOf(item,["date","published","publishedAt","timestamp","createdAt"],""),
-    source:valueOf(item,["source","publisher","domain","author"],"Source not specified"),
+    source:asText(valueOf(item,["source","publisher","domain","author"],"Source not specified")),
     severity:severity(item),
-    category:valueOf(item,["category","section","sector","domain","topic"],""),
-    status:valueOf(item,["status","verification","assessment"],"")
+    category:asText(valueOf(item,["category","section","sector","domain","topic"],"")),
+    status:asText(valueOf(item,["status","verification","assessment"],""))
   };
 }
 
@@ -681,12 +483,15 @@ function flattenArticles(data) {
 
   function add(items) {
     if (!items) return;
+
     if (Array.isArray(items)) {
       items.forEach(item => output.push(normalizeArticle(item)));
     } else if (typeof items === "object") {
       Object.values(items).forEach(value => {
         if (Array.isArray(value)) add(value);
-        else if (value && typeof value === "object") output.push(normalizeArticle(value));
+        else if (value && typeof value === "object") {
+          output.push(normalizeArticle(value));
+        }
       });
     }
   }
@@ -697,6 +502,7 @@ function flattenArticles(data) {
 
   if (Array.isArray(data.sections)) {
     data.sections.forEach(section => {
+      if (!section || typeof section !== "object") return;
       add(section.articles);
       add(section.items);
       add(section.stories);
@@ -715,6 +521,7 @@ function flattenArticles(data) {
   }
 
   const seen = new Set();
+
   return output.filter(item => {
     const key = item.title + "|" + item.url;
     if (seen.has(key)) return false;
@@ -724,11 +531,11 @@ function flattenArticles(data) {
 }
 
 function renderStatus() {
-  const ni = valueOf(intelligence,["niStatus","northernIrelandStatus"],"MONITORING");
-  const uk = valueOf(intelligence,["ukStatus","overallStatus"],"MONITORING");
+  const ni = asText(valueOf(intelligence,["niStatus","northernIrelandStatus"],"MONITORING"));
+  const uk = asText(valueOf(intelligence,["ukStatus","overallStatus"],"MONITORING"));
 
-  $("ni-status").textContent = String(ni).toUpperCase();
-  $("uk-status").textContent = String(uk).toUpperCase();
+  $("ni-status").textContent = ni.toUpperCase();
+  $("uk-status").textContent = uk.toUpperCase();
   $("article-count").textContent = articles.length;
 
   const generated = valueOf(intelligence,["generatedAt","updatedAt","lastUpdated"],"");
@@ -747,7 +554,9 @@ function renderStatus() {
 }
 
 function renderAlerts() {
-  const important = articles.filter(item => item.severity === "high" || item.severity === "medium").slice(0,8);
+  const important = articles.filter(item =>
+    item.severity === "high" || item.severity === "medium"
+  ).slice(0,8);
 
   $("priority-alerts").innerHTML = important.length
     ? important.map(item => `
@@ -756,7 +565,7 @@ function renderAlerts() {
         <p>${escapeHTML(item.summary)}</p>
         <div class="meta">${escapeHTML(item.area)} // ${escapeHTML(item.source)}</div>
       </div>`).join("")
-    : '<div class="panel muted">No priority alerts identified in the loaded records.</div>';
+    : '<div class="panel muted">No priority alerts loaded.</div>';
 }
 
 function renderFeed() {
@@ -764,7 +573,10 @@ function renderFeed() {
 
   const filtered = articles.filter(item => {
     const areaMatch = activeFilter === "ALL" || item.area === activeFilter;
-    const text = [item.title,item.summary,item.source,item.category,item.area].join(" ").toLowerCase();
+    const text = [
+      item.title,item.summary,item.source,item.category,item.area
+    ].join(" ").toLowerCase();
+
     return areaMatch && text.includes(query);
   });
 
@@ -790,24 +602,37 @@ function renderFeed() {
 }
 
 function renderSections() {
-  const dataSections = Array.isArray(intelligence.sections)
-    ? intelligence.sections
-    : Object.entries(intelligence.sections || {}).map(([name,value]) =>
-        typeof value === "object" ? {...value,title:value.title || name} : {title:name,summary:value}
+  const rawSections = intelligence.sections || {};
+
+  const dataSections = Array.isArray(rawSections)
+    ? rawSections
+    : Object.entries(rawSections).map(([name,value]) =>
+        typeof value === "object" && value !== null
+          ? {...value,title:value.title || name}
+          : {title:name,summary:value}
       );
 
   $("sector-list").innerHTML = SECTORS.map((name,index) => {
+    const sectorName = name.toLowerCase();
+
     const match = dataSections.find(section => {
-      const title = String(valueOf(section,["title","name","category","sector"],"")).toLowerCase();
-      return title && (title.includes(name.toLowerCase()) || name.toLowerCase().includes(title));
+      const title = asText(valueOf(
+        section,["title","name","category","sector"],""
+      )).toLowerCase();
+
+      return title && (
+        title.includes(sectorName) || sectorName.includes(title)
+      );
     });
 
-    const matchingArticles = articles.filter(item =>
-      item.category && (
-      String(item.category || "").toLowerCase()
-        name.toLowerCase().includes(item.category.toLowerCase())
-      )
-    );
+    // FIX: category values are normalised to text before comparison.
+    const matchingArticles = articles.filter(item => {
+      const category = asText(item.category).toLowerCase();
+      return category && (
+        category.includes(sectorName) ||
+        sectorName.includes(category)
+      );
+    });
 
     const summary = match
       ? asText(valueOf(match,["summary","description","assessment","content","body"],""))
@@ -884,17 +709,20 @@ function renderRumours() {
 }
 
 function showPage(name) {
-  document.querySelectorAll(".page").forEach(page =>
-    page.classList.toggle("active",page.id === name)
-  );
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.toggle("active",page.id === name);
+  });
 
-  document.querySelectorAll("nav button[data-page]").forEach(button =>
-    button.classList.toggle("active",button.dataset.page === name)
-  );
+  document.querySelectorAll("nav button[data-page]").forEach(button => {
+    button.classList.toggle("active",button.dataset.page === name);
+  });
+
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 async function loadIntelligence() {
   $("connection").textContent = "CONTACTING COLLECTOR...";
+  $("connection").className = "yellow";
   $("collector-status").textContent = "FETCHING";
 
   try {
@@ -906,14 +734,12 @@ async function loadIntelligence() {
 
     const data = await response.json();
 
-    if (!data || typeof data !== "object") {
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
       throw new Error("Invalid intelligence data");
     }
 
     intelligence = data;
     articles = flattenArticles(data);
-
-    sections = data.sections || [];
 
     renderStatus();
     renderAlerts();
@@ -943,30 +769,36 @@ async function loadIntelligence() {
   }
 }
 
-/* DASHBOARD NAVIGATION */
+/* NAVIGATION */
 
 document.querySelectorAll("nav button[data-page]").forEach(button => {
   button.addEventListener("click",() => showPage(button.dataset.page));
 });
 
-/* MARKETS OPENS AS A SEPARATE PAGE */
+/* MARKETS */
 
 $("markets-button").addEventListener("click",() => {
   window.location.href = "./markets.html";
 });
 
+/* INTELLIGENCE FILTERS */
+
 document.querySelectorAll("[data-filter]").forEach(button => {
   button.addEventListener("click",() => {
     activeFilter = button.dataset.filter;
-    document.querySelectorAll("[data-filter]").forEach(item =>
-      item.classList.toggle("active",item === button)
-    );
+
+    document.querySelectorAll("[data-filter]").forEach(item => {
+      item.classList.toggle("active",item === button);
+    });
+
     renderFeed();
   });
 });
 
 $("search").addEventListener("input",renderFeed);
 $("refresh-button").addEventListener("click",loadIntelligence);
+
+/* NOTES */
 
 $("save-note").addEventListener("click",() => {
   const title = $("note-title").value.trim();
@@ -980,9 +812,12 @@ $("save-note").addEventListener("click",() => {
 
   saveSaved();
   renderNotes();
+
   $("note-title").value = "";
   $("note-body").value = "";
 });
+
+/* RUMOUR MONITOR */
 
 $("save-rumour").addEventListener("click",() => {
   const claim = $("rumour-claim").value.trim();
@@ -1003,6 +838,8 @@ $("save-rumour").addEventListener("click",() => {
   $("rumour-evidence").value = "";
 });
 
+/* DELETE ACTIONS */
+
 document.addEventListener("click",event => {
   if (event.target.dataset.deleteNote !== undefined) {
     saved.notes.splice(Number(event.target.dataset.deleteNote),1);
@@ -1017,6 +854,8 @@ document.addEventListener("click",event => {
   }
 });
 
+/* CLOCK AND STARTUP */
+
 function updateClock() {
   $("clock").textContent = new Date().toLocaleString();
 }
@@ -1029,6 +868,8 @@ renderSources();
 updateClock();
 setInterval(updateClock,1000);
 loadIntelligence();
+
+/* SERVICE WORKER */
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load",() => {
