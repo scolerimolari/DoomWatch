@@ -5,513 +5,309 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#171914">
-<meta name="description" content="DoomWatch — Operation Containment.">
+<meta name="description" content="DoomWatch — Operation Containment. UK and Northern Ireland resilience intelligence.">
 <link rel="manifest" href="./manifest.json">
 <title>DOOMWATCH // OPERATION CONTAINMENT</title>
 
 <style>
 :root {
-  --black:#11120f;
-  --black2:#1a1b16;
-  --tan:#c8b58c;
-  --olive:#626b43;
-  --olive2:#414a30;
-  --yellow:#e9bd36;
-  --red:#c83c32;
-  --green:#78ed8b;
-  --muted:#a49c82;
-  --line:#777052;
-  --panel:#292b21;
+  --black:#10120f;
+  --panel:#1b1f19;
+  --panel2:#24291f;
+  --olive:#626b38;
+  --tan:#b69a69;
+  --yellow:#f0c83e;
+  --red:#c94a38;
+  --green:#7dff86;
+  --muted:#999e8e;
+  --line:#414738;
 }
 
 * {box-sizing:border-box}
 
 body {
   margin:0;
-  background:
-    radial-gradient(ellipse at 50% -10%,#444a31,transparent 55%),
-    var(--black);
-  color:#e7dfc8;
-  font-family:Arial,Helvetica,sans-serif;
+  background:var(--black);
+  color:#e8e8d9;
+  font-family:Consolas,Monaco,monospace;
   font-size:14px;
 }
 
 header {
-  padding:20px 15px 15px;
-  background:linear-gradient(145deg,#4b5235,#25291e 65%,#151610);
-  border-bottom:5px solid var(--yellow);
-  box-shadow:0 5px 18px #000;
+  background:linear-gradient(120deg,#292c20,#11140f);
+  border-bottom:3px solid var(--yellow);
+  padding:18px;
 }
 
 .brand {
   display:flex;
+  justify-content:space-between;
   align-items:center;
-  gap:14px;
+  gap:12px;
+  flex-wrap:wrap;
 }
 
-.emblem {
-  width:65px;
-  height:65px;
-  display:grid;
-  place-items:center;
-  flex-shrink:0;
-  border:3px solid var(--tan);
-  border-radius:7px;
-  background:#171812;
+.logo {
   color:var(--yellow);
-  font-size:32px;
-  box-shadow:inset 0 0 15px #000,0 0 10px #000;
-}
-
-h1 {
-  margin:0;
-  color:var(--tan);
-  font-size:clamp(24px,6vw,35px);
+  font-size:clamp(25px,5vw,42px);
+  font-weight:900;
   letter-spacing:3px;
-  text-shadow:2px 2px #000;
 }
 
 .subtitle {
+  color:var(--tan);
+  letter-spacing:3px;
+  font-size:11px;
   margin-top:5px;
-  color:#d8c89f;
-  font-size:9px;
-  letter-spacing:1.5px;
+}
+
+.classification {
+  color:var(--red);
+  border:1px solid var(--red);
+  padding:7px 10px;
+  font-weight:bold;
+  letter-spacing:2px;
 }
 
 .topline {
   display:flex;
   justify-content:space-between;
   flex-wrap:wrap;
-  gap:8px;
+  gap:10px;
   margin-top:17px;
-  color:var(--tan);
-  font:10px monospace;
+  color:var(--green);
+  font-size:11px;
 }
 
-.live {color:var(--green)}
+nav {
+  display:flex;
+  overflow-x:auto;
+  gap:6px;
+  padding:10px;
+  background:#191c16;
+  border-bottom:1px solid var(--line);
+}
+
+nav button {
+  flex:0 0 auto;
+  background:#282d23;
+  color:var(--tan);
+  border:1px solid var(--line);
+  padding:11px 15px;
+  font:inherit;
+  cursor:pointer;
+}
+
+nav button.active {
+  background:var(--olive);
+  border-color:var(--yellow);
+  color:white;
+}
 
 main {
-  max-width:1100px;
+  max-width:1450px;
   margin:auto;
-  padding:13px;
+  padding:14px;
 }
 
-/* FIELD EQUIPMENT */
+.page {display:none}
+.page.active {display:block}
 
-.instrument-bay {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-bottom:14px;
+h2 {
+  color:var(--yellow);
+  font-size:18px;
+  letter-spacing:2px;
+  border-bottom:1px solid var(--olive);
+  padding-bottom:10px;
 }
 
-.instrument {
-  min-width:0;
-  padding:12px;
-  background:linear-gradient(145deg,#777052,#373a2a 38%,#171914);
-  border:3px solid #958365;
-  border-radius:6px;
-  box-shadow:
-    inset 0 0 0 3px #191a14,
-    0 6px 15px #000a;
-}
-
-.instrument-label {
-  color:#f0dcae;
-  font:bold 10px monospace;
+h3 {
+  color:var(--tan);
+  font-size:14px;
   letter-spacing:1px;
-  margin-bottom:10px;
 }
 
-.pke-display {
-  min-height:150px;
-  background:#061008;
-  border:3px solid #a18e66;
-  border-radius:4px;
-  color:var(--green);
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  position:relative;
-  overflow:hidden;
-  box-shadow:inset 0 0 22px #42ff7040;
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:12px;
 }
-
-.pke-display:after {
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:repeating-linear-gradient(
-    transparent 0px,
-    transparent 3px,
-    #8cff8b12 4px
-  );
-}
-
-.pke-core {
-  font:bold 31px monospace;
-  text-shadow:0 0 12px var(--green);
-}
-
-.pke-wings {
-  font:25px monospace;
-  letter-spacing:17px;
-  margin-left:17px;
-}
-
-.pke-reading {
-  font:10px monospace;
-  margin:7px;
-}
-
-.pke-bars {
-  display:flex;
-  align-items:end;
-  gap:4px;
-  height:22px;
-}
-
-.pke-bars i {
-  display:block;
-  width:8px;
-  height:8px;
-  background:var(--green);
-  box-shadow:0 0 7px var(--green);
-}
-
-.trap-body {
-  min-height:150px;
-  padding:12px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  background:repeating-linear-gradient(
-    135deg,#22251d 0px,#22251d 10px,
-    #343629 10px,#343629 20px
-  );
-  border:3px solid #a48b54;
-}
-
-.trap-light {
-  width:20px;
-  height:20px;
-  flex-shrink:0;
-  border-radius:50%;
-  background:#777;
-  border:3px solid #111;
-  box-shadow:0 0 5px #000;
-}
-
-.trap-screen {
-  flex:1;
-  min-width:0;
-  padding:12px 8px;
-  background:#061008;
-  border:2px solid #9a8963;
-  color:var(--green);
-  font-family:monospace;
-  box-shadow:inset 0 0 14px #42ff7040;
-}
-
-.trap-title {font-size:9px}
-
-.trap-status {
-  font-size:19px;
-  font-weight:bold;
-  margin:9px 0;
-  overflow-wrap:anywhere;
-}
-
-.trap-sub {font-size:9px}
-
-.trap-grille {
-  writing-mode:vertical-rl;
-  color:#d7bd75;
-  letter-spacing:3px;
-}
-
-.instrument-footer {
-  color:#e3d2a9;
-  font:10px monospace;
-  margin-top:10px;
-}
-
-/* DASHBOARD PANELS */
 
 .panel {
-  background:linear-gradient(145deg,#303226,#1b1d17);
-  border:2px solid #68634c;
-  border-radius:5px;
-  padding:15px;
-  margin-bottom:13px;
-  box-shadow:
-    inset 0 0 0 2px #171812,
-    0 5px 15px #0008;
+  background:var(--panel);
+  border:1px solid var(--line);
+  padding:14px;
+  min-width:0;
 }
 
 .panel-title {
   color:var(--yellow);
-  font-size:12px;
-  letter-spacing:1.5px;
-  font-weight:bold;
-  margin-bottom:12px;
-  padding-bottom:9px;
-  border-bottom:1px solid #716344;
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  align-items:center;
-}
-
-.kicker {
-  color:var(--muted);
-  font-size:9px;
-}
-
-.overview-grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:9px;
-}
-
-.metric {
-  background:#11140f;
-  border:1px solid #68634c;
-  border-radius:4px;
-  padding:12px;
-  min-height:83px;
-}
-
-.metric-label {
-  font-size:9px;
-  color:var(--muted);
-  letter-spacing:1px;
-}
-
-.metric-value {
-  font-size:20px;
-  font-weight:bold;
-  margin-top:8px;
-}
-
-.metric-sub {
-  font-size:10px;
-  color:var(--muted);
-  margin-top:4px;
-}
-
-.status {
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  font-size:10px;
-  font-weight:bold;
-  letter-spacing:1px;
-  padding:5px 8px;
-  border-radius:3px;
-  background:#292b21;
-  color:var(--muted);
-  border:1px solid #777052;
-}
-
-.status:before {
-  content:"";
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:currentColor;
-}
-
-.status.GREEN {
-  color:var(--green);
-  border-color:#397a4a;
-  background:#14271a;
-}
-
-.status.AMBER {
-  color:var(--yellow);
-  border-color:#80602d;
-  background:#302514;
-}
-
-.status.RED {
-  color:#ff6960;
-  border-color:#873c3c;
-  background:#321515;
-}
-
-.status.GREY {color:#aaa99c}
-
-.report-copy {
-  line-height:1.6;
-  color:#d8d1bd;
-}
-
-.report-copy p {margin:7px 0}
-
-.report-meta {
-  font:10px monospace;
-  color:var(--muted);
-  margin-top:10px;
-}
-
-button {
-  background:#4c5234;
-  color:#f2d68b;
-  border:2px solid #a28a4f;
-  border-radius:3px;
-  padding:10px 13px;
-  font-weight:bold;
-  cursor:pointer;
   font-size:11px;
-  letter-spacing:1px;
+  letter-spacing:2px;
+  margin-bottom:10px;
 }
 
-button:active {background:#687247}
-button:disabled {opacity:.5}
-
-#refreshMessage {
-  font-size:10px;
-  color:var(--muted);
-  margin-left:8px;
-}
-
-.section-list {display:grid;gap:8px}
-
-.section-card {
-  background:#11140f;
-  border:1px solid #68634c;
-  border-radius:4px;
-  padding:12px;
-}
-
-.section-head {
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:flex-start;
-}
-
-.section-name {
+.big-status {
+  font-size:22px;
   font-weight:bold;
-  line-height:1.35;
+  color:var(--green);
+  margin:8px 0;
 }
 
-.section-assessment {
-  color:#d1cbb8;
-  line-height:1.5;
+.muted {color:var(--muted)}
+.green {color:var(--green)}
+.yellow {color:var(--yellow)}
+.red {color:var(--red)}
+.tan {color:var(--tan)}
+
+.warning {
+  border-left:4px solid var(--red);
+  padding:10px;
+  background:#291b18;
+}
+
+.terminal {
+  background:#080d09;
+  border:1px solid #3b563b;
+  color:var(--green);
+  padding:13px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+
+.intel-window {
+  height:540px;
+  max-height:70vh;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  border:1px solid var(--olive);
+  background:#10140f;
+  padding:10px;
+  scrollbar-color:var(--olive) #10140f;
+  scrollbar-width:thin;
+}
+
+.intel-window::-webkit-scrollbar {width:9px}
+.intel-window::-webkit-scrollbar-track {background:#10140f}
+.intel-window::-webkit-scrollbar-thumb {background:var(--olive)}
+
+.intel-card {
+  background:var(--panel);
+  border-left:3px solid var(--olive);
+  padding:13px;
+  margin-bottom:10px;
+}
+
+.intel-card.high {border-left-color:var(--red)}
+.intel-card.medium {border-left-color:var(--yellow)}
+.intel-card.low {border-left-color:var(--green)}
+
+.intel-card h3 {margin:0 0 8px}
+.intel-card p {line-height:1.5}
+
+.meta {
+  font-size:11px;
+  color:var(--muted);
   margin-top:9px;
 }
 
-.section-impact {
-  color:#b8d7b7;
-  font-size:11px;
-  line-height:1.5;
-  margin-top:7px;
-}
-
-.section-updated {
-  font:10px monospace;
-  color:var(--muted);
-  margin-top:8px;
-}
-
-.article {
-  border-top:1px solid #494a38;
-  padding:12px 0;
-}
-
-.article:first-child {
-  border-top:0;
-  padding-top:0;
-}
-
-.article a {
+a {
   color:var(--green);
-  font-weight:bold;
   text-decoration:none;
-  line-height:1.4;
 }
 
-.article a:hover {text-decoration:underline}
-
-.article-meta {
-  font:10px monospace;
-  color:var(--muted);
-  margin-top:6px;
-  line-height:1.6;
-}
-
-.article-summary {
-  color:#d1cbb8;
-  line-height:1.5;
-  margin-top:6px;
-}
+a:hover {text-decoration:underline}
 
 .tag {
   display:inline-block;
-  border:1px solid #686c4b;
+  padding:3px 6px;
+  margin:2px;
+  border:1px solid var(--olive);
   color:var(--tan);
-  padding:3px 5px;
-  border-radius:3px;
-  font:9px monospace;
-  margin:4px 4px 0 0;
-}
-
-.empty {
-  border:1px dashed #777052;
-  border-radius:5px;
-  padding:16px;
-  color:var(--muted);
-  line-height:1.6;
-  text-align:center;
-}
-
-.watch-item {
-  padding:8px 0;
-  border-top:1px solid #494a38;
-  line-height:1.5;
-}
-
-.watch-item:first-child {border-top:0}
-
-.source-row {
-  padding:8px 0;
-  border-top:1px solid #494a38;
-  font:11px monospace;
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.small-note {
   font-size:10px;
-  color:var(--muted);
+}
+
+.controls {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:12px 0;
+}
+
+button,input,textarea,select {
+  font:inherit;
+}
+
+.controls button,.action-button {
+  background:var(--olive);
+  color:white;
+  border:1px solid var(--tan);
+  padding:9px 12px;
+  cursor:pointer;
+}
+
+.controls button.active {
+  background:var(--yellow);
+  color:#111;
+}
+
+input,textarea,select {
+  width:100%;
+  background:#0e120d;
+  border:1px solid var(--olive);
+  color:white;
+  padding:10px;
+  margin:5px 0 12px;
+}
+
+textarea {min-height:85px;resize:vertical}
+
+.checkline {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  padding:9px;
+  border-bottom:1px solid var(--line);
+}
+
+.checkline input {
+  width:auto;
+  margin:0;
+}
+
+.section-card {
+  background:var(--panel);
+  border:1px solid var(--line);
+  margin-bottom:10px;
+  padding:12px;
+}
+
+.section-card summary {
+  color:var(--yellow);
+  cursor:pointer;
+  font-weight:bold;
   line-height:1.5;
+}
+
+.section-body {
+  padding-top:12px;
+  line-height:1.6;
 }
 
 footer {
-  text-align:center;
+  border-top:1px solid var(--olive);
   padding:20px;
-  color:#a49c82;
-  font:10px monospace;
-  letter-spacing:1px;
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:2px;
+  margin-top:25px;
 }
 
-@media(min-width:720px) {
-  .overview-grid {
-    grid-template-columns:repeat(4,minmax(0,1fr));
-  }
-  .section-list {
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-  main {padding:22px}
-}
-
-@media(max-width:480px) {
-  .instrument-bay {grid-template-columns:1fr}
+@media(max-width:600px) {
+  main {padding:9px}
+  header {padding:13px}
+  .intel-window {height:480px}
 }
 </style>
 </head>
@@ -520,670 +316,717 @@ footer {
 
 <header>
   <div class="brand">
-    <div class="emblem">☢</div>
     <div>
-      <h1>DOOMWATCH</h1>
-      <div class="subtitle">
-        OPERATION CONTAINMENT // RESILIENCE INTELLIGENCE
-      </div>
+      <div class="logo">DOOMWATCH</div>
+      <div class="subtitle">OPERATION CONTAINMENT // RESILIENCE INTELLIGENCE</div>
     </div>
+    <div class="classification">FIELD SYSTEM // ACTIVE</div>
   </div>
 
   <div class="topline">
-    <span>AREA OF OPERATIONS: NORTHERN IRELAND / UNITED KINGDOM</span>
-    <span class="live">● SYSTEM ONLINE</span>
+    <span>REGION: NORTHERN IRELAND / UNITED KINGDOM</span>
+    <span id="clock">SYSTEM TIME</span>
+    <span id="connection">CONNECTING...</span>
   </div>
 </header>
 
+<nav>
+  <button class="active" data-page="overview">OVERVIEW</button>
+  <button data-page="intelligence">INTELLIGENCE</button>
+  <button data-page="sections">11 SECTORS</button>
+  <button data-page="preparedness">PREPAREDNESS</button>
+  <button data-page="sources">SOURCES</button>
+</nav>
+
 <main>
 
-<!-- PKE SCANNER AND GHOST TRAP -->
+<!-- OVERVIEW -->
 
-<section class="instrument-bay">
+<section class="page active" id="overview">
+  <h2>01 // COMMAND OVERVIEW</h2>
 
-  <div class="instrument">
-    <div class="instrument-label">
-      PKE METER // SIGNAL DETECTION
+  <div class="grid">
+    <div class="panel">
+      <div class="panel-title">NORTHERN IRELAND</div>
+      <div class="big-status" id="ni-status">AWAITING DATA</div>
+      <div class="muted">Regional intelligence assessment</div>
     </div>
 
-    <div class="pke-display">
-      <div class="pke-wings">╱╲ ╱╲</div>
-      <div class="pke-core">PKE</div>
-      <div class="pke-reading" id="pkeReading">
-        AWAITING SCAN
-      </div>
-      <div class="pke-bars" id="pkeBars">
-        <i></i><i></i><i></i><i></i><i></i>
-        <i></i><i></i><i></i><i></i><i></i>
-      </div>
+    <div class="panel">
+      <div class="panel-title">UNITED KINGDOM</div>
+      <div class="big-status" id="uk-status">AWAITING DATA</div>
+      <div class="muted">National intelligence assessment</div>
     </div>
 
-    <div class="instrument-footer">
-      SIGNALS: <span id="pkeSignals">0</span>
-      // SOURCES: <span id="pkeSources">0</span>
-    </div>
-  </div>
-
-  <div class="instrument">
-    <div class="instrument-label">
-      GHOST TRAP // CONTAINMENT UNIT
+    <div class="panel">
+      <div class="panel-title">INTELLIGENCE RECORDS</div>
+      <div class="big-status" id="article-count">0</div>
+      <div class="muted">Records received from collector</div>
     </div>
 
-    <div class="trap-body">
-      <div class="trap-light" id="trapLight"></div>
-
-      <div class="trap-screen">
-        <div class="trap-title">CONTAINMENT STATUS</div>
-        <div class="trap-status" id="trapStatus">
-          STANDBY
-        </div>
-        <div class="trap-sub" id="trapDetail">
-          AWAITING INTELLIGENCE
-        </div>
-      </div>
-
-      <div class="trap-grille">||||||||||||||||</div>
-    </div>
-
-    <div class="instrument-footer">
-      THREAT LEVEL: <span id="trapLevel">UNASSESSED</span>
+    <div class="panel">
+      <div class="panel-title">LAST COLLECTION</div>
+      <div class="big-status" style="font-size:15px" id="last-update">PENDING</div>
+      <div class="muted">Collector timestamp</div>
     </div>
   </div>
 
-</section>
+  <h2>02 // SITUATION REPORT</h2>
 
-<!-- COMMAND OVERVIEW -->
-
-<section class="panel">
-  <div class="panel-title">
-    <span>01 // COMMAND OVERVIEW</span>
-    <span class="kicker" id="reportDate">AWAITING DATA</span>
-  </div>
-
-  <div class="overview-grid">
-    <div class="metric">
-      <div class="metric-label">OVERALL ASSESSMENT</div>
-      <div class="metric-value" id="overallStatus">UNASSESSED</div>
-      <div class="metric-sub">Evidence-based assessment</div>
-    </div>
-
-    <div class="metric">
-      <div class="metric-label">NORTHERN IRELAND</div>
-      <div class="metric-value" id="niStatus">UNASSESSED</div>
-      <div class="metric-sub">Regional assessment</div>
-    </div>
-
-    <div class="metric">
-      <div class="metric-label">UK WIDE</div>
-      <div class="metric-value" id="ukStatus">UNASSESSED</div>
-      <div class="metric-sub">National assessment</div>
-    </div>
-
-    <div class="metric">
-      <div class="metric-label">ARTICLES COLLECTED</div>
-      <div class="metric-value" id="articleCount">0</div>
-      <div class="metric-sub">Retained intelligence items</div>
+  <div class="panel">
+    <div class="panel-title">CURRENT INTELLIGENCE ASSESSMENT</div>
+    <div class="terminal" id="report">
+      Awaiting intelligence collection...
     </div>
   </div>
 
-  <div style="margin-top:13px">
-    <button id="refreshButton" onclick="loadIntelligence(true)">
-      ⟳ REFRESH INTELLIGENCE
-    </button>
-    <span id="refreshMessage">Waiting for intelligence feed.</span>
+  <h2>03 // PRIORITY ALERTS</h2>
+
+  <div id="priority-alerts">
+    <div class="panel muted">No priority alerts loaded.</div>
+  </div>
+
+  <h2>04 // SYSTEM DIAGNOSTICS</h2>
+
+  <div class="grid">
+    <div class="panel">
+      <div class="panel-title">COLLECTOR</div>
+      <span id="collector-status" class="yellow">AWAITING RESPONSE</span>
+    </div>
+    <div class="panel">
+      <div class="panel-title">DATA FILE</div>
+      <span id="data-status" class="yellow">NOT CHECKED</span>
+    </div>
+    <div class="panel">
+      <div class="panel-title">LAST REFRESH</div>
+      <span id="refresh-time">--</span>
+    </div>
   </div>
 </section>
 
-<!-- DAILY REPORT -->
+<!-- INTELLIGENCE -->
 
-<section class="panel">
-  <div class="panel-title">
-    <span>02 // DAILY PREPAREDNESS REPORT</span>
-    <span class="status GREY" id="reportStatus">AWAITING REPORT</span>
+<section class="page" id="intelligence">
+  <h2>05 // INTELLIGENCE OPERATIONS</h2>
+
+  <div class="terminal">
+    DOOMWATCH INTELLIGENCE TERMINAL<br>
+    PRIORITY: NORTHERN IRELAND → UNITED KINGDOM<br>
+    MONITORING: OPEN SOURCE / OFFICIAL / ALTERNATIVE / SOCIAL<br>
+    STATUS: <span id="terminal-status">AWAITING DATA</span>
   </div>
 
-  <div id="dailyReport" class="report-copy">
-    <div class="empty">
-      INTELLIGENCE REPORT NOT YET RECEIVED.
-      Collection data will appear here.
+  <div class="controls">
+    <button class="active" data-filter="ALL">ALL</button>
+    <button data-filter="NI">NORTHERN IRELAND</button>
+    <button data-filter="UK">UNITED KINGDOM</button>
+    <button data-filter="INTERNATIONAL">INTERNATIONAL</button>
+    <button id="refresh-button">REFRESH DATA</button>
+  </div>
+
+  <input id="search" type="search"
+    placeholder="Search intelligence records...">
+
+  <div class="panel">
+    <div class="panel-title">
+      LIVE INTELLIGENCE STREAM // SCROLL INDEPENDENTLY
+    </div>
+
+    <div class="intel-window" id="intel-feed">
+      <div class="muted">Waiting for intelligence feed...</div>
     </div>
   </div>
-
-  <div class="report-meta" id="reportMeta">
-    REPORT SOURCE: NOT CONNECTED
-  </div>
 </section>
 
-<!-- ELEVEN DOMAINS -->
+<!-- ELEVEN SECTORS -->
 
-<section class="panel">
-  <div class="panel-title">
-    <span>03 // INTELLIGENCE DOMAINS</span>
-    <span class="kicker">11 MONITORING SECTORS</span>
+<section class="page" id="sections">
+  <h2>06 // SECTOR MONITORING</h2>
+
+  <div class="terminal">
+    ELEVEN CRITICAL RESILIENCE DOMAINS<br>
+    SELECT A SECTOR TO EXPAND ITS INTELLIGENCE RECORDS.
   </div>
 
-  <div class="small-note" style="margin-bottom:12px">
-    GREEN: no significant verified disruption identified.
-    GREY: insufficient evidence, not necessarily safe.
-  </div>
-
-  <div class="section-list" id="sections">
-    <div class="empty">Awaiting sector assessments.</div>
-  </div>
-</section>
-
-<!-- LATEST INTELLIGENCE -->
-
-<section class="panel">
-  <div class="panel-title">
-    <span>04 // LATEST INTELLIGENCE</span>
-    <span class="kicker">ORIGINAL SOURCE LINKS</span>
-  </div>
-
-  <div id="articles">
-    <div class="empty">No collected articles yet.</div>
-  </div>
-</section>
-
-<!-- RUMOUR WATCH -->
-
-<section class="panel">
-  <div class="panel-title">
-    <span>05 // RUMOUR & VERIFICATION WATCH</span>
-    <span class="kicker">CLAIM CONTROL</span>
-  </div>
-
-  <div id="rumours">
-    <div class="empty">Awaiting verification assessments.</div>
-  </div>
-</section>
-
-<!-- WATCHLIST -->
-
-<section class="panel">
-  <div class="panel-title">
-    <span>06 // 24–72 HOUR WATCHLIST</span>
-    <span class="kicker">FORWARD LOOK</span>
-  </div>
-
-  <div id="watchlist">
-    <div class="empty">Awaiting watchlist.</div>
-  </div>
+  <div id="sector-list"></div>
 </section>
 
 <!-- PREPAREDNESS -->
 
-<section class="panel">
-  <div class="panel-title">
-    <span>07 // SENSIBLE PREPAREDNESS</span>
-    <span class="kicker">PROPORTIONATE ACTION</span>
+<section class="page" id="preparedness">
+  <h2>07 // PERSONAL PREPAREDNESS</h2>
+
+  <div class="warning">
+    Preparedness is about practical resilience, not panic.
+    Prioritise realistic local risks and official safety advice.
   </div>
 
-  <div id="actions">
-    <div class="empty">Awaiting preparedness recommendations.</div>
+  <h3>PERSONAL READINESS CHECKLIST</h3>
+
+  <div class="panel" id="checklist"></div>
+
+  <h3>OPERATIONAL NOTES</h3>
+
+  <div class="panel">
+    <label for="note-title">NOTE TITLE</label>
+    <input id="note-title" placeholder="Enter title">
+
+    <label for="note-body">NOTE</label>
+    <textarea id="note-body" placeholder="Enter operational note"></textarea>
+
+    <button class="action-button" id="save-note">SAVE NOTE</button>
+
+    <div id="notes-list"></div>
+  </div>
+
+  <h3>RUMOUR AND CLAIM MONITOR</h3>
+
+  <div class="panel">
+    <input id="rumour-claim" placeholder="Claim or rumour">
+    <input id="rumour-source" placeholder="Where was it reported?">
+    <textarea id="rumour-evidence" placeholder="Evidence / verification notes"></textarea>
+    <button class="action-button" id="save-rumour">RECORD CLAIM</button>
+    <div id="rumour-list"></div>
   </div>
 </section>
 
-<!-- SOURCE HEALTH -->
+<!-- SOURCES -->
 
-<section class="panel">
-  <div class="panel-title">
-    <span>08 // SYSTEM & SOURCE STATUS</span>
+<section class="page" id="sources">
+  <h2>08 // SOURCE DIRECTORY</h2>
+
+  <div class="warning">
+    Official sources and independent reporting should be assessed
+    separately. A source appearing here does not mean its claims
+    have been independently verified.
   </div>
 
-  <div class="report-copy" id="systemStatus">
-    <p>Dashboard: <span class="live">READY</span></p>
-    <p>Intelligence feed: <span id="feedStatus">NOT CONNECTED</span></p>
-    <p>Last update: <span id="lastUpdate">NONE</span></p>
-    <p>Collector: <span id="collectorStatus">NOT REPORTED</span></p>
-  </div>
-
-  <div id="sourceHealth">
-    <div class="empty">Source health data not yet available.</div>
-  </div>
-
-  <p class="small-note">
-    DoomWatch is an independent information dashboard, not an
-    official government warning service. Follow official emergency
-    instructions.
-  </p>
+  <div id="source-list"></div>
 </section>
 
 </main>
 
 <footer>
-  DOOMWATCH // OPERATION CONTAINMENT<br>
-  MONITOR • VERIFY • ASSESS • PREPARE
+DOOMWATCH // OPERATION CONTAINMENT<br>
+OPEN SOURCE INTELLIGENCE // RESILIENCE MONITORING<br>
+NOT AN EMERGENCY SERVICE
 </footer>
 
 <script>
+"use strict";
+
 const DATA_URL = "./data/intelligence.json";
 
-const DOMAIN_NAMES = [
-  "National resilience & civil contingencies",
-  "Food supply & agriculture",
-  "Fuel & energy supply",
-  "Chemicals, medicines & industrial inputs",
-  "Electricity, gas & water",
-  "Transport, ports & logistics",
-  "Healthcare & public health",
-  "Telecommunications, cyber & infrastructure",
-  "Weather, flooding & natural hazards",
-  "Civil defence & community preparedness",
-  "International events & UK/NI impact"
+const SECTORS = [
+  "National resilience",
+  "Food and agriculture",
+  "Fuel, energy and oil",
+  "Chemicals, medicines and industrial inputs",
+  "Electricity, gas and water",
+  "Transport, ports and logistics",
+  "Healthcare and public health",
+  "Telecommunications, cyber and infrastructure",
+  "Weather, flooding and natural hazards",
+  "Civil defence and community preparedness",
+  "International events with UK/NI impact"
 ];
 
-const validStatuses = ["GREEN","AMBER","RED","GREY"];
+const SOURCES = [
+  ["NHS Northern Ireland","https://www.health-ni.gov.uk/"],
+  ["Department of Health NI","https://www.health-ni.gov.uk/"],
+  ["Northern Ireland Executive","https://www.northernireland.gov.uk/"],
+  ["NI Direct","https://www.nidirect.gov.uk/"],
+  ["PSNI","https://www.psni.police.uk/"],
+  ["Met Office","https://www.metoffice.gov.uk/"],
+  ["UK Government","https://www.gov.uk/"],
+  ["Cabinet Office","https://www.gov.uk/government/organisations/cabinet-office"],
+  ["UK Health Security Agency","https://www.gov.uk/government/organisations/uk-health-security-agency"],
+  ["National Cyber Security Centre","https://www.ncsc.gov.uk/"],
+  ["National Grid","https://www.nationalgrid.com/"],
+  ["Ofgem","https://www.ofgem.gov.uk/"],
+  ["Environment Agency","https://www.gov.uk/government/organisations/environment-agency"],
+  ["Food Standards Agency","https://www.food.gov.uk/"],
+  ["UKHSA alerts","https://www.gov.uk/government/organisations/uk-health-security-agency"],
+  ["NATO","https://www.nato.int/"],
+  ["European Commission","https://commission.europa.eu/"],
+  ["ReliefWeb","https://reliefweb.int/"],
+  ["GDACS","https://www.gdacs.org/"],
+  ["BBC News","https://www.bbc.co.uk/news/"],
+  ["Reuters","https://www.reuters.com/"]
+];
 
-function safeText(value) {
-  return String(value ?? "");
+const CHECKS = [
+  "Drinking water available",
+  "Food supplies for several days",
+  "Essential medication available",
+  "Torch and spare batteries",
+  "Power banks charged",
+  "Battery or wind-up radio",
+  "First aid supplies",
+  "Important contact numbers accessible offline",
+  "Vehicle fuel level checked",
+  "Household emergency meeting point agreed",
+  "Copies of essential documents accessible",
+  "Local emergency information bookmarked"
+];
+
+const STORE_KEY = "doomwatch-v1";
+
+let intelligence = null;
+let articles = [];
+let sections = [];
+let activeFilter = "ALL";
+
+let saved = {
+  notes:[],
+  rumours:[],
+  checks:{},
+  plan:""
+};
+
+function $(id) {
+  return document.getElementById(id);
 }
 
-function statusClass(value) {
-  const s = safeText(value).toUpperCase();
-  return validStatuses.includes(s) ? s : "GREY";
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[char]);
 }
 
-function makeStatus(value) {
-  const span = document.createElement("span");
-  span.className = "status " + statusClass(value);
-  span.textContent = statusClass(value);
-  return span;
+function safeURL(value) {
+  try {
+    const url = new URL(String(value || ""), location.href);
+    return ["http:","https:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
 }
 
-function addText(parent, tag, value, className) {
-  const el = document.createElement(tag);
-  if (className) el.className = className;
-  el.textContent = safeText(value);
-  parent.appendChild(el);
-  return el;
+function loadSaved() {
+  try {
+    const data = JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
+    saved = {...saved,...data};
+  } catch {}
 }
 
-function showEmpty(id, message) {
-  const target = document.getElementById(id);
-  target.replaceChildren();
-  addText(target,"div",message,"empty");
+function saveSaved() {
+  localStorage.setItem(STORE_KEY,JSON.stringify(saved));
 }
 
-/* PKE METER AND GHOST TRAP */
-
-function renderInstruments(data) {
-  const collector = data.collector || {};
-  const articles = Array.isArray(data.articles) ? data.articles : [];
-
-  const signals = articles.length;
-  const successful = Number(collector.successfulFeeds || 0);
-  const failed = Number(collector.failedFeeds || 0);
-  const configured = Number(collector.configuredFeeds || 0);
-
-  document.getElementById("pkeSignals").textContent = signals;
-
-  document.getElementById("pkeSources").textContent =
-    configured ? successful + "/" + configured : successful;
-
-  document.getElementById("pkeReading").textContent =
-    configured && failed ? "SIGNAL DEGRADED" :
-    configured ? "SCAN COMPLETE" : "AWAITING SCAN";
-
-  const bars = document.querySelectorAll("#pkeBars i");
-
-  bars.forEach((bar,index) => {
-    const height = 5 + ((signals * 7 + index * 11) % 17);
-    bar.style.height = height + "px";
-  });
-
-  const overall = statusClass(data.overallStatus);
-  const trapStatus = document.getElementById("trapStatus");
-  const trapLight = document.getElementById("trapLight");
-
-  trapStatus.textContent =
-    overall === "RED" ? "ALERT" :
-    overall === "AMBER" ? "INVESTIGATE" :
-    overall === "GREEN" ? "CLEAR" : "UNASSESSED";
-
-  const lightColour =
-    overall === "RED" ? "#e33b32" :
-    overall === "AMBER" ? "#e9bd36" :
-    overall === "GREEN" ? "#78ed8b" : "#888";
-
-  trapLight.style.background = lightColour;
-  trapLight.style.boxShadow = "0 0 12px " + lightColour;
-
-  document.getElementById("trapLevel").textContent = overall;
-
-  document.getElementById("trapDetail").textContent =
-    configured
-      ? failed + " FEED(S) UNAVAILABLE"
-      : "AWAITING INTELLIGENCE";
-}
-
-/* INTELLIGENCE DOMAINS */
-
-function renderSections(data) {
-  const target = document.getElementById("sections");
-  target.replaceChildren();
-
-  const supplied = Array.isArray(data.sections) ? data.sections : [];
-
-  DOMAIN_NAMES.forEach((name,index) => {
-    const item = supplied.find(s => Number(s.id) === index + 1) || {};
-
-    const card = document.createElement("article");
-    card.className = "section-card";
-
-    const head = document.createElement("div");
-    head.className = "section-head";
-
-    const title = document.createElement("div");
-    title.className = "section-name";
-    title.textContent =
-      String(index + 1).padStart(2,"0") + " // " + name;
-
-    head.appendChild(title);
-    head.appendChild(makeStatus(item.status || "GREY"));
-    card.appendChild(head);
-
-    addText(
-      card,
-      "div",
-      item.assessment || "No current evidence-based assessment supplied.",
-      "section-assessment"
-    );
-
-    if (item.niImpact) {
-      addText(card,"div","NI IMPACT: " + item.niImpact,"section-impact");
+function valueOf(object, keys, fallback="") {
+  for (const key of keys) {
+    if (object && object[key] !== undefined && object[key] !== null) {
+      return object[key];
     }
-
-    if (item.ukContext) {
-      addText(card,"div","UK CONTEXT: " + item.ukContext,"section-assessment");
-    }
-
-    if (item.confidence) {
-      addText(card,"div","CONFIDENCE: " + item.confidence,"section-updated");
-    }
-
-    if (item.updatedAt) {
-      addText(card,"div","UPDATED: " + item.updatedAt,"section-updated");
-    }
-
-    target.appendChild(card);
-  });
+  }
+  return fallback;
 }
 
-/* ARTICLES */
+function asText(value) {
+  if (typeof value === "string") return value;
+  if (typeof value === "number") return String(value);
+  if (Array.isArray(value)) return value.map(asText).join("\n");
+  if (value && typeof value === "object") {
+    return value.text || value.summary || value.description || "";
+  }
+  return "";
+}
 
-function renderArticles(data) {
-  const target = document.getElementById("articles");
-  target.replaceChildren();
+function dateText(value) {
+  if (!value) return "Date unavailable";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString();
+}
 
-  const articles = Array.isArray(data.articles) ? data.articles : [];
+function severity(item) {
+  const value = String(valueOf(item,["severity","priority","level","risk"],"low")).toLowerCase();
+  if (/critical|severe|high|urgent|red/.test(value)) return "high";
+  if (/medium|moderate|elevated|amber/.test(value)) return "medium";
+  return "low";
+}
 
-  if (!articles.length) {
-    showEmpty("articles","No articles supplied in the latest collection.");
-    return;
+function locationOf(item) {
+  const value = String(valueOf(item,["area","region","location","geography","country"],""));
+  if (/northern ireland|\bNI\b/i.test(value)) return "NI";
+  if (/international|global|world/i.test(value)) return "INTERNATIONAL";
+  if (/uk|united kingdom|britain|england|scotland|wales/i.test(value)) return "UK";
+  return "UK";
+}
+
+function normalizeArticle(item) {
+  if (typeof item === "string") {
+    return {title:item,summary:"",url:"",area:"UK",date:"",source:"Unknown",severity:"low"};
   }
 
-  articles.slice(0,40).forEach(article => {
-    const card = document.createElement("article");
-    card.className = "article";
+  return {
+    title:valueOf(item,["title","headline","name","claim"],"Untitled intelligence record"),
+    summary:asText(valueOf(item,["summary","description","content","body","text","snippet"],"")),
+    url:safeURL(valueOf(item,["url","link","sourceUrl","articleUrl"],"")),
+    area:locationOf(item),
+    date:valueOf(item,["date","published","publishedAt","timestamp","createdAt"],""),
+    source:valueOf(item,["source","publisher","domain","author"],"Source not specified"),
+    severity:severity(item),
+    category:valueOf(item,["category","section","sector","domain","topic"],""),
+    status:valueOf(item,["status","verification","assessment"],"")
+  };
+}
 
-    const link = document.createElement("a");
-    const url = safeText(article.url);
+function flattenArticles(data) {
+  const output = [];
 
-    if (/^https?:\/\//i.test(url)) {
-      link.href = url;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
+  function add(items) {
+    if (!items) return;
+    if (Array.isArray(items)) {
+      items.forEach(item => output.push(normalizeArticle(item)));
+    } else if (typeof items === "object") {
+      Object.values(items).forEach(value => {
+        if (Array.isArray(value)) add(value);
+        else if (value && typeof value === "object") output.push(normalizeArticle(value));
+      });
     }
+  }
 
-    link.textContent = article.title || "Untitled source item";
-    card.appendChild(link);
+  add(data.articles);
+  add(data.items);
+  add(data.alerts);
 
-    addText(
-      card,
-      "div",
-      [
-        article.source,
-        article.publishedAt,
-        article.region
-      ].filter(Boolean).join(" • "),
-      "article-meta"
-    );
+  if (Array.isArray(data.sections)) {
+    data.sections.forEach(section => {
+      add(section.articles);
+      add(section.items);
+      add(section.stories);
+      add(section.updates);
+    });
+  } else if (data.sections && typeof data.sections === "object") {
+    Object.values(data.sections).forEach(section => {
+      if (Array.isArray(section)) add(section);
+      else if (section && typeof section === "object") {
+        add(section.articles);
+        add(section.items);
+        add(section.stories);
+        add(section.updates);
+      }
+    });
+  }
 
-    const summary = article.summary || article.description;
-
-    if (summary) {
-      addText(card,"div",summary,"article-summary");
-    }
-
-    if (article.domain) {
-      addText(card,"span","DOMAIN " + article.domain,"tag");
-    }
-
-    if (article.evidenceStatus) {
-      addText(card,"span",article.evidenceStatus,"tag");
-    }
-
-    target.appendChild(card);
+  const seen = new Set();
+  return output.filter(item => {
+    const key = item.title + "|" + item.url;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
   });
 }
 
-/* LISTS */
+function renderStatus() {
+  const ni = valueOf(intelligence,["niStatus","northernIrelandStatus"],"MONITORING");
+  const uk = valueOf(intelligence,["ukStatus","overallStatus"],"MONITORING");
 
-function renderList(id,items,emptyMessage) {
-  const target = document.getElementById(id);
-  target.replaceChildren();
+  $("ni-status").textContent = String(ni).toUpperCase();
+  $("uk-status").textContent = String(uk).toUpperCase();
+  $("article-count").textContent = articles.length;
 
-  if (!Array.isArray(items) || !items.length) {
-    showEmpty(id,emptyMessage);
-    return;
-  }
+  const generated = valueOf(intelligence,["generatedAt","updatedAt","lastUpdated"],"");
+  $("last-update").textContent = dateText(generated);
 
-  items.forEach(item => {
-    const text = typeof item === "string"
-      ? item
-      : item.text || item.assessment || item.claim || "";
+  $("report").textContent = asText(valueOf(
+    intelligence,["report","assessment","summary","dailyReport"],
+    "No situation report supplied by the collector."
+  ));
 
-    const row = document.createElement("div");
-    row.className = "watch-item";
-    row.textContent = text;
+  $("collector-status").textContent = "DATA RECEIVED";
+  $("collector-status").className = "green";
+  $("data-status").textContent = "LOADED";
+  $("data-status").className = "green";
+  $("terminal-status").textContent = "OPERATIONAL";
+}
 
-    if (item && typeof item === "object" && item.status) {
-      row.appendChild(document.createTextNode(" "));
-      row.appendChild(makeStatus(item.status));
-    }
+function renderAlerts() {
+  const important = articles.filter(item => item.severity === "high" || item.severity === "medium").slice(0,8);
 
-    target.appendChild(row);
+  $("priority-alerts").innerHTML = important.length
+    ? important.map(item => `
+      <div class="intel-card ${item.severity}">
+        <h3>${escapeHTML(item.title)}</h3>
+        <p>${escapeHTML(item.summary)}</p>
+        <div class="meta">${escapeHTML(item.area)} // ${escapeHTML(item.source)}</div>
+      </div>`).join("")
+    : '<div class="panel muted">No priority alerts identified in the loaded records.</div>';
+}
+
+function renderFeed() {
+  const query = $("search").value.toLowerCase();
+
+  const filtered = articles.filter(item => {
+    const areaMatch = activeFilter === "ALL" || item.area === activeFilter;
+    const text = [item.title,item.summary,item.source,item.category,item.area].join(" ").toLowerCase();
+    return areaMatch && text.includes(query);
+  });
+
+  $("intel-feed").innerHTML = filtered.length
+    ? filtered.map(item => `
+      <article class="intel-card ${item.severity}">
+        <h3>${escapeHTML(item.title)}</h3>
+        <div>
+          <span class="tag">${escapeHTML(item.area)}</span>
+          <span class="tag">${escapeHTML(item.category || "GENERAL")}</span>
+          <span class="tag">${escapeHTML(item.severity.toUpperCase())}</span>
+        </div>
+        <p>${escapeHTML(item.summary || "No additional description supplied.")}</p>
+        <div class="meta">
+          SOURCE: ${escapeHTML(item.source)}<br>
+          DATE: ${escapeHTML(dateText(item.date))}<br>
+          ${item.status ? "ASSESSMENT: "+escapeHTML(item.status) : ""}
+        </div>
+        ${item.url ? `<p><a href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a></p>` : ""}
+      </article>
+    `).join("")
+    : '<div class="panel muted">No matching intelligence records.</div>';
+}
+
+function renderSections() {
+  const dataSections = Array.isArray(intelligence.sections)
+    ? intelligence.sections
+    : Object.entries(intelligence.sections || {}).map(([name,value]) =>
+        typeof value === "object" ? {...value,title:value.title || name} : {title:name,summary:value}
+      );
+
+  $("sector-list").innerHTML = SECTORS.map((name,index) => {
+    const match = dataSections.find(section => {
+      const title = String(valueOf(section,["title","name","category","sector"],"")).toLowerCase();
+      return title && (title.includes(name.toLowerCase()) || name.toLowerCase().includes(title));
+    });
+
+    const matchingArticles = articles.filter(item =>
+      item.category && (
+        item.category.toLowerCase().includes(name.toLowerCase()) ||
+        name.toLowerCase().includes(item.category.toLowerCase())
+      )
+    );
+
+    const summary = match
+      ? asText(valueOf(match,["summary","description","assessment","content","body"],""))
+      : "";
+
+    const records = matchingArticles.map(item => `
+      <div class="intel-card ${item.severity}">
+        <h3>${escapeHTML(item.title)}</h3>
+        <p>${escapeHTML(item.summary)}</p>
+        <div class="meta">${escapeHTML(item.source)}</div>
+        ${item.url ? `<a href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a>` : ""}
+      </div>
+    `).join("");
+
+    return `
+      <details class="section-card">
+        <summary>${String(index+1).padStart(2,"0")} // ${escapeHTML(name)}</summary>
+        <div class="section-body">
+          ${summary ? `<p>${escapeHTML(summary)}</p>` : ""}
+          ${records || '<p class="muted">No matching records currently available.</p>'}
+        </div>
+      </details>
+    `;
+  }).join("");
+}
+
+function renderSources() {
+  $("source-list").innerHTML = SOURCES.map(source => `
+    <div class="section-card">
+      <a href="${escapeHTML(source[1])}" target="_blank" rel="noopener noreferrer">
+        ${escapeHTML(source[0])} ↗
+      </a>
+    </div>
+  `).join("");
+}
+
+function renderChecklist() {
+  $("checklist").innerHTML = CHECKS.map((item,index) => `
+    <label class="checkline">
+      <input type="checkbox" data-check="${index}" ${saved.checks[index] ? "checked" : ""}>
+      <span>${escapeHTML(item)}</span>
+    </label>
+  `).join("");
+
+  $("checklist").querySelectorAll("input").forEach(input => {
+    input.addEventListener("change",() => {
+      saved.checks[input.dataset.check] = input.checked;
+      saveSaved();
+    });
   });
 }
 
-/* DAILY REPORT */
+function renderNotes() {
+  $("notes-list").innerHTML = saved.notes.map((note,index) => `
+    <div class="section-card">
+      <strong class="yellow">${escapeHTML(note.title)}</strong>
+      <p>${escapeHTML(note.body)}</p>
+      <div class="meta">${escapeHTML(note.date)}</div>
+      <button class="action-button" data-delete-note="${index}">DELETE</button>
+    </div>
+  `).join("") || '<p class="muted">No saved notes.</p>';
+}
 
-function renderReport(data) {
-  const report = data.report || {};
-  const target = document.getElementById("dailyReport");
+function renderRumours() {
+  $("rumour-list").innerHTML = saved.rumours.map((item,index) => `
+    <div class="section-card">
+      <strong class="yellow">${escapeHTML(item.claim)}</strong>
+      <p>REPORTED: ${escapeHTML(item.source)}</p>
+      <p>${escapeHTML(item.evidence)}</p>
+      <div class="meta">UNVERIFIED CLAIM // ${escapeHTML(item.date)}</div>
+      <button class="action-button" data-delete-rumour="${index}">DELETE</button>
+    </div>
+  `).join("") || '<p class="muted">No claims recorded.</p>';
+}
 
-  target.replaceChildren();
-
-  if (!report.summary && !report.executiveSummary) {
-    showEmpty(
-      "dailyReport",
-      "Daily report content has not yet been supplied."
-    );
-    return;
-  }
-
-  addText(
-    target,
-    "p",
-    report.executiveSummary || report.summary,
-    "report-copy"
+function showPage(name) {
+  document.querySelectorAll(".page").forEach(page =>
+    page.classList.toggle("active",page.id === name)
   );
 
-  if (report.riskPicture) {
-    addText(target,"p",report.riskPicture,"report-copy");
-  }
-
-  if (report.niAssessment) {
-    addText(
-      target,
-      "p",
-      "NORTHERN IRELAND: " + report.niAssessment,
-      "report-copy"
-    );
-  }
-
-  if (report.ukAssessment) {
-    addText(
-      target,
-      "p",
-      "UNITED KINGDOM: " + report.ukAssessment,
-      "report-copy"
-    );
-  }
-
-  document.getElementById("reportMeta").textContent =
-    "REPORT: " + (report.date || "UNDATED") +
-    " // METHOD: " + (report.method || "AUTOMATED COLLECTION");
+  document.querySelectorAll("nav button").forEach(button =>
+    button.classList.toggle("active",button.dataset.page === name)
+  );
 }
 
-/* SOURCE HEALTH */
-
-function renderSourceHealth(data) {
-  const target = document.getElementById("sourceHealth");
-  target.replaceChildren();
-
-  const sources = Array.isArray(data.sourceStatus)
-    ? data.sourceStatus : [];
-
-  if (!sources.length) {
-    showEmpty("sourceHealth","No individual source status supplied.");
-    return;
-  }
-
-  sources.forEach(source => {
-    const row = document.createElement("div");
-    row.className = "source-row";
-
-    const name = document.createElement("span");
-    name.textContent = source.name || source.id || "Unknown source";
-
-    const status = document.createElement("span");
-    status.textContent =
-      source.status === "OK" ? "ONLINE" : "FAILED";
-
-    status.style.color =
-      source.status === "OK" ? "#78ed8b" : "#e35b4e";
-
-    row.appendChild(name);
-    row.appendChild(status);
-    target.appendChild(row);
-  });
-}
-
-/* MAIN RENDER */
-
-function renderData(data) {
-  renderInstruments(data);
-
-  document.getElementById("overallStatus")
-    .replaceChildren(makeStatus(data.overallStatus));
-
-  document.getElementById("niStatus")
-    .replaceChildren(makeStatus(data.niStatus));
-
-  document.getElementById("ukStatus")
-    .replaceChildren(makeStatus(data.ukStatus));
-
-  document.getElementById("articleCount").textContent =
-    Array.isArray(data.articles) ? data.articles.length : 0;
-
-  document.getElementById("reportDate").textContent =
-    data.generatedAt || data.report?.date || "DATE NOT SUPPLIED";
-
-  document.getElementById("reportStatus")
-    .replaceChildren(makeStatus(data.report?.status || "GREY"));
-
-  renderReport(data);
-  renderSections(data);
-  renderArticles(data);
-
-  renderList(
-    "rumours",
-    data.rumours,
-    "No rumour assessments supplied."
-  );
-
-  renderList(
-    "watchlist",
-    data.watchlist,
-    "No watchlist items supplied."
-  );
-
-  renderList(
-    "actions",
-    data.actions,
-    "No preparedness actions supplied."
-  );
-
-  const collector = data.collector || {};
-
-  document.getElementById("collectorStatus").textContent =
-    collector.lastRun
-      ? "LAST RUN " + collector.lastRun
-      : "NOT REPORTED";
-
-  document.getElementById("feedStatus").textContent = "CONNECTED";
-
-  document.getElementById("lastUpdate").textContent =
-    data.generatedAt || data.collectorLastRun || "TIMESTAMP NOT SUPPLIED";
-
-  renderSourceHealth(data);
-}
-
-/* DATA CONNECTION */
-
-async function loadIntelligence(manual = false) {
-  const button = document.getElementById("refreshButton");
-  const message = document.getElementById("refreshMessage");
-
-  button.disabled = true;
-  message.textContent = "CONTACTING INTELLIGENCE FEED...";
+async function loadIntelligence() {
+  $("connection").textContent = "CONTACTING COLLECTOR...";
+  $("collector-status").textContent = "FETCHING";
 
   try {
-    const response = await fetch(
-      DATA_URL + "?refresh=" + Date.now(),
-      {cache:"no-store"}
-    );
+    const response = await fetch(DATA_URL + "?refresh=" + Date.now(),{
+      cache:"no-store"
+    });
 
-    if (!response.ok) {
-      throw new Error("Feed returned " + response.status);
-    }
+    if (!response.ok) throw new Error("HTTP " + response.status);
 
     const data = await response.json();
 
-    renderData(data);
-
-    message.textContent =
-      "DATA UPDATED " + new Date().toLocaleTimeString();
-
-  } catch(error) {
-    document.getElementById("feedStatus").textContent = "AWAITING FEED";
-    message.textContent = "NO DATA FEED — " + error.message;
-
-    if (manual) {
-      showEmpty(
-        "articles",
-        "Could not retrieve intelligence data. Check the data feed."
-      );
+    if (!data || typeof data !== "object") {
+      throw new Error("Invalid intelligence data");
     }
 
-  } finally {
-    button.disabled = false;
+    intelligence = data;
+    articles = flattenArticles(data);
+
+    sections = data.sections || [];
+
+    renderStatus();
+    renderAlerts();
+    renderFeed();
+    renderSections();
+
+    $("connection").textContent = "DATA LINK ACTIVE";
+    $("connection").className = "green";
+    $("refresh-time").textContent = new Date().toLocaleTimeString();
+
+  } catch(error) {
+    $("connection").textContent = "DATA LINK FAILED";
+    $("connection").className = "red";
+    $("collector-status").textContent = "CONNECTION ERROR";
+    $("collector-status").className = "red";
+    $("data-status").textContent = error.message;
+    $("data-status").className = "red";
+    $("terminal-status").textContent = "OFFLINE";
+
+    $("intel-feed").innerHTML = `
+      <div class="warning">
+        INTELLIGENCE FEED UNAVAILABLE<br>
+        ${escapeHTML(error.message)}<br><br>
+        Check the collector and data/intelligence.json.
+        Existing locally saved notes and preparedness records remain available.
+      </div>`;
   }
 }
 
-loadIntelligence(false);
+document.querySelectorAll("nav button").forEach(button => {
+  button.addEventListener("click",() => showPage(button.dataset.page));
+});
+
+document.querySelectorAll("[data-filter]").forEach(button => {
+  button.addEventListener("click",() => {
+    activeFilter = button.dataset.filter;
+    document.querySelectorAll("[data-filter]").forEach(item =>
+      item.classList.toggle("active",item === button)
+    );
+    renderFeed();
+  });
+});
+
+$("search").addEventListener("input",renderFeed);
+$("refresh-button").addEventListener("click",loadIntelligence);
+
+$("save-note").addEventListener("click",() => {
+  const title = $("note-title").value.trim();
+  const body = $("note-body").value.trim();
+
+  if (!title || !body) return;
+
+  saved.notes.unshift({
+    title,body,date:new Date().toLocaleString()
+  });
+
+  saveSaved();
+  renderNotes();
+  $("note-title").value = "";
+  $("note-body").value = "";
+});
+
+$("save-rumour").addEventListener("click",() => {
+  const claim = $("rumour-claim").value.trim();
+  if (!claim) return;
+
+  saved.rumours.unshift({
+    claim,
+    source:$("rumour-source").value.trim(),
+    evidence:$("rumour-evidence").value.trim(),
+    date:new Date().toLocaleString()
+  });
+
+  saveSaved();
+  renderRumours();
+
+  $("rumour-claim").value = "";
+  $("rumour-source").value = "";
+  $("rumour-evidence").value = "";
+});
+
+document.addEventListener("click",event => {
+  if (event.target.dataset.deleteNote !== undefined) {
+    saved.notes.splice(Number(event.target.dataset.deleteNote),1);
+    saveSaved();
+    renderNotes();
+  }
+
+  if (event.target.dataset.deleteRumour !== undefined) {
+    saved.rumours.splice(Number(event.target.dataset.deleteRumour),1);
+    saveSaved();
+    renderRumours();
+  }
+});
+
+function updateClock() {
+  $("clock").textContent = new Date().toLocaleString();
+}
+
+loadSaved();
+renderChecklist();
+renderNotes();
+renderRumours();
+renderSources();
+updateClock();
+setInterval(updateClock,1000);
+loadIntelligence();
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load",() => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
 </script>
 
 </body>
