@@ -28,8 +28,12 @@ def iso(dt=None):
 def clean(value):
     if not value:
         return ""
-    value = re.sub(r"<[^>]+>", " ", str(value))
-    return unescape(re.sub(r"\s+", " ", value)).strip()
+
+    value = re.sub(r"<!\[CDATA\[(.*?)\]\]>", r"\1", str(value), flags=re.DOTALL)
+    value = re.sub(r"<[^>]+>", " ", value)
+    value = unescape(re.sub(r"\s+", " ", value))
+
+    return value.strip()
 
 
 def local_name(tag):
@@ -41,28 +45,26 @@ def child_text(element, names):
         if local_name(child.tag) in names:
             if child.text:
                 return clean(child.text)
+
             href = child.attrib.get("href")
             if href:
                 return href
+
     return ""
 
 
 def repair_xml(xml_data):
-    """Attempt to repair common invalid characters in XML feeds."""
-
     if isinstance(xml_data, bytes):
         xml_text = xml_data.decode("utf-8-sig", errors="replace")
     else:
         xml_text = str(xml_data)
 
-    # Remove characters forbidden by XML 1.0.
     xml_text = re.sub(
         r"[\x00-\x08\x0B\x0C\x0E-\x1F]",
         "",
         xml_text
     )
 
-    # Remove any XML declaration after decoding to text.
     xml_text = re.sub(
         r"<\?xml[^?]*\?>",
         "",
@@ -71,7 +73,6 @@ def repair_xml(xml_data):
         flags=re.IGNORECASE
     )
 
-    # Repair common HTML entities.
     replacements = {
         "&nbsp;": " ",
         "&mdash;": "—",
@@ -85,7 +86,6 @@ def repair_xml(xml_data):
     for old, new in replacements.items():
         xml_text = xml_text.replace(old, new)
 
-    # Escape ampersands that are not valid XML entities.
     xml_text = re.sub(
         r"&(?!amp;|lt;|gt;|quot;|apos;|#\d+;|#x[0-9a-fA-F]+;)",
         "&amp;",
@@ -95,8 +95,82 @@ def repair_xml(xml_data):
     return xml_text
 
 
+def regex_tag(block, tag):
+    pattern = (
+        r"<" + re.escape(tag) + r"\b[^>]*>"
+        r"(.*?)"
+        r"</" + re.escape(tag) + r"\s*>"
+    )
+
+    match = re.search(
+        pattern,
+        block,
+        flags=re.IGNORECASE | re.DOTALL
+    )
+
+    if match:
+        return clean(match.group(1))
+
+    return ""
+
+
+def parse_gdacs_fallback(xml_data, source):
+    """
+    Emergency RSS extraction for GDACS when its XML is malformed.
+    Extracts individual RSS items without requiring a valid XML document.
+    """
+
+    if isinstance(xml_data, bytes):
+        text_data = xml_data.decode("utf-8-sig", errors="replace")
+    else:
+        text_data = str(xml_data)
+
+    items = re.findall(
+        r"<item\b[^>]*>(.*?)</item\s*>",
+        text_data,
+        flags=re.IGNORECASE | re.DOTALL
+    )
+
+    entries = []
+
+    for item in items:
+        title = regex_tag(item, "title")
+        link = regex_tag(item, "link")
+
+        if not link:
+            link = regex_tag(item, "guid")
+
+        description = regex_tag(item, "description")
+
+        published = (
+            regex_tag(item, "pubDate")
+            or regex_tag(item, "published")
+            or regex_tag(item, "updated")
+        )
+
+        if not title or not link:
+            continue
+
+        entries.append({
+            "id": source["id"] + ":" + link,
+            "sourceId": source["id"],
+            "source": source["name"],
+            "title": title,
+            "url": link,
+            "publishedAt": published,
+            "collectedAt": iso(),
+            "description": description[:1200],
+            "domain": source.get("domain"),
+            "region": source.get("region", "Unknown"),
+            "priority": source.get("priority", "medium"),
+            "evidenceStatus": "UNASSESSED",
+            "confidence": "UNASSESSED"
+        })
+
+    return entries
+
+
 def parse_feed(xml_data, source):
-    # First try the original feed without modification.
     try:
         root = ET.fromstring(xml_data)
 
@@ -108,9 +182,33 @@ def parse_feed(xml_data, source):
             str(original_error)
         )
 
-        # Retry after repairing common invalid XML characters.
-        repaired = repair_xml(xml_data)
-        root = ET.fromstring(repaired)
+        try:
+            repaired = repair_xml(xml_data)
+            root = ET.fromstring(repaired)
+
+        except ET.ParseError as repair_error:
+
+            if source.get("id") == "gdacs-global":
+                print(
+                    "GDACS fallback parser activated:",
+                    str(repair_error)
+                )
+
+                entries = parse_gdacs_fallback(xml_data, source)
+
+                if entries:
+                    print(
+                        "GDACS fallback extracted:",
+                        len(entries),
+                        "articles"
+                    )
+                    return entries
+
+                raise ValueError(
+                    "GDACS XML invalid and fallback found no usable RSS items"
+                ) from repair_error
+
+            raise repair_error from original_error
 
     entries = []
 
@@ -258,6 +356,7 @@ def main():
 
     for article in existing + collected:
         url = article.get("url")
+
         if url:
             combined[url] = article
 
