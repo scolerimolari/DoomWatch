@@ -804,7 +804,7 @@ function renderSections() {
 
     const matchingArticles = articles.filter(item =>
       item.category && (
-        item.category.toLowerCase().includes(name.toLowerCase()) ||
+      String(item.category || "").toLowerCase()
         name.toLowerCase().includes(item.category.toLowerCase())
       )
     );
