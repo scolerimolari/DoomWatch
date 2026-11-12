@@ -88,14 +88,12 @@ FUEL_URL = (
     "weekly-road-fuel-prices"
 )
 
-FOOD_URL = "https://nifoodcompass.com/"
-
 DEFRA_FOOD_URL = (
     "https://www.gov.uk/government/statistics/"
     "food-statistics-pocketbook/food-statistics-in-your-pocket"
 )
 
-# The direct CSV download, NOT the GOV.UK /preview page.
+# Direct official CSV fallback.
 DEFRA_FOOD_CSV_URL = (
     "https://assets.publishing.service.gov.uk/media/"
     "6a3cfd9ada47783d87723a5d/"
@@ -1009,7 +1007,6 @@ def find_food_index_csv(page):
                 link,
             )
 
-            # GOV.UK links may point to /preview.
             absolute = re.sub(
                 r"/preview/?$",
                 "",
@@ -1026,7 +1023,6 @@ def find_food_index_csv(page):
 
         return candidates[0]
 
-    # Known direct official CSV fallback.
     return DEFRA_FOOD_CSV_URL
 
 
@@ -1051,7 +1047,6 @@ def parse_food_inflation_csv(raw):
             "Food inflation CSV has no column headings"
         )
 
-    # Normalize headings to tolerate whitespace/BOM.
     field_map = {
         str(field).strip().lower(): field
         for field in reader.fieldnames
@@ -1135,10 +1130,12 @@ def collect_groceries(data):
     basket.setdefault("items", [])
     basket.setdefault("history", [])
 
+    # Remove any old Food Compass source status.
+    data.setdefault("sources", {}).pop("foodCompass", None)
+
     print("GROCERIES: collecting official CPIH food inflation")
 
     try:
-        # Discover the current CSV link from the official page.
         page = fetch(DEFRA_FOOD_URL, "text/html")
         csv_url = find_food_index_csv(page)
 
@@ -1153,8 +1150,6 @@ def collect_groceries(data):
             parse_food_inflation_csv(raw)
         )
 
-        # Preserve previous observations if the current feed
-        # temporarily returns a shorter history.
         old_food = data.get("foodInflationHistory", [])
         old_overall = data.get("overallInflationHistory", [])
 
@@ -1171,7 +1166,6 @@ def collect_groceries(data):
         latest_food = food_history[-1]
         latest_overall = overall_history[-1]
 
-        # New, correctly named top-level data.
         data["foodInflationHistory"] = food_history
         data["overallInflationHistory"] = overall_history
 
@@ -1193,16 +1187,12 @@ def collect_groceries(data):
             "url": DEFRA_FOOD_URL,
         }
 
-        # Also retain the histories inside householdBasket
-        # for compatibility with existing dashboard code.
         basket["foodInflationHistory"] = food_history
         basket["overallInflationHistory"] = overall_history
         basket["foodInflation"] = data["foodInflation"]
         basket["overallInflation"] = data["overallInflation"]
         basket["updatedAt"] = timestamp()
 
-        # Remove the old misleading index fields.
-        # They must not be presented as a 2015=100 index.
         basket.pop("priceIndexHistory", None)
         basket.pop("inflationHistory", None)
         basket.pop("foodPriceIndex", None)
@@ -1265,39 +1255,6 @@ def collect_groceries(data):
             "checkedAt": timestamp(),
             "url": DEFRA_FOOD_URL,
             "error": str(error)[:250],
-        }
-
-    # ----------------------------------------------
-    # NI FOOD COMPASS SOURCE CHECK
-    # ----------------------------------------------
-
-    try:
-        fetch(FOOD_URL, "text/html")
-
-        data["sources"]["foodCompass"] = {
-            "status": "source_checked",
-            "checkedAt": timestamp(),
-            "url": FOOD_URL,
-            "note": (
-                "NI product comparison source checked. "
-                "Product prices are not treated as live or "
-                "current without their capture dates."
-            ),
-        }
-
-        print("OK: NI Food Compass source checked")
-
-    except Exception as error:
-        print(
-            "FAILED: NI Food Compass",
-            str(error)[:200],
-        )
-
-        data["sources"]["foodCompass"] = {
-            "status": "failed",
-            "checkedAt": timestamp(),
-            "url": FOOD_URL,
-            "error": str(error)[:200],
         }
 
 
