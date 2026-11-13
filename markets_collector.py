@@ -1830,7 +1830,7 @@ def collect_supermarket_index(data):
 
     url = (
         "https://api.apify.com/v2/datasets/"
-        "AvRCWQFinCiNjx3sP/items?format=json"
+        "AvRCWqFinCiNjx3sP/items?format=json"
     )
 
     basket = data.setdefault("householdBasket", {})
@@ -1843,8 +1843,10 @@ def collect_supermarket_index(data):
         raw = fetch(url, "application/json")
         payload = json.loads(raw.decode("utf-8"))
 
+        if isinstance(payload, dict):
+            payload = payload.get("rows", [])
         if not isinstance(payload, list):
-            raise ValueError("Dataset response was not a JSON list")
+            raise ValueError("Dataset response did not contain a rows list")
 
         records = []
 
