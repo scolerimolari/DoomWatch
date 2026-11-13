@@ -286,6 +286,13 @@ footer {
   <div class="panel">
     <input id="rumour-claim" placeholder="Claim or rumour">
     <input id="rumour-source" placeholder="Where was it reported?">
+    <label for="rumour-status">ASSESSMENT STATUS</label>
+    <select id="rumour-status">
+      <option value="UNVERIFIED">UNVERIFIED // NOT YET CHECKED</option>
+      <option value="CORROBORATED">CORROBORATED // INDEPENDENT SUPPORT FOUND</option>
+      <option value="CONTRADICTED">CONTRADICTED // CONFLICTING EVIDENCE</option>
+      <option value="DEBUNKED">DEBUNKED // RELIABLE EVIDENCE DISPROVES</option>
+    </select>
     <textarea id="rumour-evidence" placeholder="Evidence / verification notes"></textarea>
     <button class="action-button" id="save-rumour">RECORD CLAIM</button>
     <div id="rumour-list"></div>
@@ -751,9 +758,9 @@ function renderRumours() {
   $("rumour-list").innerHTML = saved.rumours.map((item,index) => `
     <div class="section-card">
       <strong class="yellow">${escapeHTML(item.claim)}</strong>
-      <p>REPORTED: ${escapeHTML(item.source)}</p>
-      <p>${escapeHTML(item.evidence)}</p>
-      <div class="meta">UNVERIFIED CLAIM // ${escapeHTML(item.date)}</div>
+      <p>REPORTED: ${escapeHTML(item.source||"Source not recorded")}</p>
+      <p>${escapeHTML(item.evidence||"No verification notes recorded.")}</p>
+      <div class="meta">${escapeHTML(item.status||"UNVERIFIED")} // RECORDED ${escapeHTML(item.date)}</div>
       <button class="action-button" data-delete-rumour="${index}">DELETE</button>
     </div>
   `).join("") || '<p class="muted">No claims recorded.</p>';
@@ -879,6 +886,7 @@ $("save-rumour").addEventListener("click",() => {
     claim,
     source:$("rumour-source").value.trim(),
     evidence:$("rumour-evidence").value.trim(),
+    status:$("rumour-status").value||"UNVERIFIED",
     date:new Date().toLocaleString()
   });
 
