@@ -1,0 +1,107 @@
+{
+  "generatedAt": "2026-11-13T12:38:05+00:00",
+  "source": {
+    "status": "ok",
+    "checkedAt": "2026-11-13T12:38:05+00:00",
+    "url": "https://dev.to/yappman/comparing-uk-supermarket-prices-programmatically-tesco-sainsburys-asda-and-aldi-in-one-schema-4epi",
+    "datasetUrl": "https://api.apify.com/v2/datasets/ynAT9NPps2EdjMOJa/items?format=json&limit=100000",
+    "licence": "CC BY 4.0",
+    "latestDate": "2026-11-13",
+    "recordsImported": 10802,
+    "recordsStored": 10802,
+    "latestSnapshotRows": 211,
+    "retailers": [
+      "Tesco",
+      "Sainsbury's",
+      "Asda",
+      "Aldi"
+    ],
+    "note": "Daily 212-item UK staple basket. Prices are online shelf snapshots, not live store prices or a complete household bill. Product names, descriptions, images and retailer content are not reproduced. Credit Yappman Data, CC BY 4.0."
+  },
+  "historyRows": 10802,
+  "latestDate": "2026-11-13",
+  "latestRows": 211,
+  "retailerCounts": {
+    "aldi": 46,
+    "asda": 48,
+    "sainsburys": 59,
+    "tesco": 58
+  },
+  "sampleRows": [
+    {
+      "scrapedAt": "2026-11-13T05:30:08Z",
+      "date": "2026-11-13",
+      "retailer": "aldi",
+      "retailerProductId": "000000000000262344",
+      "ean": [],
+      "price": 1.79,
+      "wasPrice": null,
+      "loyaltyPrice": null,
+      "unitPrice": null,
+      "unitMeasure": "",
+      "packSize": "1kg",
+      "stock": null,
+      "source": "Yappman Data daily 212-item basket"
+    },
+    {
+      "scrapedAt": "2026-11-13T05:30:08Z",
+      "date": "2026-11-13",
+      "retailer": "aldi",
+      "retailerProductId": "000000000000267180",
+      "ean": [],
+      "price": 0.78,
+      "wasPrice": null,
+      "loyaltyPrice": null,
+      "unitPrice": null,
+      "unitMeasure": "",
+      "packSize": "5 each",
+      "stock": null,
+      "source": "Yappman Data daily 212-item basket"
+    },
+    {
+      "scrapedAt": "2026-11-13T05:30:08Z",
+      "date": "2026-11-13",
+      "retailer": "aldi",
+      "retailerProductId": "000000000000267186",
+      "ean": [],
+      "price": 0.16,
+      "wasPrice": null,
+      "loyaltyPrice": null,
+      "unitPrice": null,
+      "unitMeasure": "",
+      "packSize": "1 each",
+      "stock": null,
+      "source": "Yappman Data daily 212-item basket"
+    },
+    {
+      "scrapedAt": "2026-11-13T05:30:08Z",
+      "date": "2026-11-13",
+      "retailer": "aldi",
+      "retailerProductId": "000000000000271500",
+      "ean": [],
+      "price": 2.85,
+      "wasPrice": null,
+      "loyaltyPrice": null,
+      "unitPrice": null,
+      "unitMeasure": "",
+      "packSize": "6 each",
+      "stock": null,
+      "source": "Yappman Data daily 212-item basket"
+    },
+    {
+      "scrapedAt": "2026-11-13T05:30:08Z",
+      "date": "2026-11-13",
+      "retailer": "aldi",
+      "retailerProductId": "000000000000275529",
+      "ean": [],
+      "price": 0.89,
+      "wasPrice": 0.95,
+      "loyaltyPrice": null,
+      "unitPrice": null,
+      "unitMeasure": "",
+      "packSize": "330g",
+      "stock": null,
+      "source": "Yappman Data daily 212-item basket"
+    }
+  ]
+}\n
