@@ -541,9 +541,19 @@ function normalizeArticle(item) {
     source:asText(valueOf(item,["source","publisher","sourceName","author"],"Source not specified")),
     sourcePriority:asText(valueOf(item,["priority"],"")),
     sourceTrust:asText(valueOf(item,["sourceTrust","trust"],"unclassified")),
+    sourceType:asText(valueOf(item,["sourceType"],"")),
     severity:severity(item),
     category,
-    status:asText(valueOf(item,["status","verification","assessment","evidenceStatus"],""))
+    status:asText(valueOf(item,["status","verification","assessment","evidenceStatus"],"")),
+    evidenceStatus:asText(valueOf(item,["evidenceStatus","status","verification"],"UNASSESSED")),
+    confidence:asText(valueOf(item,["confidence"],"UNASSESSED")),
+    region:asText(valueOf(item,["region"],"")),
+    sectorIds:Array.isArray(item.sectorIds)?item.sectorIds.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=SECTORS.length):[],
+    sectorKeywordIds:Array.isArray(item.sectorKeywordIds)?item.sectorKeywordIds.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=SECTORS.length):[],
+    sectorSourceIds:Array.isArray(item.sectorSourceIds)?item.sectorSourceIds.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=SECTORS.length):[],
+    sectorLabels:Array.isArray(item.sectorLabels)?item.sectorLabels.map(asText):[],
+    sectorClassification:asText(valueOf(item,["sectorClassification"],"UNCLASSIFIED")),
+    locality:item.locality&&typeof item.locality==="object"?{name:asText(item.locality.name),precision:asText(item.locality.precision||"APPROXIMATE_TOWN_CENTRE")}:null
   };
 }
 
@@ -719,7 +729,7 @@ function renderAlerts() {
         <summary>${escapeHTML(item.title)}</summary>
         <p>${escapeHTML(item.summary || "No additional description supplied.")}</p>
         <div class="meta">${escapeHTML(item.area)} · ${escapeHTML(item.source)} · ${escapeHTML(dateText(item.date))}</div>
-        <div class="meta">INCIDENT SEVERITY: ${escapeHTML(item.severity.toUpperCase())} · SOURCE CLASS: ${escapeHTML(item.sourceTrust)}</div>
+        <div class="meta">INCIDENT SEVERITY: ${escapeHTML(item.severity.toUpperCase())} · SOURCE CLASS: ${escapeHTML(item.sourceTrust)} · EVIDENCE: ${escapeHTML(item.evidenceStatus||"UNASSESSED")} · CONFIDENCE: ${escapeHTML(item.confidence||"UNASSESSED")}</div>
         ${item.url ? `<p><a href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a></p>` : ""}
       </details>`).join("")
     : '<div class="panel muted">No explicit medium/high incident severity is recorded. This does not mean no risks exist.</div>';
@@ -761,6 +771,7 @@ function renderFeed() {
         </div>
         <p>${escapeHTML(item.summary || "No additional description supplied.")}</p>
         <div class="meta">SOURCE: ${escapeHTML(item.source)} · DATE: ${escapeHTML(dateText(item.date))}</div>
+        <div class="meta">EVIDENCE: ${escapeHTML(item.evidenceStatus||"UNASSESSED")} · CONFIDENCE: ${escapeHTML(item.confidence||"UNASSESSED")} · SOURCE TYPE: ${escapeHTML(item.sourceType||"NOT CLASSIFIED")}</div>
         ${item.status ? '<div class="meta">ASSESSMENT: '+escapeHTML(item.status)+'</div>' : ""}
         ${item.url ? `<p><a href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a></p>` : ""}
       </details>
