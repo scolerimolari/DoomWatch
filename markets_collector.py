@@ -1818,6 +1818,115 @@ def collect_retailer_basket(data):
 
 
 # ==================================================
+# FREE UK SUPERMARKET SHELF-PRICE INDEX
+# ==================================================
+
+def collect_supermarket_index(data):
+    """
+    Import the public Yappman UK Online Shelf-Price Index.
+    This is a weekly aggregate index, not individual product prices.
+    Dataset is public and licensed CC BY 4.0.
+    """
+
+    url = (
+        "https://api.apify.com/v2/datasets/"
+        "AvRCWqFinCiNjx3sP/items?format=json"
+    )
+
+    basket = data.setdefault("householdBasket", {})
+    basket.setdefault("items", [])
+    basket.setdefault("history", [])
+
+    print("SUPERMARKET INDEX: importing public weekly dataset")
+
+    try:
+        raw = fetch(url, "application/json")
+        payload = json.loads(raw.decode("utf-8"))
+
+        if not isinstance(payload, list):
+            raise ValueError("Dataset response was not a JSON list")
+
+        records = []
+
+        for row in payload:
+            if not isinstance(row, dict):
+                continue
+
+            if not row.get("vintage"):
+                continue
+
+            try:
+                level = float(row.get("level"))
+            except (TypeError, ValueError):
+                continue
+
+            record = dict(row)
+            record["level"] = level
+            records.append(record)
+
+        if not records:
+            raise ValueError("No valid dated index records were returned")
+
+        records.sort(
+            key=lambda row: (
+                str(row.get("vintage", "")),
+                str(row.get("recordType", "")),
+                str(row.get("retailer", "")),
+                str(row.get("class", "")),
+            )
+        )
+
+        headlines = [
+            row for row in records
+            if row.get("recordType") == "headline"
+        ]
+
+        if not headlines:
+            raise ValueError("Dataset contains no headline index records")
+
+        latest = headlines[-1]
+
+        basket["supermarketIndexHistory"] = records
+        basket["supermarketIndexUpdatedAt"] = timestamp()
+        basket["supermarketIndex"] = latest
+
+        data.setdefault("sources", {})["supermarketPriceIndex"] = {
+            "status": "ok",
+            "checkedAt": timestamp(),
+            "url": "https://data.yappman.com/shelf-price-index/",
+            "datasetUrl": url,
+            "licence": "CC BY 4.0",
+            "latestVintage": latest.get("vintage"),
+            "recordsImported": len(records),
+            "note": (
+                "Weekly UK online shelf-price index for Tesco, "
+                "Sainsbury's, Asda and Aldi. Aggregate index only; "
+                "not individual product prices, household spending "
+                "or ONS CPI. Credit Yappman Data, CC BY 4.0."
+            ),
+        }
+
+        print(
+            "OK SUPERMARKET INDEX:",
+            latest.get("vintage"),
+            latest.get("level"),
+            "records:",
+            len(records),
+        )
+
+    except Exception as error:
+        print("FAILED: Supermarket shelf-price index", str(error)[:250])
+
+        data.setdefault("sources", {})["supermarketPriceIndex"] = {
+            "status": "failed",
+            "checkedAt": timestamp(),
+            "url": "https://data.yappman.com/shelf-price-index/",
+            "error": str(error)[:250],
+            "note": "No supermarket index values were added or estimated.",
+        }
+
+
+# ==================================================
 # OFFICIAL CPIH FOOD AND OVERALL INFLATION
 # ==================================================
 
