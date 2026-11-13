@@ -556,7 +556,9 @@ function renderCrossRetailerComparison(rows){
   const price=number(o.price);
   if(price===null||price<=0)return;
   const retailer=String(o.retailer||"").toLowerCase();
-  const entry={price,scrapedAt:o.scrapedAt||"",retailer,eans:codes};
+  const confidence=number(o.matchConfidence);
+  const basis=String(o.matchBasis||"").trim().toLowerCase();
+  const entry={price,scrapedAt:o.scrapedAt||"",retailer,eans:codes,confidence,basis};
   codes.forEach(code=>{
    if(!eanGroups.has(code))eanGroups.set(code,new Map());
    const group=eanGroups.get(code),prior=group.get(retailer);
@@ -566,7 +568,8 @@ function renderCrossRetailerComparison(rows){
   if(key){
    const folded=key.toLocaleLowerCase();
    if(!matchGroups.has(folded))matchGroups.set(folded,{label:key,rows:[]});
-   matchGroups.get(folded).rows.push(entry);
+   if((entry.confidence===null||entry.confidence>=0.90)&&entry.basis!=="name")
+    matchGroups.get(folded).rows.push(entry);
   }
  });
  const matches=[];
@@ -589,7 +592,9 @@ function renderCrossRetailerComparison(rows){
   // If every retailer supplied the same EAN, the exact match above is enough.
   if(knownEans.size===1&&values.every(v=>v.eans.length))return;
   const prices=values.map(v=>v.price);
-  matches.push({key:"match:"+key,label:group.label,method:knownEans.size?"Source match key (EAN bridge)":"Source match key",retailers:values.length,low:Math.min(...prices),high:Math.max(...prices)});
+  const confidenceValues=values.map(v=>v.confidence).filter(v=>v!==null);
+  const confidenceLabel=confidenceValues.length?" • "+Math.round(Math.min(...confidenceValues)*100)+"% min confidence":"";
+  matches.push({key:"match:"+key,label:group.label,method:(knownEans.size?"Source match key (EAN bridge)":"Source match key")+confidenceLabel,retailers:values.length,low:Math.min(...prices),high:Math.max(...prices)});
  });
  matches.forEach(m=>m.spread=m.high-m.low);
  matches.sort((a,b)=>b.spread-a.spread);
