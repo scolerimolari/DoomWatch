@@ -283,8 +283,16 @@ def fetch_feed(source):
         raise ValueError("Empty response")
 
     articles = parse_feed(body, source)
+    root_match = re.search(
+        rb"<(?!\\?)([A-Za-z][A-Za-z0-9_.:-]*)",
+        body
+    )
+    root_tag = (
+        root_match.group(1).decode("ascii", errors="replace")
+        if root_match else "UNKNOWN"
+    )
 
-    return articles, content_type
+    return articles, content_type, len(body), root_tag
 
 
 def load_json(path, default):
@@ -373,7 +381,7 @@ def main():
 
     for source in feeds:
         try:
-            articles, content_type = fetch_feed(source)
+            articles, content_type, response_bytes, root_tag = fetch_feed(source)
             collected.extend(articles)
 
             feed_state = "OK" if articles else "EMPTY"
@@ -383,7 +391,9 @@ def main():
                 "status": feed_state,
                 "checkedAt": iso(),
                 "articleCount": len(articles),
-                "contentType": content_type
+                "contentType": content_type,
+                "responseBytes": response_bytes,
+                "rootTag": root_tag
             })
 
             print(
@@ -393,6 +403,18 @@ def main():
                 len(articles),
                 "articles"
             )
+
+            if not articles:
+                print(
+                    "EMPTY DETAILS:",
+                    source["id"],
+                    "-",
+                    content_type,
+                    "-",
+                    response_bytes,
+                    "bytes - root:",
+                    root_tag
+                )
 
         except Exception as error:
             source_status.append({
