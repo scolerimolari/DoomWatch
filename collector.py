@@ -367,6 +367,11 @@ def fetch_gdacs_api(source):
             or properties.get("url")
             or ""
         )
+        if not link and event_type and event_id:
+            link = (
+                "https://www.gdacs.org/gdacsapi/api/events/geteventdata?"
+                + urlencode({"eventtype": event_type, "eventid": event_id})
+            )
         published = str(
             properties.get("datemodified")
             or properties.get("todate")
@@ -603,10 +608,10 @@ def main():
     combined = {}
 
     for article in existing + collected:
-        url = article.get("url")
+        key = article.get("url") or article.get("id")
 
-        if url:
-            combined[url] = article
+        if key:
+            combined[key] = article
 
     cutoff = now() - timedelta(days=90)
     retained = []
