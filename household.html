@@ -158,6 +158,31 @@ footer{padding:20px 14px;color:var(--muted);font-size:11px;text-align:center}
 </section>
 
 <section class="card wide">
+<h2>SUSTAINED PRICE PRESSURE // 14-DAY TREND</h2>
+<div class="small">A product is classed as a sustained rise or fall only when it has at least three dated observations spanning seven or more days, with the latest two movements in the same direction. This is a signal from the available online basket, not a household inflation rate.</div>
+<div class="grid" style="margin-top:12px">
+<div class="card">
+<h3>PRICE-PRESSURE SIGNAL</h3>
+<div class="metric" id="basketPressureSignal">—</div>
+<div class="small" id="basketPressureNote">Waiting for sufficient dated history.</div>
+</div>
+<div class="card">
+<h3>RETAILER COMPARISON</h3>
+<div class="list" id="retailerMovementList"><div class="item">Waiting for comparable observations.</div></div>
+</div>
+<div class="card">
+<h3 class="warning">SUSTAINED RISES</h3>
+<div class="list" id="sustainedRises"><div class="item">History is building.</div></div>
+</div>
+<div class="card">
+<h3 class="good">SUSTAINED FALLS</h3>
+<div class="list" id="sustainedFalls"><div class="item">History is building.</div></div>
+</div>
+</div>
+<div class="small" id="sustainedTrendNote" style="margin-top:10px">At least three observations over seven days are required before a trend is classified.</div>
+</section>
+
+<section class="card wide">
 <h2>HOUSEHOLD BASKET</h2>
 <div class="small">Collected household basket observations and historical records.</div>
 <div class="list" id="basketList" style="margin-top:12px"></div>
@@ -411,6 +436,96 @@ function renderPriceMovers(){
   "Unchanged products are excluded; product IDs are shown because product descriptions are not included in this feed.";
 }
 
+function median(values){
+ const sorted=values.filter(Number.isFinite).sort((a,b)=>a-b);
+ if(!sorted.length)return null;
+ const mid=Math.floor(sorted.length/2);
+ return sorted.length%2?sorted[mid]:(sorted[mid-1]+sorted[mid])/2;
+}
+function renderSustainedPricePressure(history){
+ const signal=document.getElementById("basketPressureSignal");
+ const signalNote=document.getElementById("basketPressureNote");
+ const retailerList=document.getElementById("retailerMovementList");
+ const risesEl=document.getElementById("sustainedRises");
+ const fallsEl=document.getElementById("sustainedFalls");
+ const note=document.getElementById("sustainedTrendNote");
+ if(!signal||!signalNote||!retailerList||!risesEl||!fallsEl||!note)return;
+ const groups=new Map();
+ allObjects(history).forEach(o=>{
+  const key=String(o.retailer||"")+"|"+String(o.retailerProductId||"");
+  const day=String(o.date||String(o.scrapedAt||"").slice(0,10));
+  const price=number(o.price);
+  if(!day||price===null||price<=0)return;
+  if(!groups.has(key))groups.set(key,[]);
+  groups.get(key).push({day,price,retailer:o.retailer||"Unknown",id:o.retailerProductId||"—"});
+ });
+ const trends=[];
+ groups.forEach(rows=>{
+  const byDay=new Map();
+  rows.sort((a,b)=>a.day.localeCompare(b.day)).forEach(row=>byDay.set(row.day,row));
+  const series=Array.from(byDay.values()).slice(-3);
+  if(series.length<3)return;
+  const first=series[0],mid=series[1],last=series[2];
+  const span=(Date.parse(last.day+"T00:00:00Z")-Date.parse(first.day+"T00:00:00Z"))/86400000;
+  if(!Number.isFinite(span)||span<7)return;
+  const d1=(mid.price/first.price-1)*100;
+  const d2=(last.price/mid.price-1)*100;
+  const total=(last.price/first.price-1)*100;
+  if(d1>0.0001&&d2>0.0001&&total>0.05)
+   trends.push({retailer:last.retailer,id:last.id,first:first.price,last:last.price,pct:total,direction:"up",span});
+  else if(d1< -0.0001&&d2< -0.0001&&total< -0.05)
+   trends.push({retailer:last.retailer,id:last.id,first:first.price,last:last.price,pct:total,direction:"down",span});
+ });
+ const movers=[];
+ const retailerMoves=new Map();
+ dailyBasketLatestRows.forEach(o=>{
+  const key=String(o.retailer||"")+"|"+String(o.retailerProductId||"");
+  const previous=dailyBasketPreviousByKey.get(key);
+  if(!previous)return;
+  const now=number(o.price),was=number(previous.price);
+  if(now===null||was===null||was<=0)return;
+  const pct=(now/was-1)*100;
+  if(Math.abs(pct)<0.0001)return;
+  movers.push(pct);
+  const retailer=o.retailer||"Unknown";
+  if(!retailerMoves.has(retailer))retailerMoves.set(retailer,[]);
+  retailerMoves.get(retailer).push(pct);
+ });
+ const upCount=movers.filter(v=>v>0).length;
+ const downCount=movers.filter(v=>v<0).length;
+ const med=median(movers);
+ if(!movers.length){
+  signal.textContent="BUILDING";
+  signalNote.textContent="No comparable daily price movements yet.";
+ }else{
+  const riseShare=upCount/movers.length;
+  const pressure=riseShare>=0.65&&med>0.1?"UPWARD":
+   riseShare<=0.35&&med< -0.1?"EASING":"MIXED";
+  signal.textContent=pressure;
+  signalNote.textContent=upCount+" rising / "+downCount+" falling products; median movement "+
+   (med>0?"+":"")+med.toFixed(2)+"% versus each product's previous observation.";
+ }
+ const names={tesco:"Tesco",sainsburys:"Sainsbury's",asda:"Asda",aldi:"Aldi"};
+ const retailerRows=Array.from(retailerMoves.entries()).map(([name,values])=>({
+  name:names[name]||name,median:median(values),count:values.length
+ })).sort((a,b)=>a.name.localeCompare(b.name));
+ retailerList.innerHTML=retailerRows.length?retailerRows.map(r=>
+  '<div class="item"><strong>'+escapeHtml(r.name)+'</strong><span>'+
+  (r.median>0?"+":"")+r.median.toFixed(2)+'% median • '+r.count+' changes</span></div>'
+ ).join(""):'<div class="item">No retailer-level comparisons available yet.</div>';
+ const renderTrend=t=>'<div class="item"><div><strong>'+escapeHtml(names[t.retailer]||t.retailer)+'</strong>'+
+  '<div class="small">Product ID '+escapeHtml(t.id)+' • '+t.span+' days</div></div>'+
+  '<div style="text-align:right"><strong>'+(t.pct>0?"+":"")+t.pct.toFixed(2)+'%</strong>'+
+  '<div class="small">'+money(t.first)+' → '+money(t.last)+'</div></div></div>';
+ const sustainedUp=trends.filter(t=>t.direction==="up").sort((a,b)=>b.pct-a.pct).slice(0,8);
+ const sustainedDown=trends.filter(t=>t.direction==="down").sort((a,b)=>a.pct-b.pct).slice(0,8);
+ risesEl.innerHTML=sustainedUp.length?sustainedUp.map(renderTrend).join(""):'<div class="item">No sustained rises meet the minimum evidence threshold.</div>';
+ fallsEl.innerHTML=sustainedDown.length?sustainedDown.map(renderTrend).join(""):'<div class="item">No sustained falls meet the minimum evidence threshold.</div>';
+ note.textContent=trends.length+" products currently meet the sustained-trend test. "+
+  "Retailer comparison uses the median percentage change among comparable products in the latest snapshot; it is not a like-for-like total basket cost. "+
+  "The pressure signal is directional only and is not official CPI, CPIH or a forecast.";
+}
+
 function renderDailyGroceryBasket(data){
  const basket=data.householdBasket||{};
  const history=allObjects(basket.dailyProductPriceHistory);
@@ -444,6 +559,7 @@ function renderDailyGroceryBasket(data){
  });
  dailyBasketPreviousByKey=byProduct;
  renderPriceMovers();
+ renderSustainedPricePressure(history);
  const comparable=dailyBasketLatestRows.filter(o=>
   byProduct.has(String(o.retailer||"")+"|"+String(o.retailerProductId||""))
  ).length;
