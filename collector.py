@@ -768,7 +768,7 @@ def main():
 
     intelligence["collector"] = {
         "lastRun": iso(),
-        "configuredFeeds": len(feeds),
+        "configuredFeeds": len(feeds) + len(social_status),
         "successfulFeeds": sum(
             1 for item in source_status
             if item["status"] in ("OK", "EMPTY")
