@@ -110,7 +110,7 @@ function renderWatch(){
  $("watch-items").innerHTML=fresh.length?fresh.slice(0,8).map(a=>{
   const matched=Object.keys(topics).filter(k=>hits(a,k));
   const socialPost=social(a);
-  const link=a.url&&/^https?:\\/\\//i.test(a.url)?' <a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"";
+  const link=a.url&&(String(a.url).startsWith("https://")||String(a.url).startsWith("http://"))?' <a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"";
   return '<div style="padding:9px 0;border-top:1px solid #414738"><strong style="color:#f0d28e">'+esc(a.title||"Untitled signal")+'</strong><div class="muted" style="margin-top:4px">'+esc(date(a.collectedAt||a.publishedAt))+' · '+esc(a.source||"Unknown source")+' · '+(socialPost?"UNVERIFIED SOCIAL": "OPEN SOURCE")+'</div><div style="margin-top:4px">'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+link+'</div></div>';
  }).join(""):'<div style="padding:10px 0">NO NEW RECORDS SINCE LAST REVIEW. The archive will be checked again automatically while this page remains open.</div>';
 }
