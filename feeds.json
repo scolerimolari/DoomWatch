@@ -189,6 +189,24 @@
       "region": "Northern Ireland",
       "priority": "high",
       "tier": 1
+    },
+    {
+      "id": "trafficwatch-belfast-incidents",
+      "name": "TrafficWatchNI Greater Belfast incidents",
+      "url": "https://rss.trafficwatchni.com/trafficwatchni_incidents_belfast_rss.xml",
+      "domain": 6,
+      "region": "Northern Ireland",
+      "priority": "high",
+      "tier": 1
+    },
+    {
+      "id": "trafficwatch-belfast-roadworks",
+      "name": "TrafficWatchNI Greater Belfast roadworks",
+      "url": "https://rss.trafficwatchni.com/trafficwatchni_roadworks_belfast_rss.xml",
+      "domain": 6,
+      "region": "Northern Ireland",
+      "priority": "medium",
+      "tier": 1
     }
   ]
 }
