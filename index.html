@@ -872,14 +872,19 @@ function renderRumours() {
 
 function showPage(name) {
   document.querySelectorAll(".page").forEach(page => {
-    page.classList.toggle("active",page.id === name);
+    const active = page.id === name;
+    page.classList.toggle("active",active);
+    page.setAttribute("aria-hidden",String(!active));
   });
 
   document.querySelectorAll("nav button[data-page]").forEach(button => {
-    button.classList.toggle("active",button.dataset.page === name);
+    const active = button.dataset.page === name;
+    button.classList.toggle("active",active);
+    button.setAttribute("aria-current",active ? "page" : "false");
+    button.setAttribute("aria-pressed",String(active));
   });
 
-  window.scrollTo({top:0,behavior:"smooth"});
+  window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
 }
 
 async function loadIntelligence() {
@@ -947,11 +952,14 @@ $("markets-button").addEventListener("click",() => {
 /* INTELLIGENCE FILTERS */
 
 document.querySelectorAll("[data-filter]").forEach(button => {
+  button.setAttribute("aria-pressed",String(button.classList.contains("active")));
   button.addEventListener("click",() => {
     activeFilter = button.dataset.filter;
 
     document.querySelectorAll("[data-filter]").forEach(item => {
-      item.classList.toggle("active",item === button);
+      const active = item === button;
+      item.classList.toggle("active",active);
+      item.setAttribute("aria-pressed",String(active));
     });
 
     renderFeed();
