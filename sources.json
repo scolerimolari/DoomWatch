@@ -649,6 +649,38 @@
       "trust": "official_primary_source",
       "status": "manual_review",
       "notes": "Agriculture, food, environment, animal health and rural affairs. No RSS endpoint verified."
+    },
+    {
+      "id": "trafficwatch-belfast-incidents",
+      "name": "TrafficWatchNI Greater Belfast incidents",
+      "platform": "website",
+      "type": "traffic_incident_feed",
+      "url": "https://www.trafficwatchni.com/twni/",
+      "endpoint": "https://rss.trafficwatchni.com/trafficwatchni_incidents_belfast_rss.xml",
+      "method": "rss",
+      "region": "Northern Ireland",
+      "sectors": [
+        6
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "notes": "DfI Traffic Information and Control Centre RSS feed for Greater Belfast; feed availability and content are shown in collector diagnostics."
+    },
+    {
+      "id": "trafficwatch-belfast-roadworks",
+      "name": "TrafficWatchNI Greater Belfast roadworks",
+      "platform": "website",
+      "type": "traffic_incident_feed",
+      "url": "https://www.trafficwatchni.com/twni/",
+      "endpoint": "https://rss.trafficwatchni.com/trafficwatchni_roadworks_belfast_rss.xml",
+      "method": "rss",
+      "region": "Northern Ireland",
+      "sectors": [
+        6
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "notes": "DfI Traffic Information and Control Centre RSS feed for Greater Belfast; feed availability and content are shown in collector diagnostics."
     }
   ]
 }
