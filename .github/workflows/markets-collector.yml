@@ -48,6 +48,7 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import re
           from pathlib import Path
 
           data = json.loads(Path("data/markets.json").read_text(encoding="utf-8"))
