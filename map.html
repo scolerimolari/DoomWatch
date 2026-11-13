@@ -70,8 +70,8 @@ const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const date=v=>{if(!v)return "Date not supplied";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB");};
 const allText=a=>(String(a.title||"")+" "+String(a.description||"")).toLowerCase();
-const isNI=a=>/northern ireland|\bni\b/i.test(String(a.region||""))||TOWNS.some(t=>t.terms.some(term=>allText(a).includes(term)));
-const locate=a=>{const t=allText(a);for(const town of TOWNS){if(town.terms.some(term=>new RegExp("(^|[^a-z])"+term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"([^a-z]|$)","i").test(t)))return town;}return null;};
+const isNI=a=>/northern ireland|\bni\b/i.test(String(a.region||""))||!!a.locality||TOWNS.some(t=>t.terms.some(term=>allText(a).includes(term)));
+const locate=a=>{if(a.locality&&a.locality.name){const found=TOWNS.find(t=>t.name===a.locality.name);if(found)return found;}const t=allText(a);for(const town of TOWNS){if(town.terms.some(term=>new RegExp("(^|[^a-z])"+term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"([^a-z]|$)","i").test(t)))return town;}return null;};
 const category=a=>{const t=allText(a),s=String(a.sourceType||"").toLowerCase();if(/traffic|roadwork|transport|rail|airport|port|ferry|bridge|closure/.test(t+" "+s))return "TRANSPORT";if(/weather|flood|storm|wind|snow|ice|fire|environment|warning/.test(t+" "+s))return "WEATHER";if(/police|emergency|incident|crash|collision|evacuat|rescue|explosion|outage/.test(t+" "+s))return "EMERGENCY";return "OTHER";};
 let records=[],filtered=[],markers=[],active="ALL",map=null,layer=null;
 function initMap(){
