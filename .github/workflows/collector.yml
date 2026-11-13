@@ -29,6 +29,12 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Validate collector and source configuration
+        run: |
+          python -m py_compile collector.py
+          python -m json.tool feeds.json > /dev/null
+          python -m json.tool sources.json > /dev/null
+
       - name: Run DoomWatch collector
         run: python collector.py
 
