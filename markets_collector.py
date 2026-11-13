@@ -1672,6 +1672,26 @@ def main():
     # Aggregate weekly supermarket index only; no product-level data.
     collect_supermarket_index(data)
 
+    # Enforce an aggregate-only grocery schema after all collectors have run.
+    # Older builds and the index importer may recreate empty legacy basket keys.
+    basket = data.setdefault("householdBasket", {})
+    allowed_grocery_fields = {
+        "foodInflationHistory",
+        "overallInflationHistory",
+        "foodInflation",
+        "overallInflation",
+        "supermarketIndexHistory",
+        "supermarketIndexUpdatedAt",
+        "supermarketIndex",
+    }
+    for key in list(basket):
+        if key not in allowed_grocery_fields:
+            basket.pop(key, None)
+
+    # Remove retired product-level source metadata.
+    for key in ("foodCompass", "groceryBasket", "dailyGroceryBasket"):
+        data.setdefault("sources", {}).pop(key, None)
+
     # Existing news collection.
     collect_news(data)
 
