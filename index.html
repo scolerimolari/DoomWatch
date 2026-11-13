@@ -470,6 +470,12 @@ function normalizeArticle(item) {
     };
   }
 
+  const rawCategory=asText(valueOf(item,["category","section","sector","domain","topic"],""));
+  const domainNumber=Number(rawCategory);
+  const category=Number.isInteger(domainNumber)&&domainNumber>=1&&domainNumber<=SECTORS.length
+    ? SECTORS[domainNumber-1]
+    : rawCategory;
+
   return {
     title:asText(valueOf(item,["title","headline","name","claim"],"Untitled intelligence record")),
     summary:asText(valueOf(item,["summary","description","content","body","text","snippet"],"")),
@@ -478,8 +484,8 @@ function normalizeArticle(item) {
     date:valueOf(item,["date","published","publishedAt","timestamp","createdAt"],""),
     source:asText(valueOf(item,["source","publisher","domain","author"],"Source not specified")),
     severity:severity(item),
-    category:asText(valueOf(item,["category","section","sector","domain","topic"],"")),
-    status:asText(valueOf(item,["status","verification","assessment"],""))
+    category,
+    status:asText(valueOf(item,["status","verification","assessment","evidenceStatus"],""))
   };
 }
 
