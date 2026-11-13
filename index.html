@@ -554,6 +554,9 @@ function renderSourceHealth(){
  const runDate=lastRun?new Date(lastRun):null;
  const ageHours=runDate&&!Number.isNaN(runDate.getTime())?(Date.now()-runDate.getTime())/3600000:null;
  const stale=ageHours===null||ageHours>6;
+ $("collector-status").textContent=stale?"STALE":failed>0?"PARTIAL FAILURE":"FEEDS REPORTING";
+ $("collector-status").className=stale||failed>0?"red":"green";
+ $("terminal-status").textContent=stale||failed>0?"ATTENTION":"OPERATIONAL";
  const overall=failed>0||stale?"ATTENTION":"ALL FEEDS REPORTING";
  summary.textContent=overall+" // "+successful+" successful / "+failed+" failed / "+configured+" configured";
  summary.className=(failed>0||stale)?"warning":"green";
