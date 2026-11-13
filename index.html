@@ -277,8 +277,12 @@ footer {
     Prioritise realistic local risks and official safety advice.
   </div>
 
-  <h3>PERSONAL READINESS CHECKLIST</h3>
-  <div class="panel" id="checklist"></div>
+  <h3>PERSONAL READINESS // PROGRESS</h3>
+  <div class="panel">
+    <div id="prep-progress-label" class="muted">0 OF 12 ACTIONS COMPLETE</div>
+    <div class="prep-progress" role="progressbar" aria-label="Preparedness checklist completion" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><span id="prep-progress-fill"></span></div>
+    <div id="checklist"></div>
+  </div>
 
   <h3>OPERATIONAL NOTES</h3>
   <div class="panel">
@@ -756,62 +760,42 @@ function renderFeed() {
     : '<div class="panel muted">No matching intelligence records.</div>';
 }
 
+const SECTOR_GUIDES = [
+ {scope:"Government coordination, civil contingencies and national resilience.",watch:["cabinet office","resilience","civil contingencies","emergency planning","continuity","national risk","government response"],action:"Know your local council emergency information and how official instructions are issued."},
+ {scope:"Food production, imports, distribution, retail availability and agricultural disruption.",watch:["food","agriculture","farm","crop","livestock","fertiliser","fertilizer","grain","food standards","food supply","supermarket","port"],action:"Keep a modest rotating food reserve and note dietary, infant and pet requirements."},
+ {scope:"Oil, petrol, diesel, gas, electricity generation inputs and energy affordability.",watch:["fuel","oil","petrol","diesel","gas","energy","refinery","electricity","power station","heating","grid"],action:"Plan for heating and essential travel disruption; know safe alternatives and never use outdoor heaters indoors."},
+ {scope:"Medicines, chemicals, fertiliser, manufacturing inputs and critical materials.",watch:["medicine","medicines","pharma","pharmaceutical","chemical","chlorine","medical supply","shortage","industrial","fertiliser","fertilizer","helium","semiconductor"],action:"Maintain a lawful, sensible buffer of essential prescribed medicines through normal pharmacy arrangements."},
+ {scope:"Electricity, gas, drinking water, wastewater and utility network continuity.",watch:["electricity","power outage","blackout","grid","gas network","water","ni water","water supply","sewage","wastewater","utility","substation"],action:"Store drinking water in clean containers and know how to report power and water faults."},
+ {scope:"Roads, rail, ports, airports, freight, shipping and cross-channel links.",watch:["transport","traffic","road","rail","translink","port","harbour","harbor","airport","ferry","shipping","freight","logistics","bridge","closure"],action:"Identify an alternative route and keep essential journeys flexible during disruption."},
+ {scope:"Hospitals, primary care, public health, infectious disease and emergency services.",watch:["health","hospital","nhs","healthcare","public health","infection","outbreak","virus","disease","ambulance","pharmacy","uk hsa","ukhsa"],action:"Keep key health information, emergency contacts and routine medication details accessible."},
+ {scope:"Telecoms, internet, cyber incidents, data centres and digital infrastructure.",watch:["cyber","ransomware","malware","phishing","telecom","mobile network","broadband","internet outage","data breach","data centre","datacenter","digital","satellite"],action:"Use unique passwords and MFA, keep offline copies of key contacts and maintain a charged power bank."},
+ {scope:"Severe weather, flooding, wildfire, coastal hazards and environmental incidents.",watch:["weather","flood","storm","wind","snow","ice","heatwave","wildfire","coastal","met office","environment","landslide","drought"],action:"Check local flood and weather warnings and prepare a simple household plan for power or road disruption."},
+ {scope:"Household readiness, community support, civil defence and local response capacity.",watch:["preparedness","civil defence","community resilience","emergency response","volunteer","evacuation","shelter","emergency plan","resilience forum"],action:"Agree a household contact plan, meeting point and check-in arrangement with someone nearby."},
+ {scope:"International conflict, trade, sanctions, shipping chokepoints and overseas events affecting NI/UK.",watch:["war","conflict","military","missile","drone","sanction","ukraine","russia","iran","israel","gaza","red sea","hormuz","nato","geopolitical","trade disruption","blockade"],action:"Track the practical UK/NI transmission route: shipping, energy, prices, cyber risk or official travel advice."}
+];
+function sectorMatch(item,index){
+ const text=[item.title,item.summary,item.source,item.category,item.area].join(" ").toLowerCase();
+ const cat=String(item.category||"").toLowerCase();
+ if(cat&&SECTORS[index].toLowerCase().includes(cat))return true;
+ return SECTOR_GUIDES[index].watch.some(word=>text.includes(word));
+}
 function renderSections() {
-  const rawSections = intelligence.sections || {};
-
-  const dataSections = Array.isArray(rawSections)
-    ? rawSections
-    : Object.entries(rawSections).map(([name,value]) =>
-        typeof value === "object" && value !== null
-          ? {...value,title:value.title || name}
-          : {title:name,summary:value}
-      );
-
-  $("sector-list").innerHTML = SECTORS.map((name,index) => {
-    const sectorName = name.toLowerCase();
-
-    const match = dataSections.find(section => {
-      const title = asText(valueOf(
-        section,["title","name","category","sector"],""
-      )).toLowerCase();
-
-      return title && (
-        title.includes(sectorName) || sectorName.includes(title)
-      );
-    });
-
-    // FIX: category values are normalised to text before comparison.
-    const matchingArticles = articles.filter(item => {
-      const category = asText(item.category).toLowerCase();
-      return category && (
-        category.includes(sectorName) ||
-        sectorName.includes(category)
-      );
-    });
-
-    const summary = match
-      ? asText(valueOf(match,["summary","description","assessment","content","body"],""))
-      : "";
-
-    const records = matchingArticles.map(item => `
-      <div class="intel-card ${item.severity}">
-        <h3>${escapeHTML(item.title)}</h3>
-        <p>${escapeHTML(item.summary)}</p>
-        <div class="meta">${escapeHTML(item.source)}</div>
-        ${item.url ? `<a href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a>` : ""}
-      </div>
-    `).join("");
-
-    return `
-      <details class="section-card">
-        <summary>${String(index+1).padStart(2,"0")} // ${escapeHTML(name)}</summary>
-        <div class="section-body">
-          ${summary ? `<p>${escapeHTML(summary)}</p>` : ""}
-          ${records || '<p class="muted">No matching records currently available.</p>'}
-        </div>
-      </details>
-    `;
+ const rawSections=intelligence.sections||{};
+ const dataSections=Array.isArray(rawSections)?rawSections:Object.entries(rawSections).map(([name,value])=>typeof value==="object"&&value!==null?{...value,title:value.title||name}:{title:name,summary:value});
+ $("sector-list").innerHTML=SECTORS.map((name,index)=>{
+  const guide=SECTOR_GUIDES[index];
+  const match=dataSections.find(section=>{
+   const title=asText(valueOf(section,["title","name","category","sector"],"")).toLowerCase();
+   return title&&(title.includes(name.toLowerCase())||name.toLowerCase().includes(title));
+  });
+  const summary=match?asText(valueOf(match,["summary","description","assessment","content","body"],"")):"";
+  const records=articles.filter(item=>sectorMatch(item,index));
+  const cards=records.slice(0,18).map(item=>{
+   const link=item.url?'<a href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"";
+   return '<details class="intel-card '+item.severity+'"><summary>'+escapeHTML(item.title)+'</summary><div class="meta">'+escapeHTML(item.area)+' · '+escapeHTML(item.source)+' · '+escapeHTML(dateText(item.date))+'</div><p>'+escapeHTML(item.summary||"No additional description supplied.")+'</p>'+link+'</details>';
   }).join("");
+  return '<details class="section-card"><summary>'+String(index+1).padStart(2,"0")+' // '+escapeHTML(name)+' <span class="sector-count">'+records.length+' MATCHES</span></summary><div class="section-body"><p>'+escapeHTML(guide.scope)+'</p>'+(summary?'<p>'+escapeHTML(summary)+'</p>':"")+'<div class="warning"><strong>READINESS ACTION:</strong> '+escapeHTML(guide.action)+'</div><div class="meta">KEYWORD MATCHING IS A DISCOVERY AID, NOT A VERIFIED SECTOR CLASSIFICATION. UP TO 18 RECENT MATCHES SHOWN.</div>'+(cards||'<p class="muted">No matching records in the current archive. This is a coverage gap, not proof that the sector is risk-free.</p>')+'</div></details>';
+ }).join("");
 }
 
 function renderSources() {
@@ -825,19 +809,25 @@ function renderSources() {
 }
 
 function renderChecklist() {
-  $("checklist").innerHTML = CHECKS.map((item,index) => `
-    <label class="checkline">
-      <input type="checkbox" data-check="${index}" ${saved.checks[index] ? "checked" : ""}>
-      <span>${escapeHTML(item)}</span>
-    </label>
-  `).join("");
-
-  $("checklist").querySelectorAll("input").forEach(input => {
-    input.addEventListener("change",() => {
-      saved.checks[input.dataset.check] = input.checked;
-      saveSaved();
-    });
-  });
+ const groups=[
+  {name:"WATER & FOOD",items:[0,1]},
+  {name:"HEALTH & FIRST AID",items:[2,6]},
+  {name:"POWER & INFORMATION",items:[3,4,5]},
+  {name:"COMMUNICATION & DOCUMENTS",items:[7,10,11]},
+  {name:"MOBILITY & HOUSEHOLD",items:[8,9]}
+ ];
+ $("checklist").innerHTML=groups.map(group=>'<div class="prep-group"><h3>'+group.name+'</h3>'+group.items.map(index=>'<label class="checkline"><input type="checkbox" data-check="'+index+'" '+(saved.checks[index]?"checked":"")+'><span>'+escapeHTML(CHECKS[index])+'</span></label>').join("")+'</div>').join("");
+ $("checklist").querySelectorAll("input").forEach(input=>input.addEventListener("change",()=>{
+  saved.checks[input.dataset.check]=input.checked;saveSaved();updatePrepProgress();
+ }));
+ updatePrepProgress();
+}
+function updatePrepProgress(){
+ const complete=CHECKS.filter((item,index)=>!!saved.checks[index]).length;
+ const label=$("prep-progress-label"),fill=$("prep-progress-fill"),bar=document.querySelector('[role="progressbar"]');
+ if(label)label.textContent=complete+" OF "+CHECKS.length+" ACTIONS COMPLETE";
+ if(fill)fill.style.width=(complete/CHECKS.length*100)+"%";
+ if(bar)bar.setAttribute("aria-valuenow",String(complete));
 }
 
 function renderNotes() {
