@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
+from email.utils import parsedate_to_datetime
 from html import unescape
 
 ROOT = Path(__file__).resolve().parent
@@ -494,8 +495,8 @@ def main():
 
     intelligence["report"] = "\n".join(report_lines)
 
-    # Factual daily snapshot: recent collected records grouped by declared region.
-    # This is a source-led digest, not an automated assessment of threat or impact.
+    # Factual daily snapshot: only records published or collected in the last 48 hours.
+    # Official/high-priority source feeds are surfaced first, without implying incident severity.
     def brief_region(article):
         region = str(article.get("region", "")).strip().lower()
         if "northern ireland" in region or region == "ni":
@@ -508,42 +509,64 @@ def main():
             return "UK"
         return "UNKNOWN"
 
+    def brief_date(article):
+        for field in ("publishedAt", "collectedAt"):
+            value = article.get(field)
+            if not value:
+                continue
+            try:
+                parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+            except (ValueError, TypeError):
+                try:
+                    parsed = parsedate_to_datetime(str(value))
+                except (ValueError, TypeError, OverflowError):
+                    continue
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed.astimezone(timezone.utc)
+        return None
+
+    brief_cutoff = now() - timedelta(hours=48)
     grouped = {"NI": [], "UK": [], "INTERNATIONAL": [], "UNKNOWN": []}
     for article in intelligence["articles"]:
+        article_date = brief_date(article)
+        if article_date is None or article_date < brief_cutoff:
+            continue
         region = brief_region(article)
-        grouped[region].append(article)
+        grouped[region].append((article, article_date))
 
-    def brief_sort_key(article):
-        return str(article.get("publishedAt") or article.get("collectedAt") or "")
+    def brief_sort_key(record):
+        article, article_date = record
+        priority = str(article.get("priority", "medium")).lower()
+        priority_rank = {"high": 0, "medium": 1, "low": 2}.get(priority, 3)
+        return (priority_rank, -article_date.timestamp())
 
     brief_sections = []
     for region in ("NI", "UK", "INTERNATIONAL", "UNKNOWN"):
-        records = sorted(
-            grouped[region],
-            key=brief_sort_key,
-            reverse=True
-        )[:6]
+        records = sorted(grouped[region], key=brief_sort_key)[:6]
         brief_sections.append({
             "region": region,
             "recordCount": len(grouped[region]),
             "entries": [
                 {
-                    "title": str(item.get("title", "Untitled record"))[:300],
-                    "source": str(item.get("source", "Source not specified"))[:160],
-                    "url": str(item.get("url", "")),
-                    "publishedAt": item.get("publishedAt") or item.get("collectedAt", ""),
-                    "sector": item.get("domain"),
-                    "evidenceStatus": item.get("evidenceStatus", "UNASSESSED")
+                    "title": str(article.get("title", "Untitled record"))[:300],
+                    "source": str(article.get("source", "Source not specified"))[:160],
+                    "url": str(article.get("url", "")),
+                    "publishedAt": article.get("publishedAt") or article.get("collectedAt", ""),
+                    "sector": article.get("domain"),
+                    "sourcePriority": str(article.get("priority", "medium")).upper(),
+                    "evidenceStatus": article.get("evidenceStatus", "UNASSESSED")
                 }
-                for item in records
+                for article, article_date in records
             ]
         })
 
     intelligence["dailyBrief"] = {
         "generatedAt": iso(),
         "type": "FACTUAL_SOURCE_SNAPSHOT",
-        "disclaimer": "Recent feed records grouped by the region declared by each source. Inclusion is not confirmation of an incident, severity, or local impact. Open original sources and official advisories.",
-        "totalRecords": len(intelligence["articles"]),
+        "windowHours": 48,
+        "disclaimer": "Records published or collected within the last 48 hours, grouped by the region declared by each source. Higher-priority source feeds are listed first; this is not incident severity or confirmation of local impact. Open original sources and official advisories.",
+        "totalRecords": sum(len(items) for items in grouped.values()),
         "regions": brief_sections
     }
 
