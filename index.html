@@ -589,7 +589,7 @@ function renderStatus() {
   $("uk-status").textContent = uk.toUpperCase();
   $("article-count").textContent = articles.length;
 
-  const generated = valueOf(intelligence,["generatedAt","updatedAt","lastUpdated"],"");
+  const generated = valueOf(intelligence,["generatedAt","updatedAt","lastUpdated","collectorLastRun"],valueOf(intelligence.collector||{},["lastRun"],""));
   $("last-update").textContent = dateText(generated);
 
   $("report").textContent = asText(valueOf(
