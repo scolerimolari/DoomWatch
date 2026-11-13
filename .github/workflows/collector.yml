@@ -1,6 +1,16 @@
 name: DoomWatch Intelligence Collector
 
 "on":
+  push:
+    branches:
+      - main
+    paths:
+      - "collector.py"
+      - "feeds.json"
+      - "sources.json"
+      - "manifest.json"
+      - ".github/workflows/collector.yml"
+
   workflow_dispatch:
 
   schedule:
