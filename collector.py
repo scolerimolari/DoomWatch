@@ -165,9 +165,6 @@ def parse_gdacs_fallback(xml_data, source):
             or regex_tag(item, "updated")
         )
 
-        if not link:
-            link = child_text(element, {"guid", "id"})
-
         if not title or not link:
             continue
 
@@ -249,6 +246,9 @@ def parse_feed(xml_data, source):
 
                 if child.attrib.get("rel") == "alternate":
                     break
+
+        if not link:
+            link = child_text(element, {"guid", "id"})
 
         description = child_text(
             element,
