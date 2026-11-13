@@ -88,19 +88,34 @@ jobs:
       - name: Run DoomWatch collector
         run: python collector.py
 
-      - name: Save updated intelligence
+      - name: Save updated intelligence safely
         run: |
           git config user.name "DoomWatch Collector"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add data/intelligence.json
+          for attempt in 1 2 3; do
+            echo "Saving intelligence update, attempt $attempt"
 
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-          else
+            git add data/intelligence.json
+
+            if git diff --cached --quiet; then
+              echo "No intelligence data changes to commit."
+              exit 0
+            fi
+
             git commit -m "Update DoomWatch intelligence"
 
-            git pull --rebase origin main
+            if git pull --rebase origin main && git push origin HEAD:main; then
+              echo "Intelligence update committed successfully."
+              exit 0
+            fi
 
-            git push origin HEAD:main
-          fi
+            echo "Remote changed during collection. Refreshing data and retrying."
+            git rebase --abort || true
+            git fetch origin main
+            git reset --hard origin/main
+            python collector.py
+          done
+
+          echo "Unable to save intelligence after three attempts."
+          exit 1
