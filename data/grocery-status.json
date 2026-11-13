@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-13T12:54:35+00:00",
+  "generatedAt": "2026-11-13T12:57:44+00:00",
   "source": {
     "status": "ok",
-    "checkedAt": "2026-11-13T12:54:35+00:00",
+    "checkedAt": "2026-11-13T12:57:44+00:00",
     "url": "https://dev.to/yappman/comparing-uk-supermarket-prices-programmatically-tesco-sainsburys-asda-and-aldi-in-one-schema-4epi",
     "datasetUrl": "https://api.apify.com/v2/datasets/ynAT9NPps2EdjMOJa/items?format=json&limit=100000",
     "licence": "CC BY 4.0",
@@ -27,86 +27,8 @@
     "sainsburys": 59,
     "tesco": 58
   },
-  "sampleRows": [
-    {
-      "scrapedAt": "2026-11-13T05:30:08Z",
-      "date": "2026-11-13",
-      "retailer": "aldi",
-      "retailerProductId": "000000000000262344",
-      "ean": [],
-      "matchKey": "worldwide foods basmati rice 1000g",
-      "price": 1.79,
-      "wasPrice": null,
-      "loyaltyPrice": null,
-      "unitPrice": null,
-      "unitMeasure": "",
-      "packSize": "1kg",
-      "stock": null,
-      "source": "Yappman Data daily 212-item basket"
-    },
-    {
-      "scrapedAt": "2026-11-13T05:30:08Z",
-      "date": "2026-11-13",
-      "retailer": "aldi",
-      "retailerProductId": "000000000000267180",
-      "ean": [],
-      "matchKey": "natures pick bananas 5 each",
-      "price": 0.78,
-      "wasPrice": null,
-      "loyaltyPrice": null,
-      "unitPrice": null,
-      "unitMeasure": "",
-      "packSize": "5 each",
-      "stock": null,
-      "source": "Yappman Data daily 212-item basket"
-    },
-    {
-      "scrapedAt": "2026-11-13T05:30:08Z",
-      "date": "2026-11-13",
-      "retailer": "aldi",
-      "retailerProductId": "000000000000267186",
-      "ean": [],
-      "matchKey": "natures pick banana 1 each",
-      "price": 0.16,
-      "wasPrice": null,
-      "loyaltyPrice": null,
-      "unitPrice": null,
-      "unitMeasure": "",
-      "packSize": "1 each",
-      "stock": null,
-      "source": "Yappman Data daily 212-item basket"
-    },
-    {
-      "scrapedAt": "2026-11-13T05:30:08Z",
-      "date": "2026-11-13",
-      "retailer": "aldi",
-      "retailerProductId": "000000000000271500",
-      "ean": [],
-      "matchKey": "natures pick pink lady apples 6 each",
-      "price": 2.85,
-      "wasPrice": null,
-      "loyaltyPrice": null,
-      "unitPrice": null,
-      "unitMeasure": "",
-      "packSize": "6 each",
-      "stock": null,
-      "source": "Yappman Data daily 212-item basket"
-    },
-    {
-      "scrapedAt": "2026-11-13T05:30:08Z",
-      "date": "2026-11-13",
-      "retailer": "aldi",
-      "retailerProductId": "000000000000275529",
-      "ean": [],
-      "matchKey": "natures pick cherry tomatoes 330g",
-      "price": 0.89,
-      "wasPrice": 0.95,
-      "loyaltyPrice": null,
-      "unitPrice": null,
-      "unitMeasure": "",
-      "packSize": "330g",
-      "stock": null,
-      "source": "Yappman Data daily 212-item basket"
-    }
-  ]
+  "eanRows": 161,
+  "matchKeyRows": 50,
+  "sharedEanProductGroups": 2,
+  "sharedMatchKeyProductGroups": 0
 }
