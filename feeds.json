@@ -37,7 +37,7 @@
     {
       "id": "gdacs-global",
       "name": "Global Disaster Alert and Coordination System",
-      "url": "https://www.gdacs.org/contentdata/xml/rss_24h.xml",
+      "url": "https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH",
       "domain": 11,
       "region": "International",
       "priority": "medium",
