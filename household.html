@@ -549,32 +549,49 @@ function renderCrossRetailerComparison(rows){
  const body=document.getElementById("crossRetailerRows");
  const note=document.getElementById("crossRetailerNote");
  if(!body||!note)return;
- const groups=new Map();
+ const eanGroups=new Map(),matchGroups=new Map();
  rows.forEach(o=>{
   const raw=Array.isArray(o.ean)?o.ean:[o.ean];
-  const codes=[...new Set(raw.map(v=>String(v||"").replace(/\D/g,"")).filter(v=>v.length>=8&&v.length<=14))];
-  const identities=codes.map(code=>({key:"ean:"+code,label:code,method:"EAN"}));
-  if(!identities.length&&String(o.matchKey||"").trim())
-   identities.push({key:"match:"+String(o.matchKey).trim(),label:"Source match key",method:"Match key"});
+  const codes=[...new Set(raw.map(v=>String(v||"").replace(/\\D/g,"")).filter(v=>v.length>=8&&v.length<=14))];
   const price=number(o.price);
   if(price===null||price<=0)return;
-  identities.forEach(identity=>{
-   if(!groups.has(identity.key))groups.set(identity.key,{...identity,retailers:new Map()});
-   const group=groups.get(identity.key);
-   const retailer=String(o.retailer||"").toLowerCase();
-   const prior=group.retailers.get(retailer);
-   if(!prior||String(o.scrapedAt||"")>String(prior.scrapedAt||""))
-    group.retailers.set(retailer,{price,scrapedAt:o.scrapedAt||"",retailer});
+  const retailer=String(o.retailer||"").toLowerCase();
+  const entry={price,scrapedAt:o.scrapedAt||"",retailer,eans:codes};
+  codes.forEach(code=>{
+   if(!eanGroups.has(code))eanGroups.set(code,new Map());
+   const group=eanGroups.get(code),prior=group.get(retailer);
+   if(!prior||entry.scrapedAt>prior.scrapedAt)group.set(retailer,entry);
   });
+  const key=String(o.matchKey||"").trim();
+  if(key){
+   const folded=key.toLocaleLowerCase();
+   if(!matchGroups.has(folded))matchGroups.set(folded,{label:key,rows:[]});
+   matchGroups.get(folded).rows.push(entry);
+  }
  });
  const matches=[];
- groups.forEach(group=>{
-  if(group.retailers.size<2)return;
-  const values=Array.from(group.retailers.values());
-  const prices=values.map(v=>v.price);
-  const low=Math.min(...prices),high=Math.max(...prices);
-  matches.push({label:group.label,method:group.method,retailers:values.length,low,high,spread:high-low});
+ eanGroups.forEach((retailers,code)=>{
+  if(retailers.size<2)return;
+  const values=Array.from(retailers.values()),prices=values.map(v=>v.price);
+  matches.push({key:"ean:"+code,label:code,method:"Exact EAN",retailers:values.length,low:Math.min(...prices),high:Math.max(...prices)});
  });
+ matchGroups.forEach((group,key)=>{
+  const retailers=new Map();
+  group.rows.forEach(entry=>{
+   const prior=retailers.get(entry.retailer);
+   if(!prior||entry.scrapedAt>prior.scrapedAt)retailers.set(entry.retailer,entry);
+  });
+  if(retailers.size<2)return;
+  const values=Array.from(retailers.values());
+  const knownEans=new Set(values.flatMap(v=>v.eans));
+  // Never let a text key override two different known barcodes.
+  if(knownEans.size>1)return;
+  // If every retailer supplied the same EAN, the exact match above is enough.
+  if(knownEans.size===1&&values.every(v=>v.eans.length))return;
+  const prices=values.map(v=>v.price);
+  matches.push({key:"match:"+key,label:group.label,method:knownEans.size?"Source match key (EAN bridge)":"Source match key",retailers:values.length,low:Math.min(...prices),high:Math.max(...prices)});
+ });
+ matches.forEach(m=>m.spread=m.high-m.low);
  matches.sort((a,b)=>b.spread-a.spread);
  body.innerHTML=matches.length?matches.slice(0,25).map(m=>
   '<tr><td>'+escapeHtml(m.label)+'</td><td>'+escapeHtml(m.method)+'</td><td>'+
@@ -583,11 +600,11 @@ function renderCrossRetailerComparison(rows){
  ).join(""):'<tr><td colspan="6">No shared product identities across retailers in this snapshot.</td></tr>';
  const usable=rows.filter(o=>{
   const raw=Array.isArray(o.ean)?o.ean:[o.ean];
-  const hasEan=raw.some(v=>{const code=String(v||"").replace(/\D/g,"");return code.length>=8&&code.length<=14;});
+  const hasEan=raw.some(v=>{const code=String(v||"").replace(/\\D/g,"");return code.length>=8&&code.length<=14;});
   return hasEan||!!String(o.matchKey||"").trim();
  }).length;
  note.textContent=matches.length?
-  matches.length+" products matched across at least two retailers using exact EANs or source-provided match keys. Price differences do not adjust for promotions, loyalty eligibility or delivery charges.":
+  matches.length+" verified-key groups matched across at least two retailers. Exact EANs take priority; source match keys can bridge missing barcodes only when known barcodes do not conflict. Check pack size and unit price before treating unlike formats as equivalent.":
   "No cross-retailer comparisons published: "+usable+"/"+rows.length+" latest rows have a usable EAN or source match key. No retailer equivalence has been guessed.";
 }
 function renderDailyGroceryBasket(data){
