@@ -629,7 +629,8 @@ function renderDailyBrief() {
       return '<div class="intel-card unassessed">'+
         '<strong>'+escapeHTML(item.title || "Untitled record")+'</strong>'+
         '<div class="meta">'+escapeHTML(item.source || "Source not specified")+
-        ' // '+escapeHTML(dateText(item.publishedAt))+'</div>'+
+        ' // '+escapeHTML(dateText(item.publishedAt))+
+        ' // SOURCE PRIORITY: '+escapeHTML(item.sourcePriority || "UNSPECIFIED")+'</div>'+
         (link ? '<p><a href="'+escapeHTML(link)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL SOURCE ↗</a></p>' : '')+
         '</div>';
     }).join("") : '<div class="muted">No records in this region.</div>';
