@@ -473,7 +473,8 @@ def collect_bluesky_searches():
         ("supply-chain", "supply chain disruption shortage shipping"),
         ("northern-ireland", "Northern Ireland incident outage disruption"),
         ("conflict-shipping", "war conflict shipping disruption"),
-        ("fuel-food", "fuel shortage food supply shortage")
+        ("fuel-food", "fuel shortage food supply shortage"),
+        ("culture-society", "civil liberties protest censorship surveillance immigration")
     ]
     endpoint = "https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts"
     results, statuses = [], []
