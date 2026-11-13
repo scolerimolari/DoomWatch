@@ -761,6 +761,13 @@ function renderRumours() {
       <p>REPORTED: ${escapeHTML(item.source||"Source not recorded")}</p>
       <p>${escapeHTML(item.evidence||"No verification notes recorded.")}</p>
       <div class="meta">${escapeHTML(item.status||"UNVERIFIED")} // RECORDED ${escapeHTML(item.date)}</div>
+      <label>UPDATE ASSESSMENT</label>
+      <select data-rumour-status="${index}">
+        <option value="UNVERIFIED" ${!item.status||item.status==="UNVERIFIED"?"selected":""}>UNVERIFIED</option>
+        <option value="CORROBORATED" ${item.status==="CORROBORATED"?"selected":""}>CORROBORATED</option>
+        <option value="CONTRADICTED" ${item.status==="CONTRADICTED"?"selected":""}>CONTRADICTED</option>
+        <option value="DEBUNKED" ${item.status==="DEBUNKED"?"selected":""}>DEBUNKED</option>
+      </select>
       <button class="action-button" data-delete-rumour="${index}">DELETE</button>
     </div>
   `).join("") || '<p class="muted">No claims recorded.</p>';
@@ -896,6 +903,19 @@ $("save-rumour").addEventListener("click",() => {
   $("rumour-claim").value = "";
   $("rumour-source").value = "";
   $("rumour-evidence").value = "";
+});
+
+/* CLAIM ASSESSMENT UPDATES */
+
+document.addEventListener("change",event => {
+  if (event.target.dataset.rumourStatus !== undefined) {
+    const index=Number(event.target.dataset.rumourStatus);
+    if (!saved.rumours[index]) return;
+    saved.rumours[index].status=event.target.value;
+    saved.rumours[index].assessedAt=new Date().toLocaleString();
+    saveSaved();
+    renderRumours();
+  }
 });
 
 /* DELETE ACTIONS */
