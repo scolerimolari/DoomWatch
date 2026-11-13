@@ -549,7 +549,7 @@ function renderCrossRetailerComparison(rows){
  const body=document.getElementById("crossRetailerRows");
  const note=document.getElementById("crossRetailerNote");
  if(!body||!note)return;
- const eanGroups=new Map(),matchGroups=new Map(),namePackGroups=new Map();
+ const eanGroups=new Map(),matchGroups=new Map(),legacyMatchGroups=new Map(),namePackGroups=new Map();
  const retailerPrefix=/^(tesco|asda|sainsbury'?s|aldi|lidl)\s+/i;
  const ignored=new Set(["the","and","of","a","an","in","to","for"]);
  function packIdentity(o){
@@ -588,7 +588,12 @@ function renderCrossRetailerComparison(rows){
   const entry={price,scrapedAt:o.scrapedAt||"",retailer:String(o.retailer||"").toLowerCase(),eans:codes};
   codes.forEach(code=>addLatest(eanGroups,code,entry));
   const sourceKey=String(o.matchKey||"").trim().toLowerCase();
-  if(sourceKey)addLatest(matchGroups,sourceKey,entry);
+  const basis=String(o.matchBasis||"").trim().toLowerCase();
+  const confidence=number(o.matchConfidence);
+  const sourceEligible=(confidence===null||confidence>=0.90)&&basis!=="name";
+  if(sourceKey&&sourceEligible)addLatest(matchGroups,sourceKey,entry);
+  const legacyKey=String(o.matchKeyV1||"").trim().toLowerCase();
+  if(legacyKey&&sourceEligible)addLatest(legacyMatchGroups,legacyKey,entry);
   const nameKey=nameIdentity(o);
   if(nameKey)addLatest(namePackGroups,nameKey,entry);
  });
@@ -610,6 +615,7 @@ function renderCrossRetailerComparison(rows){
  }
  addGroups(eanGroups,"Exact EAN");
  addGroups(matchGroups,"Source match key");
+ addGroups(legacyMatchGroups,"Legacy source match key (V1)");
  addGroups(namePackGroups,"Name + pack (strict)");
  const unique=new Map();
  matches.forEach(m=>{
@@ -630,7 +636,7 @@ function renderCrossRetailerComparison(rows){
    !!String(o.matchKey||"").trim();
  }).length;
  note.textContent=finalMatches.length?
-  finalMatches.length+" comparison groups found. Matching uses exact EANs, source match keys, then strict name-token + normalised pack-size identity. Name-and-pack matches require matching descriptive tokens and the same pack quantity; they are candidate like-for-like comparisons, not proof of identical ingredients or quality. Promotions, loyalty eligibility and delivery charges are not adjusted.":
+  finalMatches.length+" comparison groups found. Matching uses exact EANs, eligible current and legacy source match keys, then strict name-token + normalised pack-size identity. Name-and-pack matches require matching descriptive tokens and the same pack quantity; they are candidate like-for-like comparisons, not proof of identical ingredients or quality. Promotions, loyalty eligibility and delivery charges are not adjusted.":
   "No cross-retailer comparisons published: "+usable+"/"+rows.length+" latest rows have an EAN or source match key. No retailer equivalence has been guessed.";
 }
 function renderDailyGroceryBasket(data){
