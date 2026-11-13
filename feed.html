@@ -46,6 +46,15 @@
 <h2>EMERGING TOPICS // MENTION FREQUENCY</h2>
 <div class="panel"><div class="muted">Counts are from records collected in the last 72 hours. They indicate attention, not threat level or truth.</div><div class="trend-list" id="trends" style="margin-top:10px"></div></div>
 <h2>SEARCH & FILTER</h2>
+<div class="muted" style="margin:0 0 7px">SOURCE CLASS // WHO IS PUBLISHING?</div>
+<div class="controls" id="source-filters">
+<button class="active" data-source="ALL" aria-pressed="true">ALL SOURCES</button>
+<button data-source="OFFICIAL" aria-pressed="false">OFFICIAL</button>
+<button data-source="MEDIA" aria-pressed="false">NEWS / MEDIA</button>
+<button data-source="SOCIAL" aria-pressed="false">SOCIAL</button>
+<button data-source="NI" aria-pressed="false">NORTHERN IRELAND</button>
+</div>
+<div class="muted" style="margin:12px 0 7px">TOPIC // WHAT IS THE SIGNAL ABOUT?</div>
 <div class="controls" id="feed-filters">
 <button class="active" data-filter="ALL" aria-pressed="true">ALL SIGNALS</button>
 <button data-filter="SOCIAL" aria-pressed="false">SOCIAL POSTS</button>
@@ -55,7 +64,7 @@
 <button data-filter="LOCAL" aria-pressed="false">NI / LOCAL</button>
 <button data-filter="SOCIETY" aria-pressed="false">CULTURE / SOCIETY</button>
 </div>
-<input id="feed-search" type="search" placeholder="Search terms, locations, sources or claims…">
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="feed-search" type="search" placeholder="Search terms, locations, sources or claims…" style="flex:1;min-width:180px"><button type="button" class="action-button" id="feed-clear">CLEAR SEARCH</button></div>
 <div class="panel muted" id="feed-status" aria-live="polite">CONNECTING TO SIGNAL ARCHIVE…</div>
 <h2>LIVE SIGNAL STREAM</h2>
 <div class="feed-list" id="feed-items"></div>
@@ -76,9 +85,15 @@ LOCAL:["northern ireland","belfast","derry","londonderry","newtownabbey","ballyc
 SOCIETY:["protest","riot","immigration","migration","election","censorship","surveillance","digital id","culture war","gender","free speech","civil liberties","community tension","disinformation"]
 };
 const labels={CYBER:"CYBER / DIGITAL",SUPPLY:"SUPPLY CHAIN",CONFLICT:"WAR / CONFLICT",LOCAL:"NI / LOCAL",SOCIETY:"CULTURE / SOCIETY"};
-let articles=[],active="ALL",rendered=[],collectorRun="",lastSeen="",watchTimer=null;
+let articles=[],active="ALL",activeSource="ALL",rendered=[],collectorRun="",lastSeen="",watchTimer=null;
 function hits(a,key){const t=textOf(a);return topics[key].some(w=>t.includes(w));}
-function matches(a){if(active==="ALL")return true;if(active==="SOCIAL")return social(a);return hits(a,active);}
+function matches(a){
+ if(activeSource==="SOCIAL"&&!social(a))return false;
+ if(activeSource==="OFFICIAL"&&String(a.sourceTrust||"").toLowerCase()!=="official_primary_source")return false;
+ if(activeSource==="MEDIA"&&!/established_media|mainstream_media|international_media/i.test(String(a.sourceTrust||"")+" "+String(a.sourceType||"")))return false;
+ if(activeSource==="NI"&&!/northern ireland|\bni\b/i.test(String(a.region||"")))return false;
+ if(active==="ALL")return true;if(active==="SOCIAL")return social(a);return hits(a,active);
+}
 function render(){
  const q=$("feed-search").value.trim().toLowerCase();
  const list=articles.filter(a=>matches(a)&&(!q||textOf(a).includes(q)||String(a.source||"").toLowerCase().includes(q))).slice(0,300);
@@ -89,7 +104,7 @@ function render(){
   const link=a.url&&/^https?:\/\//i.test(a.url)?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL POST / REPORT ↗</a>':'<span class="muted">No valid source link</span>';
   return '<details class="feed-item '+(socialPost?"social":"")+'"><summary><strong>'+esc(a.title||"Untitled signal")+'</strong><div class="meta">'+esc(a.source||"Source not supplied")+' · '+esc(date(a.publishedAt||a.collectedAt))+'</div></summary><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+'<div style="margin-top:10px"><button type="button" class="action-button" data-flag="'+index+'">SAVE TO RUMOUR MONITOR</button></div></details>';
  }).join("")||'<div class="panel muted">No records match this filter and search. Try another topic or clear the search.</div>';
- $("feed-status").textContent="SHOWING "+list.length+" OF "+articles.length+" MATCHING RECORDS // FILTER: "+active+" // KEYWORD CLASSIFICATION IS AUTOMATED AND MAY MISS CONTEXT.";
+ $("feed-status").textContent="SHOWING "+list.length+" OF "+articles.length+" RECORDS // SOURCE: "+activeSource+" // TOPIC: "+active+" // KEYWORD CLASSIFICATION IS AUTOMATED AND MAY MISS CONTEXT.";
 }
 function renderTrends(){
  const cutoff=Date.now()-72*60*60*1000,recent=articles.filter(a=>{const d=new Date(a.publishedAt||a.collectedAt||0).getTime();return Number.isFinite(d)&&d>=cutoff;});
@@ -151,6 +166,8 @@ $("feed-items").addEventListener("click",event=>{
 });
 document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{active=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});render();}));
 $("feed-search").addEventListener("input",render);
+$("feed-clear").addEventListener("click",()=>{$("feed-search").value="";render();$("feed-search").focus();});
+document.querySelectorAll("[data-source]").forEach(b=>b.addEventListener("click",()=>{activeSource=b.dataset.source;document.querySelectorAll("[data-source]").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});render();}));
 $("watch-refresh").addEventListener("click",()=>load());
 $("watch-ack").addEventListener("click",()=>{
  try{localStorage.setItem("doomwatch-feed-last-seen-v1",String(Date.now()));}
