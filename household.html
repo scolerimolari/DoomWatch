@@ -580,7 +580,7 @@ function renderCrossRetailerComparison(rows){
  ).join(""):'<tr><td colspan="5">No shared valid barcodes across retailers in this snapshot.</td></tr>';
  note.textContent=matches.length?
   matches.length+" shared barcodes matched across at least two retailers. Exact EAN is the equivalence test; this does not adjust for promotions, loyalty eligibility or delivery charges.":
-  "No cross-retailer comparisons published: the latest feed does not contain enough shared valid barcodes. No retailer equivalence has been guessed.";
+  "No cross-retailer comparisons published: "+rows.filter(o=>{const raw=Array.isArray(o.ean)?o.ean:[o.ean];return raw.some(v=>{const code=String(v||"").replace(/\\D/g,"");return code.length>=8&&code.length<=14;});}).length+"/"+rows.length+" latest rows have a usable barcode. No retailer equivalence has been guessed.";
 }
 
 function renderDailyGroceryBasket(data){
@@ -630,7 +630,14 @@ function renderDailyGroceryBasket(data){
   " • "+history.length.toLocaleString("en-GB")+" historical observations stored";
  note.textContent=(comparable?"Historical comparisons use each product’s most recent earlier dated observation, not necessarily the immediately preceding calendar day. ":"Price history is building; previous-price comparisons will appear as subsequent daily snapshots arrive. ")+"Prices are online shelf snapshots. Loyalty prices are shown separately and may require a retailer loyalty card. Source: Yappman Data, UK Daily 212-Item Basket, CC BY 4.0. Product IDs and barcodes identify records; they are not product descriptions.";
  const counts={};
- dailyBasketLatestRows.forEach(o=>{const r=String(o.retailer||"unknown").toLowerCase();counts[r]=(counts[r]||0)+1;});
+ let barcodeRows=0;
+ dailyBasketLatestRows.forEach(o=>{
+  const r=String(o.retailer||"unknown").toLowerCase();
+  counts[r]=(counts[r]||0)+1;
+  const raw=Array.isArray(o.ean)?o.ean:[o.ean];
+  if(raw.some(v=>{const code=String(v||"").replace(/\\D/g,"");return code.length>=8&&code.length<=14;}))
+   barcodeRows++;
+ });
  const expected=212;
  const retailerNames={aldi:"Aldi",asda:"Asda",sainsburys:"Sainsbury's",tesco:"Tesco"};
  const breakdown=Object.entries(counts).sort((a,b)=>a[0].localeCompare(b[0])).map(([k,v])=>
@@ -638,7 +645,8 @@ function renderDailyGroceryBasket(data){
  ).join(" • ");
  coverage.textContent="Coverage: "+dailyBasketLatestRows.length+" of "+expected+
   " expected basket rows ("+(dailyBasketLatestRows.length/expected*100).toFixed(1)+
-  "%) • "+breakdown+". Missing or unreturned rows are not treated as out of stock.";
+  "%) • "+breakdown+" • usable barcode on "+barcodeRows+"/"+dailyBasketLatestRows.length+
+  " rows. Missing or unreturned rows are not treated as out of stock.";
  renderDailyBasketRows();
 }
 
