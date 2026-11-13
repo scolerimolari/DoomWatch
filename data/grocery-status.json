@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-13T13:19:22+00:00",
+  "generatedAt": "2026-11-13T13:25:50+00:00",
   "source": {
     "status": "ok",
-    "checkedAt": "2026-11-13T13:19:22+00:00",
+    "checkedAt": "2026-11-13T13:25:49+00:00",
     "url": "https://dev.to/yappman/comparing-uk-supermarket-prices-programmatically-tesco-sainsburys-asda-and-aldi-in-one-schema-4epi",
     "datasetUrl": "https://api.apify.com/v2/datasets/ynAT9NPps2EdjMOJa/items?format=json&limit=100000",
     "licence": "CC BY 4.0",
