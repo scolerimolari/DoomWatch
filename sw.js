@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "doomwatch-v2";
+const CACHE_NAME = "doomwatch-v3";
 
 const APP_FILES = [
   "./",
