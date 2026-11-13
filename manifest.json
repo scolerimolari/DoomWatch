@@ -6,8 +6,8 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#07110f",
-  "theme_color": "#10251f",
+  "background_color": "#0b0d0c",
+  "theme_color": "#111714",
   "categories": [
     "news",
     "utilities",
@@ -15,7 +15,7 @@
   ],
   "icons": [
     {
-      "src": "icon.svg",
+      "src": "containment.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"

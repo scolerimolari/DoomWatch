@@ -55,6 +55,7 @@ main{padding:10px}
 .card .price{font-size:18px}
 }
 </style>
+<link rel="stylesheet" href="./doomwatch.css">
 </head>
 
 <body>
@@ -480,7 +481,7 @@ function renderStocks(){
 }
 
 // --------------------------------------------------
-// WEEKLY GROCERY INDEX - EXTERNAL PUBLIC DATA
+// AGGREGATE WEEKLY SUPERMARKET INDEX
 // --------------------------------------------------
 
 const RETAILER_NAMES={
@@ -793,9 +794,9 @@ function renderStatus(){
  Crypto assets: ${displayItems(D.crypto).length}<br>
  Currencies: ${displayItems(D.fx).length}<br>
  Stocks: ${displayItems(D.stocks).length}<br>
- Heating oil products: ${(oil.items||[]).length}<br>
+ Heating oil series: ${(oil.items||[]).length}<br>
  Heating oil history: ${(oil.items||[]).reduce((n,i)=>n+(i.history||[]).length,0)}<br>
- Road fuel products: ${(fuel.items||[]).length}<br>
+ Road fuel series: ${(fuel.items||[]).length}<br>
  Road fuel history: ${(fuel.items||[]).reduce((n,i)=>n+(i.history||[]).length,0)}<br>
  Grocery data: aggregate index and official inflation only<br>
  Food inflation observations: ${(basket.foodInflationHistory||[]).length}<br>
@@ -843,8 +844,7 @@ async function load(){
  }
 }
 
-// Load the independent weekly grocery feed.
-// Failure here does not stop the main DoomWatch markets page.
+// Load the local aggregate index with the rest of the markets data.
 load();
 
 let resizeTimer;
@@ -858,22 +858,6 @@ window.addEventListener("resize",()=>{
   if(GROCERY.length)renderGroceryIndex();
  },200);
 });
-</script>
- <a href="./index.html" style="
-position:fixed;
-top:12px;
-right:12px;
-z-index:99999;
-background:#252b23;
-color:#d9e5c9;
-border:1px solid #71845e;
-padding:10px 16px;
-border-radius:6px;
-font-weight:bold;
-font-size:13px;
-text-decoration:none;
-">
-← HOME
- </a>
+</script><script src="./doomwatch-ui.js"></script>
 </body>
 </html>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+<title id="title">DoomWatch containment unit</title><desc id="desc">Original red industrial containment emblem with concentric locking rings and a central energy core.</desc>
+<defs><linearGradient id="red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff6557"/><stop offset=".48" stop-color="#bd2424"/><stop offset="1" stop-color="#541313"/></linearGradient><radialGradient id="steel"><stop stop-color="#f0e7d2"/><stop offset=".55" stop-color="#8c9188"/><stop offset="1" stop-color="#252d28"/></radialGradient></defs>
+<rect x="8" y="8" width="240" height="240" rx="34" fill="#111713" stroke="#c8a56c" stroke-width="5"/>
+<path d="M25 54H231M25 202H231" stroke="#7d2420" stroke-width="8"/>
+<circle cx="128" cy="128" r="88" fill="#1a211d" stroke="url(#red)" stroke-width="17"/><circle cx="128" cy="128" r="68" fill="none" stroke="#d7c6a0" stroke-width="3" stroke-dasharray="7 7"/>
+<circle cx="128" cy="128" r="49" fill="#080d0a" stroke="#8c958b" stroke-width="8"/><circle cx="128" cy="128" r="34" fill="url(#red)" stroke="#f2d7c3" stroke-width="3"/>
+<path d="M128 91V165M91 128H165M102 102L154 154M154 102L102 154" stroke="#fff0df" stroke-width="6" stroke-linecap="round"/><circle cx="128" cy="128" r="11" fill="#fff1d4" stroke="#641615" stroke-width="4"/>
+<path d="M48 37h28m104 0h28M48 219h28m104 0h28" stroke="#e5c78f" stroke-width="5" stroke-linecap="round"/>
+<circle cx="34" cy="34" r="6" fill="#e3c28b"/><circle cx="222" cy="34" r="6" fill="#e3c28b"/><circle cx="34" cy="222" r="6" fill="#e3c28b"/><circle cx="222" cy="222" r="6" fill="#e3c28b"/>
+</svg>
