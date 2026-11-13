@@ -375,17 +375,18 @@ def main():
             articles, content_type = fetch_feed(source)
             collected.extend(articles)
 
+            feed_state = "OK" if articles else "EMPTY"
             source_status.append({
                 "id": source["id"],
                 "name": source["name"],
-                "status": "OK",
+                "status": feed_state,
                 "checkedAt": iso(),
                 "articleCount": len(articles),
                 "contentType": content_type
             })
 
             print(
-                "OK:",
+                feed_state + ":",
                 source["name"],
                 "-",
                 len(articles),
@@ -448,7 +449,11 @@ def main():
         "configuredFeeds": len(feeds),
         "successfulFeeds": sum(
             1 for item in source_status
-            if item["status"] == "OK"
+            if item["status"] in ("OK", "EMPTY")
+        ),
+        "emptyFeeds": sum(
+            1 for item in source_status
+            if item["status"] == "EMPTY"
         ),
         "failedFeeds": sum(
             1 for item in source_status
@@ -465,6 +470,7 @@ def main():
         "COLLECTION SUMMARY // FACTUAL STATUS ONLY",
         "Last collection: " + intelligence["collector"]["lastRun"],
         "Sources reporting successfully: " + str(intelligence["collector"]["successfulFeeds"]) + " of " + str(intelligence["collector"]["configuredFeeds"]),
+        "Sources reporting empty feeds: " + str(intelligence["collector"]["emptyFeeds"]),
         "Sources reporting failure: " + str(intelligence["collector"]["failedFeeds"]),
         "New feed records collected this run: " + str(intelligence["collector"]["newArticles"]),
         "Records retained in the 90-day intelligence window: " + str(intelligence["collector"]["retainedArticles"]),
@@ -473,7 +479,7 @@ def main():
     failed_names = [
         item.get("name", item.get("id", "Unknown source"))
         for item in source_status
-        if item.get("status") != "OK"
+        if item.get("status") == "FAILED"
     ]
 
     if failed_names:
