@@ -580,7 +580,7 @@ function renderCrossRetailerComparison(rows){
  ).join(""):'<tr><td colspan="5">No shared valid barcodes across retailers in this snapshot.</td></tr>';
  note.textContent=matches.length?
   matches.length+" shared barcodes matched across at least two retailers. Exact EAN is the equivalence test; this does not adjust for promotions, loyalty eligibility or delivery charges.":
-  "No cross-retailer comparisons published: "+rows.filter(o=>{const raw=Array.isArray(o.ean)?o.ean:[o.ean];return raw.some(v=>{const code=String(v||"").replace(/\\D/g,"");return code.length>=8&&code.length<=14;});}).length+"/"+rows.length+" latest rows have a usable barcode. No retailer equivalence has been guessed.";
+  "No cross-retailer comparisons published: "+rows.filter(o=>{const raw=Array.isArray(o.ean)?o.ean:[o.ean];return raw.some(v=>{const code=String(v||"").replace(/\D/g,"");return code.length>=8&&code.length<=14;});}).length+"/"+rows.length+" latest rows have a usable barcode. No retailer equivalence has been guessed.";
 }
 
 function renderDailyGroceryBasket(data){
@@ -635,7 +635,7 @@ function renderDailyGroceryBasket(data){
   const r=String(o.retailer||"unknown").toLowerCase();
   counts[r]=(counts[r]||0)+1;
   const raw=Array.isArray(o.ean)?o.ean:[o.ean];
-  if(raw.some(v=>{const code=String(v||"").replace(/\\D/g,"");return code.length>=8&&code.length<=14;}))
+  if(raw.some(v=>{const code=String(v||"").replace(/\D/g,"");return code.length>=8&&code.length<=14;}))
    barcodeRows++;
  });
  const expected=212;
