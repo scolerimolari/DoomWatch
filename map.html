@@ -34,6 +34,7 @@
 <button data-filter="WEATHER" aria-pressed="false">WEATHER</button>
 <button data-filter="EMERGENCY" aria-pressed="false">EMERGENCY</button>
 <button data-filter="OTHER" aria-pressed="false">OTHER</button>
+<button type="button" id="map-refresh">REFRESH ARCHIVE</button>
 </div>
 <label class="map-search-label" for="map-search">SEARCH LOCAL REPORTS</label>
 <input id="map-search" type="search" placeholder="Search town, incident, source or article…" autocomplete="off">
@@ -143,6 +144,7 @@ async function load(){try{const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"
 initMap();
 document.querySelectorAll("#map-filters [data-filter]").forEach(b=>b.addEventListener("click",()=>{active=b.dataset.filter;document.querySelectorAll("#map-filters [data-filter]").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});render();}));
 $("map-search").addEventListener("input",event=>{searchTerm=String(event.target.value||"").trim().toLowerCase();render();});
+$("map-refresh").addEventListener("click",()=>{ $("map-status").textContent="REFRESHING INTELLIGENCE ARCHIVE…";load(); });
 async function load(){try{const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();records=(Array.isArray(d.articles)?d.articles:[]).filter(isNI).sort((a,b)=>new Date(b.publishedAt||b.collectedAt||0)-new Date(a.publishedAt||a.collectedAt||0));render();}catch(e){$("map-status").textContent="INTELLIGENCE LINK FAILED // "+e.message;$("map-list-status").textContent="The intelligence archive could not be loaded. Try again when the data link is restored.";}}
 load();
 </script>
