@@ -29,6 +29,12 @@ canvas{width:100%;height:180px;display:block;margin-top:8px}
 .item strong{color:var(--text)}
 .warning{color:var(--amber)}
 .good{color:var(--green)}
+.tablewrap{overflow:auto;max-height:520px;margin-top:12px;border:1px solid var(--line);border-radius:5px}
+table{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap}
+th,td{padding:9px 8px;text-align:left;border-bottom:1px solid var(--line)}
+th{position:sticky;top:0;background:var(--panel2);color:var(--green)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.controls input,.controls select{min-width:0;flex:1;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:5px;padding:10px;font-size:12px}
 footer{padding:20px 14px;color:var(--muted);font-size:11px;text-align:center}
 </style>
 </head>
@@ -109,6 +115,30 @@ footer{padding:20px 14px;color:var(--muted);font-size:11px;text-align:center}
 <canvas id="shelfIndexChart"></canvas>
 <div class="grid" id="shelfRetailers" style="margin-top:12px"></div>
 <div class="small" id="shelfIndexNote">No published weekly index loaded.</div>
+</section>
+
+<section class="card wide">
+<h2>DAILY 212-ITEM SUPERMARKET PRICE TRACKER</h2>
+<div class="small">Dated product-level online shelf-price snapshots from Tesco, Sainsbury's, Asda and Aldi. Prices are not live checkout quotes. Product names and retailer descriptions are not reproduced; records are identified by retailer product ID and barcode.</div>
+<div class="metric" id="dailyBasketCount">—</div>
+<div class="small" id="dailyBasketDate">Waiting for daily product price data</div>
+<div class="controls">
+<input id="dailyBasketSearch" type="search" placeholder="Search retailer ID or barcode" oninput="renderDailyBasketRows()">
+<select id="dailyBasketRetailer" onchange="renderDailyBasketRows()">
+<option value="">All retailers</option>
+<option value="tesco">Tesco</option>
+<option value="sainsburys">Sainsbury's</option>
+<option value="asda">Asda</option>
+<option value="aldi">Aldi</option>
+</select>
+</div>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Retailer</th><th>Product ID / EAN</th><th>Shelf</th><th>Was</th><th>Loyalty</th><th>Unit price</th></tr></thead>
+<tbody id="dailyBasketRows"><tr><td colspan="6">No daily product prices loaded.</td></tr></tbody>
+</table>
+</div>
+<div class="small" id="dailyBasketNote" style="margin-top:10px">Source: Yappman Data, UK Daily 212-Item Basket, CC BY 4.0.</div>
 </section>
 
 <section class="card wide">
@@ -297,6 +327,60 @@ function renderSupermarketIndex(data){
   ". Source: Yappman Data, UK Online Shelf-Price Index, CC BY 4.0. Online shelf prices only; not CPI or prices paid. See data.yappman.com/shelf-price-index.";
 }
 
+let dailyBasketLatestRows=[];
+function renderDailyBasketRows(){
+ const body=document.getElementById("dailyBasketRows");
+ if(!body)return;
+ const query=(document.getElementById("dailyBasketSearch").value||"").trim().toLowerCase();
+ const retailer=document.getElementById("dailyBasketRetailer").value||"";
+ const filtered=dailyBasketLatestRows.filter(o=>{
+  const codes=Array.isArray(o.ean)?o.ean.join(" "):text(o.ean);
+  const hay=[o.retailer,o.retailerProductId,codes].join(" ").toLowerCase();
+  return (!retailer||o.retailer===retailer)&&(!query||hay.includes(query));
+ });
+ if(!filtered.length){
+  body.innerHTML='<tr><td colspan="6">No matching product price rows.</td></tr>';
+  return;
+ }
+ body.innerHTML=filtered.map(o=>{
+  const codes=Array.isArray(o.ean)?o.ean.filter(Boolean).join(", "):text(o.ean);
+  const identity=escapeHtml(String(o.retailerProductId||"—"))+
+   (codes?' <span class="small">/ '+escapeHtml(codes)+'</span>':'');
+  const unit=o.unitPrice===null||o.unitPrice===undefined?"—":
+   money(number(o.unitPrice))+(o.unitMeasure?" / "+escapeHtml(o.unitMeasure):"");
+  return '<tr><td>'+escapeHtml(o.retailer)+'</td><td>'+identity+
+   '</td><td>'+money(number(o.price))+'</td><td>'+
+   money(number(o.wasPrice))+'</td><td>'+
+   money(number(o.loyaltyPrice))+'</td><td>'+unit+'</td></tr>';
+ }).join("");
+}
+function renderDailyGroceryBasket(data){
+ const basket=data.householdBasket||{};
+ const history=allObjects(basket.dailyProductPriceHistory);
+ const count=document.getElementById("dailyBasketCount");
+ const date=document.getElementById("dailyBasketDate");
+ const note=document.getElementById("dailyBasketNote");
+ if(!history.length){
+  count.textContent="—";
+  date.textContent="No dated product-level price history available.";
+  note.textContent="The daily basket has not yet been imported.";
+  dailyBasketLatestRows=[];
+  renderDailyBasketRows();
+  return;
+ }
+ const latestDate=String(basket.dailyProductPriceLatestDate||
+  history.map(o=>o.date||String(o.scrapedAt||"").slice(0,10)).sort().slice(-1)[0]||"");
+ dailyBasketLatestRows=history.filter(o=>
+  String(o.date||String(o.scrapedAt||"").slice(0,10))===latestDate
+ ).sort((a,b)=>String(a.retailer).localeCompare(String(b.retailer))||
+  String(a.retailerProductId).localeCompare(String(b.retailerProductId)));
+ count.textContent=dailyBasketLatestRows.length+" product price rows";
+ date.textContent="Latest snapshot: "+latestDate+
+  " • "+history.length.toLocaleString("en-GB")+" historical observations stored";
+ note.textContent="Prices are online shelf snapshots. Loyalty prices are shown separately and may require a retailer loyalty card. Source: Yappman Data, UK Daily 212-Item Basket, CC BY 4.0. Product IDs and barcodes identify records; they are not product descriptions.";
+ renderDailyBasketRows();
+}
+
 function renderOil(data){
  const oil=data.heatingOil||{};
  const arr=allObjects(oil.items);
@@ -359,6 +443,7 @@ async function load(){
   renderFuel(data);
   renderProducts(data);
   renderSupermarketIndex(data);
+  renderDailyGroceryBasket(data);
   renderSources(data);
   status.textContent="DATA LINK ACTIVE • Updated "+(data.updatedAt||data.generatedAt||"timestamp not supplied");
  }catch(e){
