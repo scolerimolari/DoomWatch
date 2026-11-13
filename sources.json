@@ -157,7 +157,7 @@
       ],
       "trust": "unverified_social",
       "status": "active",
-      "notes": "Public Bluesky search API queried by the collector for cyber incidents, supply-chain disruption, Belfast and Northern Ireland occurrences, conflict and shipping, fuel/food supply chatter, culture-war discussion and civil liberties. Posts are unverified signals; query coverage is limited and subject to platform availability and rate limits."
+      "notes": "Public Bluesky search API queried for cyber incidents, supply-chain disruption, Belfast and NI occurrences, Newtownabbey, Ballyclare, NI utilities, ports and freight, conflict and shipping, fuel/food supply chatter, culture-war discussion and civil liberties. Posts are unverified signals; query coverage is limited and subject to platform availability and rate limits."
     },
     {
       "id": "mastodon-public",
