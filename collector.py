@@ -755,7 +755,23 @@ def main():
 
     brief_sections = []
     for region in ("NI", "UK", "INTERNATIONAL", "UNKNOWN"):
-        records = sorted(grouped[region], key=brief_sort_key)[:6]
+        ranked_records = sorted(grouped[region], key=brief_sort_key)
+        records = []
+        source_counts = {}
+        for record in ranked_records:
+            article = record[0]
+            source_key = str(
+                article.get("sourceId")
+                or article.get("source")
+                or "unknown"
+            )
+            if source_counts.get(source_key, 0) >= 2:
+                continue
+            records.append(record)
+            source_counts[source_key] = source_counts.get(source_key, 0) + 1
+            if len(records) >= 6:
+                break
+
         brief_sections.append({
             "region": region,
             "recordCount": len(grouped[region]),
