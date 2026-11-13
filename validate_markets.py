@@ -101,7 +101,7 @@ def main():
         if record_type not in ALLOWED_INDEX_RECORD_TYPES:
             fail(f"Unsupported supermarket recordType at row {index}: {record_type!r}")
         vintage = record.get("vintage")
-        if not isinstance(vintage, str) or not re.fullmatch(r"20\\d{2}-W\\d{2}", vintage):
+        if not isinstance(vintage, str) or not re.fullmatch(r"20\d{2}-W\d{2}", vintage):
             fail(f"Invalid supermarket vintage at row {index}")
         level = record.get("level")
         if isinstance(level, bool) or not isinstance(level, (int, float)) or not math.isfinite(level):
