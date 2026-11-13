@@ -23,6 +23,19 @@
 <header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">FEED // OPEN SOURCE SIGNAL MONITOR</div></div><div class="classification">UNVERIFIED SIGNALS</div></div></header>
 <main>
 <h2>FEED // SOCIAL & OPEN-SOURCE SIGNALS</h2>
+<section class="panel" id="watch-desk" style="margin-top:12px;border:1px solid #b64d3d;border-left:5px solid #d65a45">
+ <div style="display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap">
+  <div><div class="muted">IN-APP MONITOR // LOCAL WATCH DESK</div><h3 style="margin:5px 0;color:#f0d28e">NEW SIGNALS SINCE YOUR LAST CHECK</h3></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="action-button" id="watch-refresh">CHECK NOW</button><button type="button" class="action-button" id="watch-ack">MARK REVIEWED</button></div>
+ </div>
+ <div class="signal-grid" style="margin-top:10px">
+  <div class="signal-stat"><span class="muted">NEW RECORDS</span><strong id="watch-new-count">—</strong></div>
+  <div class="signal-stat"><span class="muted">WATCH TOPICS</span><strong id="watch-topic-count">—</strong></div>
+  <div class="signal-stat"><span class="muted">LAST CHECK</span><strong id="watch-last-check" style="font-size:13px">FIRST VISIT</strong></div>
+ </div>
+ <div id="watch-items" style="margin-top:10px" aria-live="polite" class="muted">WAITING FOR THE SIGNAL ARCHIVE…</div>
+ <div class="muted" style="margin-top:9px;font-size:11px">This desk updates inside DoomWatch when the archive changes. Collector schedule: approximately every three hours. It does not send external reports or background alerts. Signals are not verified threat assessments.</div>
+</section>
 <div class="disclaimer"><strong>READ THIS FIRST:</strong> Bluesky public search is the only direct social-network connection in this build. X, Telegram, Reddit and Mastodon are not connected. Social posts and alternative commentary are unverified signals, not established facts. Repetition is not corroboration. Check original sources, date, location and independent evidence before acting or sharing.</div>
 <div class="signal-grid" style="margin-top:12px">
 <div class="signal-stat"><span class="muted">PUBLIC SOCIAL POSTS</span><strong id="social-count">—</strong><span class="muted">Collected from Bluesky search</span></div>
@@ -63,7 +76,7 @@ LOCAL:["northern ireland","belfast","derry","londonderry","newtownabbey","ballyc
 SOCIETY:["protest","riot","immigration","migration","election","censorship","surveillance","digital id","culture war","gender","free speech","civil liberties","community tension","disinformation"]
 };
 const labels={CYBER:"CYBER / DIGITAL",SUPPLY:"SUPPLY CHAIN",CONFLICT:"WAR / CONFLICT",LOCAL:"NI / LOCAL",SOCIETY:"CULTURE / SOCIETY"};
-let articles=[],active="ALL",rendered=[];
+let articles=[],active="ALL",rendered=[],collectorRun="",lastSeen="",watchTimer=null;
 function hits(a,key){const t=textOf(a);return topics[key].some(w=>t.includes(w));}
 function matches(a){if(active==="ALL")return true;if(active==="SOCIAL")return social(a);return hits(a,active);}
 function render(){
@@ -84,7 +97,38 @@ function renderTrends(){
  $("trends").innerHTML=counts.map(x=>'<span class="trend">'+esc(x.label)+' // '+x.count+' MENTIONS</span>').join("");
  $("topic-count").textContent=counts.filter(x=>x.count>0).length;
 }
-async function load(){try{const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();articles=Array.isArray(d.articles)?d.articles:[];articles.sort((a,b)=>new Date(b.publishedAt||b.collectedAt||0)-new Date(a.publishedAt||a.collectedAt||0));$("social-count").textContent=articles.filter(social).length;$("record-count").textContent=articles.length.toLocaleString("en-GB");$("feed-updated").textContent=date(d.collectorLastRun||d.collector?.lastRun);renderTrends();render();}catch(e){$("feed-status").textContent="SIGNAL ARCHIVE FAILED // "+e.message;}}
+function signalTime(a){const d=new Date(a.collectedAt||a.publishedAt||a.updatedAt||0);return Number.isFinite(d.getTime())?d.getTime():0;}
+function renderWatch(){
+ const key="doomwatch-feed-last-seen-v1";
+ let since=0;
+ try{since=Number(localStorage.getItem(key)||0);}catch(e){}
+ const fresh=articles.filter(a=>signalTime(a)>since).sort((a,b)=>signalTime(b)-signalTime(a));
+ const activeTopics=Object.keys(topics).filter(k=>fresh.some(a=>hits(a,k)));
+ $("watch-new-count").textContent=fresh.length.toLocaleString("en-GB");
+ $("watch-topic-count").textContent=activeTopics.length?activeTopics.map(k=>labels[k].split(" / ")[0]).join(" · "):"NONE";
+ $("watch-last-check").textContent=since?date(since):"FIRST VISIT";
+ $("watch-items").innerHTML=fresh.length?fresh.slice(0,8).map(a=>{
+  const matched=Object.keys(topics).filter(k=>hits(a,k));
+  const socialPost=social(a);
+  const link=a.url&&/^https?:\\/\\//i.test(a.url)?' <a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"";
+  return '<div style="padding:9px 0;border-top:1px solid #414738"><strong style="color:#f0d28e">'+esc(a.title||"Untitled signal")+'</strong><div class="muted" style="margin-top:4px">'+esc(date(a.collectedAt||a.publishedAt))+' · '+esc(a.source||"Unknown source")+' · '+(socialPost?"UNVERIFIED SOCIAL": "OPEN SOURCE")+'</div><div style="margin-top:4px">'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+link+'</div></div>';
+ }).join(""):'<div style="padding:10px 0">NO NEW RECORDS SINCE LAST REVIEW. The archive will be checked again automatically while this page remains open.</div>';
+}
+async function load(){
+ try{
+  const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  const d=await r.json();
+  articles=Array.isArray(d.articles)?d.articles:[];
+  articles.sort((a,b)=>signalTime(b)-signalTime(a));
+  collectorRun=d.collectorLastRun||d.collector?.lastRun||"";
+  $("social-count").textContent=articles.filter(social).length;
+  $("record-count").textContent=articles.length.toLocaleString("en-GB");
+  $("feed-updated").textContent=date(collectorRun);
+  renderTrends();render();renderWatch();
+  $("feed-status").textContent="ARCHIVE CONNECTED // "+articles.length+" RECORDS // AUTO-CHECK EVERY 5 MINUTES WHILE OPEN";
+ }catch(e){$("feed-status").textContent="SIGNAL ARCHIVE FAILED // "+e.message;}
+}
 $("feed-items").addEventListener("click",event=>{
  const button=event.target.closest("[data-flag]");
  if(!button)return;
@@ -106,7 +150,17 @@ $("feed-items").addEventListener("click",event=>{
  }catch(error){button.textContent="SAVE FAILED // STORAGE UNAVAILABLE";}
 });
 document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{active=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});render();}));
-$("feed-search").addEventListener("input",render);load();
+$("feed-search").addEventListener("input",render);
+$("watch-refresh").addEventListener("click",()=>load());
+$("watch-ack").addEventListener("click",()=>{
+ try{localStorage.setItem("doomwatch-feed-last-seen-v1",String(Date.now()));}
+ catch(e){$("watch-items").textContent="Could not save review state: browser storage unavailable.";return;}
+ renderWatch();
+});
+load();
+if(watchTimer)clearInterval(watchTimer);
+watchTimer=setInterval(load,5*60*1000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)load();});
 </script>
 <script src="./doomwatch-ui.js"></script>
 </body></html>
