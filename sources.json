@@ -697,6 +697,105 @@
       "trust": "official_primary_source",
       "status": "active",
       "notes": "Official GDACS GeoJSON API. Collector requests red and orange events from the last seven days across earthquakes, cyclones, floods, volcanoes, drought and wildfires. Original event links retained where supplied."
+    },
+    {
+      "id": "belfast-harbour",
+      "name": "Belfast Harbour",
+      "platform": "website",
+      "type": "port_operator",
+      "url": "https://www.belfast-harbour.co.uk/",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        6,
+        5
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Port operations, shipping, logistics, harbour infrastructure and major commercial activity. No RSS endpoint verified."
+    },
+    {
+      "id": "larne-port",
+      "name": "Larne Port - Peel Ports",
+      "platform": "website",
+      "type": "port_operator",
+      "url": "https://www.peelports.com/ports/larne",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        6,
+        5
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Port of Larne operations, ferry and freight connectivity, shipping and logistics updates. No RSS endpoint verified."
+    },
+    {
+      "id": "belfast-international-airport",
+      "name": "Belfast International Airport",
+      "platform": "website",
+      "type": "airport_operator",
+      "url": "https://www.belfastairport.com/",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        6
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Airport operational notices, flight disruption and aviation infrastructure updates. No RSS endpoint verified."
+    },
+    {
+      "id": "city-of-derry-airport",
+      "name": "City of Derry Airport",
+      "platform": "website",
+      "type": "airport_operator",
+      "url": "https://www.cityofderryairport.com/",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        6
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Regional airport operational notices and transport connectivity. No RSS endpoint verified."
+    },
+    {
+      "id": "pha-ni",
+      "name": "Public Health Agency Northern Ireland",
+      "platform": "website",
+      "type": "public_health_agency",
+      "url": "https://www.publichealth.hscni.net/",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        7
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Public health alerts, communicable disease updates, health protection and emergency public health guidance. No RSS endpoint verified."
+    },
+    {
+      "id": "fsa-ni",
+      "name": "Food Standards Agency - Northern Ireland",
+      "platform": "website",
+      "type": "food_safety_regulator",
+      "url": "https://www.food.gov.uk/northern-ireland",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        2,
+        7
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Food safety alerts, recalls, food-chain incidents and regulatory updates relevant to Northern Ireland. No NI-specific RSS endpoint verified."
     }
   ]
 }
