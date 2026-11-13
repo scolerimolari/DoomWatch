@@ -154,13 +154,27 @@ jobs:
               if len(tokens) < 2:
                   continue
               identity = " ".join(tokens) + "|" + pack
-              name_pack_identities.setdefault(identity, set()).add(
-                  str(row.get("retailer") or "Unknown")
-              )
-          shared_name_pack_groups = sum(
-              1 for retailers in name_pack_identities.values()
-              if len(retailers) >= 2
-          )
+              raw_ean = row.get("ean") or []
+              if not isinstance(raw_ean, list):
+                  raw_ean = [raw_ean]
+              row_eans = {
+                  "".join(ch for ch in str(value) if ch.isdigit())
+                  for value in raw_ean
+              }
+              row_eans = {value for value in row_eans if 8 <= len(value) <= 14}
+              name_pack_identities.setdefault(identity, []).append({
+                  "retailer": str(row.get("retailer") or "Unknown"),
+                  "eans": row_eans,
+              })
+          shared_name_pack_groups = 0
+          for group in name_pack_identities.values():
+              retailers = {item["retailer"] for item in group}
+              known_eans = set().union(*(item["eans"] for item in group))
+              if len(retailers) < 2 or len(known_eans) > 1:
+                  continue
+              if known_eans and all(item["eans"] for item in group):
+                  continue
+              shared_name_pack_groups += 1
 
           shared_match_key_groups = 0
           hybrid_match_key_groups = 0
