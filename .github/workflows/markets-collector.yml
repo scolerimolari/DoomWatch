@@ -32,12 +32,48 @@ jobs:
       - name: Collect market intelligence
         run: python markets_collector.py
 
+      - name: Create compact grocery feed diagnostic
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("data/markets.json").read_text(encoding="utf-8"))
+          basket = data.get("householdBasket") or {}
+          history = basket.get("dailyProductPriceHistory") or []
+          source = (data.get("sources") or {}).get("dailyGroceryBasket") or {}
+          latest_date = basket.get("dailyProductPriceLatestDate") or ""
+          latest = [
+              row for row in history
+              if str(row.get("date") or row.get("scrapedAt") or "")[:10] == latest_date
+          ]
+          counts = {}
+          for row in latest:
+              retailer = str(row.get("retailer") or "Unknown")
+              counts[retailer] = counts.get(retailer, 0) + 1
+
+          report = {
+              "generatedAt": data.get("updatedAt"),
+              "source": source,
+              "historyRows": len(history),
+              "latestDate": latest_date,
+              "latestRows": len(latest),
+              "retailerCounts": counts,
+              "sampleRows": latest[:5],
+          }
+          Path("data/grocery-status.json").write_text(
+              json.dumps(report, ensure_ascii=False, indent=2) + "\\n",
+              encoding="utf-8",
+          )
+          print(json.dumps(report, ensure_ascii=False))
+          PY
+
       - name: Commit updated market history
         run: |
           git config user.name "DoomWatch Markets Collector"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add data/markets.json
+          git add data/markets.json data/grocery-status.json
 
           if git diff --cached --quiet; then
             echo "No market data changes to commit"
