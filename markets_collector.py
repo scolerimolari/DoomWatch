@@ -1818,6 +1818,176 @@ def collect_retailer_basket(data):
 
 
 # ==================================================
+# FREE UK DAILY 212-ITEM GROCERY BASKET
+# ==================================================
+
+def collect_daily_grocery_basket(data):
+    """
+    Import Yappman Data's public UK daily 212-item basket.
+    Keep price fields and retailer identifiers only; do not
+    copy retailer names, descriptions, images or other content.
+    Dataset is public and licensed CC BY 4.0.
+    """
+
+    url = (
+        "https://api.apify.com/v2/datasets/"
+        "ynAT9NPps2EdjMOJa/items?format=json&limit=100000"
+    )
+
+    basket = data.setdefault("householdBasket", {})
+    old = basket.get("dailyProductPriceHistory", [])
+    if not isinstance(old, list):
+        old = []
+
+    print("DAILY GROCERY BASKET: importing public 212-item dataset")
+
+    try:
+        raw = fetch(url, "application/json")
+        payload = json.loads(raw.decode("utf-8"))
+
+        if isinstance(payload, dict):
+            payload = payload.get("items", payload.get("rows", []))
+        if not isinstance(payload, list):
+            raise ValueError("Dataset response did not contain a rows list")
+
+        records = {}
+
+        def numeric(value):
+            if value is None or value == "":
+                return None
+            try:
+                result = float(str(value).replace(",", "").replace("£", "").strip())
+                return round(result, 4) if result >= 0 else None
+            except (TypeError, ValueError):
+                return None
+
+        def normalise(row):
+            if not isinstance(row, dict):
+                return None
+
+            scraped = row.get("scrapedAt") or row.get("scraped_at")
+            retailer = str(row.get("retailer") or "").strip().lower()
+            product_id = str(
+                row.get("retailerProductId")
+                or row.get("retailer_product_id")
+                or ""
+            ).strip()
+            price = numeric(row.get("price"))
+
+            if not scraped or not retailer or not product_id or price is None:
+                return None
+
+            ean = row.get("ean")
+            if isinstance(ean, str):
+                ean = [ean] if ean else []
+            elif not isinstance(ean, list):
+                ean = []
+
+            loyalty = numeric(row.get("loyaltyPrice"))
+            was_price = numeric(row.get("wasPrice"))
+            unit_price = numeric(row.get("unitPrice"))
+
+            return {
+                "scrapedAt": str(scraped),
+                "date": str(scraped)[:10],
+                "retailer": retailer,
+                "retailerProductId": product_id,
+                "ean": [str(code) for code in ean if code],
+                "price": price,
+                "wasPrice": was_price,
+                "loyaltyPrice": loyalty,
+                "unitPrice": unit_price,
+                "unitMeasure": str(
+                    row.get("unitMeasure") or row.get("unit") or ""
+                )[:40],
+                "packSize": str(row.get("packSize") or "")[:60],
+                "stock": row.get("stock"),
+                "source": "Yappman Data daily 212-item basket",
+            }
+
+        for row in old:
+            clean = normalise(row)
+            if clean:
+                key = (
+                    clean["scrapedAt"], clean["retailer"],
+                    clean["retailerProductId"]
+                )
+                records[key] = clean
+
+        imported = 0
+        for row in payload:
+            clean = normalise(row)
+            if not clean:
+                continue
+            key = (
+                clean["scrapedAt"], clean["retailer"],
+                clean["retailerProductId"]
+            )
+            records[key] = clean
+            imported += 1
+
+        if not imported:
+            raise ValueError("No valid dated product price rows were returned")
+
+        history = sorted(
+            records.values(),
+            key=lambda item: (
+                item["scrapedAt"], item["retailer"],
+                item["retailerProductId"]
+            )
+        )[-40000:]
+
+        latest_date = max(item["date"] for item in history)
+        latest_rows = [
+            item for item in history
+            if item["date"] == latest_date
+        ]
+
+        basket["dailyProductPriceHistory"] = history
+        basket["dailyProductPriceUpdatedAt"] = timestamp()
+        basket["dailyProductPriceLatestDate"] = latest_date
+        basket["dailyProductPriceLatestCount"] = len(latest_rows)
+
+        data.setdefault("sources", {})["dailyGroceryBasket"] = {
+            "status": "ok",
+            "checkedAt": timestamp(),
+            "url": "https://dev.to/yappman/comparing-uk-supermarket-prices-programmatically-tesco-sainsburys-asda-and-aldi-in-one-schema-4epi",
+            "datasetUrl": url,
+            "licence": "CC BY 4.0",
+            "latestDate": latest_date,
+            "recordsImported": imported,
+            "recordsStored": len(history),
+            "latestSnapshotRows": len(latest_rows),
+            "retailers": ["Tesco", "Sainsbury's", "Asda", "Aldi"],
+            "note": (
+                "Daily 212-item UK staple basket. Prices are online "
+                "shelf snapshots, not live store prices or a complete "
+                "household bill. Product names, descriptions, images "
+                "and retailer content are not reproduced. Credit "
+                "Yappman Data, CC BY 4.0."
+            ),
+        }
+
+        print(
+            "OK DAILY GROCERY BASKET:",
+            latest_date,
+            "latest rows:", len(latest_rows),
+            "stored:", len(history),
+        )
+
+    except Exception as error:
+        print("FAILED: Daily grocery basket", str(error)[:250])
+
+        data.setdefault("sources", {})["dailyGroceryBasket"] = {
+            "status": "failed",
+            "checkedAt": timestamp(),
+            "url": "https://data.yappman.com/mcp/",
+            "error": str(error)[:250],
+            "note": "Existing daily product price history was preserved.",
+        }
+
+
+# ==================================================
 # FREE UK SUPERMARKET SHELF-PRICE INDEX
 # ==================================================
 
@@ -2202,6 +2372,7 @@ def main():
     # New retailer price collection.
     collect_retailer_basket(data)
     collect_supermarket_index(data)
+    collect_daily_grocery_basket(data)
 
     # Existing news collection.
     collect_news(data)
