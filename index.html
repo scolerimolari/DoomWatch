@@ -605,9 +605,12 @@ function renderSourceHealth(){
   const ok=state==="OK";
   const empty=state==="EMPTY";
   const detail=(ok||empty)?(Number(item.articleCount)||0)+" records received":String(item.error||"Feed did not report success");
+  const diagnostics=empty&&item.responseBytes!==undefined
+    ?" // "+Number(item.responseBytes)+" bytes // XML root: "+String(item.rootTag||"UNKNOWN")
+    :"";
   const label=ok?"OK":empty?"EMPTY":"FAILED";
   const colour=ok?"green":empty?"yellow":"red";
-  return '<div class="section-card" style="margin-bottom:6px"><strong class="'+colour+'">'+label+'</strong> // '+escapeHTML(item.name||item.id||"Unknown source")+'<div class="meta">'+escapeHTML(detail)+' // '+escapeHTML(dateText(item.checkedAt))+'</div></div>';
+  return '<div class="section-card" style="margin-bottom:6px"><strong class="'+colour+'">'+label+'</strong> // '+escapeHTML(item.name||item.id||"Unknown source")+'<div class="meta">'+escapeHTML(detail+diagnostics)+' // '+escapeHTML(dateText(item.checkedAt))+'</div></div>';
  }).join(""):'<div class="muted">No per-source diagnostics are present in the collector data.</div>';
  if(stale){
   list.innerHTML='<div class="warning">COLLECTION DATA IS MISSING OR OLDER THAN SIX HOURS. Feed status cannot be treated as current.</div>'+list.innerHTML;
