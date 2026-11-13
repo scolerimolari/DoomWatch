@@ -144,11 +144,11 @@ footer{padding:20px 14px;color:var(--muted);font-size:11px;text-align:center}
 
 <section class="card wide">
 <h2>VERIFIED CROSS-RETAILER PRICE CHECK</h2>
-<div class="small">Compares the same barcode (EAN) across retailers in the latest snapshot only. Retailer-specific product IDs are never treated as equivalent. Rows without a shared barcode are excluded. These are shelf-price comparisons, not a complete basket ranking.</div>
+<div class="small">Matches products across retailers by exact EAN first, then the source-provided matchKey (normalised brand, name and pack size) when no barcode is available. Retailer-specific product IDs are never treated as equivalent. These are shelf-price comparisons, not a complete basket ranking.</div>
 <div class="tablewrap">
 <table>
-<thead><tr><th>Barcode (EAN)</th><th>Retailers matched</th><th>Lowest shelf price</th><th>Highest shelf price</th><th>Price spread</th></tr></thead>
-<tbody id="crossRetailerRows"><tr><td colspan="5">Waiting for verified barcode matches.</td></tr></tbody>
+<thead><tr><th>Product identity</th><th>Match method</th><th>Retailers matched</th><th>Lowest shelf price</th><th>Highest shelf price</th><th>Price spread</th></tr></thead>
+<tbody id="crossRetailerRows"><tr><td colspan="6">Waiting for verified product matches.</td></tr></tbody>
 </table>
 </div>
 <div class="small" id="crossRetailerNote" style="margin-top:10px">No cross-retailer equivalence is assumed without a shared barcode.</div>
@@ -553,36 +553,43 @@ function renderCrossRetailerComparison(rows){
  rows.forEach(o=>{
   const raw=Array.isArray(o.ean)?o.ean:[o.ean];
   const codes=[...new Set(raw.map(v=>String(v||"").replace(/\D/g,"")).filter(v=>v.length>=8&&v.length<=14))];
-  codes.forEach(code=>{
-   if(!groups.has(code))groups.set(code,new Map());
-   const byRetailer=groups.get(code);
-   const price=number(o.price);
-   if(price===null||price<=0)return;
+  const identities=codes.map(code=>({key:"ean:"+code,label:code,method:"EAN"}));
+  if(!identities.length&&String(o.matchKey||"").trim())
+   identities.push({key:"match:"+String(o.matchKey).trim(),label:"Source match key",method:"Match key"});
+  const price=number(o.price);
+  if(price===null||price<=0)return;
+  identities.forEach(identity=>{
+   if(!groups.has(identity.key))groups.set(identity.key,{...identity,retailers:new Map()});
+   const group=groups.get(identity.key);
    const retailer=String(o.retailer||"").toLowerCase();
-   const prior=byRetailer.get(retailer);
+   const prior=group.retailers.get(retailer);
    if(!prior||String(o.scrapedAt||"")>String(prior.scrapedAt||""))
-    byRetailer.set(retailer,{price,scrapedAt:o.scrapedAt||"",retailer});
+    group.retailers.set(retailer,{price,scrapedAt:o.scrapedAt||"",retailer});
   });
  });
  const matches=[];
- groups.forEach((retailers,ean)=>{
-  if(retailers.size<2)return;
-  const values=Array.from(retailers.values());
+ groups.forEach(group=>{
+  if(group.retailers.size<2)return;
+  const values=Array.from(group.retailers.values());
   const prices=values.map(v=>v.price);
   const low=Math.min(...prices),high=Math.max(...prices);
-  matches.push({ean,retailers:values.length,low,high,spread:high-low});
+  matches.push({label:group.label,method:group.method,retailers:values.length,low,high,spread:high-low});
  });
  matches.sort((a,b)=>b.spread-a.spread);
  body.innerHTML=matches.length?matches.slice(0,25).map(m=>
-  '<tr><td>'+escapeHtml(m.ean)+'</td><td>'+m.retailers+'</td><td>'+
-  money(m.low)+'</td><td>'+money(m.high)+'</td><td>'+
+  '<tr><td>'+escapeHtml(m.label)+'</td><td>'+escapeHtml(m.method)+'</td><td>'+
+  m.retailers+'</td><td>'+money(m.low)+'</td><td>'+money(m.high)+'</td><td>'+
   money(m.spread)+'</td></tr>'
- ).join(""):'<tr><td colspan="5">No shared valid barcodes across retailers in this snapshot.</td></tr>';
+ ).join(""):'<tr><td colspan="6">No shared product identities across retailers in this snapshot.</td></tr>';
+ const usable=rows.filter(o=>{
+  const raw=Array.isArray(o.ean)?o.ean:[o.ean];
+  const hasEan=raw.some(v=>{const code=String(v||"").replace(/\D/g,"");return code.length>=8&&code.length<=14;});
+  return hasEan||!!String(o.matchKey||"").trim();
+ }).length;
  note.textContent=matches.length?
-  matches.length+" shared barcodes matched across at least two retailers. Exact EAN is the equivalence test; this does not adjust for promotions, loyalty eligibility or delivery charges.":
-  "No cross-retailer comparisons published: "+rows.filter(o=>{const raw=Array.isArray(o.ean)?o.ean:[o.ean];return raw.some(v=>{const code=String(v||"").replace(/\D/g,"");return code.length>=8&&code.length<=14;});}).length+"/"+rows.length+" latest rows have a usable barcode. No retailer equivalence has been guessed.";
+  matches.length+" products matched across at least two retailers using exact EANs or source-provided match keys. Price differences do not adjust for promotions, loyalty eligibility or delivery charges.":
+  "No cross-retailer comparisons published: "+usable+"/"+rows.length+" latest rows have a usable EAN or source match key. No retailer equivalence has been guessed.";
 }
-
 function renderDailyGroceryBasket(data){
  const basket=data.householdBasket||{};
  const history=allObjects(basket.dailyProductPriceHistory);
@@ -630,13 +637,14 @@ function renderDailyGroceryBasket(data){
   " • "+history.length.toLocaleString("en-GB")+" historical observations stored";
  note.textContent=(comparable?"Historical comparisons use each product’s most recent earlier dated observation, not necessarily the immediately preceding calendar day. ":"Price history is building; previous-price comparisons will appear as subsequent daily snapshots arrive. ")+"Prices are online shelf snapshots. Loyalty prices are shown separately and may require a retailer loyalty card. Source: Yappman Data, UK Daily 212-Item Basket, CC BY 4.0. Product IDs and barcodes identify records; they are not product descriptions.";
  const counts={};
- let barcodeRows=0;
+ let barcodeRows=0,matchKeyRows=0;
  dailyBasketLatestRows.forEach(o=>{
   const r=String(o.retailer||"unknown").toLowerCase();
   counts[r]=(counts[r]||0)+1;
   const raw=Array.isArray(o.ean)?o.ean:[o.ean];
   if(raw.some(v=>{const code=String(v||"").replace(/\D/g,"");return code.length>=8&&code.length<=14;}))
    barcodeRows++;
+  if(String(o.matchKey||"").trim())matchKeyRows++;
  });
  const expected=212;
  const retailerNames={aldi:"Aldi",asda:"Asda",sainsburys:"Sainsbury's",tesco:"Tesco"};
