@@ -132,6 +132,13 @@ def parse_gdacs_fallback(xml_data, source):
         flags=re.IGNORECASE | re.DOTALL
     )
 
+    print(
+        "GDACS fallback candidate entries:",
+        len(items),
+        "- response preview:",
+        clean(text_data[:240])[:180]
+    )
+
     entries = []
 
     for item in items:
@@ -299,6 +306,30 @@ def fetch_feed(source):
         raise ValueError("Empty response")
 
     articles = parse_feed(body, source)
+
+    if not articles:
+        try:
+            diagnostic_root = ET.fromstring(repair_xml(body))
+            candidates = [
+                element for element in diagnostic_root.iter()
+                if local_name(element.tag) in ("item", "entry")
+            ]
+            first = candidates[0] if candidates else None
+            print(
+                "EMPTY PARSER DETAILS:",
+                source.get("id"),
+                "- entries:",
+                len(candidates),
+                "- first child tags:",
+                ",".join(local_name(child.tag) for child in list(first)[:12]) if first is not None else "none",
+                "- first title:",
+                child_text(first, {"title"})[:100] if first is not None else "none",
+                "- first link:",
+                child_text(first, {"link", "guid", "id"})[:160] if first is not None else "none"
+            )
+        except ET.ParseError:
+            pass
+
     root_match = re.search(
         rb"<([A-Za-z][A-Za-z0-9_.:-]*)",
         body
