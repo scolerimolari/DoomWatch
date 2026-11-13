@@ -575,7 +575,8 @@ function renderSourceHealth(){
  const collector=intelligence.collector||{};
  const statuses=Array.isArray(intelligence.sourceStatus)?intelligence.sourceStatus:[];
  const successful=statuses.filter(x=>String(x.status||"").toUpperCase()==="OK").length;
- const failed=statuses.filter(x=>String(x.status||"").toUpperCase()!=="OK").length;
+ const empty=statuses.filter(x=>String(x.status||"").toUpperCase()==="EMPTY").length;
+ const failed=statuses.filter(x=>String(x.status||"").toUpperCase()==="FAILED").length;
  const configured=Number(collector.configuredFeeds)||statuses.length;
  const lastRun=collector.lastRun||intelligence.collectorLastRun||"";
  const runDate=lastRun?new Date(lastRun):null;
@@ -585,7 +586,7 @@ function renderSourceHealth(){
  $("collector-status").className=stale||failed>0?"red":"green";
  $("terminal-status").textContent=stale||failed>0?"ATTENTION":"OPERATIONAL";
  const overall=failed>0||stale?"ATTENTION":"ALL FEEDS REPORTING";
- summary.textContent=overall+" // "+successful+" successful / "+failed+" failed / "+configured+" configured";
+ summary.textContent=overall+" // "+successful+" with records / "+empty+" empty responses / "+failed+" failed / "+configured+" configured";
  summary.className=(failed>0||stale)?"warning":"green";
  if(lastRun){
   const age=ageHours===null?"age unavailable":ageHours<1?Math.max(1,Math.round(ageHours*60))+" min ago":ageHours.toFixed(1)+" hours ago";
@@ -594,14 +595,19 @@ function renderSourceHealth(){
   summary.textContent+=" // collection timestamp missing";
  }
  const ordered=statuses.slice().sort((a,b)=>{
-  const af=String(a.status||"").toUpperCase()==="OK"?1:0;
-  const bf=String(b.status||"").toUpperCase()==="OK"?1:0;
+  const order={OK:0,EMPTY:1,FAILED:2};
+  const af=order[String(a.status||"").toUpperCase()]??3;
+  const bf=order[String(b.status||"").toUpperCase()]??3;
   return af-bf||String(a.name||"").localeCompare(String(b.name||""));
  });
  list.innerHTML=ordered.length?ordered.map(item=>{
-  const ok=String(item.status||"").toUpperCase()==="OK";
-  const detail=ok?(Number(item.articleCount)||0)+" records received":String(item.error||"Feed did not report success");
-  return '<div class="section-card" style="margin-bottom:6px"><strong class="'+(ok?"green":"red")+'">'+(ok?"OK":"FAILED")+'</strong> // '+escapeHTML(item.name||item.id||"Unknown source")+'<div class="meta">'+escapeHTML(detail)+' // '+escapeHTML(dateText(item.checkedAt))+'</div></div>';
+  const state=String(item.status||"").toUpperCase();
+  const ok=state==="OK";
+  const empty=state==="EMPTY";
+  const detail=(ok||empty)?(Number(item.articleCount)||0)+" records received":String(item.error||"Feed did not report success");
+  const label=ok?"OK":empty?"EMPTY":"FAILED";
+  const colour=ok?"green":empty?"yellow":"red";
+  return '<div class="section-card" style="margin-bottom:6px"><strong class="'+colour+'">'+label+'</strong> // '+escapeHTML(item.name||item.id||"Unknown source")+'<div class="meta">'+escapeHTML(detail)+' // '+escapeHTML(dateText(item.checkedAt))+'</div></div>';
  }).join(""):'<div class="muted">No per-source diagnostics are present in the collector data.</div>';
  if(stale){
   list.innerHTML='<div class="warning">COLLECTION DATA IS MISSING OR OLDER THAN SIX HOURS. Feed status cannot be treated as current.</div>'+list.innerHTML;
