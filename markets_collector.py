@@ -1405,7 +1405,7 @@ def collect_groceries(data):
     """
     Collect official inflation statistics.
 
-    Retailer basket collection is deliberately separate.
+    Only aggregate official inflation and index series are retained.
     """
 
     basket = data.setdefault(
@@ -1417,7 +1417,7 @@ def collect_groceries(data):
     )
 
     # Remove legacy product-level grocery data from previous builds.
-    for key in ("items", "history", "observations", "retailers", "dailyProductPriceHistory", "dailyProductPriceLatestDate", "dailyProductPriceLatestCount"):
+    for key in ("items", "history", "observations", "retailers", "dailyProductPriceHistory", "dailyProductPriceLatestDate", "dailyProductPriceLatestCount", "productCount", "retailerCount", "latestDate", "comparisonNote"):
         basket.pop(key, None)
 
     data.setdefault("sources", {}).pop("foodCompass", None)
