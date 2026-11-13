@@ -284,7 +284,7 @@ def fetch_feed(source):
 
     articles = parse_feed(body, source)
     root_match = re.search(
-        rb"<(?!\\?)([A-Za-z][A-Za-z0-9_.:-]*)",
+        rb"<([A-Za-z][A-Za-z0-9_.:-]*)",
         body
     )
     root_tag = (
