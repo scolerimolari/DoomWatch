@@ -642,13 +642,13 @@ function renderDailyBrief() {
 
     return '<details class="section-card"><summary>'+
       escapeHTML(group.region)+' // '+Number(group.recordCount || 0)+
-      ' RECORDS IN RETENTION WINDOW</summary><div class="section-body">'+
+      ' RECORDS IN LAST 48 HOURS</summary><div class="section-body">'+
       cards+'</div></details>';
   }).join("");
 
   target.innerHTML =
     '<div class="meta">GENERATED: '+escapeHTML(dateText(brief.generatedAt))+
-    ' // '+Number(brief.totalRecords || 0)+' RETAINED RECORDS</div>'+
+    ' // '+Number(brief.totalRecords || 0)+' 48-HOUR RECORDS</div>'+
     '<p>'+escapeHTML(brief.disclaimer || "Source-led snapshot; verify original reports.")+'</p>'+
     sections;
 }
