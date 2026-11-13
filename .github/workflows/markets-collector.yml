@@ -85,12 +85,20 @@ jobs:
                       ean_identities.setdefault(ean, set()).add(retailer)
               if match_key:
                   match_key_rows += 1
-                  match_identities.setdefault(match_key, []).append({
-                      "retailer": retailer,
-                      "eans": set(eans),
-                  })
                   if not eans:
                       match_key_only_rows += 1
+                  confidence = row.get("matchConfidence")
+                  basis = str(row.get("matchBasis") or "").strip().casefold()
+                  try:
+                      confidence = float(confidence) if confidence is not None else None
+                  except (TypeError, ValueError):
+                      confidence = None
+                  # Ignore explicitly weak or name-only source matches.
+                  if (confidence is None or confidence >= 0.90) and basis != "name":
+                      match_identities.setdefault(match_key, []).append({
+                          "retailer": retailer,
+                          "eans": set(eans),
+                      })
 
           shared_ean_groups = sum(
               1 for retailers in ean_identities.values()
