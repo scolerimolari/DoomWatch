@@ -813,7 +813,7 @@ function renderSections() {
   const summary=match?asText(valueOf(match,["summary","description","assessment","content","body"],"")):"";
   const records=articles.filter(item=>sectorMatch(item,index));
   const coverage=(intelligence.sectorCoverage||[]).find(item=>Number(item.id)===index+1);
-  const coverageText=coverage?" · "+coverage.recordCount+" TAGGED / "+coverage.sourceCount+" SOURCES":"";
+  const coverageText=coverage?" · "+(coverage.keywordRecordCount||0)+" KEYWORD / "+(coverage.sourceTaggedRecordCount||0)+" SOURCE TAGS":"";
   const cards=records.slice(0,18).map(item=>{
    const link=item.url?'<a href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"";
    return '<details class="intel-card '+item.severity+'"><summary>'+escapeHTML(item.title)+'</summary><div class="meta">'+escapeHTML(item.area)+' · '+escapeHTML(item.source)+' · '+escapeHTML(dateText(item.date))+'</div><div class="meta">SOURCE CLASS: '+escapeHTML(item.sourceTrust||"UNCLASSIFIED")+' · EVIDENCE: '+escapeHTML(item.evidenceStatus||"UNASSESSED")+' · '+(item.locality?escapeHTML(item.locality.name)+" / APPROXIMATE LOCATION":"NO TOWN LOCATION TAG")+'</div><p>'+escapeHTML(item.summary||"No additional description supplied.")+'</p>'+link+'</details>';
