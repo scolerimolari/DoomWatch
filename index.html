@@ -983,9 +983,16 @@ async function loadIntelligence() {
 
 /* NAVIGATION */
 
-document.querySelectorAll("nav button[data-page]").forEach(button => {
-  button.addEventListener("click",() => showPage(button.dataset.page));
+document.addEventListener("click",event => {
+  const button=event.target.closest("nav button[data-page]");
+  if(button) showPage(button.dataset.page);
 });
+function openPageFromHash(){
+  const target=decodeURIComponent(location.hash.slice(1));
+  if(target && document.getElementById(target)?.classList.contains("page")) showPage(target);
+}
+window.addEventListener("hashchange",openPageFromHash);
+openPageFromHash();
 
 /* INTELLIGENCE FILTERS */
 
