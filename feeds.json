@@ -40,7 +40,7 @@
       "url": "https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH",
       "domain": 11,
       "region": "International",
-      "priority": "medium",
+      "priority": "high",
       "tier": 1,
       "trust": "official_primary_source",
       "sourceType": "international_disaster_alert"
