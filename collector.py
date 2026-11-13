@@ -15,7 +15,7 @@ DATA_FILE = ROOT / "data" / "intelligence.json"
 
 USER_AGENT = "DoomWatch-OperationContainment/1.0"
 TIMEOUT = 20
-MAX_ARTICLES = 1000
+MAX_ARTICLES = 3000
 MAX_FEED_SIZE = 3_000_000
 
 
