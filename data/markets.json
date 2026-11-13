@@ -1,51 +1,51 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-13T13:32:10+00:00",
-  "generatedAt": "2026-11-13T13:32:10+00:00",
+  "updatedAt": "2026-11-13T13:32:26+00:00",
+  "generatedAt": "2026-11-13T13:32:26+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:02+00:00"
+      "checkedAt": "2026-11-13T13:32:20+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:03+00:00"
+      "checkedAt": "2026-11-13T13:32:20+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:03+00:00"
+      "checkedAt": "2026-11-13T13:32:21+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:03+00:00"
+      "checkedAt": "2026-11-13T13:32:21+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:03+00:00"
+      "checkedAt": "2026-11-13T13:32:21+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:03+00:00"
+      "checkedAt": "2026-11-13T13:32:21+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:04+00:00"
+      "checkedAt": "2026-11-13T13:32:21+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:04+00:00"
+      "checkedAt": "2026-11-13T13:32:22+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:04+00:00"
+      "checkedAt": "2026-11-13T13:32:22+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:04+00:00"
+      "checkedAt": "2026-11-13T13:32:22+00:00"
     },
     "heatingOil": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:07+00:00",
+      "checkedAt": "2026-11-13T13:32:25+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
       "observationsImported": 179,
@@ -54,7 +54,7 @@
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:08+00:00",
+      "checkedAt": "2026-11-13T13:32:25+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
       "observationsImported": 463,
@@ -63,7 +63,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:09+00:00",
+      "checkedAt": "2026-11-13T13:32:25+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -72,7 +72,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:09+00:00",
+      "checkedAt": "2026-11-13T13:32:25+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -81,7 +81,7 @@
     },
     "supermarketPriceIndex": {
       "status": "ok",
-      "checkedAt": "2026-11-13T13:32:09+00:00",
+      "checkedAt": "2026-11-13T13:32:26+00:00",
       "url": "https://data.yappman.com/shelf-price-index/",
       "datasetUrl": "https://api.apify.com/v2/datasets/AvRCWqFinCiNjx3sP/items?format=json",
       "licence": "CC BY 4.0",
@@ -93,10 +93,10 @@
   "commodities": {
     "gold": {
       "symbol": "GC=F",
-      "price": 3885.9,
-      "changePct": -7.357,
+      "price": 3886.8,
+      "changePct": -7.336,
       "currency": "USD",
-      "observedAt": "2026-11-13T13:22:01+00:00",
+      "observedAt": "2026-11-13T13:22:18+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -1108,7 +1108,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 3885.899902
+          "value": 3886.800049
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -1118,10 +1118,10 @@
     },
     "silver": {
       "symbol": "SI=F",
-      "price": 49.77,
-      "changePct": -6.225,
+      "price": 49.805,
+      "changePct": -6.159,
       "currency": "USD",
-      "observedAt": "2026-11-13T13:22:00+00:00",
+      "observedAt": "2026-11-13T13:22:18+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -2133,7 +2133,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 49.77
+          "value": 49.805
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -5212,10 +5212,10 @@
     },
     "ftse100": {
       "symbol": "^FTSE",
-      "price": 10875.14,
-      "changePct": 10.884,
+      "price": 10874.49,
+      "changePct": 10.877,
       "currency": "GBP",
-      "observedAt": "2026-11-13T13:17:02+00:00",
+      "observedAt": "2026-11-13T13:17:20+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -6235,7 +6235,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 10875.139648
+          "value": 10874.490234
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -6247,10 +6247,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 69520.85,
-      "changePct": -30.268,
+      "price": 69496.82,
+      "changePct": -30.292,
       "currency": "USD",
-      "observedAt": "2026-11-13T13:32:02+00:00",
+      "observedAt": "2026-11-13T13:32:17+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -7718,7 +7718,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 69520.851562
+          "value": 69496.820312
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -23926,7 +23926,7 @@
         ]
       }
     ],
-    "updatedAt": "2026-11-13T13:32:07+00:00",
+    "updatedAt": "2026-11-13T13:32:25+00:00",
     "source": "Consumer Council Northern Ireland",
     "sourceUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker",
     "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
@@ -27970,7 +27970,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-13T13:32:08+00:00",
+    "updatedAt": "2026-11-13T13:32:25+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
@@ -28607,11 +28607,7 @@
       "source": "ONS / Defra CPIH",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket"
     },
-    "updatedAt": "2026-11-13T13:32:09+00:00",
-    "retailerCount": 4,
-    "productCount": 25,
-    "latestDate": "2026-11-13",
-    "comparisonNote": "Only verified structured product offers are recorded. Prices are not invented. Incomplete retailer baskets are not given a complete basket total. Loyalty prices are not inferred from standard prices.",
+    "updatedAt": "2026-11-13T13:32:25+00:00",
     "supermarketIndexHistory": [
       {
         "vintage": "2026-W39",
@@ -36894,7 +36890,7 @@
         "missingPackSize": null
       }
     ],
-    "supermarketIndexUpdatedAt": "2026-11-13T13:32:09+00:00",
+    "supermarketIndexUpdatedAt": "2026-11-13T13:32:26+00:00",
     "supermarketIndex": {
       "vintage": "2026-W45",
       "publishedAt": "2026-11-09T12:49:02Z",
