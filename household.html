@@ -139,6 +139,19 @@ footer{padding:20px 14px;color:var(--muted);font-size:11px;text-align:center}
 </table>
 </div>
 <div class="small" id="dailyBasketNote" style="margin-top:10px">Source: Yappman Data, UK Daily 212-Item Basket, CC BY 4.0.</div>
+<div class="small" id="dailyBasketCoverage" style="margin-top:10px">Coverage and retailer counts will appear when the daily feed loads.</div>
+</section>
+
+<section class="card wide">
+<h2>VERIFIED CROSS-RETAILER PRICE CHECK</h2>
+<div class="small">Compares the same barcode (EAN) across retailers in the latest snapshot only. Retailer-specific product IDs are never treated as equivalent. Rows without a shared barcode are excluded. These are shelf-price comparisons, not a complete basket ranking.</div>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Barcode (EAN)</th><th>Retailers matched</th><th>Lowest shelf price</th><th>Highest shelf price</th><th>Price spread</th></tr></thead>
+<tbody id="crossRetailerRows"><tr><td colspan="5">Waiting for verified barcode matches.</td></tr></tbody>
+</table>
+</div>
+<div class="small" id="crossRetailerNote" style="margin-top:10px">No cross-retailer equivalence is assumed without a shared barcode.</div>
 </section>
 
 <section class="card wide">
@@ -532,18 +545,59 @@ function renderSustainedPricePressure(history){
   "The pressure signal is directional only and is not official CPI, CPIH or a forecast.";
 }
 
+function renderCrossRetailerComparison(rows){
+ const body=document.getElementById("crossRetailerRows");
+ const note=document.getElementById("crossRetailerNote");
+ if(!body||!note)return;
+ const groups=new Map();
+ rows.forEach(o=>{
+  const raw=Array.isArray(o.ean)?o.ean:[o.ean];
+  const codes=[...new Set(raw.map(v=>String(v||"").replace(/\\D/g,"")).filter(v=>v.length>=8&&v.length<=14))];
+  codes.forEach(code=>{
+   if(!groups.has(code))groups.set(code,new Map());
+   const byRetailer=groups.get(code);
+   const price=number(o.price);
+   if(price===null||price<=0)return;
+   const retailer=String(o.retailer||"").toLowerCase();
+   const prior=byRetailer.get(retailer);
+   if(!prior||String(o.scrapedAt||"")>String(prior.scrapedAt||""))
+    byRetailer.set(retailer,{price,scrapedAt:o.scrapedAt||"",retailer});
+  });
+ });
+ const matches=[];
+ groups.forEach((retailers,ean)=>{
+  if(retailers.size<2)return;
+  const values=Array.from(retailers.values());
+  const prices=values.map(v=>v.price);
+  const low=Math.min(...prices),high=Math.max(...prices);
+  matches.push({ean,retailers:values.length,low,high,spread:high-low});
+ });
+ matches.sort((a,b)=>b.spread-a.spread);
+ body.innerHTML=matches.length?matches.slice(0,25).map(m=>
+  '<tr><td>'+escapeHtml(m.ean)+'</td><td>'+m.retailers+'</td><td>'+
+  money(m.low)+'</td><td>'+money(m.high)+'</td><td>'+
+  money(m.spread)+'</td></tr>'
+ ).join(""):'<tr><td colspan="5">No shared valid barcodes across retailers in this snapshot.</td></tr>';
+ note.textContent=matches.length?
+  matches.length+" shared barcodes matched across at least two retailers. Exact EAN is the equivalence test; this does not adjust for promotions, loyalty eligibility or delivery charges.":
+  "No cross-retailer comparisons published: the latest feed does not contain enough shared valid barcodes. No retailer equivalence has been guessed.";
+}
+
 function renderDailyGroceryBasket(data){
  const basket=data.householdBasket||{};
  const history=allObjects(basket.dailyProductPriceHistory);
  const count=document.getElementById("dailyBasketCount");
  const date=document.getElementById("dailyBasketDate");
  const note=document.getElementById("dailyBasketNote");
+ const coverage=document.getElementById("dailyBasketCoverage");
  if(!history.length){
   count.textContent="—";
   date.textContent="No dated product-level price history available.";
   note.textContent="The daily basket has not yet been imported.";
+  coverage.textContent="No coverage data available.";
   dailyBasketLatestRows=[];
   renderDailyBasketRows();
+  renderCrossRetailerComparison([]);
   return;
  }
  const latestDate=String(basket.dailyProductPriceLatestDate||
@@ -555,25 +609,36 @@ function renderDailyGroceryBasket(data){
  const byProduct=new Map();
  history.forEach(o=>{
   const key=String(o.retailer||"")+"|"+String(o.retailerProductId||"");
-  const date=String(o.date||String(o.scrapedAt||"").slice(0,10));
-  if(!date||date>=latestDate)return;
+  const day=String(o.date||String(o.scrapedAt||"").slice(0,10));
+  if(!day||day>=latestDate)return;
   const prior=byProduct.get(key);
-  if(!prior||date>prior.date||
-     (date===prior.date&&String(o.scrapedAt||"")>String(prior.scrapedAt||""))){
-   byProduct.set(key,{...o,date});
+  if(!prior||day>prior.date||
+     (day===prior.date&&String(o.scrapedAt||"")>String(prior.scrapedAt||""))){
+   byProduct.set(key,{...o,date:day});
   }
  });
  dailyBasketPreviousByKey=byProduct;
  renderPriceMovers();
  renderSustainedPricePressure(history);
+ renderCrossRetailerComparison(dailyBasketLatestRows);
  const comparable=dailyBasketLatestRows.filter(o=>
   byProduct.has(String(o.retailer||"")+"|"+String(o.retailerProductId||""))
  ).length;
  count.textContent=dailyBasketLatestRows.length+" product price rows • "+
-  comparable+" with previous-day comparisons";
+  comparable+" with earlier observations";
  date.textContent="Latest snapshot: "+latestDate+
   " • "+history.length.toLocaleString("en-GB")+" historical observations stored";
- note.textContent=(comparable?"Historical comparisons use each product’s most recent earlier dated observation. ":"Price history is building; previous-price comparisons will appear as subsequent daily snapshots arrive. ")+"Prices are online shelf snapshots. Loyalty prices are shown separately and may require a retailer loyalty card. Source: Yappman Data, UK Daily 212-Item Basket, CC BY 4.0. Product IDs and barcodes identify records; they are not product descriptions.";
+ note.textContent=(comparable?"Historical comparisons use each product’s most recent earlier dated observation, not necessarily the immediately preceding calendar day. ":"Price history is building; previous-price comparisons will appear as subsequent daily snapshots arrive. ")+"Prices are online shelf snapshots. Loyalty prices are shown separately and may require a retailer loyalty card. Source: Yappman Data, UK Daily 212-Item Basket, CC BY 4.0. Product IDs and barcodes identify records; they are not product descriptions.";
+ const counts={};
+ dailyBasketLatestRows.forEach(o=>{const r=String(o.retailer||"unknown").toLowerCase();counts[r]=(counts[r]||0)+1;});
+ const expected=212;
+ const retailerNames={aldi:"Aldi",asda:"Asda",sainsburys:"Sainsbury's",tesco:"Tesco"};
+ const breakdown=Object.entries(counts).sort((a,b)=>a[0].localeCompare(b[0])).map(([k,v])=>
+  (retailerNames[k]||k)+": "+v
+ ).join(" • ");
+ coverage.textContent="Coverage: "+dailyBasketLatestRows.length+" of "+expected+
+  " expected basket rows ("+(dailyBasketLatestRows.length/expected*100).toFixed(1)+
+  "%) • "+breakdown+". Missing or unreturned rows are not treated as out of stock.";
  renderDailyBasketRows();
 }
 
