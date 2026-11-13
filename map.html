@@ -74,6 +74,17 @@ const allText=a=>(String(a.title||"")+" "+String(a.description||"")).toLowerCase
 const isNI=a=>/northern ireland|\bni\b/i.test(String(a.region||""))||!!a.locality||TOWNS.some(t=>t.terms.some(term=>allText(a).includes(term)));
 const locate=a=>{if(a.locality&&a.locality.name){const found=TOWNS.find(t=>t.name===a.locality.name);if(found)return found;}const t=allText(a);for(const town of TOWNS){if(town.terms.some(term=>new RegExp("(^|[^a-z])"+term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"([^a-z]|$)","i").test(t)))return town;}return null;};
 const category=a=>{const t=allText(a),s=String(a.sourceType||"").toLowerCase();if(/traffic|roadwork|transport|rail|airport|port|ferry|bridge|closure/.test(t+" "+s))return "TRANSPORT";if(/weather|flood|storm|wind|snow|ice|fire|environment|warning/.test(t+" "+s))return "WEATHER";if(/police|emergency|incident|crash|collision|evacuat|rescue|explosion|outage/.test(t+" "+s))return "EMERGENCY";return "OTHER";};
+function diverse(records,limit,perSource){
+ const counts=new Map(),out=[];
+ for(const item of records){
+  const key=String(item.sourceId||item.source||"unknown");
+  const count=counts.get(key)||0;
+  if(count>=perSource)continue;
+  counts.set(key,count+1);out.push(item);
+  if(out.length>=limit)break;
+ }
+ return out;
+}
 let records=[],filtered=[],markers=[],active="ALL",map=null,layer=null;
 function initMap(){
  map=null;
@@ -104,10 +115,11 @@ function renderFallbackMap(groups){
 function render(){
  filtered=records.filter(a=>active==="ALL"||category(a)===active);
  const groups=new Map();
- filtered.slice(0,500).forEach(a=>{const town=locate(a);if(!town)return;const group=groups.get(town.name)||{town,items:[]};group.items.push(a);groups.set(town.name,group);});
+ const plotRecords=diverse(filtered,500,45);
+ plotRecords.forEach(a=>{const town=locate(a);if(!town)return;const group=groups.get(town.name)||{town,items:[]};group.items.push(a);groups.set(town.name,group);});
  if(layer){layer.clearLayers();const bounds=[];groups.forEach(group=>{const town=group.town,items=group.items,cats=items.map(category),c=cats.includes("EMERGENCY")?"#ed5146":cats.includes("TRANSPORT")?"#d6b574":cats.includes("WEATHER")?"#79bde0":"#a8d58b";const links=items.slice(0,8).map(a=>'<div style="margin:5px 0">'+esc(a.title||"Untitled report")+(a.url&&(String(a.url).startsWith("https://")||String(a.url).startsWith("http://"))?' <a target="_blank" rel="noopener" href="'+esc(a.url)+'">OPEN ↗</a>':"")+'</div>').join("");L.circleMarker([town.lat,town.lon],{radius:Math.min(16,7+Math.log2(items.length)*2),weight:2,color:"#111",fillColor:c,fillOpacity:.9}).bindPopup('<strong>'+esc(town.name)+' // '+items.length+' RECORDS</strong><div>Approximate town-centre location</div>'+links).addTo(layer);bounds.push([town.lat,town.lon]);});if(bounds.length)map.fitBounds(bounds,{padding:[24,24],maxZoom:9});}else renderFallbackMap([...groups.values()]);
- $("map-articles").innerHTML=filtered.slice(0,80).map(a=>{const town=locate(a),c=category(a),url=a.url&&(String(a.url).startsWith("https://")||String(a.url).startsWith("http://"));return '<details class="map-item"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED")+" · "+esc(c)+" · "+esc(date(a.publishedAt||a.collectedAt))+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div>'+(url?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':'<span class="muted">No valid article URL supplied</span>')+'</details>';}).join("")||'<div class="panel muted">No Northern Ireland records match this filter.</div>';
- const located=filtered.filter(locate).length,plotted=filtered.slice(0,500).filter(locate).length;
+ $("map-articles").innerHTML=diverse(filtered,80,10).map(a=>{const town=locate(a),c=category(a),url=a.url&&(String(a.url).startsWith("https://")||String(a.url).startsWith("http://"));return '<details class="map-item"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED")+" · "+esc(c)+" · "+esc(date(a.publishedAt||a.collectedAt))+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div>'+(url?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':'<span class="muted">No valid article URL supplied</span>')+'</details>';}).join("")||'<div class="panel muted">No Northern Ireland records match this filter.</div>';
+ const located=filtered.filter(locate).length,plotted=plotRecords.filter(locate).length;
  $("map-list-status").textContent=filtered.length+" NI/local records · "+located+" with a town-level text match · showing up to 80 newest article links.";
  $("map-status").textContent=(layer?"LIVE STREET MAP":"BUILT-IN SCHEMATIC MAP")+" // "+plotted+" LOCATED RECORDS IN NEWEST 500 ACROSS "+groups.size+" TOWN LOCATIONS // "+filtered.length+" NI/LOCAL RECORDS IN ARCHIVE // APPROXIMATE TOWN LOCATIONS";
 }
