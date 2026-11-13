@@ -202,7 +202,7 @@ footer {
 
   <h2>03 // PRIORITY ALERTS</h2>
   <div id="priority-alerts">
-    <div class="panel muted">No priority alerts loaded.</div>
+    <div class="panel muted">No incidents with an explicit medium or high severity assessment are recorded.</div>
   </div>
 
   <h2>04 // SYSTEM DIAGNOSTICS</h2>
@@ -481,7 +481,7 @@ function locationOf(item) {
 function normalizeArticle(item) {
   if (typeof item === "string") {
     return {
-      title:item,summary:"",url:"",area:"UK",date:"",
+      title:item,summary:"",url:"",area:"UNKNOWN",date:"",
       source:"Unknown",sourcePriority:"",severity:"unassessed",category:"",status:""
     };
   }
