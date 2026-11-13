@@ -1010,7 +1010,9 @@ function renderStatus(){
  Heating oil history: ${(oil.items||[]).reduce((n,i)=>n+(i.history||[]).length,0)}<br>
  Road fuel products: ${(fuel.items||[]).length}<br>
  Road fuel history: ${(fuel.items||[]).reduce((n,i)=>n+(i.history||[]).length,0)}<br>
- Grocery products: ${(basket.items||[]).length}<br>
+ Legacy tracked grocery products: ${(basket.items||[]).length}<br>
+ Daily grocery price observations: ${(basket.dailyProductPriceHistory||[]).length}<br>
+ Latest daily grocery snapshot: ${safe(basket.dailyProductPriceLatestDate)} // ${(basket.dailyProductPriceLatestCount||0)} rows<br>
  Food inflation observations: ${(basket.foodInflationHistory||[]).length}<br>
  Overall inflation observations: ${(basket.overallInflationHistory||[]).length}
  `;
