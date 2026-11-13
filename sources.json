@@ -11,7 +11,14 @@
       "endpoint": "https://prepperready.co.uk/feed.xml",
       "method": "rss",
       "region": "UK",
-      "sectors": [1, 2, 3, 5, 9, 10],
+      "sectors": [
+        1,
+        2,
+        3,
+        5,
+        9,
+        10
+      ],
       "trust": "independent_specialist",
       "status": "candidate",
       "notes": "UK household preparedness, food, water, power and practical resilience."
@@ -25,7 +32,17 @@
       "endpoint": "https://feeds.bbci.co.uk/news/uk/rss.xml",
       "method": "rss",
       "region": "UK",
-      "sectors": [1, 2, 3, 5, 6, 7, 8, 9, 10],
+      "sectors": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
       "trust": "established_media",
       "status": "candidate",
       "notes": "Broad UK incident and policy coverage."
@@ -39,7 +56,16 @@
       "endpoint": "https://feeds.skynews.com/feeds/rss/home.xml",
       "method": "rss",
       "region": "UK",
-      "sectors": [1, 3, 5, 6, 7, 8, 9, 11],
+      "sectors": [
+        1,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11
+      ],
       "trust": "established_media",
       "status": "candidate",
       "notes": "Breaking news and UK incident reporting."
@@ -53,7 +79,18 @@
       "endpoint": "https://www.theguardian.com/uk/rss",
       "method": "rss",
       "region": "UK",
-      "sectors": [1, 2, 3, 4, 5, 6, 7, 8, 9, 11],
+      "sectors": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11
+      ],
       "trust": "established_media",
       "status": "candidate",
       "notes": "UK politics, energy, environment and international reporting."
@@ -67,7 +104,13 @@
       "endpoint": "https://www.aljazeera.com/xml/rss/all.xml",
       "method": "rss",
       "region": "International",
-      "sectors": [1, 3, 4, 6, 11],
+      "sectors": [
+        1,
+        3,
+        4,
+        6,
+        11
+      ],
       "trust": "established_media",
       "status": "candidate",
       "notes": "International conflict, geopolitics and disruption."
@@ -81,7 +124,11 @@
       "endpoint": "https://www.declassifieduk.org/feed/",
       "method": "rss",
       "region": "UK",
-      "sectors": [1, 8, 11],
+      "sectors": [
+        1,
+        8,
+        11
+      ],
       "trust": "independent_investigative",
       "status": "candidate",
       "notes": "Defence, security, foreign policy and investigations."
@@ -95,7 +142,19 @@
       "endpoint": "https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts",
       "method": "public_api",
       "region": "Global",
-      "sectors": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      "sectors": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
       "trust": "unverified_social",
       "status": "connector_required",
       "notes": "Public post search. Requires query, pagination and rate-limit handling."
@@ -109,7 +168,19 @@
       "endpoint": "INSTANCE_SPECIFIC_PUBLIC_ACCOUNT_RSS",
       "method": "rss_or_public_api",
       "region": "Global",
-      "sectors": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      "sectors": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
       "trust": "unverified_social",
       "status": "connector_required",
       "notes": "Public accounts and hashtags. Instance and account selection required."
@@ -123,7 +194,16 @@
       "endpoint": "INSTANCE_SPECIFIC_COMMUNITY_FEED",
       "method": "rss",
       "region": "Global",
-      "sectors": [1, 2, 3, 5, 8, 9, 10, 11],
+      "sectors": [
+        1,
+        2,
+        3,
+        5,
+        8,
+        9,
+        10,
+        11
+      ],
       "trust": "unverified_community",
       "status": "connector_required",
       "notes": "Public community discussions. Select instances and communities before activation."
@@ -137,7 +217,19 @@
       "endpoint": "https://www.youtube.com/feeds/videos.xml?channel_id=CHANNEL_ID",
       "method": "rss",
       "region": "Global",
-      "sectors": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      "sectors": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
       "trust": "mixed_media",
       "status": "connector_required",
       "notes": "Channel IDs must be selected and verified. Video claims require assessment."
@@ -151,7 +243,19 @@
       "endpoint": null,
       "method": "official_api_or_authorised_access",
       "region": "Global",
-      "sectors": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      "sectors": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
       "trust": "unverified_community",
       "status": "access_restricted",
       "notes": "RSS support ends 13 November 2026. Public API access is transitioning to the Developer Platform."
@@ -165,7 +269,19 @@
       "endpoint": null,
       "method": "authorised_public_channel_access",
       "region": "Global",
-      "sectors": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      "sectors": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
       "trust": "unverified_social",
       "status": "manual_review",
       "notes": "Selected public channels only. No assumption of unrestricted automated access."
@@ -179,7 +295,19 @@
       "endpoint": null,
       "method": "authorised_api_or_manual",
       "region": "Global",
-      "sectors": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      "sectors": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
       "trust": "unverified_social",
       "status": "manual_review",
       "notes": "Public reporting and selected accounts. API access and costs must be checked."
@@ -193,7 +321,14 @@
       "endpoint": "https://feeds.feedburner.com/zerohedge/feed",
       "method": "rss",
       "region": "International",
-      "sectors": [1, 3, 4, 5, 8, 11],
+      "sectors": [
+        1,
+        3,
+        4,
+        5,
+        8,
+        11
+      ],
       "trust": "alternative_commentary",
       "status": "candidate",
       "notes": "Financial markets, central banks, geopolitics and institutional influence. Verify claims against primary sources."
@@ -207,7 +342,14 @@
       "endpoint": "https://feeds.feedburner.com/ActivistPost",
       "method": "rss",
       "region": "International",
-      "sectors": [1, 4, 7, 8, 10, 11],
+      "sectors": [
+        1,
+        4,
+        7,
+        8,
+        10,
+        11
+      ],
       "trust": "alternative_commentary",
       "status": "candidate",
       "notes": "Surveillance, civil liberties, censorship, technology and global governance commentary."
@@ -221,7 +363,13 @@
       "endpoint": "https://off-guardian.org/feed/",
       "method": "rss",
       "region": "UK",
-      "sectors": [1, 7, 8, 10, 11],
+      "sectors": [
+        1,
+        7,
+        8,
+        10,
+        11
+      ],
       "trust": "alternative_commentary",
       "status": "candidate",
       "notes": "Media narratives, public policy, censorship and institutional scrutiny."
@@ -235,7 +383,12 @@
       "endpoint": "https://dailysceptic.org/feed/",
       "method": "rss",
       "region": "UK",
-      "sectors": [1, 7, 8, 10],
+      "sectors": [
+        1,
+        7,
+        8,
+        10
+      ],
       "trust": "independent_commentary",
       "status": "candidate",
       "notes": "UK public policy, institutional decisions, science and public debate."
@@ -249,7 +402,13 @@
       "endpoint": "https://expose-news.com/feed/",
       "method": "rss",
       "region": "UK",
-      "sectors": [1, 4, 7, 8, 10],
+      "sectors": [
+        1,
+        4,
+        7,
+        8,
+        10
+      ],
       "trust": "alternative_commentary",
       "status": "candidate",
       "notes": "Alternative reporting on UK policy, health, institutions and public affairs. Claims require corroboration."
@@ -263,7 +422,12 @@
       "endpoint": "https://www.opendemocracy.net/rss/",
       "method": "rss",
       "region": "UK",
-      "sectors": [1, 8, 10, 11],
+      "sectors": [
+        1,
+        8,
+        10,
+        11
+      ],
       "trust": "independent_investigative",
       "status": "candidate",
       "notes": "Political influence, lobbying, accountability, rights and institutional power."
@@ -277,7 +441,11 @@
       "endpoint": null,
       "method": "manual_or_verified_rss",
       "region": "UK",
-      "sectors": [1, 8, 10],
+      "sectors": [
+        1,
+        8,
+        10
+      ],
       "trust": "advocacy_source",
       "status": "manual_review",
       "notes": "UK surveillance, facial recognition, digital identity, privacy and civil liberties."
@@ -291,7 +459,15 @@
       "endpoint": null,
       "method": "manual_or_verified_rss",
       "region": "UK",
-      "sectors": [1, 3, 4, 7, 8, 10, 11],
+      "sectors": [
+        1,
+        3,
+        4,
+        7,
+        8,
+        10,
+        11
+      ],
       "trust": "alternative_commentary",
       "status": "manual_review",
       "notes": "UK government, public institutions, defence, health policy and geopolitics."
@@ -305,7 +481,13 @@
       "endpoint": null,
       "method": "manual_review",
       "region": "UK",
-      "sectors": [1, 7, 8, 10, 11],
+      "sectors": [
+        1,
+        7,
+        8,
+        10,
+        11
+      ],
       "trust": "curated_alternative",
       "status": "manual_review",
       "notes": "Alternative media archive and curated material. Not treated as a verified live news feed."
@@ -319,7 +501,12 @@
       "endpoint": null,
       "method": "manual_or_verified_rss",
       "region": "UK",
-      "sectors": [1, 8, 10, 11],
+      "sectors": [
+        1,
+        8,
+        10,
+        11
+      ],
       "trust": "advocacy_source",
       "status": "manual_review",
       "notes": "Surveillance, data collection, digital rights and state and corporate technology."
@@ -333,10 +520,50 @@
       "endpoint": null,
       "method": "manual_or_verified_rss",
       "region": "UK_Europe",
-      "sectors": [1, 6, 8, 10, 11],
+      "sectors": [
+        1,
+        6,
+        8,
+        10,
+        11
+      ],
       "trust": "independent_research",
       "status": "manual_review",
       "notes": "Policing, borders, surveillance, security policy and state powers."
+    },
+    {
+      "id": "nifrs-ni",
+      "name": "Northern Ireland Fire & Rescue Service",
+      "platform": "website",
+      "type": "emergency_service",
+      "url": "https://www.nifrs.org/",
+      "endpoint": "https://www.nifrs.org/feed/",
+      "method": "rss",
+      "region": "Northern Ireland",
+      "sectors": [
+        10
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "notes": "Official NIFRS news and operational statements. RSS endpoint accepted by the feed service; confirm ongoing health in collector diagnostics."
+    },
+    {
+      "id": "gov-northern-ireland-office",
+      "name": "Northern Ireland Office",
+      "platform": "website",
+      "type": "government_department",
+      "url": "https://www.gov.uk/government/organisations/northern-ireland-office",
+      "endpoint": "https://www.gov.uk/government/organisations/northern-ireland-office.atom",
+      "method": "rss",
+      "region": "Northern Ireland",
+      "sectors": [
+        1,
+        8,
+        11
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "notes": "Official GOV.UK Atom feed for Northern Ireland Office publications and announcements."
     }
   ]
 }
