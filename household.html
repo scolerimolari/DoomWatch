@@ -597,8 +597,9 @@ function renderCrossRetailerComparison(rows){
   map.forEach((retailers,key)=>{
    if(retailers.size<2)return;
    const values=Array.from(retailers.values());
-   if(method==="Source match key"){
+   if(method!=="Exact EAN"){
     const known=new Set(values.flatMap(v=>v.eans));
+    // A name or source key must never overrule conflicting barcodes.
     if(known.size>1)return;
     if(known.size===1&&values.every(v=>v.eans.length))return;
    }
