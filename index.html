@@ -495,6 +495,15 @@ function locationOf(item) {
   return "UNKNOWN";
 }
 
+function sourcePageURL(item) {
+  const source = asText(valueOf(item,["source","publisher","sourceName"],"")).toLowerCase();
+  if (source.includes("trafficwatchni") || source.includes("trafficwatch")) {
+    if (source.includes("roadwork")) return "https://trafficwatchni.com/twni/roadworks";
+    if (source.includes("incident") || source.includes("traffic")) return "https://trafficwatchni.com/twni/traffic-news";
+  }
+  return "";
+}
+
 function normalizeArticle(item) {
   if (typeof item === "string") {
     return {
@@ -512,7 +521,7 @@ function normalizeArticle(item) {
   return {
     title:asText(valueOf(item,["title","headline","name","claim"],"Untitled intelligence record")),
     summary:asText(valueOf(item,["summary","description","content","body","text","snippet"],"")),
-    url:safeURL(valueOf(item,["url","link","sourceUrl","articleUrl"],"")),
+    url:safeURL(valueOf(item,["url","link","sourceUrl","articleUrl"],"")) || sourcePageURL(item),
     area:locationOf(item),
     date:valueOf(item,["date","published","publishedAt","timestamp","createdAt"],""),
     source:asText(valueOf(item,["source","publisher","sourceName","author"],"Source not specified")),
@@ -636,7 +645,7 @@ function renderDailyBrief() {
   const sections = brief.regions.map(group => {
     const entries = Array.isArray(group.entries) ? group.entries : [];
     const cards = entries.length ? entries.map(item => {
-      const link = safeURL(item.url);
+      const link = safeURL(item.url) || sourcePageURL(item);
       return '<div class="intel-card unassessed">'+
         '<strong>'+escapeHTML(item.title || "Untitled record")+'</strong>'+
         '<div class="meta">'+escapeHTML(item.source || "Source not specified")+
