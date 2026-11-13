@@ -102,6 +102,16 @@ footer{padding:20px 14px;color:var(--muted);font-size:11px;text-align:center}
 </section>
 
 <section class="card wide">
+<h2>UK SUPERMARKET SHELF-PRICE INDEX</h2>
+<div class="small">Weekly online shelf-price index across Tesco, Sainsbury's, Asda and Aldi. This tracks matched product shelf prices, not individual product prices, household spending or official CPI.</div>
+<div class="metric" id="shelfIndexLatest">—</div>
+<div class="small" id="shelfIndexDate">Waiting for verified weekly index data</div>
+<canvas id="shelfIndexChart"></canvas>
+<div class="grid" id="shelfRetailers" style="margin-top:12px"></div>
+<div class="small" id="shelfIndexNote">No published weekly index loaded.</div>
+</section>
+
+<section class="card wide">
 <h2>HOUSEHOLD BASKET</h2>
 <div class="small">Collected household basket observations and historical records.</div>
 <div class="list" id="basketList" style="margin-top:12px"></div>
@@ -247,6 +257,46 @@ function renderProducts(data){
   }).join("");
  }
 }
+function renderSupermarketIndex(data){
+ const basket=data.householdBasket||{};
+ const history=allObjects(basket.supermarketIndexHistory);
+ const headlines=history.filter(o=>o.recordType==="headline"&&o.vintage);
+ const latest=headlines.sort((a,b)=>String(a.vintage).localeCompare(String(b.vintage))).slice(-1)[0];
+ const metric=document.getElementById("shelfIndexLatest");
+ const date=document.getElementById("shelfIndexDate");
+ const note=document.getElementById("shelfIndexNote");
+ const retailerBox=document.getElementById("shelfRetailers");
+ if(!latest){
+  metric.textContent="—";
+  date.textContent="No verified weekly index data available.";
+  note.textContent="The public index has not yet been imported.";
+  retailerBox.innerHTML="";
+  draw("shelfIndexChart",[]);
+  return;
+ }
+ metric.textContent=number(latest.level)===null?"—":number(latest.level).toFixed(1);
+ date.textContent="Week "+latest.vintage+
+  (number(latest.weekOnWeekPct)!==null?
+   " • "+(number(latest.weekOnWeekPct)>0?"+":"")+number(latest.weekOnWeekPct).toFixed(2)+"% week on week":"");
+ const meta=history.filter(o=>o.recordType==="meta"&&o.vintage===latest.vintage).slice(-1)[0];
+ const base=meta&&meta.base?String(meta.base):"";
+ const series=headlines.filter(o=>!base||String(o.vintage)>=base)
+  .map(o=>({date:o.vintage,value:number(o.level)})).filter(o=>o.value!==null);
+ draw("shelfIndexChart",series);
+ const retailers=history.filter(o=>o.recordType==="retailer"&&o.vintage===latest.vintage);
+ const names={tesco:"Tesco",sainsburys:"Sainsbury's",asda:"Asda",aldi:"Aldi"};
+ retailerBox.innerHTML=retailers.map(o=>{
+  const name=names[o.retailer]||text(o.retailer)||"Retailer";
+  const level=number(o.level);
+  const change=number(o.weekOnWeekPct);
+  const detail=level===null?"—":level.toFixed(1)+
+   (change===null?"":" ("+(change>0?"+":"")+change.toFixed(2)+"%)");
+  return '<div class="item"><strong>'+escapeHtml(name)+'</strong><span>'+escapeHtml(detail)+'</span></div>';
+ }).join("");
+ note.textContent="Matched products: "+(number(latest.matched)||"not supplied")+
+  ". Source: Yappman Data, UK Online Shelf-Price Index, CC BY 4.0. Online shelf prices only; not CPI or prices paid. See data.yappman.com/shelf-price-index.";
+}
+
 function renderOil(data){
  const oil=data.heatingOil||{};
  const arr=allObjects(oil.items);
@@ -308,6 +358,7 @@ async function load(){
   renderOil(data);
   renderFuel(data);
   renderProducts(data);
+  renderSupermarketIndex(data);
   renderSources(data);
   status.textContent="DATA LINK ACTIVE • Updated "+(data.updatedAt||data.generatedAt||"timestamp not supplied");
  }catch(e){
