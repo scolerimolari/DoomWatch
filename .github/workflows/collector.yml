@@ -47,6 +47,44 @@ jobs:
           python -m json.tool manifest.json > /dev/null
           python -m py_compile markets_collector.py
 
+      - name: Validate dashboard JavaScript
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+
+          class ScriptExtractor(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.scripts = []
+                  self.current = None
+
+              def handle_starttag(self, tag, attrs):
+                  if tag.lower() == "script":
+                      self.current = []
+
+              def handle_data(self, data):
+                  if self.current is not None:
+                      self.current.append(data)
+
+              def handle_endtag(self, tag):
+                  if tag.lower() == "script" and self.current is not None:
+                      self.scripts.append("".join(self.current))
+                      self.current = None
+
+          for page in ("index.html", "markets.html", "household.html"):
+              parser = ScriptExtractor()
+              parser.feed(Path(page).read_text(encoding="utf-8"))
+              if not parser.scripts:
+                  raise SystemExit(f"No inline JavaScript found in {page}")
+              for number, script in enumerate(parser.scripts, start=1):
+                  Path(f"/tmp/{page}-{number}.js").write_text(script, encoding="utf-8")
+                  print(f"Extracted {page} script {number}")
+          PY
+          node --check /tmp/index.html-1.js
+          node --check /tmp/markets.html-1.js
+          node --check /tmp/household.html-1.js
+
       - name: Run DoomWatch collector
         run: python collector.py
 
