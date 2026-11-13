@@ -142,6 +142,22 @@ footer{padding:20px 14px;color:var(--muted);font-size:11px;text-align:center}
 </section>
 
 <section class="card wide">
+<h2>PRICE MOVERS // BIGGEST DAILY CHANGES</h2>
+<div class="small">Ranks products with a previous dated observation against their latest recorded price. This is a comparison of online shelf snapshots, not a live checkout quote.</div>
+<div class="grid" style="margin-top:12px">
+<div class="card">
+<h3 class="warning">BIGGEST PRICE RISES</h3>
+<div class="list" id="priceMoversUp"><div class="item">Waiting for comparable observations.</div></div>
+</div>
+<div class="card">
+<h3 class="good">BIGGEST PRICE FALLS</h3>
+<div class="list" id="priceMoversDown"><div class="item">Waiting for comparable observations.</div></div>
+</div>
+</div>
+<div class="small" id="priceMoversNote" style="margin-top:10px">Price movements will appear when comparable dated observations are available.</div>
+</section>
+
+<section class="card wide">
 <h2>HOUSEHOLD BASKET</h2>
 <div class="small">Collected household basket observations and historical records.</div>
 <div class="list" id="basketList" style="margin-top:12px"></div>
@@ -365,6 +381,36 @@ function renderDailyBasketRows(){
    money(number(o.loyaltyPrice))+'</td><td>'+unit+'</td></tr>';
  }).join("");
 }
+function renderPriceMovers(){
+ const up=document.getElementById("priceMoversUp");
+ const down=document.getElementById("priceMoversDown");
+ const note=document.getElementById("priceMoversNote");
+ if(!up||!down||!note)return;
+ const moves=[];
+ dailyBasketLatestRows.forEach(o=>{
+  const key=String(o.retailer||"")+"|"+String(o.retailerProductId||"");
+  const previous=dailyBasketPreviousByKey.get(key);
+  if(!previous)return;
+  const now=number(o.price),was=number(previous.price);
+  if(now===null||was===null||was<=0)return;
+  const change=now-was;
+  if(Math.abs(change)<0.00005)return;
+  moves.push({retailer:o.retailer||"Unknown",id:o.retailerProductId||"—",
+   now,was,change,pct:change/was*100});
+ });
+ const card=(m)=>'<div class="item"><div><strong>'+escapeHtml(m.retailer.toUpperCase())+
+  '</strong><div class="small">ID '+escapeHtml(m.id)+'</div></div><div style="text-align:right"><strong>'+
+  (m.change>0?"+":"")+money(m.change)+' ('+(m.pct>0?"+":"")+m.pct.toFixed(1)+'%)</strong>'+
+  '<div class="small">'+money(m.was)+' → '+money(m.now)+'</div></div></div>';
+ const rises=moves.filter(m=>m.change>0).sort((a,b)=>b.pct-a.pct).slice(0,8);
+ const falls=moves.filter(m=>m.change<0).sort((a,b)=>a.pct-b.pct).slice(0,8);
+ up.innerHTML=rises.length?rises.map(card).join(""):'<div class="item">No price rises in the current comparison.</div>';
+ down.innerHTML=falls.length?falls.map(card).join(""):'<div class="item">No price falls in the current comparison.</div>';
+ note.textContent=moves.length+" products changed price across "+dailyBasketLatestRows.length+
+  " latest product rows. Ranked by percentage change against each product’s most recent earlier observation. "+
+  "Unchanged products are excluded; product IDs are shown because product descriptions are not included in this feed.";
+}
+
 function renderDailyGroceryBasket(data){
  const basket=data.householdBasket||{};
  const history=allObjects(basket.dailyProductPriceHistory);
@@ -397,6 +443,7 @@ function renderDailyGroceryBasket(data){
   }
  });
  dailyBasketPreviousByKey=byProduct;
+ renderPriceMovers();
  const comparable=dailyBasketLatestRows.filter(o=>
   byProduct.has(String(o.retailer||"")+"|"+String(o.retailerProductId||""))
  ).length;
