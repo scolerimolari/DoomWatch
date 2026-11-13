@@ -1,6 +1,15 @@
 name: DoomWatch Markets Collector
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "markets_collector.py"
+      - ".github/workflows/markets-collector.yml"
+      - "markets.html"
+      - "household.html"
+
   schedule:
     - cron: "17 */6 * * *"
   workflow_dispatch:
