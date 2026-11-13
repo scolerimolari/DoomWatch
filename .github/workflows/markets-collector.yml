@@ -60,9 +60,43 @@ jobs:
               if str(row.get("date") or row.get("scrapedAt") or "")[:10] == latest_date
           ]
           counts = {}
+          ean_rows = 0
+          match_key_rows = 0
+          identities = {}
           for row in latest:
               retailer = str(row.get("retailer") or "Unknown")
               counts[retailer] = counts.get(retailer, 0) + 1
+
+              raw_ean = row.get("ean") or []
+              if not isinstance(raw_ean, list):
+                  raw_ean = [raw_ean]
+              eans = [
+                  "".join(ch for ch in str(value) if ch.isdigit())
+                  for value in raw_ean
+              ]
+              eans = [value for value in eans if 8 <= len(value) <= 14]
+              match_key = str(row.get("matchKey") or "").strip()
+
+              if eans:
+                  ean_rows += 1
+                  identity = "ean:" + sorted(eans)[0]
+              elif match_key:
+                  match_key_rows += 1
+                  identity = "match:" + match_key.casefold()
+              else:
+                  identity = ""
+
+              if identity:
+                  identities.setdefault(identity, set()).add(retailer)
+
+          shared_ean_groups = sum(
+              1 for key, retailers in identities.items()
+              if key.startswith("ean:") and len(retailers) >= 2
+          )
+          shared_match_key_groups = sum(
+              1 for key, retailers in identities.items()
+              if key.startswith("match:") and len(retailers) >= 2
+          )
 
           report = {
               "generatedAt": data.get("updatedAt"),
@@ -71,7 +105,10 @@ jobs:
               "latestDate": latest_date,
               "latestRows": len(latest),
               "retailerCounts": counts,
-              "sampleRows": latest[:5],
+              "eanRows": ean_rows,
+              "matchKeyRows": match_key_rows,
+              "sharedEanProductGroups": shared_ean_groups,
+              "sharedMatchKeyProductGroups": shared_match_key_groups,
           }
           Path("data/grocery-status.json").write_text(
               json.dumps(report, ensure_ascii=False, indent=2) + "\n",
