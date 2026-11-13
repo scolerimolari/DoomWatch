@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "markets_collector.py"
+      - "validate_markets.py"
       - ".github/workflows/markets-collector.yml"
       - "markets.html"
       - "household.html"
@@ -43,6 +44,9 @@ jobs:
 
       - name: Collect market intelligence
         run: python markets_collector.py
+
+      - name: Validate collected market data
+        run: python validate_markets.py
 
       - name: Commit updated market history
         run: |
