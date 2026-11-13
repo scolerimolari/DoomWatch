@@ -66,6 +66,7 @@ jobs:
           match_key_only_rows = 0
           ean_identities = {}
           match_identities = {}
+          legacy_match_identities = {}
           for row in latest:
               retailer = str(row.get("retailer") or "Unknown")
               counts[retailer] = counts.get(retailer, 0) + 1
@@ -100,6 +101,12 @@ jobs:
                           "retailer": retailer,
                           "eans": set(eans),
                       })
+                      legacy_key = str(row.get("matchKeyV1") or "").strip().casefold()
+                      if legacy_key:
+                          legacy_match_identities.setdefault(legacy_key, []).append({
+                              "retailer": retailer,
+                              "eans": set(eans),
+                          })
 
           shared_ean_groups = sum(
               1 for retailers in ean_identities.values()
@@ -177,22 +184,27 @@ jobs:
                   continue
               shared_name_pack_groups += 1
 
-          shared_match_key_groups = 0
-          hybrid_match_key_groups = 0
-          for group in match_identities.values():
-              retailers = {row["retailer"] for row in group}
-              if len(retailers) < 2:
-                  continue
-              known_eans = set().union(*(row["eans"] for row in group))
-              # Conflicting barcodes are stronger evidence than a text key.
-              if len(known_eans) > 1:
-                  continue
-              # If every row has the same barcode, the EAN already covers it.
-              if known_eans and all(row["eans"] for row in group):
-                  continue
-              shared_match_key_groups += 1
-              if known_eans:
-                  hybrid_match_key_groups += 1
+          def count_safe_match_groups(identities):
+              shared = 0
+              hybrid = 0
+              for group in identities.values():
+                  retailers = {row["retailer"] for row in group}
+                  if len(retailers) < 2:
+                      continue
+                  known_eans = set().union(*(row["eans"] for row in group))
+                  # Conflicting barcodes are stronger evidence than a text key.
+                  if len(known_eans) > 1:
+                      continue
+                  # If every row has the same barcode, the EAN already covers it.
+                  if known_eans and all(row["eans"] for row in group):
+                      continue
+                  shared += 1
+                  if known_eans:
+                      hybrid += 1
+              return shared, hybrid
+
+          shared_match_key_groups, hybrid_match_key_groups = count_safe_match_groups(match_identities)
+          shared_legacy_match_key_groups, hybrid_legacy_match_key_groups = count_safe_match_groups(legacy_match_identities)
 
           report = {
               "generatedAt": data.get("updatedAt"),
@@ -207,6 +219,8 @@ jobs:
               "sharedEanProductGroups": shared_ean_groups,
               "sharedMatchKeyProductGroups": shared_match_key_groups,
               "hybridMatchKeyProductGroups": hybrid_match_key_groups,
+              "sharedLegacyMatchKeyV1Groups": shared_legacy_match_key_groups,
+              "hybridLegacyMatchKeyV1Groups": hybrid_legacy_match_key_groups,
               "sharedNamePackCandidateGroups": shared_name_pack_groups,
           }
           Path("data/grocery-status.json").write_text(
