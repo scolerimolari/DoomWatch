@@ -8,6 +8,7 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from email.utils import parsedate_to_datetime
 from html import unescape
+from urllib.error import HTTPError
 
 ROOT = Path(__file__).resolve().parent
 FEEDS_FILE = ROOT / "feeds.json"
@@ -476,22 +477,38 @@ def collect_bluesky_searches():
         ("fuel-food", "fuel shortage food supply shortage"),
         ("culture-society", "civil liberties protest censorship surveillance immigration")
     ]
-    endpoint = "https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts"
+    endpoints = [
+        "https://api.bsky.app/xrpc/app.bsky.feed.searchPosts",
+        "https://api.bsky.app/xrpc/app.bsky.feed.SEARCHPOSTS",
+        "https://public.api.bsky.app/xrpc/app.bsky.feed.SEARCHPOSTS"
+    ]
     results, statuses = [], []
 
     for search_id, query in searches:
         try:
-            url = endpoint + "?" + urlencode({
-                "q": query, "limit": 20, "sort": "latest", "lang": "en"
-            })
-            request = urllib.request.Request(
-                url,
-                headers={"User-Agent": USER_AGENT, "Accept": "application/json"}
-            )
-            with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
-                payload = json.loads(
-                    response.read(2_000_000).decode("utf-8-sig", errors="replace")
+            payload = None
+            last_http_error = None
+            for endpoint in endpoints:
+                url = endpoint + "?" + urlencode({
+                    "q": query, "limit": 20, "sort": "latest", "lang": "en"
+                })
+                request = urllib.request.Request(
+                    url,
+                    headers={"User-Agent": USER_AGENT, "Accept": "application/json"}
                 )
+                try:
+                    with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+                        payload = json.loads(
+                            response.read(2_000_000).decode("utf-8-sig", errors="replace")
+                        )
+                    break
+                except HTTPError as error:
+                    if error.code != 403:
+                        raise
+                    last_http_error = error
+
+            if payload is None:
+                raise last_http_error or RuntimeError("All Bluesky search endpoints failed")
 
             posts = payload.get("posts", []) if isinstance(payload, dict) else []
             added = 0
