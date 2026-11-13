@@ -129,7 +129,7 @@ main{padding:10px}
 <div id="groceryIndexStatus" class="small">Connecting to published grocery index...</div>
 <div class="grid" id="groceryIndexCards"></div>
 <div class="index-note">
-Independent UK online supermarket shelf-price index. Tracks matched products at Tesco, Sainsbury's, Asda and Aldi. Base 100. This is a price index, not a cash shopping basket total, not CPI and not specifically Northern Ireland pricing.
+Independent weekly UK supermarket shelf-price index, shown only as an aggregate measure. No individual product prices, product lists or household basket totals are displayed. Base 100; not CPI and not specifically Northern Ireland pricing.
 </div>
 </div>
 
@@ -151,9 +151,9 @@ Independent UK online supermarket shelf-price index. Tracks matched products at 
 </div>
 
 <div class="panel">
-<h3>FOOD CATEGORY PRICE TRENDS</h3>
+<h3>AGGREGATE FOOD CATEGORY PRICE TRENDS</h3>
 <div class="chart-wrap"><canvas id="groceryCategoryChart"></canvas></div>
-<div class="small">Category indices are separate matched-product measures, not average till prices.</div>
+<div class="small">Published category-level index trends only; no product-level prices or item records.</div>
 </div>
 
 <div class="panel">
@@ -164,41 +164,6 @@ Independent UK online supermarket shelf-price index. Tracks matched products at 
 <tbody id="groceryCategoryRows"></tbody>
 </table>
 </div>
-</div>
-
-<div class="panel">
-<h3>GROCERY BASKET // INDIVIDUAL PRODUCT MONITOR</h3>
-<p class="small">Individual observed supermarket prices from the DoomWatch collector, where available.</p>
-<div class="grid" id="basketCards"></div>
-<div id="basketStatus" class="small"></div>
-</div>
-
-<div class="panel">
-<h3>DAILY GROCERY PRICE HISTORY // 4 RETAILERS</h3>
-<p class="small">Daily online shelf-price observations from the public 212-item dataset. This is separate from the weekly supermarket index and direct retailer scraping. Product matching is not complete, so prices are shown by retailer and product key rather than claiming every row is directly comparable.</p>
-<div id="dailyBasketStatus" class="small">Loading daily product history...</div>
-<div class="grid" style="margin:10px 0">
- <div><label class="small" for="dailyRetailerFilter">RETAILER</label><select id="dailyRetailerFilter" style="width:100%;padding:9px;background:#20241e;color:#e5e8dc;border:1px solid #41483a;border-radius:4px"><option value="all">All retailers</option></select></div>
- <div><label class="small" for="dailyProductSearch">SEARCH PRODUCT KEY / PACK</label><input id="dailyProductSearch" type="search" placeholder="Search product or pack size" style="width:100%;padding:9px;background:#20241e;color:#e5e8dc;border:1px solid #41483a;border-radius:4px"></div>
-</div>
-<div class="scroll">
-<table>
-<thead><tr><th>RETAILER</th><th>PRODUCT KEY</th><th>PACK</th><th>PRICE</th><th>UNIT PRICE</th><th>DATE</th></tr></thead>
-<tbody id="dailyBasketRows"></tbody>
-</table>
-</div>
-<div class="panel">
-<h3>SELECTED PRODUCT // DAILY PRICE HISTORY</h3>
-<label class="small" for="dailyProductSelect">PRODUCT HISTORY</label>
-<select id="dailyProductSelect" style="width:100%;padding:9px;background:#20241e;color:#e5e8dc;border:1px solid #41483a;border-radius:4px"></select>
-<div class="chart-wrap"><canvas id="dailyProductChart"></canvas></div>
-<div id="dailyProductHistoryStatus" class="small"></div>
-</div>
-</div>
-<div class="panel">
-<h3>FIXED HOUSEHOLD BASKET // HISTORICAL COST</h3>
-<div id="basketSummary" class="small"></div>
-<div class="chart-wrap"><canvas id="basketChart"></canvas></div>
 </div>
 
 <div class="panel">
@@ -213,15 +178,6 @@ Independent UK online supermarket shelf-price index. Tracks matched products at 
 <div class="chart-wrap"><canvas id="inflationChart"></canvas></div>
 </div>
 
-<div class="panel">
-<h3>GROCERY ITEM HISTORY</h3>
-<div class="scroll">
-<table>
-<thead><tr><th>ITEM</th><th>PRICE</th><th>UNIT</th><th>RETAILER</th><th>DATE</th></tr></thead>
-<tbody id="basketRows"></tbody>
-</table>
-</div>
-</div>
 </section>
 
 <section id="energy">
@@ -721,165 +677,14 @@ async function loadGroceryIndex(){
 }
 
 
-// DAILY PRODUCT PRICE HISTORY // PUBLIC FOUR-RETAILER DATASET
-function dailyHtml(value){
- return safe(value).replace(/&/g,"&amp;").replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
-}
-function dailyProductLabel(row){
- return row.matchKeyV1||row.matchKey||
-  (row.retailerProductId?"Product "+row.retailerProductId:"Unlabelled product");
-}
-function dailyProductRows(){
+function renderFoodInflation(){
  const basket=D.householdBasket||{};
- const rows=Array.isArray(basket.dailyProductPriceHistory)?basket.dailyProductPriceHistory:[];
- const latestDate=basket.dailyProductPriceLatestDate||
-  rows.reduce((latest,row)=>row.date>latest?row.date:latest,"");
- return {rows,latestDate,latest:rows.filter(row=>row.date===latestDate)};
-}
-function renderDailyProductHistory(){
- const {rows,latestDate,latest}=dailyProductRows();
- const status=$("dailyBasketStatus");
- if(!rows.length){
-  status.textContent="No daily product-price history is present in markets.json.";
-  $("dailyBasketRows").innerHTML='<tr><td colspan="6">No daily product data available.</td></tr>';
-  $("dailyProductSelect").innerHTML="";
-  $("dailyProductHistoryStatus").textContent="";
-  chart("dailyProductChart",[]);
-  return;
- }
- const retailers=[...new Set(latest.map(row=>row.retailer))].sort();
- const retailerSelect=$("dailyRetailerFilter");
- const oldRetailer=retailerSelect.value||"all";
- retailerSelect.innerHTML='<option value="all">All retailers</option>'+
-  retailers.map(key=>'<option value="'+dailyHtml(key)+'">'+dailyHtml(pretty(key))+'</option>').join("");
- retailerSelect.value=retailers.includes(oldRetailer)||oldRetailer==="all"?oldRetailer:"all";
- const search=$("dailyProductSearch").value.trim().toLowerCase();
- const filtered=latest.filter(row=>
-  (retailerSelect.value==="all"||row.retailer===retailerSelect.value)&&
-  [dailyProductLabel(row),row.packSize,row.unitMeasure,row.retailerProductId]
-   .join(" ").toLowerCase().includes(search)
- ).sort((a,b)=>a.retailer.localeCompare(b.retailer)||
-  dailyProductLabel(a).localeCompare(dailyProductLabel(b)));
- status.textContent="Latest snapshot: "+date(latestDate)+
-  " // "+latest.length+" observations // "+retailers.map(pretty).join(", ")+
-  " // "+rows.length.toLocaleString("en-GB")+" historical observations stored.";
- $("dailyBasketRows").innerHTML=filtered.map(row=>'<tr>'+
-  '<td>'+dailyHtml(pretty(row.retailer))+'</td>'+
-  '<td>'+dailyHtml(dailyProductLabel(row))+'</td>'+
-  '<td>'+dailyHtml(row.packSize||row.unitMeasure)+'</td>'+
-  '<td>'+money(row.price,"GBP")+'</td>'+
-  '<td>'+(row.unitPrice!==null&&row.unitPrice!==undefined?money(row.unitPrice,"GBP")+" / "+dailyHtml(row.unitMeasure):"—")+'</td>'+
-  '<td>'+safe(date(row.date))+'</td></tr>').join("")||
-  '<tr><td colspan="6">No products match this filter.</td></tr>';
- const products=latest.slice().sort((a,b)=>a.retailer.localeCompare(b.retailer)||
-  dailyProductLabel(a).localeCompare(dailyProductLabel(b)));
- const productSelect=$("dailyProductSelect");
- const previous=productSelect.value;
- productSelect.innerHTML=products.map((row,index)=>
-  '<option value="'+index+'">'+dailyHtml(pretty(row.retailer))+
-   ' — '+dailyHtml(dailyProductLabel(row))+' ('+money(row.price,"GBP")+')</option>'
- ).join("");
- if(previous!==""&&Number(previous)<products.length)productSelect.value=previous;
- renderSelectedDailyProduct();
-}
-function renderSelectedDailyProduct(){
- const {rows}=dailyProductRows();
- const {latest}=dailyProductRows();
- const products=latest.slice().sort((a,b)=>a.retailer.localeCompare(b.retailer)||
-  dailyProductLabel(a).localeCompare(dailyProductLabel(b)));
- const selected=products[Number($("dailyProductSelect").value)];
- if(!selected){chart("dailyProductChart",[]);$("dailyProductHistoryStatus").textContent="No product selected.";return;}
- const retailer=selected.retailer,productId=String(selected.retailerProductId);
- const history=rows.filter(row=>row.retailer===retailer&&
-  String(row.retailerProductId)===productId)
-  .sort((a,b)=>String(a.date).localeCompare(String(b.date)));
- chart("dailyProductChart",history.map(row=>({
-  date:row.date,price:Number(row.price)
- })));
- $("dailyProductHistoryStatus").textContent=history.length?
-  dailyHtml(dailyProductLabel(history[history.length-1]))+" // "+
-  dailyHtml(pretty(retailer))+" // "+history.length+
-  " dated observations // Latest: "+money(history[history.length-1].price,"GBP")+
-  " on "+date(history[history.length-1].date):
-  "No dated price history for this selection.";
-}
-
-// HOUSEHOLD BASKET AND INFLATION
-function latestHistory(item){
- const h=historyOf(item)
- .filter(p=>p.date&&Number.isFinite(Number(p.price)))
- .sort((a,b)=>String(a.date).localeCompare(String(b.date)));
-
- if(h.length)return h[h.length-1];
-
- if(item.price!==undefined){
-  return {
-   date:item.observedAt||item.date,
-   price:item.price,
-   retailer:item.retailer||item.source
-  };
- }
- return null;
-}
-
-function renderBasket(){
- const basket=D.householdBasket||{};
- const items=Array.isArray(basket.items)?basket.items:[];
-
- if(items.length){
-  $("basketCards").innerHTML=items.map(item=>{
-   const latest=latestHistory(item);
-   return `
-   <div class="card">
-    <div class="name">${safe(label(item))}</div>
-    <div class="price">${latest?money(latest.price,item.currency||"GBP"):"—"}</div>
-    <div class="small">${safe(item.size||item.unit)}</div>
-    <div class="small">${safe(latest?.retailer||latest?.source)}</div>
-    <div class="small">${safe(date(latest?.date))}</div>
-   </div>`;
-  }).join("");
- }else{
-  $("basketCards").innerHTML=
-  '<div class="small warning">No individual supermarket product prices have been collected by the DoomWatch collector yet. The independent weekly index above is active separately.</div>';
- }
-
- $("basketStatus").textContent=
- `Tracked products: ${items.length} // Historical basket observations: ${(basket.history||[]).length}`;
-
- const rows=items.map(item=>{
-  const latest=latestHistory(item);
-  if(!latest)return "";
-  return `<tr>
-   <td>${safe(label(item))}</td>
-   <td>${money(latest.price,item.currency||"GBP")}</td>
-   <td>${safe(item.unit||item.size)}</td>
-   <td>${safe(latest.retailer||latest.source||item.source)}</td>
-   <td>${safe(date(latest.date))}</td>
-  </tr>`;
- }).filter(Boolean);
-
- $("basketRows").innerHTML=rows.join("")||
- '<tr><td colspan="5">No individual grocery prices collected.</td></tr>';
-
- const basketHistory=Array.isArray(basket.history)?basket.history:[];
- $("basketSummary").textContent=basketHistory.length
- ? "Latest complete basket: "+date(basketHistory[basketHistory.length-1].date)
- : "No complete dated shopping-basket totals available yet.";
-
- chart("basketChart",basketHistory);
-
- const foodHistory=basket.foodInflationHistory||[];
- const overallHistory=basket.overallInflationHistory||[];
- const foodLatest=basket.foodInflation||{};
- const overallLatest=basket.overallInflation||{};
-
- $("foodInflationSummary").textContent=
- `${safe(foodLatest.name||"UK food CPIH")}: ${safe(foodLatest.value)}% year-on-year // ${date(foodLatest.date)} // ${safe(foodLatest.source)}`;
-
- $("overallInflationSummary").textContent=
- `${safe(overallLatest.name||"UK overall CPIH")}: ${safe(overallLatest.value)}% year-on-year // ${date(overallLatest.date)} // ${safe(overallLatest.source)}`;
-
+ const foodHistory=basket.foodInflationHistory||D.foodInflationHistory||[];
+ const overallHistory=basket.overallInflationHistory||D.overallInflationHistory||[];
+ const foodLatest=basket.foodInflation||D.foodInflation||{};
+ const overallLatest=basket.overallInflation||D.overallInflation||{};
+ $("foodInflationSummary").textContent=`${safe(foodLatest.name||"UK food CPIH")}: ${safe(foodLatest.value)}% year-on-year // ${date(foodLatest.date)} // ${safe(foodLatest.source)}`;
+ $("overallInflationSummary").textContent=`${safe(overallLatest.name||"UK overall CPIH")}: ${safe(overallLatest.value)}% year-on-year // ${date(overallLatest.date)} // ${safe(overallLatest.source)}`;
  chart("foodChart",foodHistory,"%");
  chart("inflationChart",overallHistory,"%");
 }
@@ -1010,9 +815,7 @@ function renderStatus(){
  Heating oil history: ${(oil.items||[]).reduce((n,i)=>n+(i.history||[]).length,0)}<br>
  Road fuel products: ${(fuel.items||[]).length}<br>
  Road fuel history: ${(fuel.items||[]).reduce((n,i)=>n+(i.history||[]).length,0)}<br>
- Legacy tracked grocery products: ${(basket.items||[]).length}<br>
- Daily grocery price observations: ${(basket.dailyProductPriceHistory||[]).length}<br>
- Latest daily grocery snapshot: ${safe(basket.dailyProductPriceLatestDate)} // ${(basket.dailyProductPriceLatestCount||0)} rows<br>
+ Grocery data: aggregate index and official inflation only<br>
  Food inflation observations: ${(basket.foodInflationHistory||[]).length}<br>
  Overall inflation observations: ${(basket.overallInflationHistory||[]).length}
  `;
@@ -1040,8 +843,7 @@ async function load(){
   renderCards("cryptoCards",D.crypto);
   renderCards("fxCards",D.fx);
   renderStocks();
-  renderBasket();
-  renderDailyProductHistory();
+  renderFoodInflation();
   renderOil();
   renderFuel();
   renderNews("financialNews",D.news);
@@ -1057,10 +859,6 @@ async function load(){
  }
 }
 
-$("dailyRetailerFilter").addEventListener("change",renderDailyProductHistory);
-$("dailyProductSearch").addEventListener("input",renderDailyProductHistory);
-$("dailyProductSelect").addEventListener("change",renderSelectedDailyProduct);
-
 // Load the independent weekly grocery feed.
 // Failure here does not stop the main DoomWatch markets page.
 load();
@@ -1072,8 +870,6 @@ window.addEventListener("resize",()=>{
  resizeTimer=setTimeout(()=>{
   if(!D||!Object.keys(D).length)return;
   renderCommodityCharts();
-  renderBasket();
-  renderDailyProductHistory();
   renderOil();
   renderFuel();
   if(GROCERY.length)renderGroceryIndex();
