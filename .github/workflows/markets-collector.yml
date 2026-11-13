@@ -29,6 +29,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Validate markets collector
+        run: python -m py_compile markets_collector.py
+
       - name: Collect market intelligence
         run: python markets_collector.py
 
