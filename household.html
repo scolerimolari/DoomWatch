@@ -653,7 +653,8 @@ function renderDailyGroceryBasket(data){
  ).join(" • ");
  coverage.textContent="Coverage: "+dailyBasketLatestRows.length+" of "+expected+
   " expected basket rows ("+(dailyBasketLatestRows.length/expected*100).toFixed(1)+
-  "%) • "+breakdown+" • usable barcode on "+barcodeRows+"/"+dailyBasketLatestRows.length+
+  "%) • "+breakdown+" • EAN on "+barcodeRows+"/"+dailyBasketLatestRows.length+
+  " rows • matchKey on "+matchKeyRows+"/"+dailyBasketLatestRows.length+
   " rows. Missing or unreturned rows are not treated as out of stock.";
  renderDailyBasketRows();
 }
