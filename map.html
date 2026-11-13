@@ -70,30 +70,37 @@ const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const date=v=>{if(!v)return "Date not supplied";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB");};
 const allText=a=>(String(a.title||"")+" "+String(a.description||"")).toLowerCase();
-const isNI=a=>/northern ireland|\bni\b/i.test(String(a.region||""));
+const isNI=a=>/northern ireland|\\bni\\b/i.test(String(a.region||""))||TOWNS.some(t=>t.terms.some(term=>allText(a).includes(term)));
 const locate=a=>{const t=allText(a);for(const town of TOWNS){if(town.terms.some(term=>new RegExp("(^|[^a-z])"+term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"([^a-z]|$)","i").test(t)))return town;}return null;};
 const category=a=>{const t=allText(a),s=String(a.sourceType||"").toLowerCase();if(/traffic|roadwork|transport|rail|airport|port|ferry|bridge|closure/.test(t+" "+s))return "TRANSPORT";if(/weather|flood|storm|wind|snow|ice|fire|environment|warning/.test(t+" "+s))return "WEATHER";if(/police|emergency|incident|crash|collision|evacuat|rescue|explosion|outage/.test(t+" "+s))return "EMERGENCY";return "OTHER";};
 let records=[],filtered=[],markers=[],active="ALL",map=null,layer=null;
-function initMap(){if(!window.L){$("map-status").textContent="MAP LIBRARY UNAVAILABLE. ARTICLE LIST REMAINS AVAILABLE.";return;}map=L.map("event-map",{scrollWheelZoom:false}).setView([54.65,-6.65],8);L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);layer=L.layerGroup().addTo(map);}
+function initMap(){
+ if(!window.L){$("map-status").textContent="BUILT-IN MAP MODE // NO EXTERNAL LIBRARY REQUIRED";return;}
+ try{map=L.map("event-map",{scrollWheelZoom:false}).setView([54.65,-6.65],8);L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);layer=L.layerGroup().addTo(map);}catch(e){map=null;layer=null;}
+}
+function project(lat,lon){return [48+(lon+7.85)/2.65*604,48+(55.45-lat)/1.55*804];}
+function renderFallbackMap(groups){
+ const outline=[[55.25,-7.35],[55.28,-6.95],[55.18,-6.58],[55.24,-6.18],[55.08,-5.95],[54.92,-5.82],[54.76,-5.72],[54.56,-5.75],[54.36,-5.88],[54.20,-6.05],[54.08,-6.34],[54.10,-6.68],[54.18,-7.02],[54.31,-7.28],[54.50,-7.55],[54.70,-7.65],[54.90,-7.55],[55.08,-7.50]];
+ const points=outline.map(p=>project(p[0],p[1]).join(",")).join(" ");
+ let svg='<svg viewBox="0 0 700 900" role="img" aria-label="Schematic Northern Ireland map with town event counts" style="width:100%;height:100%;min-height:360px;background:#101713">';
+ for(let x=50;x<=650;x+=50)svg+='<line x1="'+x+'" y1="35" x2="'+x+'" y2="865" stroke="#26372d"/>';
+ for(let y=50;y<=850;y+=50)svg+='<line x1="35" y1="'+y+'" x2="665" y2="'+y+'" stroke="#26372d"/>';
+ svg+='<polygon points="'+points+'" fill="#27382d" stroke="#a8b59a" stroke-width="3"/><text x="350" y="460" text-anchor="middle" fill="#8fa08e" opacity=".28" font-size="38" font-weight="bold" transform="rotate(-18 350 460)">NORTHERN IRELAND</text>';
+ groups.forEach(group=>{const p=project(group.town.lat,group.town.lon),count=group.items.length,c=group.items.some(a=>category(a)==="EMERGENCY")?"#ed5146":group.items.some(a=>category(a)==="TRANSPORT")?"#d6b574":group.items.some(a=>category(a)==="WEATHER")?"#79bde0":"#a8d58b";svg+='<g><circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+Math.min(21,10+Math.log2(count)*2)+'" fill="'+c+'" stroke="#101713" stroke-width="3"/><text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="#111" font-size="12" font-weight="bold">'+count+'</text><text x="'+(p[0]+14)+'" y="'+(p[1]-13)+'" fill="#f1ead9" font-size="13" stroke="#101713" stroke-width="3" paint-order="stroke">'+esc(group.town.name)+'</text></g>';});
+ svg+='<text x="350" y="885" text-anchor="middle" fill="#c7cdbd" font-size="12">SCHEMATIC TOWN PLOT · APPROXIMATE LOCATIONS · NOT INCIDENT GPS</text></svg>';$("event-map").innerHTML=svg;
+}
 function render(){
  filtered=records.filter(a=>active==="ALL"||category(a)===active);
- let townCount=0;
- if(layer){layer.clearLayers();const bounds=[],groups=new Map();
-  filtered.slice(0,500).forEach(a=>{const town=locate(a);if(!town)return;const group=groups.get(town.name)||{town,items:[]};group.items.push(a);groups.set(town.name,group);});
-  townCount=groups.size;
-  groups.forEach(group=>{const town=group.town,items=group.items,cats=items.map(category),c=cats.includes("EMERGENCY")?"EMERGENCY":cats.includes("TRANSPORT")?"TRANSPORT":cats.includes("WEATHER")?"WEATHER":"OTHER",colour=c==="TRANSPORT"?"#d6b574":c==="WEATHER"?"#79bde0":c==="EMERGENCY"?"#ed5146":"#a8d58b";
-   const links=items.slice(0,8).map(a=>'<div style="margin:5px 0">'+esc(a.title||"Untitled report")+(a.url&&/^https?:\/\//i.test(a.url)?' <a target="_blank" rel="noopener" href="'+esc(a.url)+'">OPEN ↗</a>':"")+'</div>').join("");
-   const popup='<strong>'+esc(town.name)+' // '+items.length+' RECORDS</strong><div>Approximate town-centre location</div>'+links;
-   L.circleMarker([town.lat,town.lon],{radius:Math.min(16,7+Math.log2(items.length)*2),weight:2,color:"#111",fillColor:colour,fillOpacity:.9}).bindPopup(popup).addTo(layer);
-   bounds.push([town.lat,town.lon]);
-  });
-  if(bounds.length)map.fitBounds(bounds,{padding:[24,24],maxZoom:9});
- }
- $("map-articles").innerHTML=filtered.slice(0,250).map(a=>{const town=locate(a),c=category(a);return '<article class="map-item"><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE MAP PIN":"LOCATION NOT IDENTIFIED")+" · "+esc(c)+" · "+esc(a.source||"Unknown source")+'</div><div class="meta">'+esc(date(a.publishedAt||a.collectedAt))+' · '+esc(a.region||"Region not supplied")+'</div>'+(a.url&&/^https?:\/\//i.test(a.url)?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':'<span class="muted">No valid article URL supplied</span>')+'</article>';}).join("")||'<div class="panel muted">No Northern Ireland records match this filter.</div>';
+ const groups=new Map();
+ filtered.slice(0,500).forEach(a=>{const town=locate(a);if(!town)return;const group=groups.get(town.name)||{town,items:[]};group.items.push(a);groups.set(town.name,group);});
+ if(layer){layer.clearLayers();const bounds=[];groups.forEach(group=>{const town=group.town,items=group.items,cats=items.map(category),c=cats.includes("EMERGENCY")?"#ed5146":cats.includes("TRANSPORT")?"#d6b574":cats.includes("WEATHER")?"#79bde0":"#a8d58b";const links=items.slice(0,8).map(a=>'<div style="margin:5px 0">'+esc(a.title||"Untitled report")+(a.url&&/^https?:\\/\\//i.test(a.url)?' <a target="_blank" rel="noopener" href="'+esc(a.url)+'">OPEN ↗</a>':"")+'</div>').join("");L.circleMarker([town.lat,town.lon],{radius:Math.min(16,7+Math.log2(items.length)*2),weight:2,color:"#111",fillColor:c,fillOpacity:.9}).bindPopup('<strong>'+esc(town.name)+' // '+items.length+' RECORDS</strong><div>Approximate town-centre location</div>'+links).addTo(layer);bounds.push([town.lat,town.lon]);});if(bounds.length)map.fitBounds(bounds,{padding:[24,24],maxZoom:9});}else renderFallbackMap([...groups.values()]);
+ $("map-articles").innerHTML=filtered.slice(0,250).map(a=>{const town=locate(a),c=category(a),url=a.url&&/^https?:\\/\\//i.test(a.url);return '<article class="map-item"><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE MAP PIN":"LOCATION NOT IDENTIFIED")+" · "+esc(c)+" · "+esc(a.source||"Unknown source")+'</div><div class="meta">'+esc(date(a.publishedAt||a.collectedAt))+' · '+esc(a.region||"Region not supplied")+'</div>'+(url?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':'<span class="muted">No valid article URL supplied</span>')+'</article>';}).join("")||'<div class="panel muted">No Northern Ireland records match this filter.</div>';
  const located=filtered.filter(locate).length,plotted=filtered.slice(0,500).filter(locate).length;
- $("map-list-status").textContent=filtered.length+" Northern Ireland records · "+located+" with a town-level text match · showing up to 250 newest article links. Unmatched reports remain in the list.";
- $("map-status").textContent=(window.L?"MAP LINK ACTIVE":"MAP DATA ACTIVE // MAP LIBRARY UNAVAILABLE")+" // "+plotted+" LOCATED RECORDS IN NEWEST 500 ACROSS "+townCount+" TOWN LOCATIONS // "+filtered.length+" NI RECORDS IN ARCHIVE // SOURCE COORDINATES NOT SUPPLIED";
+ $("map-list-status").textContent=filtered.length+" NI/local records · "+located+" with a town-level text match · showing up to 250 newest article links.";
+ $("map-status").textContent=(layer?"LIVE STREET MAP":"BUILT-IN SCHEMATIC MAP")+" // "+plotted+" LOCATED RECORDS IN NEWEST 500 ACROSS "+groups.size+" TOWN LOCATIONS // "+filtered.length+" NI/LOCAL RECORDS IN ARCHIVE // APPROXIMATE TOWN LOCATIONS";
 }
+async function load(){try{const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();records=(Array.isArray(d.articles)?d.articles:[]).filter(isNI).sort((a,b)=>new Date(b.publishedAt||b.collectedAt||0)-new Date(a.publishedAt||a.collectedAt||0));render();}catch(e){$("map-status").textContent="INTELLIGENCE LINK FAILED // "+e.message;}}
+initMap();load();
 document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{active=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});render();}));
 async function load(){try{const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();records=(Array.isArray(d.articles)?d.articles:[]).filter(isNI).sort((a,b)=>new Date(b.publishedAt||b.collectedAt||0)-new Date(a.publishedAt||a.collectedAt||0));render();}catch(e){$("map-status").textContent="INTELLIGENCE LINK FAILED // "+e.message;}}
 initMap();load();
