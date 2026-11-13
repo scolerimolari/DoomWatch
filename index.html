@@ -196,14 +196,14 @@ footer {
   </div>
 
   <h2>02 // SITUATION REPORT</h2>
-  <div class="panel">
-    <div class="panel-title">COLLECTION SUMMARY // FACTUAL STATUS ONLY</div>
+  <details class="panel">
+    <summary class="panel-title">SITUATION REPORT // FACTUAL STATUS ONLY · OPEN</summary>
     <div class="terminal" id="report">Awaiting intelligence collection...</div>
-  </div>
-  <div class="panel" style="margin-top:12px">
-    <div class="panel-title">DAILY OPERATIONAL SNAPSHOT // SOURCE-LED FACTS</div>
+  </details>
+  <details class="panel" style="margin-top:12px">
+    <summary class="panel-title">DAILY SNAPSHOT // SOURCE-LED FACTS · OPEN</summary>
     <div id="daily-brief" class="muted">Awaiting the next collector run.</div>
-  </div>
+  </details>
 
   <h2>03 // PRIORITY ALERTS</h2>
   <div id="priority-alerts">
@@ -228,7 +228,7 @@ footer {
   <div class="panel" style="margin-top:12px">
     <div class="panel-title">SOURCE HEALTH // LIVE FEED DIAGNOSTICS</div>
     <div id="source-health-summary" class="muted">Awaiting collector diagnostics.</div>
-    <div id="source-health-list" style="margin-top:10px"></div>
+    <details style="margin-top:10px"><summary class="panel-title">VIEW ALL SOURCE DIAGNOSTICS</summary><div id="source-health-list" style="margin-top:10px"></div></details>
   </div>
 </section>
 
@@ -738,24 +738,20 @@ function renderFeed() {
   });
 
   $("intel-feed").innerHTML = filtered.length
-    ? filtered.map(item => `
-      <article class="intel-card ${item.severity}">
-        <h3>${escapeHTML(item.title)}</h3>
+    ? filtered.slice(0,250).map(item => `
+      <details class="intel-card ${item.severity}">
+        <summary>${escapeHTML(item.title)}</summary>
         <div>
           <span class="tag">${escapeHTML(item.area)}</span>
           <span class="tag">${escapeHTML(item.category || "GENERAL")}</span>
           <span class="tag">INCIDENT: ${escapeHTML(item.severity.toUpperCase())}</span>
-          ${item.sourcePriority ? `<span class="tag">SOURCE PRIORITY: ${escapeHTML(item.sourcePriority.toUpperCase())}</span>` : ""}
-          <span class="tag">SOURCE CLASS: ${escapeHTML(item.sourceTrust.replace(/_/g," ").toUpperCase())}</span>
+          <span class="tag">SOURCE: ${escapeHTML(item.sourceTrust.replace(/_/g," ").toUpperCase())}</span>
         </div>
         <p>${escapeHTML(item.summary || "No additional description supplied.")}</p>
-        <div class="meta">
-          SOURCE: ${escapeHTML(item.source)}<br>
-          DATE: ${escapeHTML(dateText(item.date))}<br>
-          ${item.status ? "ASSESSMENT: "+escapeHTML(item.status) : ""}
-        </div>
+        <div class="meta">SOURCE: ${escapeHTML(item.source)} · DATE: ${escapeHTML(dateText(item.date))}</div>
+        ${item.status ? '<div class="meta">ASSESSMENT: '+escapeHTML(item.status)+'</div>' : ""}
         ${item.url ? `<p><a href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a></p>` : ""}
-      </article>
+      </details>
     `).join("")
     : '<div class="panel muted">No matching intelligence records.</div>';
 }
