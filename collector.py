@@ -1,6 +1,7 @@
 import json
 import re
 import urllib.request
+from urllib.parse import urlencode
 import xml.etree.ElementTree as ET
 
 from datetime import datetime, timezone, timedelta
@@ -284,7 +285,122 @@ def parse_feed(xml_data, source):
     return entries
 
 
+def fetch_gdacs_api(source):
+    """
+    Use the official GDACS GeoJSON API instead of the RSS endpoint,
+    which is returning an HTML response to the collector.
+    """
+    today = now().date()
+    start_date = today - timedelta(days=7)
+    params = urlencode({
+        "fromDate": start_date.isoformat(),
+        "toDate": today.isoformat(),
+        "eventlist": "EQ,TC,FL,VO,DR,WF",
+        "alertlevel": "Red;Orange"
+    })
+    url = source["url"].rstrip("?") + "?" + params
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "application/geo+json, application/json"
+        }
+    )
+
+    with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+        content_type = response.headers.get("Content-Type", "")
+        body = response.read(MAX_FEED_SIZE)
+
+    if not body:
+        raise ValueError("GDACS API returned an empty response")
+
+    payload = json.loads(body.decode("utf-8-sig", errors="replace"))
+    features = payload.get("features", []) if isinstance(payload, dict) else []
+    if not isinstance(features, list):
+        raise ValueError("GDACS API response has no valid features array")
+
+    articles = []
+    for feature in features:
+        if not isinstance(feature, dict):
+            continue
+        properties = feature.get("properties") or feature
+        if not isinstance(properties, dict):
+            continue
+
+        event_type = str(properties.get("eventtype") or "").upper()
+        event_id = str(properties.get("eventid") or "")
+        episode_id = str(properties.get("episodeid") or "1")
+        alert_level = str(properties.get("alertlevel") or "").strip()
+        alert_lower = alert_level.lower()
+        severity = (
+            "high" if alert_lower == "red"
+            else "medium" if alert_lower == "orange"
+            else "unassessed"
+        )
+        title = str(
+            properties.get("name")
+            or (event_type + " event " + event_id).strip()
+            or "GDACS disaster alert"
+        )
+        country = properties.get("country") or ""
+        if isinstance(country, list):
+            country = ", ".join(str(value) for value in country if value)
+        severity_data = properties.get("severitydata") or {}
+        severity_text = ""
+        if isinstance(severity_data, dict):
+            severity_text = str(
+                severity_data.get("severitytext")
+                or severity_data.get("severity")
+                or ""
+            )
+        details = [
+            "GDACS alert level: " + (alert_level or "not specified"),
+            "Event type: " + (event_type or "not specified"),
+            "Country/area: " + (str(country) or "not specified")
+        ]
+        if severity_text:
+            details.append("Severity detail: " + severity_text)
+
+        link = str(
+            properties.get("reportUrl")
+            or properties.get("detailsUrl")
+            or properties.get("url")
+            or ""
+        )
+        published = str(
+            properties.get("datemodified")
+            or properties.get("todate")
+            or properties.get("fromdate")
+            or ""
+        )
+
+        articles.append({
+            "id": source["id"] + ":" + event_id + ":" + episode_id,
+            "sourceId": source["id"],
+            "source": source["name"],
+            "title": title[:300],
+            "url": link,
+            "publishedAt": published,
+            "collectedAt": iso(),
+            "description": "; ".join(details)[:1200],
+            "domain": source.get("domain"),
+            "region": source.get("region", "International"),
+            "priority": source.get("priority", "medium"),
+            "sourceTrust": source.get("trust", "official_primary_source"),
+            "sourceType": source.get("sourceType", "international_disaster_alert"),
+            "severity": severity,
+            "alertLevel": alert_level,
+            "evidenceStatus": "UNASSESSED",
+            "confidence": "UNASSESSED"
+        })
+
+    return articles, content_type, len(body), "GeoJSON FeatureCollection"
+
+
 def fetch_feed(source):
+    if source.get("id") == "gdacs-global":
+        return fetch_gdacs_api(source)
+
     request = urllib.request.Request(
         source["url"],
         headers={
