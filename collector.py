@@ -164,6 +164,8 @@ def parse_gdacs_fallback(xml_data, source):
             "domain": source.get("domain"),
             "region": source.get("region", "Unknown"),
             "priority": source.get("priority", "medium"),
+            "sourceTrust": source.get("trust", "unclassified"),
+            "sourceType": source.get("sourceType", source.get("type", "unclassified")),
             "evidenceStatus": "UNASSESSED",
             "confidence": "UNASSESSED"
         })
@@ -254,6 +256,8 @@ def parse_feed(xml_data, source):
             "domain": source.get("domain"),
             "region": source.get("region", "Unknown"),
             "priority": source.get("priority", "medium"),
+            "sourceTrust": source.get("trust", "unclassified"),
+            "sourceType": source.get("sourceType", source.get("type", "unclassified")),
             "evidenceStatus": "UNASSESSED",
             "confidence": "UNASSESSED"
         })
@@ -363,7 +367,9 @@ def main():
                 "domain": sectors[0] if sectors else None,
                 "region": item.get("region", "Unknown"),
                 "priority": "medium",
-                "tier": 3
+                "tier": 3,
+                "trust": item.get("trust", "unclassified"),
+                "sourceType": item.get("type", "unclassified")
             })
 
             existing_ids.add(source_id)
@@ -388,6 +394,7 @@ def main():
             source_status.append({
                 "id": source["id"],
                 "name": source["name"],
+                "sourceTrust": source.get("trust", "unclassified"),
                 "status": feed_state,
                 "checkedAt": iso(),
                 "articleCount": len(articles),
@@ -573,6 +580,7 @@ def main():
                 {
                     "title": str(article.get("title", "Untitled record"))[:300],
                     "source": str(article.get("source", "Source not specified"))[:160],
+                    "sourceTrust": str(article.get("sourceTrust", "unclassified")),
                     "url": str(article.get("url", "")),
                     "publishedAt": article.get("publishedAt") or article.get("collectedAt", ""),
                     "sector": article.get("domain"),
