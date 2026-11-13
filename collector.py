@@ -58,14 +58,18 @@ LOCALITY_POINTS = [
 ]
 def enrich_article(article):
     text = " " + (str(article.get("title","")) + " " + str(article.get("description",""))).lower() + " "
-    ids = set()
+    keyword_ids = set()
     for sector_id, (_, terms) in SECTOR_RULES.items():
         if any(re.search(r"(?<![a-z0-9])" + re.escape(term) + r"(?![a-z0-9])", text) for term in terms):
-            ids.add(sector_id)
+            keyword_ids.add(sector_id)
+    source_ids = set()
     domain = article.get("domain")
     if isinstance(domain, int) and 1 <= domain <= 11:
-        ids.add(domain)
+        source_ids.add(domain)
+    ids = keyword_ids | source_ids
     article["sectorIds"] = sorted(ids)
+    article["sectorKeywordIds"] = sorted(keyword_ids)
+    article["sectorSourceIds"] = sorted(source_ids)
     article["sectorLabels"] = [SECTOR_RULES[i][0] for i in sorted(ids)]
     article["sectorClassification"] = "KEYWORD_AND_SOURCE_METADATA"
     article.pop("locality", None)
@@ -856,6 +860,8 @@ def main():
             "id": sector_id,
             "name": label,
             "recordCount": sum(1 for article in intelligence["articles"] if sector_id in article.get("sectorIds", [])),
+            "keywordRecordCount": sum(1 for article in intelligence["articles"] if sector_id in article.get("sectorKeywordIds", [])),
+            "sourceTaggedRecordCount": sum(1 for article in intelligence["articles"] if sector_id in article.get("sectorSourceIds", [])),
             "sourceCount": len(set(str(article.get("sourceId") or article.get("source") or "") for article in intelligence["articles"] if sector_id in article.get("sectorIds", []))),
             "classification": "KEYWORD_AND_SOURCE_METADATA",
             "disclaimer": "Coverage is not a measure of risk, severity or completeness."
