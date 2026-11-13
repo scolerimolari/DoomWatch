@@ -538,7 +538,7 @@ function normalizeArticle(item) {
     summary:asText(valueOf(item,["summary","description","content","body","text","snippet"],"")),
     url:safeURL(valueOf(item,["url","link","sourceUrl","articleUrl"],"")) || sourcePageURL(item),
     area:locationOf(item),
-    date:valueOf(item,["date","published","publishedAt","timestamp","createdAt"],""),
+    date:valueOf(item,["date","published","publishedAt","timestamp","createdAt","collectedAt"],""),
     source:asText(valueOf(item,["source","publisher","sourceName","author"],"Source not specified")),
     sourcePriority:asText(valueOf(item,["priority"],"")),
     sourceTrust:asText(valueOf(item,["sourceTrust","trust"],"unclassified")),
