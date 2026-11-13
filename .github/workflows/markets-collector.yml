@@ -62,7 +62,9 @@ jobs:
           counts = {}
           ean_rows = 0
           match_key_rows = 0
-          identities = {}
+          match_key_only_rows = 0
+          ean_identities = {}
+          match_identities = {}
           for row in latest:
               retailer = str(row.get("retailer") or "Unknown")
               counts[retailer] = counts.get(retailer, 0) + 1
@@ -70,33 +72,46 @@ jobs:
               raw_ean = row.get("ean") or []
               if not isinstance(raw_ean, list):
                   raw_ean = [raw_ean]
-              eans = [
+              eans = sorted(set(
                   "".join(ch for ch in str(value) if ch.isdigit())
                   for value in raw_ean
-              ]
+              ))
               eans = [value for value in eans if 8 <= len(value) <= 14]
-              match_key = str(row.get("matchKey") or "").strip()
+              match_key = str(row.get("matchKey") or "").strip().casefold()
 
               if eans:
                   ean_rows += 1
-                  identity = "ean:" + sorted(eans)[0]
-              elif match_key:
+                  for ean in eans:
+                      ean_identities.setdefault(ean, set()).add(retailer)
+              if match_key:
                   match_key_rows += 1
-                  identity = "match:" + match_key.casefold()
-              else:
-                  identity = ""
-
-              if identity:
-                  identities.setdefault(identity, set()).add(retailer)
+                  match_identities.setdefault(match_key, []).append({
+                      "retailer": retailer,
+                      "eans": set(eans),
+                  })
+                  if not eans:
+                      match_key_only_rows += 1
 
           shared_ean_groups = sum(
-              1 for key, retailers in identities.items()
-              if key.startswith("ean:") and len(retailers) >= 2
+              1 for retailers in ean_identities.values()
+              if len(retailers) >= 2
           )
-          shared_match_key_groups = sum(
-              1 for key, retailers in identities.items()
-              if key.startswith("match:") and len(retailers) >= 2
-          )
+          shared_match_key_groups = 0
+          hybrid_match_key_groups = 0
+          for group in match_identities.values():
+              retailers = {row["retailer"] for row in group}
+              if len(retailers) < 2:
+                  continue
+              known_eans = set().union(*(row["eans"] for row in group))
+              # Conflicting barcodes are stronger evidence than a text key.
+              if len(known_eans) > 1:
+                  continue
+              # If every row has the same barcode, the EAN already covers it.
+              if known_eans and all(row["eans"] for row in group):
+                  continue
+              shared_match_key_groups += 1
+              if known_eans:
+                  hybrid_match_key_groups += 1
 
           report = {
               "generatedAt": data.get("updatedAt"),
@@ -107,8 +122,10 @@ jobs:
               "retailerCounts": counts,
               "eanRows": ean_rows,
               "matchKeyRows": match_key_rows,
+              "matchKeyOnlyRows": match_key_only_rows,
               "sharedEanProductGroups": shared_ean_groups,
               "sharedMatchKeyProductGroups": shared_match_key_groups,
+              "hybridMatchKeyProductGroups": hybrid_match_key_groups,
           }
           Path("data/grocery-status.json").write_text(
               json.dumps(report, ensure_ascii=False, indent=2) + "\n",
