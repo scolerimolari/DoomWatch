@@ -492,7 +492,7 @@ function normalizeArticle(item) {
   if (typeof item === "string") {
     return {
       title:item,summary:"",url:"",area:"UNKNOWN",date:"",
-      source:"Unknown",sourcePriority:"",severity:"unassessed",category:"",status:""
+      source:"Unknown",sourcePriority:"",sourceTrust:"unclassified",severity:"unassessed",category:"",status:""
     };
   }
 
@@ -510,6 +510,7 @@ function normalizeArticle(item) {
     date:valueOf(item,["date","published","publishedAt","timestamp","createdAt"],""),
     source:asText(valueOf(item,["source","publisher","sourceName","author"],"Source not specified")),
     sourcePriority:asText(valueOf(item,["priority"],"")),
+    sourceTrust:asText(valueOf(item,["sourceTrust","trust"],"unclassified")),
     severity:severity(item),
     category,
     status:asText(valueOf(item,["status","verification","assessment","evidenceStatus"],""))
@@ -633,7 +634,8 @@ function renderDailyBrief() {
         '<strong>'+escapeHTML(item.title || "Untitled record")+'</strong>'+
         '<div class="meta">'+escapeHTML(item.source || "Source not specified")+
         ' // '+escapeHTML(dateText(item.publishedAt))+
-        ' // SOURCE PRIORITY: '+escapeHTML(item.sourcePriority || "UNSPECIFIED")+'</div>'+
+        ' // SOURCE PRIORITY: '+escapeHTML(item.sourcePriority || "UNSPECIFIED")+
+        ' // SOURCE CLASS: '+escapeHTML(String(item.sourceTrust || "unclassified").replace(/_/g," ").toUpperCase())+'</div>'+
         (link ? '<p><a href="'+escapeHTML(link)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL SOURCE ↗</a></p>' : '')+
         '</div>';
     }).join("") : '<div class="muted">No records in this region.</div>';
@@ -724,6 +726,7 @@ function renderFeed() {
           <span class="tag">${escapeHTML(item.category || "GENERAL")}</span>
           <span class="tag">INCIDENT: ${escapeHTML(item.severity.toUpperCase())}</span>
           ${item.sourcePriority ? `<span class="tag">SOURCE PRIORITY: ${escapeHTML(item.sourcePriority.toUpperCase())}</span>` : ""}
+          <span class="tag">SOURCE CLASS: ${escapeHTML(item.sourceTrust.replace(/_/g," ").toUpperCase())}</span>
         </div>
         <p>${escapeHTML(item.summary || "No additional description supplied.")}</p>
         <div class="meta">
