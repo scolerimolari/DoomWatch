@@ -552,7 +552,7 @@ function renderCrossRetailerComparison(rows){
  const eanGroups=new Map(),matchGroups=new Map();
  rows.forEach(o=>{
   const raw=Array.isArray(o.ean)?o.ean:[o.ean];
-  const codes=[...new Set(raw.map(v=>String(v||"").replace(/\\D/g,"")).filter(v=>v.length>=8&&v.length<=14))];
+  const codes=[...new Set(raw.map(v=>String(v||"").replace(/\D/g,"")).filter(v=>v.length>=8&&v.length<=14))];
   const price=number(o.price);
   if(price===null||price<=0)return;
   const retailer=String(o.retailer||"").toLowerCase();
@@ -600,7 +600,7 @@ function renderCrossRetailerComparison(rows){
  ).join(""):'<tr><td colspan="6">No shared product identities across retailers in this snapshot.</td></tr>';
  const usable=rows.filter(o=>{
   const raw=Array.isArray(o.ean)?o.ean:[o.ean];
-  const hasEan=raw.some(v=>{const code=String(v||"").replace(/\\D/g,"");return code.length>=8&&code.length<=14;});
+  const hasEan=raw.some(v=>{const code=String(v||"").replace(/\D/g,"");return code.length>=8&&code.length<=14;});
   return hasEan||!!String(o.matchKey||"").trim();
  }).length;
  note.textContent=matches.length?
