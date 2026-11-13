@@ -134,8 +134,8 @@ footer{padding:20px 14px;color:var(--muted);font-size:11px;text-align:center}
 </div>
 <div class="tablewrap">
 <table>
-<thead><tr><th>Retailer</th><th>Product ID / EAN</th><th>Shelf</th><th>Was</th><th>Loyalty</th><th>Unit price</th></tr></thead>
-<tbody id="dailyBasketRows"><tr><td colspan="6">No daily product prices loaded.</td></tr></tbody>
+<thead><tr><th>Retailer</th><th>Product ID / EAN</th><th>Latest</th><th>Previous</th><th>Change</th><th>Change %</th><th>Was</th><th>Loyalty</th><th>Unit price</th></tr></thead>
+<tbody id="dailyBasketRows"><tr><td colspan="9">No daily product prices loaded.</td></tr></tbody>
 </table>
 </div>
 <div class="small" id="dailyBasketNote" style="margin-top:10px">Source: Yappman Data, UK Daily 212-Item Basket, CC BY 4.0.</div>
@@ -328,6 +328,7 @@ function renderSupermarketIndex(data){
 }
 
 let dailyBasketLatestRows=[];
+let dailyBasketPreviousByKey=new Map();
 function renderDailyBasketRows(){
  const body=document.getElementById("dailyBasketRows");
  if(!body)return;
@@ -339,17 +340,27 @@ function renderDailyBasketRows(){
   return (!retailer||o.retailer===retailer)&&(!query||hay.includes(query));
  });
  if(!filtered.length){
-  body.innerHTML='<tr><td colspan="6">No matching product price rows.</td></tr>';
+  body.innerHTML='<tr><td colspan="9">No matching product price rows.</td></tr>';
   return;
  }
  body.innerHTML=filtered.map(o=>{
   const codes=Array.isArray(o.ean)?o.ean.filter(Boolean).join(", "):text(o.ean);
   const identity=escapeHtml(String(o.retailerProductId||"—"))+
    (codes?' <span class="small">/ '+escapeHtml(codes)+'</span>':'');
+  const key=String(o.retailer||"")+"|"+String(o.retailerProductId||"");
+  const previous=dailyBasketPreviousByKey.get(key)||null;
+  const currentPrice=number(o.price);
+  const previousPrice=previous?number(previous.price):null;
+  const change=currentPrice!==null&&previousPrice!==null?currentPrice-previousPrice:null;
+  const changePct=change!==null&&previousPrice>0?change/previousPrice*100:null;
+  const changeText=change===null?"—":(change>0?"+":"")+money(change);
+  const pctText=changePct===null?"—":(changePct>0?"+":"")+changePct.toFixed(2)+"%";
   const unit=o.unitPrice===null||o.unitPrice===undefined?"—":
    money(number(o.unitPrice))+(o.unitMeasure?" / "+escapeHtml(o.unitMeasure):"");
   return '<tr><td>'+escapeHtml(o.retailer)+'</td><td>'+identity+
-   '</td><td>'+money(number(o.price))+'</td><td>'+
+   '</td><td>'+money(currentPrice)+'</td><td>'+
+   (previousPrice===null?"—":money(previousPrice))+'</td><td>'+
+   changeText+'</td><td>'+pctText+'</td><td>'+
    money(number(o.wasPrice))+'</td><td>'+
    money(number(o.loyaltyPrice))+'</td><td>'+unit+'</td></tr>';
  }).join("");
@@ -374,10 +385,26 @@ function renderDailyGroceryBasket(data){
   String(o.date||String(o.scrapedAt||"").slice(0,10))===latestDate
  ).sort((a,b)=>String(a.retailer).localeCompare(String(b.retailer))||
   String(a.retailerProductId).localeCompare(String(b.retailerProductId)));
- count.textContent=dailyBasketLatestRows.length+" product price rows";
+ const byProduct=new Map();
+ history.forEach(o=>{
+  const key=String(o.retailer||"")+"|"+String(o.retailerProductId||"");
+  const date=String(o.date||String(o.scrapedAt||"").slice(0,10));
+  if(!date||date>=latestDate)return;
+  const prior=byProduct.get(key);
+  if(!prior||date>prior.date||
+     (date===prior.date&&String(o.scrapedAt||"")>String(prior.scrapedAt||""))){
+   byProduct.set(key,{...o,date});
+  }
+ });
+ dailyBasketPreviousByKey=byProduct;
+ const comparable=dailyBasketLatestRows.filter(o=>
+  byProduct.has(String(o.retailer||"")+"|"+String(o.retailerProductId||""))
+ ).length;
+ count.textContent=dailyBasketLatestRows.length+" product price rows • "+
+  comparable+" with previous-day comparisons";
  date.textContent="Latest snapshot: "+latestDate+
   " • "+history.length.toLocaleString("en-GB")+" historical observations stored";
- note.textContent="Prices are online shelf snapshots. Loyalty prices are shown separately and may require a retailer loyalty card. Source: Yappman Data, UK Daily 212-Item Basket, CC BY 4.0. Product IDs and barcodes identify records; they are not product descriptions.";
+ note.textContent=(comparable?"Historical comparisons use each product’s most recent earlier dated observation. ":"Price history is building; previous-price comparisons will appear as subsequent daily snapshots arrive. ")+"Prices are online shelf snapshots. Loyalty prices are shown separately and may require a retailer loyalty card. Source: Yappman Data, UK Daily 212-Item Basket, CC BY 4.0. Product IDs and barcodes identify records; they are not product descriptions.";
  renderDailyBasketRows();
 }
 
