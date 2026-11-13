@@ -246,6 +246,7 @@ footer {
   </div>
 
   <input id="search" type="search" placeholder="Search intelligence records...">
+  <div class="panel muted" id="intel-region-summary" aria-live="polite">REGIONAL COVERAGE // AWAITING DATA</div>
 
   <div class="panel">
     <div class="panel-title">LIVE INTELLIGENCE STREAM // SCROLL INDEPENDENTLY</div>
@@ -636,6 +637,18 @@ function renderAlerts() {
 }
 
 function renderFeed() {
+  const regionCounts = {NI:0,UK:0,INTERNATIONAL:0,UNKNOWN:0};
+  articles.forEach(item => {
+    const region = regionCounts[item.area] === undefined ? "UNKNOWN" : item.area;
+    regionCounts[region]++;
+  });
+  $("intel-region-summary").textContent =
+    "REGIONAL COVERAGE // NI: "+regionCounts.NI+
+    " // UK: "+regionCounts.UK+
+    " // INTERNATIONAL: "+regionCounts.INTERNATIONAL+
+    " // UNKNOWN: "+regionCounts.UNKNOWN+
+    " // TOTAL: "+articles.length;
+
   const query = $("search").value.toLowerCase();
 
   const filtered = articles.filter(item => {
