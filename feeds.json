@@ -8,7 +8,9 @@
       "domain": 9,
       "region": "Northern Ireland",
       "priority": "high",
-      "tier": 1
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "weather_service"
     },
     {
       "id": "metoffice-uk",
@@ -17,7 +19,9 @@
       "domain": 9,
       "region": "UK",
       "priority": "high",
-      "tier": 1
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "weather_service"
     },
     {
       "id": "ncsc-all",
@@ -26,7 +30,9 @@
       "domain": 8,
       "region": "UK",
       "priority": "high",
-      "tier": 1
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "cyber_security_advisory"
     },
     {
       "id": "gdacs-global",
@@ -35,7 +41,9 @@
       "domain": 11,
       "region": "International",
       "priority": "medium",
-      "tier": 1
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "international_disaster_alert"
     },
     {
       "id": "trafficwatch-incidents",
@@ -44,7 +52,9 @@
       "domain": 6,
       "region": "Northern Ireland",
       "priority": "high",
-      "tier": 1
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "transport_incidents"
     },
     {
       "id": "trafficwatch-roadworks",
@@ -53,7 +63,9 @@
       "domain": 6,
       "region": "Northern Ireland",
       "priority": "medium",
-      "tier": 1
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "transport_roadworks"
     },
     {
       "id": "trafficwatch-events",
@@ -62,7 +74,9 @@
       "domain": 6,
       "region": "Northern Ireland",
       "priority": "medium",
-      "tier": 1
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "transport_events"
     },
     {
       "id": "trafficwatch-news",
@@ -71,7 +85,9 @@
       "domain": 6,
       "region": "Northern Ireland",
       "priority": "medium",
-      "tier": 1
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "transport_news"
     },
     {
       "id": "gov-cabinet-office",
@@ -80,7 +96,9 @@
       "domain": 1,
       "region": "UK",
       "priority": "high",
-      "tier": 2
+      "tier": 2,
+      "trust": "official_primary_source",
+      "sourceType": "government_department"
     },
     {
       "id": "gov-defra",
@@ -89,7 +107,9 @@
       "domain": 2,
       "region": "UK",
       "priority": "high",
-      "tier": 2
+      "tier": 2,
+      "trust": "official_primary_source",
+      "sourceType": "government_department"
     },
     {
       "id": "gov-desnz",
@@ -98,7 +118,9 @@
       "domain": 5,
       "region": "UK",
       "priority": "high",
-      "tier": 2
+      "tier": 2,
+      "trust": "official_primary_source",
+      "sourceType": "government_department"
     },
     {
       "id": "gov-transport",
@@ -107,7 +129,9 @@
       "domain": 6,
       "region": "UK",
       "priority": "high",
-      "tier": 2
+      "tier": 2,
+      "trust": "official_primary_source",
+      "sourceType": "government_department"
     },
     {
       "id": "gov-health",
@@ -116,7 +140,9 @@
       "domain": 7,
       "region": "UK",
       "priority": "high",
-      "tier": 2
+      "tier": 2,
+      "trust": "official_primary_source",
+      "sourceType": "government_department"
     },
     {
       "id": "bbc-ni",
@@ -125,7 +151,9 @@
       "domain": 1,
       "region": "Northern Ireland",
       "priority": "medium",
-      "tier": 3
+      "tier": 3,
+      "trust": "established_media",
+      "sourceType": "mainstream_media"
     },
     {
       "id": "prepper-ready",
@@ -134,7 +162,9 @@
       "domain": 10,
       "region": "UK",
       "priority": "medium",
-      "tier": 3
+      "tier": 3,
+      "trust": "independent_specialist",
+      "sourceType": "preparedness_media"
     },
     {
       "id": "bbc-uk",
@@ -143,7 +173,9 @@
       "domain": 1,
       "region": "UK",
       "priority": "medium",
-      "tier": 3
+      "tier": 3,
+      "trust": "established_media",
+      "sourceType": "mainstream_media"
     },
     {
       "id": "sky-news",
@@ -152,7 +184,9 @@
       "domain": 1,
       "region": "UK",
       "priority": "medium",
-      "tier": 3
+      "tier": 3,
+      "trust": "established_media",
+      "sourceType": "mainstream_media"
     },
     {
       "id": "guardian-uk",
@@ -161,7 +195,9 @@
       "domain": 1,
       "region": "UK",
       "priority": "medium",
-      "tier": 3
+      "tier": 3,
+      "trust": "established_media",
+      "sourceType": "mainstream_media"
     },
     {
       "id": "aljazeera-world",
@@ -170,7 +206,9 @@
       "domain": 11,
       "region": "International",
       "priority": "medium",
-      "tier": 3
+      "tier": 3,
+      "trust": "established_media",
+      "sourceType": "international_media"
     },
     {
       "id": "nifrs-ni",
@@ -179,7 +217,9 @@
       "domain": 10,
       "region": "Northern Ireland",
       "priority": "high",
-      "tier": 1
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "emergency_service"
     },
     {
       "id": "gov-northern-ireland-office",
@@ -188,7 +228,9 @@
       "domain": 1,
       "region": "Northern Ireland",
       "priority": "high",
-      "tier": 1
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "government_department"
     },
     {
       "id": "trafficwatch-belfast-incidents",
@@ -197,7 +239,9 @@
       "domain": 6,
       "region": "Northern Ireland",
       "priority": "high",
-      "tier": 1
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "traffic_incident_feed"
     },
     {
       "id": "trafficwatch-belfast-roadworks",
@@ -206,7 +250,9 @@
       "domain": 6,
       "region": "Northern Ireland",
       "priority": "medium",
-      "tier": 1
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "traffic_incident_feed"
     }
   ]
 }
