@@ -86,7 +86,7 @@ jobs:
               if not parser.scripts:
                   raise SystemExit(f"No inline JavaScript found in {page}")
               for number, script in enumerate(parser.scripts, start=1):
-                  Path(f"/tmp/{page}-{number}.js").write_text(script, encoding="utf-8")
+                  Path(f"/tmp/dw-script-{page}-{number}.js").write_text(script, encoding="utf-8")
                   print(f"Extracted {page} script {number}")
           PY
           for script in /tmp/dw-script-*.js; do node --check "$script"; done
