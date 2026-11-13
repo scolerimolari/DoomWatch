@@ -6,15 +6,10 @@ Build #83 - Aggregate Grocery Intelligence
 Preserves existing market, stock, heating oil, fuel,
 inflation and news collection.
 
-Adds:
-- Tesco, Asda, Sainsbury's and Lidl grocery monitoring
-- Fixed 25-product household basket
-- JSON-LD product price extraction
-- Pack-size and unit-price normalisation
-- Separate loyalty and standard prices where supplied
-- Dated product price observations
-- Historical basket totals
-- Retailer collection status
+Purpose:
+- Aggregate weekly supermarket price index
+- Official UK food and overall CPIH inflation history
+- No individual grocery products, retailer basket totals or product-level records
 
 Python standard library only.
 """
