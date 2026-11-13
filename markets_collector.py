@@ -1,8 +1,21 @@
 #!/usr/bin/env python3
 """
 DOOMWATCH - MARKETS COLLECTOR
-Independent of collector.py.
-Writes historical market data to data/markets.json.
+Build #82 - Grocery Intelligence
+
+Preserves existing market, stock, heating oil, fuel,
+inflation and news collection.
+
+Adds:
+- Tesco, Asda, Sainsbury's and Lidl grocery monitoring
+- Fixed 25-product household basket
+- JSON-LD product price extraction
+- Pack-size and unit-price normalisation
+- Separate loyalty and standard prices where supplied
+- Dated product price observations
+- Historical basket totals
+- Retailer collection status
+
 Python standard library only.
 """
 
@@ -22,15 +35,19 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 
-# --------------------------------------------------
+# ==================================================
 # CONFIGURATION
-# --------------------------------------------------
+# ==================================================
 
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data"
 DATA_FILE = DATA_DIR / "markets.json"
 
-USER_AGENT = "DoomWatch-Markets/1.0"
+USER_AGENT = (
+    "Mozilla/5.0 (compatible; DoomWatch-Markets/2.0; "
+    "+https://github.com/scolerimolari/DoomWatch)"
+)
+
 TIMEOUT = 25
 MAX_HISTORY = 400
 
@@ -93,7 +110,6 @@ DEFRA_FOOD_URL = (
     "food-statistics-pocketbook/food-statistics-in-your-pocket"
 )
 
-# Direct official CSV fallback.
 DEFRA_FOOD_CSV_URL = (
     "https://assets.publishing.service.gov.uk/media/"
     "6a3cfd9ada47783d87723a5d/"
@@ -117,14 +133,134 @@ NEWS_FEEDS = [
 ]
 
 
-# --------------------------------------------------
+# ==================================================
+# GROCERY INTELLIGENCE CONFIGURATION
+# ==================================================
+
+GROCERY_RETAILERS = {
+    "tesco": {
+        "name": "Tesco",
+        "search": (
+            "https://www.tesco.com/groceries/en-GB/search"
+            "?query={query}"
+        ),
+    },
+    "asda": {
+        "name": "Asda",
+        "search": (
+            "https://groceries.asda.com/search/{query}"
+        ),
+    },
+    "sainsburys": {
+        "name": "Sainsbury's",
+        "search": (
+            "https://www.sainsburys.co.uk/gol-ui/SearchResults/"
+            "?query={query}"
+        ),
+    },
+    "lidl": {
+        "name": "Lidl",
+        "search": (
+            "https://www.lidl.co.uk/q/search?q={query}"
+        ),
+    },
+}
+
+# Fixed basket specifications.
+# Quantities are the target comparison sizes.
+# A retailer product must expose a recognisable matching
+# pack quantity before it is included in the comparison.
+
+GROCERY_PRODUCTS = [
+    ("milk", "Semi-skimmed milk", "2.27L", 2.27, "litre",
+     "semi skimmed milk 2.27 litre"),
+
+    ("whole_milk", "Whole milk", "2.27L", 2.27, "litre",
+     "whole milk 2.27 litre"),
+
+    ("bread", "White sliced bread", "800g", 800, "gram",
+     "white sliced loaf 800g"),
+
+    ("wholemeal_bread", "Wholemeal bread", "800g", 800, "gram",
+     "wholemeal sliced loaf 800g"),
+
+    ("eggs", "Free range eggs", "12 eggs", 12, "each",
+     "12 free range eggs"),
+
+    ("butter", "Salted butter", "250g", 250, "gram",
+     "salted butter 250g"),
+
+    ("cheese", "Mature cheddar", "400g", 400, "gram",
+     "mature cheddar 400g"),
+
+    ("chicken", "Chicken breast", "1kg", 1000, "gram",
+     "chicken breast 1kg"),
+
+    ("mince", "Beef mince", "500g", 500, "gram",
+     "beef mince 500g"),
+
+    ("sausages", "Pork sausages", "8 pack", 8, "each",
+     "pork sausages 8 pack"),
+
+    ("potatoes", "White potatoes", "2.5kg", 2500, "gram",
+     "white potatoes 2.5kg"),
+
+    ("carrots", "Carrots", "1kg", 1000, "gram",
+     "carrots 1kg"),
+
+    ("onions", "Brown onions", "1kg", 1000, "gram",
+     "brown onions 1kg"),
+
+    ("bananas", "Bananas", "1kg", 1000, "gram",
+     "bananas 1kg"),
+
+    ("apples", "Apples", "6 pack", 6, "each",
+     "apples 6 pack"),
+
+    ("broccoli", "Broccoli", "1 head", 1, "each",
+     "broccoli 1 head"),
+
+    ("rice", "Long grain rice", "1kg", 1000, "gram",
+     "long grain rice 1kg"),
+
+    ("pasta", "Dried pasta", "500g", 500, "gram",
+     "dried pasta 500g"),
+
+    ("flour", "Plain flour", "1.5kg", 1500, "gram",
+     "plain flour 1.5kg"),
+
+    ("sugar", "Granulated sugar", "1kg", 1000, "gram",
+     "granulated sugar 1kg"),
+
+    ("cooking_oil", "Vegetable oil", "1L", 1, "litre",
+     "vegetable oil 1 litre"),
+
+    ("tea", "Tea bags", "160 pack", 160, "each",
+     "160 tea bags"),
+
+    ("coffee", "Instant coffee", "200g", 200, "gram",
+     "instant coffee 200g"),
+
+    ("toilet_roll", "Toilet roll", "9 pack", 9, "each",
+     "toilet rolls 9 pack"),
+
+    ("washing_liquid", "Laundry detergent", "1.5L", 1.5, "litre",
+     "laundry detergent 1.5 litre"),
+]
+
+
+# ==================================================
 # GENERAL FUNCTIONS
-# --------------------------------------------------
+# ==================================================
 
 def timestamp():
     return datetime.now(timezone.utc).replace(
         microsecond=0
     ).isoformat()
+
+
+def today():
+    return datetime.now(timezone.utc).date().isoformat()
 
 
 def fetch(url, accept="*/*"):
@@ -151,8 +287,10 @@ def load_data():
             data = json.loads(
                 DATA_FILE.read_text(encoding="utf-8")
             )
+
             if isinstance(data, dict):
                 return data
+
         except Exception as error:
             print("Existing markets file unreadable:", error)
 
@@ -194,9 +332,9 @@ def merge_history(old_history, new_history):
     ][-MAX_HISTORY:]
 
 
-# --------------------------------------------------
-# HTML TEXT AND LINK EXTRACTION
-# --------------------------------------------------
+# ==================================================
+# HTML EXTRACTION
+# ==================================================
 
 class TextExtractor(HTMLParser):
 
@@ -255,28 +393,26 @@ def find_fuel_csv(page):
     candidates = []
 
     for link in parser.links:
-        lower = link.lower()
-
-        if ".csv" not in lower:
+        if ".csv" not in link.lower():
             continue
 
-        absolute = urllib.parse.urljoin(FUEL_URL, link)
-        candidates.append(absolute)
+        candidates.append(
+            urllib.parse.urljoin(FUEL_URL, link)
+        )
 
     if candidates:
         for candidate in candidates:
             if "2018" in candidate:
                 return candidate
+
         return candidates[0]
 
-    raise ValueError(
-        "Could not locate the official road fuel CSV link"
-    )
+    raise ValueError("Could not locate official road fuel CSV")
 
 
-# --------------------------------------------------
+# ==================================================
 # MONEY AND DATE PARSING
-# --------------------------------------------------
+# ==================================================
 
 def parse_money(value):
     try:
@@ -310,15 +446,16 @@ def parse_fuel_date(value):
             return datetime.strptime(
                 value, pattern
             ).date().isoformat()
+
         except ValueError:
             pass
 
     return None
 
 
-# --------------------------------------------------
+# ==================================================
 # FINANCIAL MARKET DATA
-# --------------------------------------------------
+# ==================================================
 
 def get_yahoo_data(symbol):
     url = YAHOO_URL.format(
@@ -424,12 +561,7 @@ def collect_markets(data):
                 }
 
             except Exception as error:
-                print(
-                    "FAILED:",
-                    category,
-                    name,
-                    str(error)[:200],
-                )
+                print("FAILED:", category, name, str(error)[:200])
 
                 data["sources"][category + "." + name] = {
                     "status": "failed",
@@ -438,9 +570,9 @@ def collect_markets(data):
                 }
 
 
-# --------------------------------------------------
+# ==================================================
 # TOP TEN STOCKS
-# --------------------------------------------------
+# ==================================================
 
 def collect_stocks(data):
     existing = {
@@ -467,11 +599,7 @@ def collect_stocks(data):
             print("OK STOCK:", symbol)
 
         except Exception as error:
-            print(
-                "FAILED STOCK:",
-                symbol,
-                str(error)[:150],
-            )
+            print("FAILED STOCK:", symbol, str(error)[:150])
 
             if symbol in existing:
                 stocks.append(existing[symbol])
@@ -479,9 +607,9 @@ def collect_stocks(data):
     data["stocks"] = stocks
 
 
-# --------------------------------------------------
+# ==================================================
 # NORTHERN IRELAND HEATING OIL
-# --------------------------------------------------
+# ==================================================
 
 def parse_daily_oil_archive(text):
     observations = []
@@ -517,14 +645,11 @@ def parse_daily_oil_archive(text):
             continue
 
     unique = {
-        observation["date"]: observation
-        for observation in observations
+        item["date"]: item
+        for item in observations
     }
 
-    return [
-        unique[day]
-        for day in sorted(unique)
-    ]
+    return [unique[day] for day in sorted(unique)]
 
 
 def parse_ballyclare_prices(text):
@@ -616,16 +741,14 @@ def collect_heating_oil(data):
         archive = parse_daily_oil_archive(daily_text)
 
         if not archive:
-            raise ValueError(
-                "No valid dated national oil observations found"
-            )
+            raise ValueError("No valid dated national oil observations found")
 
         latest = archive[-1]
         latest_day = latest["date"]
 
-        existing_items = (
-            data.get("heatingOil", {}).get("items", [])
-        )
+        existing_items = data.get(
+            "heatingOil", {}
+        ).get("items", [])
 
         existing = {
             item.get("id"): item
@@ -704,22 +827,12 @@ def collect_heating_oil(data):
 
                 items.append(item)
 
-                print(
-                    "OK BALLYCLARE:",
-                    litres,
-                    "litres",
-                    ballyclare[index],
-                )
+                print("OK BALLYCLARE:", litres, "litres", ballyclare[index])
 
         else:
-            print(
-                "WARNING: Ballyclare regional prices "
-                "were not extracted"
-            )
+            print("WARNING: Ballyclare regional prices were not extracted")
 
-            present = {
-                item.get("id") for item in items
-            }
+            present = {item.get("id") for item in items}
 
             for item_id, old in existing.items():
                 if (
@@ -752,11 +865,7 @@ def collect_heating_oil(data):
             ),
         }
 
-        print(
-            "HEATING OIL COMPLETE:",
-            len(archive),
-            "dated national observations",
-        )
+        print("HEATING OIL COMPLETE:", len(archive), "observations")
 
     except Exception as error:
         print("FAILED: Heating oil", str(error)[:250])
@@ -769,9 +878,9 @@ def collect_heating_oil(data):
         }
 
 
-# --------------------------------------------------
-# PETROL AND DIESEL - OFFICIAL DESNZ HISTORY
-# --------------------------------------------------
+# ==================================================
+# PETROL AND DIESEL
+# ==================================================
 
 def parse_fuel_csv(raw):
     text = raw.decode("utf-8-sig", errors="replace")
@@ -782,8 +891,7 @@ def parse_fuel_csv(raw):
 
     fields = {
         str(name).strip().lower(): name
-        for name in reader.fieldnames
-        if name
+        for name in reader.fieldnames if name
     }
 
     date_column = fields.get("date")
@@ -805,10 +913,7 @@ def parse_fuel_csv(raw):
     )
 
     if not all([date_column, petrol_column, diesel_column]):
-        raise ValueError(
-            "Could not identify date, petrol and diesel columns "
-            + str(reader.fieldnames)
-        )
+        raise ValueError("Could not identify fuel CSV columns")
 
     observations = []
 
@@ -827,18 +932,14 @@ def parse_fuel_csv(raw):
         })
 
     unique = {
-        observation["date"]: observation
-        for observation in observations
+        item["date"]: item
+        for item in observations
     }
 
-    result = [
-        unique[day] for day in sorted(unique)
-    ]
+    result = [unique[day] for day in sorted(unique)]
 
     if not result:
-        raise ValueError(
-            "No valid dated petrol and diesel prices in CSV"
-        )
+        raise ValueError("No valid fuel observations in CSV")
 
     return result
 
@@ -849,8 +950,6 @@ def collect_fuel(data):
     try:
         page = fetch(FUEL_URL, "text/html")
         csv_url = find_fuel_csv(page)
-
-        print("FUEL CSV:", csv_url)
 
         raw_csv = fetch(
             csv_url,
@@ -904,7 +1003,7 @@ def collect_fuel(data):
             if previous_price:
                 change = round(price - previous_price, 2)
 
-            item = {
+            items.append({
                 "id": item_id,
                 "name": name,
                 "symbol": code,
@@ -913,10 +1012,7 @@ def collect_fuel(data):
                 "currency": "GBP",
                 "change": change,
                 "changePct": (
-                    round(
-                        (price / previous_price - 1) * 100,
-                        2,
-                    )
+                    round((price / previous_price - 1) * 100, 2)
                     if previous_price else None
                 ),
                 "observedAt": latest_day,
@@ -925,18 +1021,7 @@ def collect_fuel(data):
                 "source": "DESNZ weekly road fuel prices",
                 "sourceType": "Official UK average",
                 "url": FUEL_URL,
-            }
-
-            items.append(item)
-
-            print(
-                "OK FUEL:",
-                name,
-                price,
-                "p/litre",
-                "history:",
-                len(history),
-            )
+            })
 
         data["fuel"] = {
             "items": items,
@@ -958,16 +1043,11 @@ def collect_fuel(data):
             "latestObservation": latest_day,
             "note": (
                 "Official UK weekly average pump prices. "
-                "Not Northern Ireland-only or local forecourt prices. "
-                "Prices are in pence per litre."
+                "Not Northern Ireland-only or local forecourt prices."
             ),
         }
 
-        print(
-            "ROAD FUEL COMPLETE:",
-            len(observations),
-            "weekly observations",
-        )
+        print("ROAD FUEL COMPLETE:", len(observations))
 
     except Exception as error:
         print("FAILED: Road fuel", str(error)[:250])
@@ -980,15 +1060,11 @@ def collect_fuel(data):
         }
 
 
-# --------------------------------------------------
-# OFFICIAL CPIH FOOD AND OVERALL INFLATION
-# --------------------------------------------------
+# ==================================================
+# FOOD INFLATION
+# ==================================================
 
 def find_food_index_csv(page):
-    """
-    Find the GOV.UK CPIH CSV and convert its preview URL
-    into the direct raw CSV download URL.
-    """
     parser = LinkExtractor()
     parser.feed(page.decode("utf-8", errors="replace"))
 
@@ -1003,8 +1079,7 @@ def find_food_index_csv(page):
             and "inflation" in lower
         ):
             absolute = urllib.parse.urljoin(
-                DEFRA_FOOD_URL,
-                link,
+                DEFRA_FOOD_URL, link
             )
 
             absolute = re.sub(
@@ -1027,30 +1102,15 @@ def find_food_index_csv(page):
 
 
 def parse_food_inflation_csv(raw):
-    """
-    The official CSV has columns:
-        date, cdid, value
-
-    It contains separate monthly rows for:
-        CPIH - Food inflation
-        CPIH - Overall inflation
-
-    These values are already year-on-year percentages.
-    Do not calculate another inflation rate from them.
-    """
     text = raw.decode("utf-8-sig", errors="replace")
-
     reader = csv.DictReader(io.StringIO(text))
 
     if not reader.fieldnames:
-        raise ValueError(
-            "Food inflation CSV has no column headings"
-        )
+        raise ValueError("Food inflation CSV has no headings")
 
     field_map = {
         str(field).strip().lower(): field
-        for field in reader.fieldnames
-        if field
+        for field in reader.fieldnames if field
     }
 
     date_column = field_map.get("date")
@@ -1058,10 +1118,7 @@ def parse_food_inflation_csv(raw):
     value_column = field_map.get("value")
 
     if not all([date_column, cdid_column, value_column]):
-        raise ValueError(
-            "Unexpected food CSV columns: "
-            + str(reader.fieldnames)
-        )
+        raise ValueError("Unexpected food CSV columns")
 
     food = {}
     overall = {}
@@ -1073,8 +1130,7 @@ def parse_food_inflation_csv(raw):
 
         try:
             day = datetime.strptime(
-                raw_date[:10],
-                "%Y-%m-%d",
+                raw_date[:10], "%Y-%m-%d"
             ).date().replace(day=1).isoformat()
 
             value = float(
@@ -1097,28 +1153,505 @@ def parse_food_inflation_csv(raw):
         elif "overall inflation" in code:
             overall[day] = point
 
-    food_history = [
-        food[day] for day in sorted(food)
-    ]
+    food_history = [food[day] for day in sorted(food)]
+    overall_history = [overall[day] for day in sorted(overall)]
 
-    overall_history = [
-        overall[day] for day in sorted(overall)
-    ]
-
-    if not food_history:
-        raise ValueError(
-            "No CPIH Food inflation rows found in the CSV"
-        )
-
-    if not overall_history:
-        raise ValueError(
-            "No CPIH Overall inflation rows found in the CSV"
-        )
+    if not food_history or not overall_history:
+        raise ValueError("Missing CPIH food or overall inflation rows")
 
     return food_history, overall_history
 
 
-def collect_groceries(data):
+# ==================================================
+# GROCERY PRODUCT EXTRACTION
+# ==================================================
+
+def normalise_text(value):
+    value = html.unescape(str(value or "")).lower()
+    value = re.sub(r"[^a-z0-9.]+", " ", value)
+    return " ".join(value.split())
+
+
+def extract_json_objects(value):
+    """
+    Recursively find JSON-LD Product objects.
+    """
+
+    found = []
+
+    if isinstance(value, dict):
+        item_type = value.get("@type", "")
+
+        if isinstance(item_type, list):
+            is_product = "Product" in item_type
+        else:
+            is_product = item_type == "Product"
+
+        if is_product:
+            found.append(value)
+
+        for child in value.values():
+            found.extend(extract_json_objects(child))
+
+    elif isinstance(value, list):
+        for child in value:
+            found.extend(extract_json_objects(child))
+
+    return found
+
+
+class JsonLdExtractor(HTMLParser):
+
+    def __init__(self):
+        super().__init__()
+        self.active = False
+        self.buffer = []
+        self.documents = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag.lower() != "script":
+            return
+
+        attributes = dict(attrs)
+
+        if (
+            attributes.get("type", "").lower()
+            == "application/ld+json"
+        ):
+            self.active = True
+            self.buffer = []
+
+    def handle_data(self, data):
+        if self.active:
+            self.buffer.append(data)
+
+    def handle_endtag(self, tag):
+        if tag.lower() == "script" and self.active:
+            self.documents.append("".join(self.buffer))
+            self.active = False
+            self.buffer = []
+
+
+def extract_products(raw):
+    parser = JsonLdExtractor()
+    parser.feed(raw.decode("utf-8", errors="replace"))
+
+    products = []
+
+    for document in parser.documents:
+        try:
+            decoded = json.loads(document)
+
+            products.extend(
+                extract_json_objects(decoded)
+            )
+
+        except Exception:
+            continue
+
+    return products
+
+
+def extract_offer_prices(product):
+    offers = product.get("offers", [])
+
+    if isinstance(offers, dict):
+        offers = [offers]
+
+    results = []
+
+    for offer in offers:
+        if not isinstance(offer, dict):
+            continue
+
+        currency = (
+            offer.get("priceCurrency")
+            or product.get("priceCurrency")
+        )
+
+        if currency != "GBP":
+            continue
+
+        price = parse_money(offer.get("price"))
+
+        if price is None:
+            continue
+
+        results.append({
+            "price": price,
+            "currency": currency,
+            "availability": offer.get("availability"),
+        })
+
+    return results
+
+
+def product_match_score(title, search):
+    title_words = set(normalise_text(title).split())
+    search_words = set(normalise_text(search).split())
+
+    if not title_words or not search_words:
+        return 0
+
+    important = {
+        word for word in search_words
+        if len(word) > 2
+    }
+
+    if not important:
+        return 0
+
+    matched = important.intersection(title_words)
+
+    return len(matched) / len(important)
+
+
+def extract_pack_quantity(title, target_unit):
+    """
+    Extract a measurable pack size from the product title.
+
+    Returns a quantity in the requested unit.
+    Does not guess missing pack sizes.
+    """
+
+    text = normalise_text(title)
+
+    if target_unit == "gram":
+        matches = re.findall(
+            r"(\d+(?:\.\d+)?)\s*(kg|g)\b",
+            text,
+        )
+
+        if not matches:
+            return None
+
+        value, unit = matches[0]
+        value = float(value)
+
+        return value * 1000 if unit == "kg" else value
+
+    if target_unit == "litre":
+        matches = re.findall(
+            r"(\d+(?:\.\d+)?)\s*(litres?|liters?|l|ml)\b",
+            text,
+        )
+
+        if not matches:
+            return None
+
+        value, unit = matches[0]
+        value = float(value)
+
+        if unit == "ml":
+            return value / 1000
+
+        return value
+
+    if target_unit == "each":
+        matches = re.findall(
+            r"(\d+)\s*(?:pack|pk|eggs?|bags?|rolls?)\b",
+            text,
+        )
+
+        if matches:
+            return float(matches[0])
+
+        return None
+
+    return None
+
+
+def get_product_price(product, expected_search, expected_unit):
+    title = product.get("name") or ""
+
+    if not title:
+        return None
+
+    score = product_match_score(
+        title,
+        expected_search,
+    )
+
+    if score < 0.60:
+        return None
+
+    offers = extract_offer_prices(product)
+
+    if not offers:
+        return None
+
+    # Do not use aggregate low/high prices.
+    # Only accept a specific GBP offer.
+
+    offer = offers[0]
+
+    quantity = extract_pack_quantity(
+        title,
+        expected_unit,
+    )
+
+    if quantity is None or quantity <= 0:
+        return None
+
+    unit_price = round(
+        offer["price"] / quantity,
+        4,
+    )
+
+    return {
+        "title": title,
+        "price": offer["price"],
+        "currency": "GBP",
+        "packQuantity": quantity,
+        "unit": expected_unit,
+        "unitPrice": unit_price,
+        "matchScore": round(score, 3),
+        "availability": offer.get("availability"),
+    }
+
+
+# ==================================================
+# GROCERY RETAILER COLLECTION
+# ==================================================
+
+def retailer_search_url(retailer, query):
+    template = GROCERY_RETAILERS[retailer]["search"]
+
+    return template.format(
+        query=urllib.parse.quote(query)
+    )
+
+
+def collect_retailer_product(retailer, product):
+    url = retailer_search_url(
+        retailer,
+        product["search"],
+    )
+
+    raw = fetch(
+        url,
+        "text/html,application/xhtml+xml",
+    )
+
+    candidates = extract_products(raw)
+
+    matches = []
+
+    for candidate in candidates:
+        result = get_product_price(
+            candidate,
+            product["search"],
+            product["unit"],
+        )
+
+        if result:
+            matches.append(result)
+
+    if not matches:
+        raise ValueError(
+            "No verifiable matching GBP product offer"
+        )
+
+    matches.sort(
+        key=lambda item: (
+            item["matchScore"],
+            -item["price"],
+        ),
+        reverse=True,
+    )
+
+    selected = matches[0]
+
+    return {
+        "retailer": retailer,
+        "retailerName": GROCERY_RETAILERS[retailer]["name"],
+        "productId": product["id"],
+        "productName": product["name"],
+        "matchedProduct": selected["title"],
+        "price": selected["price"],
+        "currency": "GBP",
+        "packQuantity": selected["packQuantity"],
+        "packUnit": selected["unit"],
+        "unitPrice": selected["unitPrice"],
+        "unitPriceLabel": (
+            "GBP per " + selected["unit"]
+        ),
+        "loyaltyPrice": None,
+        "standardPrice": selected["price"],
+        "loyaltyStatus": "not separately verified",
+        "matchScore": selected["matchScore"],
+        "availability": selected["availability"],
+        "observedAt": timestamp(),
+        "date": today(),
+        "source": "Retailer product structured data",
+        "sourceUrl": url,
+        "verification": "structured product offer",
+    }
+
+
+def collect_grocery_retailer(retailer, old_items):
+    observations = []
+    failures = []
+
+    for product in GROCERY_PRODUCTS:
+        try:
+            observation = collect_retailer_product(
+                retailer,
+                {
+                    "id": product[0],
+                    "name": product[1],
+                    "pack": product[2],
+                    "quantity": product[3],
+                    "unit": product[4],
+                    "search": product[5],
+                },
+            )
+
+            observations.append(observation)
+
+            print(
+                "OK GROCERY:",
+                retailer,
+                product[0],
+                observation["price"],
+            )
+
+            # Avoid aggressive requests.
+            time.sleep(1)
+
+        except Exception as error:
+            failures.append({
+                "productId": product[0],
+                "error": str(error)[:180],
+            })
+
+            print(
+                "UNAVAILABLE:",
+                retailer,
+                product[0],
+                str(error)[:100],
+            )
+
+    return observations, failures
+
+
+# ==================================================
+# GROCERY HISTORY AND BASKET TOTALS
+# ==================================================
+
+def grocery_observation_key(item):
+    return (
+        item.get("date"),
+        item.get("retailer"),
+        item.get("productId"),
+    )
+
+
+def merge_grocery_observations(old, new):
+    """
+    Preserve historic observations.
+
+    One observation per retailer/product/date.
+    A new observation for the same date replaces that date's
+    previous observation.
+    """
+
+    records = {}
+
+    for item in old or []:
+        if isinstance(item, dict):
+            key = grocery_observation_key(item)
+
+            if all(key):
+                records[key] = item
+
+    for item in new or []:
+        if isinstance(item, dict):
+            key = grocery_observation_key(item)
+
+            if all(key):
+                records[key] = item
+
+    result = sorted(
+        records.values(),
+        key=lambda item: (
+            item.get("date", ""),
+            item.get("retailer", ""),
+            item.get("productId", ""),
+        ),
+    )
+
+    return result[-MAX_HISTORY * 100:]
+
+
+def calculate_grocery_baskets(observations):
+    """
+    Basket totals are calculated only when all 25 products
+    have verified observations for the retailer on that date.
+
+    Missing products are not treated as zero.
+    """
+
+    grouped = {}
+
+    for item in observations:
+        key = (
+            item.get("date"),
+            item.get("retailer"),
+        )
+
+        grouped.setdefault(key, {})
+        grouped[key][item.get("productId")] = item
+
+    expected = {
+        product[0] for product in GROCERY_PRODUCTS
+    }
+
+    baskets = []
+
+    for (day, retailer), products in grouped.items():
+        present = set(products.keys())
+
+        missing = sorted(expected - present)
+
+        total = None
+
+        if not missing and len(products) == len(expected):
+            total = round(
+                sum(
+                    item["price"]
+                    for item in products.values()
+                ),
+                2,
+            )
+
+        baskets.append({
+            "date": day,
+            "retailer": retailer,
+            "retailerName": GROCERY_RETAILERS[retailer]["name"],
+            "total": total,
+            "currency": "GBP",
+            "productsFound": len(present),
+            "productsExpected": len(expected),
+            "missingProducts": missing,
+            "complete": len(missing) == 0,
+            "source": "DoomWatch verified product observations",
+        })
+
+    return sorted(
+        baskets,
+        key=lambda item: (
+            item["date"],
+            item["retailer"],
+        ),
+    )
+
+
+def collect_retailer_basket(data):
+    print("================================")
+    print("GROCERY INTELLIGENCE COLLECTION")
+    print("================================")
+
     basket = data.setdefault(
         "householdBasket",
         {
@@ -1130,16 +1663,191 @@ def collect_groceries(data):
     basket.setdefault("items", [])
     basket.setdefault("history", [])
 
-    # Remove any old Food Compass source status.
-    data.setdefault("sources", {}).pop("foodCompass", None)
+    old_observations = basket.get(
+        "observations", []
+    )
 
-    print("GROCERIES: collecting official CPIH food inflation")
+    if not isinstance(old_observations, list):
+        old_observations = []
+
+    new_observations = []
+
+    retailer_status = {}
+
+    for retailer in GROCERY_RETAILERS:
+        print("GROCERY RETAILER:", retailer)
+
+        try:
+            observations, failures = collect_grocery_retailer(
+                retailer,
+                old_observations,
+            )
+
+            new_observations.extend(observations)
+
+            retailer_status[retailer] = {
+                "status": (
+                    "ok" if observations else "unavailable"
+                ),
+                "checkedAt": timestamp(),
+                "productsFound": len(observations),
+                "productsExpected": len(GROCERY_PRODUCTS),
+                "failures": failures,
+            }
+
+        except Exception as error:
+            print(
+                "RETAILER FAILED:",
+                retailer,
+                str(error)[:180],
+            )
+
+            retailer_status[retailer] = {
+                "status": "failed",
+                "checkedAt": timestamp(),
+                "error": str(error)[:180],
+            }
+
+    observations = merge_grocery_observations(
+        old_observations,
+        new_observations,
+    )
+
+    basket_history = calculate_grocery_baskets(
+        observations
+    )
+
+    # Preserve previous historical basket totals.
+    old_history = basket.get("history", [])
+
+    combined_history = {}
+
+    for item in old_history:
+        if not isinstance(item, dict):
+            continue
+
+        key = (
+            item.get("date"),
+            item.get("retailer"),
+        )
+
+        if all(key):
+            combined_history[key] = item
+
+    for item in basket_history:
+        key = (
+            item.get("date"),
+            item.get("retailer"),
+        )
+
+        combined_history[key] = item
+
+    final_history = sorted(
+        combined_history.values(),
+        key=lambda item: (
+            item.get("date", ""),
+            item.get("retailer", ""),
+        ),
+    )[-MAX_HISTORY * 4:]
+
+    # Preserve the existing householdBasket structure.
+    # Product observations and inflation data remain separate.
+
+    basket["observations"] = observations
+    basket["history"] = final_history
+
+    basket["items"] = [
+        {
+            "id": product[0],
+            "name": product[1],
+            "targetPack": product[2],
+            "targetQuantity": product[3],
+            "unit": product[4],
+        }
+        for product in GROCERY_PRODUCTS
+    ]
+
+    basket["retailers"] = retailer_status
+    basket["updatedAt"] = timestamp()
+
+    basket["retailerCount"] = len(GROCERY_RETAILERS)
+    basket["productCount"] = len(GROCERY_PRODUCTS)
+
+    basket["latestDate"] = today()
+
+    basket["comparisonNote"] = (
+        "Only verified structured product offers are recorded. "
+        "Prices are not invented. Incomplete retailer baskets "
+        "are not given a complete basket total. Loyalty prices "
+        "are not inferred from standard prices."
+    )
+
+    data["sources"]["groceryBasket"] = {
+        "status": (
+            "ok"
+            if any(
+                value.get("status") == "ok"
+                for value in retailer_status.values()
+            )
+            else "unavailable"
+        ),
+        "checkedAt": timestamp(),
+        "retailers": retailer_status,
+        "productsExpected": len(GROCERY_PRODUCTS),
+        "observationsStored": len(observations),
+        "basketSnapshots": len(final_history),
+        "note": (
+            "Retailer prices require structured product data. "
+            "A failed extraction is not evidence that a product "
+            "is unavailable or has a zero price."
+        ),
+    }
+
+    print("GROCERY COLLECTION COMPLETE")
+    print("Observations:", len(observations))
+    print("Basket snapshots:", len(final_history))
+
+    for retailer, status in retailer_status.items():
+        print(
+            retailer,
+            status.get("status"),
+            status.get("productsFound", 0),
+            "/",
+            len(GROCERY_PRODUCTS),
+        )
+
+
+# ==================================================
+# OFFICIAL CPIH FOOD AND OVERALL INFLATION
+# ==================================================
+
+def collect_groceries(data):
+    """
+    Collect official inflation statistics.
+
+    Retailer basket collection is deliberately separate.
+    """
+
+    basket = data.setdefault(
+        "householdBasket",
+        {
+            "items": [],
+            "history": [],
+        },
+    )
+
+    basket.setdefault("items", [])
+    basket.setdefault("history", [])
+
+    data.setdefault("sources", {}).pop(
+        "foodCompass", None
+    )
+
+    print("GROCERIES: collecting official CPIH inflation")
 
     try:
         page = fetch(DEFRA_FOOD_URL, "text/html")
         csv_url = find_food_index_csv(page)
-
-        print("FOOD INFLATION CSV:", csv_url)
 
         raw = fetch(
             csv_url,
@@ -1150,16 +1858,13 @@ def collect_groceries(data):
             parse_food_inflation_csv(raw)
         )
 
-        old_food = data.get("foodInflationHistory", [])
-        old_overall = data.get("overallInflationHistory", [])
-
         food_history = merge_history(
-            old_food,
+            data.get("foodInflationHistory", []),
             food_history,
         )
 
         overall_history = merge_history(
-            old_overall,
+            data.get("overallInflationHistory", []),
             overall_history,
         )
 
@@ -1205,11 +1910,8 @@ def collect_groceries(data):
             "observationsImported": len(food_history),
             "latestObservation": latest_food["date"],
             "note": (
-                "Official UK-wide CPIH food and non-alcoholic "
-                "beverage year-on-year inflation. The CSV already "
-                "contains inflation percentages; no second "
-                "inflation calculation is applied. This is not "
-                "a local supermarket basket or NI-only measure."
+                "Official UK-wide CPIH food inflation. "
+                "This is not a local supermarket basket."
             ),
         }
 
@@ -1221,8 +1923,7 @@ def collect_groceries(data):
             "observationsImported": len(overall_history),
             "latestObservation": latest_overall["date"],
             "note": (
-                "Official UK-wide CPIH overall year-on-year "
-                "inflation, supplied for comparison with food."
+                "Official UK-wide CPIH overall inflation."
             ),
         }
 
@@ -1230,18 +1931,12 @@ def collect_groceries(data):
             "OK FOOD INFLATION:",
             latest_food["date"],
             latest_food["value"],
-            "%",
-            "history:",
-            len(food_history),
         )
 
         print(
             "OK OVERALL INFLATION:",
             latest_overall["date"],
             latest_overall["value"],
-            "%",
-            "history:",
-            len(overall_history),
         )
 
     except Exception as error:
@@ -1258,9 +1953,9 @@ def collect_groceries(data):
         }
 
 
-# --------------------------------------------------
+# ==================================================
 # FINANCIAL AND SUPPLY NEWS
-# --------------------------------------------------
+# ==================================================
 
 def collect_news(data):
     finance = []
@@ -1275,7 +1970,6 @@ def collect_news(data):
                 )
             )
 
-            # RSS
             for item in root.findall(".//item"):
                 title = item.findtext("title") or "Untitled"
                 link = item.findtext("link") or ""
@@ -1302,12 +1996,13 @@ def collect_news(data):
                 if source == "DEFRA":
                     supply.append(article)
 
-            # ATOM
             namespace = {
                 "a": "http://www.w3.org/2005/Atom"
             }
 
-            for item in root.findall(".//a:entry", namespace):
+            for item in root.findall(
+                ".//a:entry", namespace
+            ):
                 title = item.findtext(
                     "a:title",
                     default="",
@@ -1349,11 +2044,7 @@ def collect_news(data):
             print("OK NEWS:", source)
 
         except Exception as error:
-            print(
-                "FAILED NEWS:",
-                source,
-                str(error)[:150],
-            )
+            print("FAILED NEWS:", source, str(error)[:150])
 
     def unique(items):
         seen = set()
@@ -1377,23 +2068,30 @@ def collect_news(data):
     data["supplyNews"] = unique(supply)
 
 
-# --------------------------------------------------
+# ==================================================
 # MAIN RUN
-# --------------------------------------------------
+# ==================================================
 
 def main():
     print("================================")
     print("DOOMWATCH MARKETS COLLECTION")
+    print("BUILD 82 - GROCERY INTELLIGENCE")
     print("================================")
 
     data = load_data()
     data.setdefault("sources", {})
 
+    # Existing collection systems.
     collect_markets(data)
     collect_stocks(data)
     collect_heating_oil(data)
     collect_fuel(data)
     collect_groceries(data)
+
+    # New retailer price collection.
+    collect_retailer_basket(data)
+
+    # Existing news collection.
     collect_news(data)
 
     data["schemaVersion"] = 1
