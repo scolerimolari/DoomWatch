@@ -681,6 +681,22 @@
       "trust": "official_primary_source",
       "status": "active",
       "notes": "DfI Traffic Information and Control Centre RSS feed for Greater Belfast; feed availability and content are shown in collector diagnostics."
+    },
+    {
+      "id": "gdacs-global",
+      "name": "Global Disaster Alert and Coordination System",
+      "platform": "public_api",
+      "type": "international_disaster_alert",
+      "url": "https://www.gdacs.org/",
+      "endpoint": "https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH",
+      "method": "public_api",
+      "region": "International",
+      "sectors": [
+        11
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "notes": "Official GDACS GeoJSON API. Collector requests red and orange events from the last seven days across earthquakes, cyclones, floods, volcanoes, drought and wildfires. Original event links retained where supplied."
     }
   ]
 }
