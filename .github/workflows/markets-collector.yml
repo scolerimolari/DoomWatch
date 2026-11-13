@@ -104,6 +104,64 @@ jobs:
               1 for retailers in ean_identities.values()
               if len(retailers) >= 2
           )
+          # Conservative candidate identity: exact normalised name tokens
+          # plus the same pack quantity. This is not proof of identical quality.
+          ignored = {"the", "and", "of", "a", "an", "in", "to", "for"}
+          retailer_prefix = re.compile(r"^(tesco|asda|sainsbury'?s|aldi|lidl)\\s+", re.I)
+
+          def pack_identity(row):
+              raw = re.sub(r"\\s+", "", str(row.get("packSize") or "").lower())
+              if not raw:
+                  found = re.search(
+                      r"\\b(\\d+(?:\\.\\d+)?)(kg|g|ml|l|ltr|litre|litres|pack|pk|each)\\b",
+                      str(row.get("matchKey") or "").lower(),
+                  )
+                  if found:
+                      raw = found.group(1) + found.group(2)
+              found = re.fullmatch(
+                  r"(\\d+(?:\\.\\d+)?)(kg|g|ml|l|ltr|litre|litres|pack|pk|each)",
+                  raw,
+              )
+              if not found:
+                  return ""
+              amount, unit = float(found.group(1)), found.group(2)
+              if unit == "kg":
+                  return "g:" + str(round(amount * 1000))
+              if unit == "g":
+                  return "g:" + str(round(amount))
+              if unit in {"l", "ltr", "litre", "litres"}:
+                  return "ml:" + str(round(amount * 1000))
+              if unit == "ml":
+                  return "ml:" + str(round(amount))
+              return "each:" + str(round(amount))
+
+          name_pack_identities = {}
+          for row in latest:
+              match_key = str(row.get("matchKey") or "").strip().lower()
+              pack = pack_identity(row)
+              if not match_key or not pack:
+                  continue
+              name = retailer_prefix.sub("", match_key)
+              name = re.sub(
+                  r"\\b\\d+(?:\\.\\d+)?\\s*(?:kg|g|ml|l|ltr|litre|litres|pack|pk|each)\\b",
+                  " ",
+                  name,
+              )
+              tokens = sorted({
+                  token for token in re.sub(r"[^a-z0-9 ]", " ", name).split()
+                  if len(token) > 1 and token not in ignored
+              })
+              if len(tokens) < 2:
+                  continue
+              identity = " ".join(tokens) + "|" + pack
+              name_pack_identities.setdefault(identity, set()).add(
+                  str(row.get("retailer") or "Unknown")
+              )
+          shared_name_pack_groups = sum(
+              1 for retailers in name_pack_identities.values()
+              if len(retailers) >= 2
+          )
+
           shared_match_key_groups = 0
           hybrid_match_key_groups = 0
           for group in match_identities.values():
@@ -187,6 +245,7 @@ jobs:
               "sharedEanProductGroups": shared_ean_groups,
               "sharedMatchKeyProductGroups": shared_match_key_groups,
               "hybridMatchKeyProductGroups": hybrid_match_key_groups,
+              "sharedNamePackCandidateGroups": shared_name_pack_groups,
               "sharedNamePackProductGroups": shared_name_pack_groups,
           }
           Path("data/grocery-status.json").write_text(
