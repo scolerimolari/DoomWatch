@@ -611,7 +611,7 @@ def main():
     combined = {}
 
     for article in existing + collected:
-        key = article.get("url") or article.get("id")
+        key = article.get("id") or article.get("url")
 
         if key:
             combined[key] = article
