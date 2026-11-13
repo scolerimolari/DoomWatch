@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111714">
+<meta name="description" content="DoomWatch geographic incident map for Northern Ireland.">
+<title>DOOMWATCH // MAP</title>
+<link rel="stylesheet" href="./doomwatch.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+.map-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+#event-map{height:min(66vh,650px);min-height:360px;width:100%;background:#101713;border:1px solid #66715d;border-radius:4px;z-index:1}
+.map-key{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.map-key span{border:1px solid #596653;padding:5px 8px;font-size:10px;color:#d9c69e}
+.map-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:10px}
+.map-item{padding:12px;background:#19211c;border:1px solid #4b574e;border-left:4px solid #c6a36b;overflow-wrap:anywhere}
+.map-item strong{display:block;color:#f0d28e;margin-bottom:5px}.map-item .meta{margin:5px 0}
+.map-item a{display:inline-block;margin-top:7px}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#1b241e;color:#eee;border:1px solid #8c754d}.leaflet-popup-content a{color:#b9dc9a}
+@media(max-width:600px){#event-map{height:54vh;min-height:330px}.map-item{font-size:13px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">MAP // NORTHERN IRELAND EVENT PLOT</div></div><div class="classification">GEOSPATIAL MONITOR</div></div></header>
+<main>
+<h2>MAP // NORTHERN IRELAND OCCURRENCES</h2>
+<div class="terminal" id="map-status">CONNECTING TO INTELLIGENCE ARCHIVE…</div>
+<div class="map-key"><span>● INCIDENT / EMERGENCY</span><span>● TRANSPORT / INFRASTRUCTURE</span><span>● WEATHER / ENVIRONMENT</span><span>● OTHER LOCAL REPORT</span><span>PIN = APPROXIMATE TOWN CENTRE, NOT INCIDENT COORDINATES</span></div>
+<div class="controls" id="map-filters">
+<button class="active" data-filter="ALL" aria-pressed="true">ALL EVENTS</button>
+<button data-filter="TRANSPORT" aria-pressed="false">TRANSPORT</button>
+<button data-filter="WEATHER" aria-pressed="false">WEATHER</button>
+<button data-filter="EMERGENCY" aria-pressed="false">EMERGENCY</button>
+<button data-filter="OTHER" aria-pressed="false">OTHER</button>
+</div>
+<div class="panel map-layout"><div id="event-map" role="application" aria-label="Map of Northern Ireland news and incident mentions"></div></div>
+<h2>EVENT RECORDS // ARTICLE LINKS</h2>
+<div class="panel muted" id="map-list-status">Waiting for event records…</div>
+<div class="map-list" id="map-articles"></div>
+</main>
+<footer>DOOMWATCH // MAP INTELLIGENCE<br>GEOGRAPHY IS APPROXIMATE WHERE THE SOURCE DOES NOT PROVIDE COORDINATES</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+"use strict";
+const DATA_URL="./data/intelligence.json";
+const TOWNS=[
+{name:"Belfast",lat:54.5973,lon:-5.9301,terms:["belfast","greater belfast","east belfast","west belfast","north belfast","south belfast"]},
+{name:"Newtownabbey",lat:54.6598,lon:-5.9086,terms:["newtownabbey","glengormley","carnmoney","whiteabbey"]},
+{name:"Ballyclare",lat:54.7515,lon:-6.0014,terms:["ballyclare","doagh","parkgate"]},
+{name:"Antrim",lat:54.7195,lon:-6.2072,terms:["antrim","crumlin"]},
+{name:"Larne",lat:54.8509,lon:-5.8238,terms:["larne","cairncastle"]},
+{name:"Carrickfergus",lat:54.7158,lon:-5.8058,terms:["carrickfergus","greenisland"]},
+{name:"Lisburn",lat:54.5091,lon:-6.0431,terms:["lisburn","hilden","hillsborough"]},
+{name:"Bangor",lat:54.6608,lon:-5.6681,terms:["bangor","donaghadee"]},
+{name:"Newtownards",lat:54.5924,lon:-5.6909,terms:["newtownards","ards peninsula","comber"]},
+{name:"Downpatrick",lat:54.3281,lon:-5.7153,terms:["downpatrick","strangford","killough"]},
+{name:"Newry",lat:54.1751,lon:-6.3402,terms:["newry","bessbrook","warrenpoint","crossmaglen"]},
+{name:"Armagh",lat:54.3503,lon:-6.6528,terms:["armagh","markethill","tandragee"]},
+{name:"Portadown",lat:54.4235,lon:-6.4443,terms:["portadown","craigavon","lurgan"]},
+{name:"Dungannon",lat:54.5034,lon:-6.7670,terms:["dungannon","coalisland","castlecaulfield"]},
+{name:"Cookstown",lat:54.6430,lon:-6.7450,terms:["cookstown","magherafelt"]},
+{name:"Omagh",lat:54.6000,lon:-7.3000,terms:["omagh","strabane"]},
+{name:"Enniskillen",lat:54.3448,lon:-7.6386,terms:["enniskillen","lisnaskea","fermanagh"]},
+{name:"Coleraine",lat:55.1333,lon:-6.6667,terms:["coleraine","portstewart","portrush"]},
+{name:"Ballymena",lat:54.8636,lon:-6.2763,terms:["ballymena","cullybackey","broughshane"]},
+{name:"Limavady",lat:55.0515,lon:-6.9500,terms:["limavady","dungiven"]},
+{name:"Derry/Londonderry",lat:54.9970,lon:-7.3090,terms:["derry","londonderry","waterside"]},
+{name:"Ballycastle",lat:55.2044,lon:-6.2540,terms:["ballycastle","bushmills","cushendall","causeway coast"]}
+];
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const date=v=>{if(!v)return "Date not supplied";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB");};
+const allText=a=>(String(a.title||"")+" "+String(a.description||"")).toLowerCase();
+const isNI=a=>/northern ireland|\bni\b/i.test(String(a.region||""));
+const locate=a=>{const t=allText(a);for(const town of TOWNS){if(town.terms.some(term=>new RegExp("(^|[^a-z])"+term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"([^a-z]|$)","i").test(t)))return town;}return null;};
+const category=a=>{const t=allText(a),s=String(a.sourceType||"").toLowerCase();if(/traffic|roadwork|transport|rail|airport|port|ferry|bridge|closure/.test(t+" "+s))return "TRANSPORT";if(/weather|flood|storm|wind|snow|ice|fire|environment|warning/.test(t+" "+s))return "WEATHER";if(/police|emergency|incident|crash|collision|evacuat|rescue|explosion|outage/.test(t+" "+s))return "EMERGENCY";return "OTHER";};
+let records=[],filtered=[],markers=[],active="ALL",map=null,layer=null;
+function initMap(){if(!window.L){$("map-status").textContent="MAP LIBRARY UNAVAILABLE. ARTICLE LIST REMAINS AVAILABLE.";return;}map=L.map("event-map",{scrollWheelZoom:false}).setView([54.65,-6.65],8);L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);layer=L.layerGroup().addTo(map);}
+function render(){
+ filtered=records.filter(a=>active==="ALL"||category(a)===active);
+ if(layer){layer.clearLayers();const bounds=[];filtered.forEach(a=>{const town=locate(a);if(!town)return;const c=category(a),colour=c==="TRANSPORT"?"#d6b574":c==="WEATHER"?"#79bde0":c==="EMERGENCY"?"#ed5146":"#a8d58b";const marker=L.circleMarker([town.lat,town.lon],{radius:8,weight:2,color:"#111",fillColor:colour,fillOpacity:.9}).bindPopup('<strong>'+esc(a.title||"Untitled report")+'</strong><br>'+esc(town.name)+' — approximate town location<br>'+esc(a.source||"Source not supplied")+'<br>'+esc(date(a.publishedAt||a.collectedAt))+(a.url&&/^https?:\/\//i.test(a.url)?'<br><a target="_blank" rel="noopener" href="'+esc(a.url)+'">OPEN ORIGINAL ARTICLE ↗</a>':""));marker.addTo(layer);bounds.push([town.lat,town.lon]);});if(bounds.length)map.fitBounds(bounds,{padding:[24,24],maxZoom:9});}
+ $("map-articles").innerHTML=filtered.slice(0,250).map(a=>{const town=locate(a),c=category(a);return '<article class="map-item"><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE MAP PIN":"LOCATION NOT IDENTIFIED")+" · "+esc(c)+" · "+esc(a.source||"Unknown source")+'</div><div class="meta">'+esc(date(a.publishedAt||a.collectedAt))+' · '+esc(a.region||"Region not supplied")+'</div>'+(a.url&&/^https?:\/\//i.test(a.url)?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':'<span class="muted">No valid article URL supplied</span>')+'</article>';}).join("")||'<div class="panel muted">No Northern Ireland records match this filter.</div>';
+ const located=filtered.filter(locate).length;
+ $("map-list-status").textContent=filtered.length+" Northern Ireland records · "+located+" with a town-level map match · showing up to 250 newest records. Unmatched reports remain in the list.";
+ $("map-status").textContent="MAP LINK ACTIVE // "+located+" APPROXIMATE TOWN PINS // "+filtered.length+" NI RECORDS // SOURCE COORDINATES NOT SUPPLIED";
+}
+document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{active=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});render();}));
+async function load(){try{const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();records=(Array.isArray(d.articles)?d.articles:[]).filter(isNI).sort((a,b)=>new Date(b.publishedAt||b.collectedAt||0)-new Date(a.publishedAt||a.collectedAt||0));render();}catch(e){$("map-status").textContent="INTELLIGENCE LINK FAILED // "+e.message;}}
+initMap();load();
+</script>
+<script src="./doomwatch-ui.js"></script>
+</body></html>
