@@ -98,9 +98,9 @@ def repair_xml(xml_data):
 
 def regex_tag(block, tag):
     pattern = (
-        r"<" + re.escape(tag) + r"\b[^>]*>"
+        r"<(?:[A-Za-z0-9_.-]+:)?" + re.escape(tag) + r"\b[^>]*>"
         r"(.*?)"
-        r"</" + re.escape(tag) + r"\s*>"
+        r"</(?:[A-Za-z0-9_.-]+:)?" + re.escape(tag) + r"\s*>"
     )
 
     match = re.search(
@@ -127,7 +127,7 @@ def parse_gdacs_fallback(xml_data, source):
         text_data = str(xml_data)
 
     items = re.findall(
-        r"<item\b[^>]*>(.*?)</item\s*>",
+        r"<(?:[A-Za-z0-9_.-]+:)?(?:item|entry)\b[^>]*>(.*?)</(?:[A-Za-z0-9_.-]+:)?(?:item|entry)\s*>",
         text_data,
         flags=re.IGNORECASE | re.DOTALL
     )
@@ -139,6 +139,15 @@ def parse_gdacs_fallback(xml_data, source):
         link = regex_tag(item, "link")
 
         if not link:
+            link_match = re.search(
+                r"<(?:[A-Za-z0-9_.-]+:)?link\b[^>]*\bhref=['\"]([^'\"]+)",
+                item,
+                flags=re.IGNORECASE | re.DOTALL
+            )
+            if link_match:
+                link = clean(link_match.group(1))
+
+        if not link:
             link = regex_tag(item, "guid")
 
         description = regex_tag(item, "description")
@@ -148,6 +157,9 @@ def parse_gdacs_fallback(xml_data, source):
             or regex_tag(item, "published")
             or regex_tag(item, "updated")
         )
+
+        if not link:
+            link = child_text(element, {"guid", "id"})
 
         if not title or not link:
             continue
