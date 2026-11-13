@@ -459,7 +459,34 @@ def main():
         "historyDays": 90
     }
 
-    intelligence["collectorLastRun"] = iso()
+    intelligence["collectorLastRun"] = intelligence["collector"]["lastRun"]
+
+    report_lines = [
+        "COLLECTION SUMMARY // FACTUAL STATUS ONLY",
+        "Last collection: " + intelligence["collector"]["lastRun"],
+        "Sources reporting successfully: " + str(intelligence["collector"]["successfulFeeds"]) + " of " + str(intelligence["collector"]["configuredFeeds"]),
+        "Sources reporting failure: " + str(intelligence["collector"]["failedFeeds"]),
+        "New feed records collected this run: " + str(intelligence["collector"]["newArticles"]),
+        "Records retained in the 90-day intelligence window: " + str(intelligence["collector"]["retainedArticles"]),
+    ]
+
+    failed_names = [
+        item.get("name", item.get("id", "Unknown source"))
+        for item in source_status
+        if item.get("status") != "OK"
+    ]
+
+    if failed_names:
+        report_lines.append("Feeds requiring attention: " + ", ".join(failed_names[:12]))
+    else:
+        report_lines.append("All configured feeds reported a successful response.")
+
+    report_lines.append(
+        "This is a collection-health summary, not an automated threat assessment. "
+        "Review individual reports and official advisories before taking action."
+    )
+
+    intelligence["report"] = "\\n".join(report_lines)
 
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
 
