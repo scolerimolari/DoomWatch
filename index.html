@@ -96,6 +96,7 @@ h3 {color:var(--tan);font-size:14px;letter-spacing:1px}
 .intel-card.high {border-left-color:var(--red)}
 .intel-card.medium {border-left-color:var(--yellow)}
 .intel-card.low {border-left-color:var(--green)}
+.intel-card.unassessed {border-left-color:var(--olive)}
 .intel-card h3 {margin:0 0 8px}
 .intel-card p {line-height:1.5}
 .meta {font-size:11px;color:var(--muted);margin-top:9px}
@@ -240,6 +241,7 @@ footer {
     <button data-filter="NI">NORTHERN IRELAND</button>
     <button data-filter="UK">UNITED KINGDOM</button>
     <button data-filter="INTERNATIONAL">INTERNATIONAL</button>
+    <button data-filter="UNKNOWN">UNKNOWN REGION</button>
     <button id="refresh-button">REFRESH DATA</button>
   </div>
 
@@ -455,25 +457,31 @@ function dateText(value) {
 }
 
 function severity(item) {
-  const value = asText(valueOf(item,["severity","priority","level","risk"],"low")).toLowerCase();
+  // Never confuse source priority with the severity of an individual incident.
+  const value = asText(valueOf(
+    item,["incidentSeverity","severity","alertLevel","riskLevel"],""
+  )).toLowerCase().trim();
   if (/critical|severe|high|urgent|red/.test(value)) return "high";
   if (/medium|moderate|elevated|amber/.test(value)) return "medium";
-  return "low";
+  if (/low|minor|green/.test(value)) return "low";
+  return "unassessed";
 }
 
 function locationOf(item) {
-  const value = asText(valueOf(item,["area","region","location","geography","country"],""));
-  if (/northern ireland|\bNI\b/i.test(value)) return "NI";
-  if (/international|global|world/i.test(value)) return "INTERNATIONAL";
-  if (/uk|united kingdom|britain|england|scotland|wales/i.test(value)) return "UK";
-  return "UK";
+  const value = asText(valueOf(
+    item,["area","region","location","geography","country"],""
+  )).toLowerCase().trim();
+  if (/northern ireland|\bni\b|\bni[- ]/.test(value)) return "NI";
+  if (/international|global|worldwide|\bworld\b/.test(value)) return "INTERNATIONAL";
+  if (/\buk\b|united kingdom|great britain|\bbritain\b|england|scotland|wales/.test(value)) return "UK";
+  return "UNKNOWN";
 }
 
 function normalizeArticle(item) {
   if (typeof item === "string") {
     return {
       title:item,summary:"",url:"",area:"UK",date:"",
-      source:"Unknown",severity:"low",category:"",status:""
+      source:"Unknown",sourcePriority:"",severity:"unassessed",category:"",status:""
     };
   }
 
@@ -489,7 +497,8 @@ function normalizeArticle(item) {
     url:safeURL(valueOf(item,["url","link","sourceUrl","articleUrl"],"")),
     area:locationOf(item),
     date:valueOf(item,["date","published","publishedAt","timestamp","createdAt"],""),
-    source:asText(valueOf(item,["source","publisher","domain","author"],"Source not specified")),
+    source:asText(valueOf(item,["source","publisher","sourceName","author"],"Source not specified")),
+    sourcePriority:asText(valueOf(item,["priority"],"")),
     severity:severity(item),
     category,
     status:asText(valueOf(item,["status","verification","assessment","evidenceStatus"],""))
@@ -645,7 +654,8 @@ function renderFeed() {
         <div>
           <span class="tag">${escapeHTML(item.area)}</span>
           <span class="tag">${escapeHTML(item.category || "GENERAL")}</span>
-          <span class="tag">${escapeHTML(item.severity.toUpperCase())}</span>
+          <span class="tag">INCIDENT: ${escapeHTML(item.severity.toUpperCase())}</span>
+          ${item.sourcePriority ? `<span class="tag">SOURCE PRIORITY: ${escapeHTML(item.sourcePriority.toUpperCase())}</span>` : ""}
         </div>
         <p>${escapeHTML(item.summary || "No additional description supplied.")}</p>
         <div class="meta">
