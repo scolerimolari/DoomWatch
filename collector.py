@@ -471,11 +471,13 @@ def collect_bluesky_searches():
     """Collect public Bluesky search posts as explicitly unverified signals."""
     searches = [
         ("cyber", "ransomware cyber attack data breach"),
-        ("supply-chain", "supply chain disruption shortage shipping"),
-        ("northern-ireland", "Northern Ireland incident outage disruption"),
+        ("supply-chain", "supply chain"),
+        ("belfast-local", "Belfast"),
+        ("northern-ireland", "Northern Ireland"),
         ("conflict-shipping", "war conflict shipping disruption"),
         ("fuel-food", "fuel shortage food supply shortage"),
-        ("culture-society", "civil liberties protest censorship surveillance immigration")
+        ("culture-war", "culture war"),
+        ("civil-liberties", "civil liberties")
     ]
     endpoints = [
         "https://api.bsky.app/xrpc/app.bsky.feed.searchPosts",
