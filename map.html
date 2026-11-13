@@ -32,6 +32,7 @@
 <button data-filter="OTHER" aria-pressed="false">OTHER</button>
 </div>
 <div class="panel map-layout"><div id="event-map" role="application" aria-label="Map of Northern Ireland news and incident mentions"></div></div>
+<div class="panel" id="map-town-details" aria-live="polite">SELECT A TOWN MARKER TO SEE ITS LATEST MATCHED REPORTS. LOCATIONS ARE APPROXIMATE TOWN CENTRES.</div>
 <h2>EVENT RECORDS // ARTICLE LINKS</h2>
 <div class="panel muted" id="map-list-status">Waiting for event records…</div>
 <div class="map-list" id="map-articles"></div>
@@ -86,8 +87,17 @@ function renderFallbackMap(groups){
  for(let x=50;x<=650;x+=50)svg+='<line x1="'+x+'" y1="35" x2="'+x+'" y2="865" stroke="#26372d"/>';
  for(let y=50;y<=850;y+=50)svg+='<line x1="35" y1="'+y+'" x2="665" y2="'+y+'" stroke="#26372d"/>';
  svg+='<polygon points="'+points+'" fill="#27382d" stroke="#a8b59a" stroke-width="3"/><text x="350" y="460" text-anchor="middle" fill="#8fa08e" opacity=".28" font-size="38" font-weight="bold" transform="rotate(-18 350 460)">NORTHERN IRELAND</text>';
- groups.forEach(group=>{const p=project(group.town.lat,group.town.lon),count=group.items.length,c=group.items.some(a=>category(a)==="EMERGENCY")?"#ed5146":group.items.some(a=>category(a)==="TRANSPORT")?"#d6b574":group.items.some(a=>category(a)==="WEATHER")?"#79bde0":"#a8d58b";svg+='<g><circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+Math.min(21,10+Math.log2(count)*2)+'" fill="'+c+'" stroke="#101713" stroke-width="3"/><text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="#111" font-size="12" font-weight="bold">'+count+'</text><text x="'+(p[0]+14)+'" y="'+(p[1]-13)+'" fill="#f1ead9" font-size="13" stroke="#101713" stroke-width="3" paint-order="stroke">'+esc(group.town.name)+'</text></g>';});
+ groups.forEach(group=>{const p=project(group.town.lat,group.town.lon),count=group.items.length,c=group.items.some(a=>category(a)==="EMERGENCY")?"#ed5146":group.items.some(a=>category(a)==="TRANSPORT")?"#d6b574":group.items.some(a=>category(a)==="WEATHER")?"#79bde0":"#a8d58b";svg+='<g data-town="'+esc(group.town.name)+'" role="button" tabindex="0" style="cursor:pointer"><circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+Math.min(21,10+Math.log2(count)*2)+'" fill="'+c+'" stroke="#101713" stroke-width="3"/><text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="#111" font-size="12" font-weight="bold">'+count+'</text><text x="'+(p[0]+14)+'" y="'+(p[1]-13)+'" fill="#f1ead9" font-size="13" stroke="#101713" stroke-width="3" paint-order="stroke">'+esc(group.town.name)+'</text></g>';});
  svg+='<text x="350" y="885" text-anchor="middle" fill="#c7cdbd" font-size="12">SCHEMATIC TOWN PLOT · APPROXIMATE LOCATIONS · NOT INCIDENT GPS</text></svg>';$("event-map").innerHTML=svg;
+ $("event-map").querySelectorAll("[data-town]").forEach(node=>{
+  const activate=()=>{
+   const group=groups.find(item=>item.town.name===node.getAttribute("data-town"));
+   if(!group)return;
+   $("map-town-details").innerHTML='<strong>'+esc(group.town.name)+' // '+group.items.length+' MATCHED RECORDS</strong><div class="meta">Approximate town-centre match. Not precise incident coordinates.</div>'+group.items.slice(0,12).map(a=>'<div class="map-item"><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(date(a.publishedAt||a.collectedAt))+'</div>'+(a.url&&(String(a.url).startsWith("https://")||String(a.url).startsWith("http://"))?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a>':"")+'</div>').join("");
+  };
+  node.addEventListener("click",activate);
+  node.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();activate();}});
+ });
 }
 function render(){
  filtered=records.filter(a=>active==="ALL"||category(a)===active);
