@@ -156,8 +156,8 @@
         11
       ],
       "trust": "unverified_social",
-      "status": "connector_required",
-      "notes": "Public post search. Requires query, pagination and rate-limit handling."
+      "status": "active",
+      "notes": "Public Bluesky search API queried by the collector for cyber incidents, supply-chain disruption, Northern Ireland occurrences, conflict and fuel/food supply chatter. Posts are unverified signals; query coverage is limited and subject to platform availability and rate limits."
     },
     {
       "id": "mastodon-public",
