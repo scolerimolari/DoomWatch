@@ -165,7 +165,6 @@ footer {
   <button data-page="sections">11 SECTORS</button>
   <button data-page="preparedness">PREPAREDNESS</button>
   <button data-page="sources">SOURCES</button>
-  <button type="button" id="markets-button">MARKETS</button>
 </nav>
 
 <main>
@@ -934,12 +933,6 @@ async function loadIntelligence() {
 
 document.querySelectorAll("nav button[data-page]").forEach(button => {
   button.addEventListener("click",() => showPage(button.dataset.page));
-});
-
-/* MARKETS */
-
-$("markets-button").addEventListener("click",() => {
-  window.location.href = "./markets.html";
 });
 
 /* INTELLIGENCE FILTERS */
