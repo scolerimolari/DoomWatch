@@ -12,7 +12,7 @@ if(oldHeader)oldHeader.hidden=true;
 const globalNav=document.createElement("nav");globalNav.className="dw-global-nav";globalNav.setAttribute("aria-label","DoomWatch main navigation");
 [["command","./index.html","COMMAND"],["markets","./markets.html","MARKETS"],["household","./household.html","HOUSEHOLD"]].forEach(([key,href,label])=>{const a=document.createElement("a");a.href=href;a.textContent=label;if(key===active)a.setAttribute("aria-current","page");globalNav.appendChild(a);});
 mast.insertAdjacentElement("afterend",globalNav);
-if(oldNav){if(isHousehold)oldNav.remove();else{oldNav.classList.add("dw-local-nav");oldNav.setAttribute("aria-label",isMarkets?"Markets sections":"Command sections");globalNav.insertAdjacentElement("afterend",oldNav);}}
+if(oldNav){oldNav.classList.add("dw-local-nav");oldNav.setAttribute("aria-label",isMarkets?"Markets sections":isHousehold?"Household sections":"Command sections");globalNav.insertAdjacentElement("afterend",oldNav);}
 const wire=document.createElement("div");wire.className="dw-wire";wire.setAttribute("aria-hidden","true");globalNav.insertAdjacentElement("afterend",wire);
 const top=document.createElement("button");top.type="button";top.className="dw-top";top.textContent="TOP";top.setAttribute("aria-label","Back to top");top.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));body.appendChild(top);
 body.classList.add("dw-ready");
