@@ -76,8 +76,8 @@ const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const date=v=>{if(!v)return "Date not supplied";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB");};
 const allText=a=>(String(a.title||"")+" "+String(a.description||"")).toLowerCase();
-const hasTerm=(text,term)=>new RegExp("(^|[^a-z0-9])"+term.replace(/[.*+?^${}()|[\\]\\\\]/g,"\\\\$&")+"([^a-z0-9]|$)","i").test(text);
-const isNI=a=>/northern ireland/i.test(String(a.region||""))||/(^|[;,/])\\s*ni\\s*($|[;,/])/i.test(String(a.region||""))||!!a.locality||TOWNS.some(t=>t.terms.some(term=>hasTerm(allText(a),term)));
+const hasTerm=(text,term)=>new RegExp("(^|[^a-z0-9])"+term+"([^a-z0-9]|$)","i").test(text);
+const isNI=a=>/northern ireland/i.test(String(a.region||""))||/(^|[;,/])\s*ni\s*($|[;,/])/i.test(String(a.region||""))||!!a.locality||TOWNS.some(t=>t.terms.some(term=>hasTerm(allText(a),term)));
 const locate=a=>{if(a.locality&&a.locality.name){const found=TOWNS.find(t=>t.name.toLowerCase()===String(a.locality.name).toLowerCase());if(found)return found;}const t=allText(a);for(const town of TOWNS){if(town.terms.some(term=>hasTerm(t,term)))return town;}return null;};
 const category=a=>{const t=allText(a),s=String(a.sourceType||"").toLowerCase(),v=t+" "+s;if(/traffic|roadwork|transport|rail|airport|port|ferry|bridge|closure/.test(v))return "TRANSPORT";if(/police|fire|emergency|incident|crash|collision|evacuat|rescue|ambulance|explosion|outage|crime|missing person/.test(v))return "EMERGENCY";if(/weather|flood|storm|wind|snow|ice|environment|rainfall|met office|coastal erosion/.test(v))return "WEATHER";return "OTHER";}
 function diverse(records,limit,perSource){
