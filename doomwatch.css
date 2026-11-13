@@ -47,3 +47,10 @@ section{min-width:0}
 canvas{display:block;width:100%;max-width:100%;margin-top:8px}
 .status{padding:11px 13px;margin:12px 0;color:#b8df91;font-size:11px;letter-spacing:.5px;overflow-wrap:anywhere}
 .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.dw-switches{display:flex;gap:7px;align-items:center;padding:5px 7px;border:1px solid #59645b;background:#101612;box-shadow:inset 0 0 7px #000}
+.dw-switch{position:relative;display:block;width:18px;height:30px;border:1px solid #899184;border-radius:3px;background:linear-gradient(90deg,#313a34,#141a16);box-shadow:inset 0 1px #ffffff24}
+.dw-switch:before{content:"";position:absolute;left:6px;top:3px;width:5px;height:14px;border-radius:4px;background:linear-gradient(90deg,#ddd5bd,#6d746d);transform:rotate(-24deg);transform-origin:bottom center;box-shadow:1px 1px 2px #000}
+.dw-switch.on:before{top:9px;transform:rotate(24deg);background:linear-gradient(90deg,#e45b4e,#7d1d1a)}
+@media(max-width:700px){.dw-switches{gap:4px;padding:3px}.dw-switch{width:14px;height:24px}.dw-switch:before{left:4px;height:11px;width:4px}}
+@media(max-width:420px){.dw-switches{display:none}}
