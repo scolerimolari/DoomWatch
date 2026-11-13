@@ -463,11 +463,17 @@ function renderSustainedPricePressure(history){
  groups.forEach(rows=>{
   const byDay=new Map();
   rows.sort((a,b)=>a.day.localeCompare(b.day)).forEach(row=>byDay.set(row.day,row));
-  const series=Array.from(byDay.values()).slice(-3);
-  if(series.length<3)return;
-  const first=series[0],mid=series[1],last=series[2];
+  const allDates=Array.from(byDay.values());
+  if(allDates.length<3)return;
+  const latestDay=allDates[allDates.length-1].day;
+  const cutoff=Date.parse(latestDay+"T00:00:00Z")-14*86400000;
+  const windowRows=allDates.filter(row=>Date.parse(row.day+"T00:00:00Z")>=cutoff);
+  if(windowRows.length<3)return;
+  const first=windowRows[0];
+  const mid=windowRows[Math.floor((windowRows.length-1)/2)];
+  const last=windowRows[windowRows.length-1];
   const span=(Date.parse(last.day+"T00:00:00Z")-Date.parse(first.day+"T00:00:00Z"))/86400000;
-  if(!Number.isFinite(span)||span<7)return;
+  if(!Number.isFinite(span)||span<7||first===mid||mid===last)return;
   const d1=(mid.price/first.price-1)*100;
   const d2=(last.price/mid.price-1)*100;
   const total=(last.price/first.price-1)*100;
