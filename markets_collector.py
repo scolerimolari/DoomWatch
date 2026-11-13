@@ -1830,7 +1830,7 @@ def collect_supermarket_index(data):
 
     url = (
         "https://api.apify.com/v2/datasets/"
-        "AvRCWqFinCiNjx3sP/items?format=json"
+        "AvRCWQFinCiNjx3sP/items?format=json"
     )
 
     basket = data.setdefault("householdBasket", {})
@@ -2199,6 +2199,7 @@ def main():
 
     # New retailer price collection.
     collect_retailer_basket(data)
+    collect_supermarket_index(data)
 
     # Existing news collection.
     collect_news(data)
