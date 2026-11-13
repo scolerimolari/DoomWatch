@@ -144,7 +144,7 @@ footer{padding:20px 14px;color:var(--muted);font-size:11px;text-align:center}
 
 <section class="card wide">
 <h2>VERIFIED CROSS-RETAILER PRICE CHECK</h2>
-<div class="small">Matches products across retailers by exact EAN first, then the source-provided matchKey (normalised brand, name and pack size) when no barcode is available. Retailer-specific product IDs are never treated as equivalent. These are shelf-price comparisons, not a complete basket ranking.</div>
+<div class="small">Matches products across retailers by exact EAN, source matchKey, or strict name-token and normalised pack-size identity. Retailer-specific product IDs are never treated as equivalent. Name-and-pack matches are candidate comparisons, not proof of identical ingredients or quality.</div>
 <div class="tablewrap">
 <table>
 <thead><tr><th>Product identity</th><th>Match method</th><th>Retailers matched</th><th>Lowest shelf price</th><th>Highest shelf price</th><th>Price spread</th></tr></thead>
@@ -549,68 +549,88 @@ function renderCrossRetailerComparison(rows){
  const body=document.getElementById("crossRetailerRows");
  const note=document.getElementById("crossRetailerNote");
  if(!body||!note)return;
- const eanGroups=new Map(),matchGroups=new Map();
+ const eanGroups=new Map(),matchGroups=new Map(),namePackGroups=new Map();
+ const retailerPrefix=/^(tesco|asda|sainsbury'?s|aldi|lidl)\s+/i;
+ const ignored=new Set(["the","and","of","a","an","in","to","for"]);
+ function packIdentity(o){
+  let raw=String(o.packSize||"").toLowerCase().replace(/\s+/g,"");
+  if(!raw){
+   const found=String(o.matchKey||"").toLowerCase().match(/\b(\d+(?:\.\d+)?)(kg|g|ml|l|ltr|litre|litres|pack|pk|each)\b/);
+   if(found)raw=found[1]+found[2];
+  }
+  const m=raw.match(/^(\d+(?:\.\d+)?)(kg|g|ml|l|ltr|litre|litres|pack|pk|each)$/);
+  if(!m)return "";
+  const n=Number(m[1]),u=m[2];
+  if(u==="kg")return "g:"+Math.round(n*1000);
+  if(u==="g")return "g:"+Math.round(n);
+  if(["l","ltr","litre","litres"].includes(u))return "ml:"+Math.round(n*1000);
+  if(u==="ml")return "ml:"+Math.round(n);
+  return "each:"+Math.round(n);
+ }
+ function nameIdentity(o){
+  const name=String(o.matchKey||"").toLowerCase().replace(retailerPrefix,"");
+  const tokens=[...new Set(name.replace(/\b\d+(?:\.\d+)?\s*(?:kg|g|ml|l|ltr|litre|litres|pack|pk|each)\b/g," ")
+   .replace(/[^a-z0-9 ]/g," ").split(/\s+/)
+   .filter(t=>t.length>1&&!ignored.has(t)))].sort();
+  const pack=packIdentity(o);
+  return tokens.length>=2&&pack?tokens.join(" ")+"|"+pack:"";
+ }
+ function addLatest(map,key,entry){
+  if(!map.has(key))map.set(key,new Map());
+  const group=map.get(key),prior=group.get(entry.retailer);
+  if(!prior||entry.scrapedAt>prior.scrapedAt)group.set(entry.retailer,entry);
+ }
  rows.forEach(o=>{
   const raw=Array.isArray(o.ean)?o.ean:[o.ean];
   const codes=[...new Set(raw.map(v=>String(v||"").replace(/\D/g,"")).filter(v=>v.length>=8&&v.length<=14))];
   const price=number(o.price);
   if(price===null||price<=0)return;
-  const retailer=String(o.retailer||"").toLowerCase();
-  const confidence=number(o.matchConfidence);
-  const basis=String(o.matchBasis||"").trim().toLowerCase();
-  const entry={price,scrapedAt:o.scrapedAt||"",retailer,eans:codes,confidence,basis};
-  codes.forEach(code=>{
-   if(!eanGroups.has(code))eanGroups.set(code,new Map());
-   const group=eanGroups.get(code),prior=group.get(retailer);
-   if(!prior||entry.scrapedAt>prior.scrapedAt)group.set(retailer,entry);
-  });
-  const key=String(o.matchKey||"").trim();
-  if(key){
-   const folded=key.toLocaleLowerCase();
-   if(!matchGroups.has(folded))matchGroups.set(folded,{label:key,rows:[]});
-   if((entry.confidence===null||entry.confidence>=0.90)&&entry.basis!=="name")
-    matchGroups.get(folded).rows.push(entry);
-  }
+  const entry={price,scrapedAt:o.scrapedAt||"",retailer:String(o.retailer||"").toLowerCase(),eans:codes};
+  codes.forEach(code=>addLatest(eanGroups,code,entry));
+  const sourceKey=String(o.matchKey||"").trim().toLowerCase();
+  if(sourceKey)addLatest(matchGroups,sourceKey,entry);
+  const nameKey=nameIdentity(o);
+  if(nameKey)addLatest(namePackGroups,nameKey,entry);
  });
  const matches=[];
- eanGroups.forEach((retailers,code)=>{
-  if(retailers.size<2)return;
-  const values=Array.from(retailers.values()),prices=values.map(v=>v.price);
-  matches.push({key:"ean:"+code,label:code,method:"Exact EAN",retailers:values.length,low:Math.min(...prices),high:Math.max(...prices)});
- });
- matchGroups.forEach((group,key)=>{
-  const retailers=new Map();
-  group.rows.forEach(entry=>{
-   const prior=retailers.get(entry.retailer);
-   if(!prior||entry.scrapedAt>prior.scrapedAt)retailers.set(entry.retailer,entry);
+ function addGroups(map,method){
+  map.forEach((retailers,key)=>{
+   if(retailers.size<2)return;
+   const values=Array.from(retailers.values());
+   if(method==="Source match key"){
+    const known=new Set(values.flatMap(v=>v.eans));
+    if(known.size>1)return;
+    if(known.size===1&&values.every(v=>v.eans.length))return;
+   }
+   const prices=values.map(v=>v.price);
+   matches.push({key:method+":"+key,label:method==="Exact EAN"?key:key.split("|")[0],method,
+    retailers:values.length,low:Math.min(...prices),high:Math.max(...prices)});
   });
-  if(retailers.size<2)return;
-  const values=Array.from(retailers.values());
-  const knownEans=new Set(values.flatMap(v=>v.eans));
-  // Never let a text key override two different known barcodes.
-  if(knownEans.size>1)return;
-  // If every retailer supplied the same EAN, the exact match above is enough.
-  if(knownEans.size===1&&values.every(v=>v.eans.length))return;
-  const prices=values.map(v=>v.price);
-  const confidenceValues=values.map(v=>v.confidence).filter(v=>v!==null);
-  const confidenceLabel=confidenceValues.length?" • "+Math.round(Math.min(...confidenceValues)*100)+"% min confidence":"";
-  matches.push({key:"match:"+key,label:group.label,method:(knownEans.size?"Source match key (EAN bridge)":"Source match key")+confidenceLabel,retailers:values.length,low:Math.min(...prices),high:Math.max(...prices)});
+ }
+ addGroups(eanGroups,"Exact EAN");
+ addGroups(matchGroups,"Source match key");
+ addGroups(namePackGroups,"Name + pack (strict)");
+ const unique=new Map();
+ matches.forEach(m=>{
+  const signature=[m.method,[m.label,m.retailers,m.low,m.high].join("|")].join(":");
+  if(!unique.has(signature))unique.set(signature,m);
  });
- matches.forEach(m=>m.spread=m.high-m.low);
- matches.sort((a,b)=>b.spread-a.spread);
- body.innerHTML=matches.length?matches.slice(0,25).map(m=>
+ const finalMatches=[...unique.values()];
+ finalMatches.forEach(m=>m.spread=m.high-m.low);
+ finalMatches.sort((a,b)=>b.spread-a.spread);
+ body.innerHTML=finalMatches.length?finalMatches.slice(0,25).map(m=>
   '<tr><td>'+escapeHtml(m.label)+'</td><td>'+escapeHtml(m.method)+'</td><td>'+
   m.retailers+'</td><td>'+money(m.low)+'</td><td>'+money(m.high)+'</td><td>'+
   money(m.spread)+'</td></tr>'
  ).join(""):'<tr><td colspan="6">No shared product identities across retailers in this snapshot.</td></tr>';
  const usable=rows.filter(o=>{
   const raw=Array.isArray(o.ean)?o.ean:[o.ean];
-  const hasEan=raw.some(v=>{const code=String(v||"").replace(/\D/g,"");return code.length>=8&&code.length<=14;});
-  return hasEan||!!String(o.matchKey||"").trim();
+  return raw.some(v=>{const code=String(v||"").replace(/\D/g,"");return code.length>=8&&code.length<=14;})||
+   !!String(o.matchKey||"").trim();
  }).length;
- note.textContent=matches.length?
-  matches.length+" verified-key groups matched across at least two retailers. Exact EANs take priority; source match keys can bridge missing barcodes only when known barcodes do not conflict. Check pack size and unit price before treating unlike formats as equivalent.":
-  "No cross-retailer comparisons published: "+usable+"/"+rows.length+" latest rows have a usable EAN or source match key. No retailer equivalence has been guessed.";
+ note.textContent=finalMatches.length?
+  finalMatches.length+" comparison groups found. Matching uses exact EANs, source match keys, then strict name-token + normalised pack-size identity. Name-and-pack matches require matching descriptive tokens and the same pack quantity; they are candidate like-for-like comparisons, not proof of identical ingredients or quality. Promotions, loyalty eligibility and delivery charges are not adjusted.":
+  "No cross-retailer comparisons published: "+usable+"/"+rows.length+" latest rows have an EAN or source match key. No retailer equivalence has been guessed.";
 }
 function renderDailyGroceryBasket(data){
  const basket=data.householdBasket||{};
