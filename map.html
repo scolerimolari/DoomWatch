@@ -18,6 +18,7 @@
 .map-item strong{display:block;color:#f0d28e;margin-bottom:5px}.map-item .meta{margin:5px 0}
 .map-item a{display:inline-block;margin-top:7px}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#1b241e;color:#eee;border:1px solid #8c754d}.leaflet-popup-content a{color:#b9dc9a}
 @media(max-width:600px){#event-map{height:54vh;min-height:330px}.map-item{font-size:13px}}
+ .map-search-label{display:block;margin:8px 0 3px;color:#d9c69e;font-size:11px;letter-spacing:1px;font-weight:700}#map-search{margin:0 0 10px}.map-key span{line-height:1.5}.map-item summary{line-height:1.5}.map-item .meta{line-height:1.5}
 </style>
 </head>
 <body>
@@ -26,13 +27,15 @@
 <h2>MAP // NORTHERN IRELAND OCCURRENCES</h2>
 <div class="terminal" id="map-status">CONNECTING TO INTELLIGENCE ARCHIVE…</div>
 <div class="map-key"><span>● INCIDENT / EMERGENCY</span><span>● TRANSPORT / INFRASTRUCTURE</span><span>● WEATHER / ENVIRONMENT</span><span>● OTHER LOCAL REPORT</span><span>PIN = APPROXIMATE TOWN CENTRE, NOT INCIDENT COORDINATES</span></div>
-<div class="controls" id="map-filters">
+<div class="controls" id="map-filters" aria-label="Filter mapped reports">
 <button class="active" data-filter="ALL" aria-pressed="true">ALL EVENTS</button>
 <button data-filter="TRANSPORT" aria-pressed="false">TRANSPORT</button>
 <button data-filter="WEATHER" aria-pressed="false">WEATHER</button>
 <button data-filter="EMERGENCY" aria-pressed="false">EMERGENCY</button>
 <button data-filter="OTHER" aria-pressed="false">OTHER</button>
 </div>
+<label class="map-search-label" for="map-search">SEARCH LOCAL REPORTS</label>
+<input id="map-search" type="search" placeholder="Search town, incident, source or article…" autocomplete="off">
 <div class="panel map-layout"><div id="event-map" role="application" aria-label="Map of Northern Ireland news and incident mentions"></div></div>
 <div class="panel" id="map-town-details" aria-live="polite">SELECT A TOWN MARKER TO SEE ITS LATEST MATCHED REPORTS. LOCATIONS ARE APPROXIMATE TOWN CENTRES.</div>
 <h2>EVENT RECORDS // ARTICLE LINKS</h2>
@@ -71,9 +74,10 @@ const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const date=v=>{if(!v)return "Date not supplied";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB");};
 const allText=a=>(String(a.title||"")+" "+String(a.description||"")).toLowerCase();
-const isNI=a=>/northern ireland|\bni\b/i.test(String(a.region||""))||!!a.locality||TOWNS.some(t=>t.terms.some(term=>allText(a).includes(term)));
-const locate=a=>{if(a.locality&&a.locality.name){const found=TOWNS.find(t=>t.name===a.locality.name);if(found)return found;}const t=allText(a);for(const town of TOWNS){if(town.terms.some(term=>new RegExp("(^|[^a-z])"+term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"([^a-z]|$)","i").test(t)))return town;}return null;};
-const category=a=>{const t=allText(a),s=String(a.sourceType||"").toLowerCase();if(/traffic|roadwork|transport|rail|airport|port|ferry|bridge|closure/.test(t+" "+s))return "TRANSPORT";if(/weather|flood|storm|wind|snow|ice|fire|environment|warning/.test(t+" "+s))return "WEATHER";if(/police|emergency|incident|crash|collision|evacuat|rescue|explosion|outage/.test(t+" "+s))return "EMERGENCY";return "OTHER";};
+const hasTerm=(text,term)=>new RegExp("(^|[^a-z0-9])"+term.replace(/[.*+?^${}()|[\\]\\\\]/g,"\\\\$&")+"([^a-z0-9]|$)","i").test(text);
+const isNI=a=>/northern ireland/i.test(String(a.region||""))||/(^|[;,/])\\s*ni\\s*($|[;,/])/i.test(String(a.region||""))||!!a.locality||TOWNS.some(t=>t.terms.some(term=>hasTerm(allText(a),term)));
+const locate=a=>{if(a.locality&&a.locality.name){const found=TOWNS.find(t=>t.name.toLowerCase()===String(a.locality.name).toLowerCase());if(found)return found;}const t=allText(a);for(const town of TOWNS){if(town.terms.some(term=>hasTerm(t,term)))return town;}return null;};
+const category=a=>{const t=allText(a),s=String(a.sourceType||"").toLowerCase(),v=t+" "+s;if(/traffic|roadwork|transport|rail|airport|port|ferry|bridge|closure/.test(v))return "TRANSPORT";if(/police|fire|emergency|incident|crash|collision|evacuat|rescue|ambulance|explosion|outage|crime|missing person/.test(v))return "EMERGENCY";if(/weather|flood|storm|wind|snow|ice|environment|rainfall|met office|coastal erosion/.test(v))return "WEATHER";return "OTHER";}
 function diverse(records,limit,perSource){
  const counts=new Map(),out=[];
  for(const item of records){
@@ -85,7 +89,7 @@ function diverse(records,limit,perSource){
  }
  return out;
 }
-let records=[],filtered=[],markers=[],active="ALL",map=null,layer=null;
+let records=[],filtered=[],markers=[],active="ALL",map=null,layer=null,searchTerm="";
 function initMap(){
  map=null;
  layer=null;
@@ -113,21 +117,23 @@ function renderFallbackMap(groups){
  });
 }
 function render(){
- filtered=records.filter(a=>active==="ALL"||category(a)===active);
+ filtered=records.filter(a=>(active==="ALL"||category(a)===active)&&(!searchTerm||[a.title,a.description,a.source,a.region,locate(a)?.name].some(v=>String(v||"").toLowerCase().includes(searchTerm))));
  const groups=new Map();
  const plotRecords=diverse(filtered,500,45);
  plotRecords.forEach(a=>{const town=locate(a);if(!town)return;const group=groups.get(town.name)||{town,items:[]};group.items.push(a);groups.set(town.name,group);});
  if(layer){layer.clearLayers();const bounds=[];groups.forEach(group=>{const town=group.town,items=group.items,cats=items.map(category),c=cats.includes("EMERGENCY")?"#ed5146":cats.includes("TRANSPORT")?"#d6b574":cats.includes("WEATHER")?"#79bde0":"#a8d58b";const links=items.slice(0,8).map(a=>'<div style="margin:5px 0">'+esc(a.title||"Untitled report")+(a.url&&(String(a.url).startsWith("https://")||String(a.url).startsWith("http://"))?' <a target="_blank" rel="noopener" href="'+esc(a.url)+'">OPEN ↗</a>':"")+'</div>').join("");L.circleMarker([town.lat,town.lon],{radius:Math.min(16,7+Math.log2(items.length)*2),weight:2,color:"#111",fillColor:c,fillOpacity:.9}).bindPopup('<strong>'+esc(town.name)+' // '+items.length+' RECORDS</strong><div>Approximate town-centre location</div>'+links).addTo(layer);bounds.push([town.lat,town.lon]);});if(bounds.length)map.fitBounds(bounds,{padding:[24,24],maxZoom:9});}else renderFallbackMap([...groups.values()]);
  $("map-articles").innerHTML=diverse(filtered,80,10).map(a=>{const town=locate(a),c=category(a),url=a.url&&(String(a.url).startsWith("https://")||String(a.url).startsWith("http://"));return '<details class="map-item"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED")+" · "+esc(c)+" · "+esc(date(a.publishedAt||a.collectedAt))+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div>'+(url?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':'<span class="muted">No valid article URL supplied</span>')+'</details>';}).join("")||'<div class="panel muted">No Northern Ireland records match this filter.</div>';
  const located=filtered.filter(locate).length,plotted=plotRecords.filter(locate).length;
- $("map-list-status").textContent=filtered.length+" NI/local records · "+located+" with a town-level text match · showing up to 80 newest article links.";
+ $("map-list-status").textContent=filtered.length+" matching records · "+located+" with a town-level match · "+plotted+" included in the plotted sample. Showing up to 80 newest article links, capped at 10 per source.";
+ if(!filtered.length)$("map-town-details").textContent="NO MATCHING REPORTS. Clear the search or select ALL EVENTS.";
  $("map-status").textContent=(layer?"LIVE STREET MAP":"BUILT-IN SCHEMATIC MAP")+" // "+plotted+" LOCATED RECORDS IN NEWEST 500 ACROSS "+groups.size+" TOWN LOCATIONS // "+filtered.length+" NI/LOCAL RECORDS IN ARCHIVE // APPROXIMATE TOWN LOCATIONS";
 }
 async function load(){try{const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();records=(Array.isArray(d.articles)?d.articles:[]).filter(isNI).sort((a,b)=>new Date(b.publishedAt||b.collectedAt||0)-new Date(a.publishedAt||a.collectedAt||0));render();}catch(e){$("map-status").textContent="INTELLIGENCE LINK FAILED // "+e.message;}}
-initMap();load();
-document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{active=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});render();}));
-async function load(){try{const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();records=(Array.isArray(d.articles)?d.articles:[]).filter(isNI).sort((a,b)=>new Date(b.publishedAt||b.collectedAt||0)-new Date(a.publishedAt||a.collectedAt||0));render();}catch(e){$("map-status").textContent="INTELLIGENCE LINK FAILED // "+e.message;}}
-initMap();load();
+initMap();
+document.querySelectorAll("#map-filters [data-filter]").forEach(b=>b.addEventListener("click",()=>{active=b.dataset.filter;document.querySelectorAll("#map-filters [data-filter]").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});render();}));
+$("map-search").addEventListener("input",event=>{searchTerm=String(event.target.value||"").trim().toLowerCase();render();});
+async function load(){try{const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();records=(Array.isArray(d.articles)?d.articles:[]).filter(isNI).sort((a,b)=>new Date(b.publishedAt||b.collectedAt||0)-new Date(a.publishedAt||a.collectedAt||0));render();}catch(e){$("map-status").textContent="INTELLIGENCE LINK FAILED // "+e.message;$("map-list-status").textContent="The intelligence archive could not be loaded. Try again when the data link is restored.";}}
+load();
 </script>
 <script src="./doomwatch-ui.js"></script>
 </body></html>
