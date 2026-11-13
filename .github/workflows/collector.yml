@@ -9,6 +9,9 @@ name: DoomWatch Intelligence Collector
       - "feeds.json"
       - "sources.json"
       - "manifest.json"
+      - "index.html"
+      - "markets.html"
+      - "household.html"
       - ".github/workflows/collector.yml"
 
   workflow_dispatch:
