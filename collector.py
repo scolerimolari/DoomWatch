@@ -30,7 +30,7 @@ SECTOR_RULES = {
   8: ("Telecommunications, cyber and infrastructure", ("cyber","ransomware","data breach","phishing","telecom","broadband","mobile network","internet outage","data centre","datacenter")),
   9: ("Weather, flooding and natural hazards", ("weather warning","flood","storm","wind warning","snow","ice warning","wildfire","coastal erosion","drought")),
   10: ("Civil defence and community preparedness", ("civil defence","community resilience","emergency shelter","evacuation","household preparedness","emergency plan","volunteer response")),
-  11: ("International events with UK/NI impact", ("geopolitical","international conflict","war","sanctions","blockade","red sea","strait of hormuz","ukraine","shipping disruption","trade disruption","nato"))
+  11: ("International events with UK/NI impact", ("geopolitical","international conflict","armed conflict","military operation","sanctions","blockade","red sea","strait of hormuz","ukraine","russia","iran","israel","gaza","nato","shipping disruption","trade disruption"))
 }
 LOCALITY_POINTS = [
  ("Belfast",54.5973,-5.9301,("belfast","greater belfast")),
@@ -60,7 +60,7 @@ def enrich_article(article):
     text = " " + (str(article.get("title","")) + " " + str(article.get("description",""))).lower() + " "
     ids = set()
     for sector_id, (_, terms) in SECTOR_RULES.items():
-        if any(term in text for term in terms):
+        if any(re.search(r"(?<![a-z0-9])" + re.escape(term) + r"(?![a-z0-9])", text) for term in terms):
             ids.add(sector_id)
     domain = article.get("domain")
     if isinstance(domain, int) and 1 <= domain <= 11:
