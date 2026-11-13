@@ -542,7 +542,13 @@ def collect_bluesky_searches():
         ("conflict-shipping", "war conflict shipping disruption"),
         ("fuel-food", "fuel shortage food supply shortage"),
         ("culture-war", "culture war"),
-        ("civil-liberties", "civil liberties")
+        ("civil-liberties", "civil liberties"),
+        ("newtownabbey-local", "Newtownabbey"),
+        ("ballyclare-local", "Ballyclare"),
+        ("ni-utilities", "Northern Ireland power outage water disruption"),
+        ("ni-supply-chain", "Northern Ireland fuel food supply shortage"),
+        ("belfast-ports", "Belfast port ferry freight disruption"),
+        ("ni-cyber", "Northern Ireland cyber attack ransomware")
     ]
     endpoints = [
         "https://api.bsky.app/xrpc/app.bsky.feed.searchPosts",
