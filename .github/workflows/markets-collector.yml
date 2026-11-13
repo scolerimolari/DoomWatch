@@ -207,7 +207,7 @@ jobs:
               "sharedEanProductGroups": shared_ean_groups,
               "sharedMatchKeyProductGroups": shared_match_key_groups,
               "hybridMatchKeyProductGroups": hybrid_match_key_groups,
-              "sharedNamePackProductGroups": shared_name_pack_groups,
+              "sharedNamePackCandidateGroups": shared_name_pack_groups,
           }
           Path("data/grocery-status.json").write_text(
               json.dumps(report, ensure_ascii=False, indent=2) + "\n",
