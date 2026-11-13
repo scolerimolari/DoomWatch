@@ -79,7 +79,7 @@ jobs:
                   for value in raw_ean
               ))
               eans = [value for value in eans if 8 <= len(value) <= 14]
-              match_key = str(row.get("matchKey") or "").strip().casefold()
+              match_key = retailer_prefix.sub("", str(row.get("matchKey") or "").strip().casefold()).strip()
 
               if eans:
                   ean_rows += 1
@@ -101,7 +101,7 @@ jobs:
                           "retailer": retailer,
                           "eans": set(eans),
                       })
-                      legacy_key = str(row.get("matchKeyV1") or "").strip().casefold()
+                      legacy_key = retailer_prefix.sub("", str(row.get("matchKeyV1") or "").strip().casefold()).strip()
                       if legacy_key:
                           legacy_match_identities.setdefault(legacy_key, []).append({
                               "retailer": retailer,
