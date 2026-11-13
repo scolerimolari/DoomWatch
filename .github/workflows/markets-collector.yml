@@ -67,6 +67,7 @@ jobs:
           ean_identities = {}
           match_identities = {}
           legacy_match_identities = {}
+          legacy_match_key_v1_rows = 0
           for row in latest:
               retailer = str(row.get("retailer") or "Unknown")
               counts[retailer] = counts.get(retailer, 0) + 1
@@ -102,6 +103,8 @@ jobs:
                           "eans": set(eans),
                       })
                       legacy_key = re.sub(r"^(tesco|asda|sainsbury\'?s|aldi|lidl)\s+", "", str(row.get("matchKeyV1") or "").strip().casefold()).strip()
+                  if legacy_key:
+                      legacy_match_key_v1_rows += 1
                       if legacy_key:
                           legacy_match_identities.setdefault(legacy_key, []).append({
                               "retailer": retailer,
@@ -219,6 +222,7 @@ jobs:
               "sharedEanProductGroups": shared_ean_groups,
               "sharedMatchKeyProductGroups": shared_match_key_groups,
               "hybridMatchKeyProductGroups": hybrid_match_key_groups,
+              "legacyMatchKeyV1Rows": legacy_match_key_v1_rows,
               "sharedLegacyMatchKeyV1Groups": shared_legacy_match_key_groups,
               "hybridLegacyMatchKeyV1Groups": hybrid_legacy_match_key_groups,
               "sharedNamePackCandidateGroups": shared_name_pack_groups,
