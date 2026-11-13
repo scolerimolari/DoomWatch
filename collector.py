@@ -486,7 +486,7 @@ def main():
         "Review individual reports and official advisories before taking action."
     )
 
-    intelligence["report"] = "\\n".join(report_lines)
+    intelligence["report"] = "\n".join(report_lines)
 
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
 
