@@ -63,17 +63,18 @@ LOCAL:["northern ireland","belfast","derry","londonderry","newtownabbey","ballyc
 SOCIETY:["protest","riot","immigration","migration","election","censorship","surveillance","digital id","culture war","gender","free speech","civil liberties","community tension","disinformation"]
 };
 const labels={CYBER:"CYBER / DIGITAL",SUPPLY:"SUPPLY CHAIN",CONFLICT:"WAR / CONFLICT",LOCAL:"NI / LOCAL",SOCIETY:"CULTURE / SOCIETY"};
-let articles=[],active="ALL";
+let articles=[],active="ALL",rendered=[];
 function hits(a,key){const t=textOf(a);return topics[key].some(w=>t.includes(w));}
 function matches(a){if(active==="ALL")return true;if(active==="SOCIAL")return social(a);return hits(a,active);}
 function render(){
  const q=$("feed-search").value.trim().toLowerCase();
  const list=articles.filter(a=>matches(a)&&(!q||textOf(a).includes(q)||String(a.source||"").toLowerCase().includes(q))).slice(0,300);
- $("feed-items").innerHTML=list.map(a=>{
+ rendered=list;
+ $("feed-items").innerHTML=list.map((a,index)=>{
   const socialPost=social(a),matched=Object.keys(topics).filter(k=>hits(a,k));
   const status=socialPost?"UNVERIFIED SOCIAL POST":String(a.evidenceStatus||"UNASSESSED").replace(/_/g," ");
   const link=a.url&&/^https?:\/\//i.test(a.url)?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL POST / REPORT ↗</a>':'<span class="muted">No valid source link</span>';
-  return '<article class="feed-item '+(socialPost?"social":"")+'"><strong>'+esc(a.title||"Untitled signal")+'</strong><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(a.source||"Source not supplied")+' · '+esc(a.sourceTrust||"Trust class not supplied")+'</div><div class="meta">'+esc(date(a.publishedAt||a.collectedAt))+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+'</article>';
+  return '<article class="feed-item '+(socialPost?"social":"")+'"><strong>'+esc(a.title||"Untitled signal")+'</strong><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(a.source||"Source not supplied")+' · '+esc(a.sourceTrust||"Trust class not supplied")+'</div><div class="meta">'+esc(date(a.publishedAt||a.collectedAt))+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+'<div style="margin-top:10px"><button type="button" class="action-button" data-flag="'+index+'">SAVE TO RUMOUR MONITOR</button></div></article>';
  }).join("")||'<div class="panel muted">No records match this filter and search. Try another topic or clear the search.</div>';
  $("feed-status").textContent="SHOWING "+list.length+" OF "+articles.length+" MATCHING RECORDS // FILTER: "+active+" // KEYWORD CLASSIFICATION IS AUTOMATED AND MAY MISS CONTEXT.";
 }
@@ -84,6 +85,26 @@ function renderTrends(){
  $("topic-count").textContent=counts.filter(x=>x.count>0).length;
 }
 async function load(){try{const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();articles=Array.isArray(d.articles)?d.articles:[];articles.sort((a,b)=>new Date(b.publishedAt||b.collectedAt||0)-new Date(a.publishedAt||a.collectedAt||0));$("social-count").textContent=articles.filter(social).length;$("record-count").textContent=articles.length.toLocaleString("en-GB");$("feed-updated").textContent=date(d.collectorLastRun||d.collector?.lastRun);renderTrends();render();}catch(e){$("feed-status").textContent="SIGNAL ARCHIVE FAILED // "+e.message;}}
+$("feed-items").addEventListener("click",event=>{
+ const button=event.target.closest("[data-flag]");
+ if(!button)return;
+ const item=rendered[Number(button.dataset.flag)];
+ if(!item)return;
+ try{
+  const store=JSON.parse(localStorage.getItem("doomwatch-v1")||"{}");
+  if(!Array.isArray(store.rumours))store.rumours=[];
+  const claim=String(item.title||item.description||"Untitled signal");
+  const source=String(item.source||"Source not supplied");
+  const original=String(item.url||"");
+  const duplicate=store.rumours.some(r=>(original&&r.evidence&&r.evidence.includes(original))||(r.claim===claim&&r.source===source));
+  if(!duplicate){
+   store.rumours.unshift({claim,source,evidence:"Captured from DoomWatch FEED. Verification pending. Original source: "+original,status:"UNVERIFIED",date:new Date().toLocaleString()});
+   localStorage.setItem("doomwatch-v1",JSON.stringify(store));
+  }
+  button.textContent=duplicate?"ALREADY SAVED":"SAVED TO RUMOUR MONITOR";
+  button.disabled=true;
+ }catch(error){button.textContent="SAVE FAILED // STORAGE UNAVAILABLE";}
+});
 document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{active=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});render();}));
 $("feed-search").addEventListener("input",render);load();
 </script>
