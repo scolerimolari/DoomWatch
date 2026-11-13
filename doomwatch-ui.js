@@ -10,8 +10,10 @@ const statusline=mast.querySelector("#dw-statusline");
 ["clock","connection","updated"].forEach(id=>{const node=document.getElementById(id);if(node){const wrap=document.createElement("span");wrap.appendChild(node);statusline.appendChild(wrap);}});
 if(oldHeader)oldHeader.hidden=true;
 const globalNav=document.createElement("nav");globalNav.className="dw-global-nav";globalNav.setAttribute("aria-label","DoomWatch main navigation");
-[["command","./index.html","COMMAND"],["map","./map.html","MAP"],["feed","./feed.html","FEED"],["markets","./markets.html","MARKETS"],["household","./household.html","HOUSEHOLD"]].forEach(([key,href,label])=>{const a=document.createElement("a");a.href=href;a.textContent=label;if(key===active)a.setAttribute("aria-current","page");globalNav.appendChild(a);});
+[["command","./index.html","COMMAND"],["markets","./markets.html","MARKETS"],["household","./household.html","HOUSEHOLD"],["feed","./feed.html","FEED"],["map","./map.html","MAP"]].forEach(([key,href,label])=>{const a=document.createElement("a");a.href=href;a.textContent=label;if(key===active)a.setAttribute("aria-current","page");globalNav.appendChild(a);});
 mast.insertAdjacentElement("afterend",globalNav);
+// Keep global destinations visible even when an older page-specific navigation exists.
+globalNav.querySelectorAll("a").forEach(a=>a.setAttribute("role","link"));
 if(oldNav){oldNav.classList.add("dw-local-nav");oldNav.setAttribute("aria-label",isMarkets?"Markets sections":isHousehold?"Household sections":isMap?"Map sections":isFeed?"Feed sections":"Command sections");globalNav.insertAdjacentElement("afterend",oldNav);}
 const wire=document.createElement("div");wire.className="dw-wire";wire.setAttribute("aria-hidden","true");globalNav.insertAdjacentElement("afterend",wire);
 const top=document.createElement("button");top.type="button";top.className="dw-top";top.textContent="TOP";top.setAttribute("aria-label","Back to top");top.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));body.appendChild(top);
