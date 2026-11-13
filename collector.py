@@ -488,6 +488,59 @@ def main():
 
     intelligence["report"] = "\n".join(report_lines)
 
+    # Factual daily snapshot: recent collected records grouped by declared region.
+    # This is a source-led digest, not an automated assessment of threat or impact.
+    def brief_region(article):
+        region = str(article.get("region", "")).strip().lower()
+        if "northern ireland" in region or region == "ni":
+            return "NI"
+        if region in ("international", "global", "world"):
+            return "INTERNATIONAL"
+        if region in ("uk", "united kingdom", "great britain", "britain"):
+            return "UK"
+        if region in ("england", "scotland", "wales"):
+            return "UK"
+        return "UNKNOWN"
+
+    grouped = {"NI": [], "UK": [], "INTERNATIONAL": [], "UNKNOWN": []}
+    for article in intelligence["articles"]:
+        region = brief_region(article)
+        grouped[region].append(article)
+
+    def brief_sort_key(article):
+        return str(article.get("publishedAt") or article.get("collectedAt") or "")
+
+    brief_sections = []
+    for region in ("NI", "UK", "INTERNATIONAL", "UNKNOWN"):
+        records = sorted(
+            grouped[region],
+            key=brief_sort_key,
+            reverse=True
+        )[:6]
+        brief_sections.append({
+            "region": region,
+            "recordCount": len(grouped[region]),
+            "entries": [
+                {
+                    "title": str(item.get("title", "Untitled record"))[:300],
+                    "source": str(item.get("source", "Source not specified"))[:160],
+                    "url": str(item.get("url", "")),
+                    "publishedAt": item.get("publishedAt") or item.get("collectedAt", ""),
+                    "sector": item.get("domain"),
+                    "evidenceStatus": item.get("evidenceStatus", "UNASSESSED")
+                }
+                for item in records
+            ]
+        })
+
+    intelligence["dailyBrief"] = {
+        "generatedAt": iso(),
+        "type": "FACTUAL_SOURCE_SNAPSHOT",
+        "disclaimer": "Recent feed records grouped by the region declared by each source. Inclusion is not confirmation of an incident, severity, or local impact. Open original sources and official advisories.",
+        "totalRecords": len(intelligence["articles"]),
+        "regions": brief_sections
+    }
+
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
 
     with DATA_FILE.open("w", encoding="utf-8") as file:
