@@ -514,6 +514,22 @@ def main():
         reverse=True
     )
 
+    # Backfill source classification on retained historical records.
+    feed_metadata = {
+        str(item.get("id")): item
+        for item in feeds
+        if item.get("id")
+    }
+    for article in retained:
+        metadata = feed_metadata.get(str(article.get("sourceId", "")), {})
+        if not article.get("sourceTrust"):
+            article["sourceTrust"] = metadata.get("trust", "unclassified")
+        if not article.get("sourceType"):
+            article["sourceType"] = metadata.get(
+                "sourceType",
+                metadata.get("type", "unclassified")
+            )
+
     intelligence["articles"] = retained[:MAX_ARTICLES]
     intelligence["sourceStatus"] = source_status
 
