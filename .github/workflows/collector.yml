@@ -12,6 +12,9 @@ name: DoomWatch Intelligence Collector
       - "index.html"
       - "markets.html"
       - "household.html"
+      - "doomwatch-ui.js"
+      - "doomwatch.css"
+      - "containment.svg"
       - ".github/workflows/collector.yml"
 
   workflow_dispatch:
@@ -87,6 +90,7 @@ jobs:
           node --check /tmp/index.html-1.js
           node --check /tmp/markets.html-1.js
           node --check /tmp/household.html-1.js
+          node --check doomwatch-ui.js
 
       - name: Run DoomWatch collector
         run: python collector.py
