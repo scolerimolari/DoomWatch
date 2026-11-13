@@ -95,13 +95,14 @@ function renderSources(d){
  const src=d.sources||{},keys=["supermarketPriceIndex","foodInflation","overallInflation","heatingOil","roadFuel"],labels={supermarketPriceIndex:"Weekly aggregate supermarket index",foodInflation:"UK food inflation / CPIH",overallInflation:"UK overall inflation / CPIH",heatingOil:"Northern Ireland heating oil",roadFuel:"UK road fuel averages"};
  $("sources").innerHTML=keys.map(k=>{const s=src[k]||{};return '<div class="section-card"><strong>'+labels[k]+'</strong><div class="meta">STATUS: '+esc(s.status||"not reported")+' // CHECKED: '+esc(fmtDate(s.checkedAt))+' // RECORDS: '+esc(s.recordsImported??s.observationsImported??"not supplied")+'</div>'+(s.note?'<p>'+esc(s.note)+'</p>':'')+(s.url?'<a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a>':'')+'</div>';}).join("");
 }
+let currentData=null;
 async function load(){
  $("status").textContent="CONTACTING MARKETS COLLECTOR…";
  try{const r=await fetch(DATA_URL+"?v="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();if(!d||typeof d!=="object"||Array.isArray(d))throw new Error("Invalid markets data");
- renderInflation(d);renderSupermarkets(d);renderEnergy(d);renderSources(d);
+ currentData=d;renderInflation(d);renderSupermarkets(d);renderEnergy(d);renderSources(d);
  const n=d.householdBasket?.supermarketIndexHistory?.length||0;
  $("status").textContent="DATA LINK ACTIVE // UPDATED "+fmtDate(d.updatedAt)+" // "+n+" AGGREGATE SUPERMARKET RECORDS // NO INDIVIDUAL GROCERY DATA";
  }catch(e){$("status").textContent="DATA LINK FAILED // "+e.message;}
 }
-load();let resizeTimer;window.addEventListener("resize",()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(load,180);});
+load();let resizeTimer;window.addEventListener("resize",()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(!currentData)return;renderInflation(currentData);renderSupermarkets(currentData);renderEnergy(currentData);},180);});
 </script><script src="./doomwatch-ui.js"></script></body></html>
