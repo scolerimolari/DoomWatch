@@ -7,6 +7,7 @@
 <meta name="description" content="DoomWatch geographic incident map for Northern Ireland.">
 <title>DOOMWATCH // MAP</title>
 <link rel="stylesheet" href="./doomwatch.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 .map-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
 #event-map{height:min(66vh,650px);min-height:360px;width:100%;background:#101713;border:1px solid #66715d;border-radius:4px;z-index:1}
@@ -43,6 +44,7 @@
 <div class="map-list" id="map-articles"></div>
 </main>
 <footer>DOOMWATCH // MAP INTELLIGENCE<br>GEOGRAPHY IS APPROXIMATE WHERE THE SOURCE DOES NOT PROVIDE COORDINATES</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 "use strict";
 const DATA_URL="./data/intelligence.json";
@@ -91,9 +93,18 @@ function diverse(records,limit,perSource){
 }
 let records=[],filtered=[],markers=[],active="ALL",map=null,layer=null,searchTerm="";
 function initMap(){
- map=null;
- layer=null;
- $("map-status").textContent="BUILT-IN SCHEMATIC MAP // DOES NOT DEPEND ON EXTERNAL TILE SERVICES";
+ map=null;layer=null;
+ if(window.L&&typeof window.L.map==="function"){
+  try{
+   map=L.map("event-map",{scrollWheelZoom:false,preferCanvas:true}).setView([54.62,-6.55],8);
+   layer=L.layerGroup().addTo(map);
+   const tiles=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a> contributors"});
+   let tileErrorShown=false;tiles.on("tileerror",()=>{if(!tileErrorShown){tileErrorShown=true;$("map-status").textContent="MAP TILES UNAVAILABLE // SHOWING INCIDENT MARKERS WITHOUT BASE TILES";}});tiles.addTo(map);
+   $("map-status").textContent="OPENSTREETMAP // NORTHERN IRELAND INCIDENT PLOT // APPROXIMATE TOWN-CENTRE MATCHES";
+   return;
+  }catch(error){map=null;layer=null;}
+ }
+ $("map-status").textContent="OFFLINE SCHEMATIC MAP // EXTERNAL MAP SERVICE UNAVAILABLE";
 }
 
 function project(lat,lon){return [48+(lon+7.85)/2.65*604,48+(55.45-lat)/1.55*804];}
