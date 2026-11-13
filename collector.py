@@ -361,10 +361,13 @@ def fetch_gdacs_api(source):
         if severity_text:
             details.append("Severity detail: " + severity_text)
 
+        url_value = properties.get("url") or ""
+        if isinstance(url_value, dict):
+            url_value = url_value.get("report") or url_value.get("details") or ""
         link = str(
             properties.get("reportUrl")
             or properties.get("detailsUrl")
-            or properties.get("url")
+            or url_value
             or ""
         )
         if not link and event_type and event_id:
