@@ -140,6 +140,14 @@ footer {
 }
 </style>
 <link rel="stylesheet" href="./doomwatch.css">
+<style>
+.module-launcher{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:9px;margin:12px 0 20px}
+.module-launch{display:flex;flex-direction:column;gap:5px;min-height:78px;padding:13px;border:1px solid #756343;border-left:4px solid #b94b40;border-radius:3px;background:linear-gradient(145deg,#28332b,#111713);color:#eee!important;text-decoration:none!important;box-shadow:inset 0 1px #ffffff18,0 3px 8px #0007}
+.module-launch strong{color:#f2c84b;letter-spacing:1.2px;font-size:12px}
+.module-launch span{color:#b9c0b3;font-size:11px;line-height:1.4}
+.module-launch:active{transform:translateY(1px);filter:brightness(1.25)}
+.module-launch:focus-visible{outline:2px solid #f2c84b;outline-offset:3px}
+</style>
 </head>
 
 <body>
@@ -171,6 +179,16 @@ footer {
 
 <section class="page active" id="overview">
   <h2>01 // COMMAND OVERVIEW</h2>
+  <div class="module-launcher" aria-label="DoomWatch module shortcuts">
+    <a class="module-launch" href="./index.html#intelligence"><strong>INTELLIGENCE</strong><span>Live reports and assessments</span></a>
+    <a class="module-launch" href="./index.html#sections"><strong>11 SECTORS</strong><span>Critical resilience domains</span></a>
+    <a class="module-launch" href="./index.html#preparedness"><strong>PREPAREDNESS</strong><span>Household readiness and notes</span></a>
+    <a class="module-launch" href="./markets.html"><strong>MARKETS</strong><span>Commodities and economic signals</span></a>
+    <a class="module-launch" href="./household.html"><strong>HOUSEHOLD</strong><span>Aggregate living-cost indicators</span></a>
+    <a class="module-launch" href="./feed.html"><strong>FEED</strong><span>Social and open-source signals</span></a>
+    <a class="module-launch" href="./map.html"><strong>MAP</strong><span>Northern Ireland event locations</span></a>
+    <a class="module-launch" href="./index.html#sources"><strong>SOURCES</strong><span>Publisher and source directory</span></a>
+  </div>
   <div class="grid">
     <div class="panel">
       <div class="panel-title">NORTHERN IRELAND</div>
