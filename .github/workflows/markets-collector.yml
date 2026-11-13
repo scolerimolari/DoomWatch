@@ -107,19 +107,19 @@ jobs:
           # Conservative candidate identity: exact normalised name tokens
           # plus the same pack quantity. This is not proof of identical quality.
           ignored = {"the", "and", "of", "a", "an", "in", "to", "for"}
-          retailer_prefix = re.compile(r"^(tesco|asda|sainsbury'?s|aldi|lidl)\\s+", re.I)
+          retailer_prefix = re.compile(r"^(tesco|asda|sainsbury'?s|aldi|lidl)\s+", re.I)
 
           def pack_identity(row):
-              raw = re.sub(r"\\s+", "", str(row.get("packSize") or "").lower())
+              raw = re.sub(r"\s+", "", str(row.get("packSize") or "").lower())
               if not raw:
                   found = re.search(
-                      r"\\b(\\d+(?:\\.\\d+)?)(kg|g|ml|l|ltr|litre|litres|pack|pk|each)\\b",
+                      r"\b(\d+(?:\.\d+)?)(kg|g|ml|l|ltr|litre|litres|pack|pk|each)\b",
                       str(row.get("matchKey") or "").lower(),
                   )
                   if found:
                       raw = found.group(1) + found.group(2)
               found = re.fullmatch(
-                  r"(\\d+(?:\\.\\d+)?)(kg|g|ml|l|ltr|litre|litres|pack|pk|each)",
+                  r"(\d+(?:\.\d+)?)(kg|g|ml|l|ltr|litre|litres|pack|pk|each)",
                   raw,
               )
               if not found:
@@ -143,7 +143,7 @@ jobs:
                   continue
               name = retailer_prefix.sub("", match_key)
               name = re.sub(
-                  r"\\b\\d+(?:\\.\\d+)?\\s*(?:kg|g|ml|l|ltr|litre|litres|pack|pk|each)\\b",
+                  r"\b\d+(?:\.\d+)?\s*(?:kg|g|ml|l|ltr|litre|litres|pack|pk|each)\b",
                   " ",
                   name,
               )
