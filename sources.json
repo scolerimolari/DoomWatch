@@ -564,6 +564,91 @@
       "trust": "official_primary_source",
       "status": "active",
       "notes": "Official GOV.UK Atom feed for Northern Ireland Office publications and announcements."
+    },
+    {
+      "id": "ni-water",
+      "name": "Northern Ireland Water",
+      "platform": "website",
+      "type": "critical_infrastructure_operator",
+      "url": "https://www.niwater.com/",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        5
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Water and wastewater service updates, supply interruptions, water quality and infrastructure works. No RSS endpoint verified; follow official service updates."
+    },
+    {
+      "id": "nie-networks",
+      "name": "NIE Networks",
+      "platform": "website",
+      "type": "electricity_distribution_operator",
+      "url": "https://www.nienetworks.co.uk/",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        5
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Electricity distribution network incidents, planned outages and restoration updates. No news feed endpoint verified."
+    },
+    {
+      "id": "translink-ni",
+      "name": "Translink",
+      "platform": "website",
+      "type": "public_transport_operator",
+      "url": "https://www.translink.co.uk/",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        6
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Rail and bus service disruption, network status and transport updates. No RSS endpoint verified."
+    },
+    {
+      "id": "psni-ni",
+      "name": "Police Service of Northern Ireland",
+      "platform": "website",
+      "type": "police_service",
+      "url": "https://www.psni.police.uk/latest-news",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        1,
+        6,
+        10
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Official incident statements, public safety appeals and local policing updates. News page is not currently configured as a verified RSS feed."
+    },
+    {
+      "id": "daera-ni",
+      "name": "Department of Agriculture, Environment and Rural Affairs",
+      "platform": "website",
+      "type": "government_department",
+      "url": "https://www.daera-ni.gov.uk/",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        2,
+        3,
+        4,
+        9
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Agriculture, food, environment, animal health and rural affairs. No RSS endpoint verified."
     }
   ]
 }
