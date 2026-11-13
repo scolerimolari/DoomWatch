@@ -552,7 +552,7 @@ function renderCrossRetailerComparison(rows){
  const groups=new Map();
  rows.forEach(o=>{
   const raw=Array.isArray(o.ean)?o.ean:[o.ean];
-  const codes=[...new Set(raw.map(v=>String(v||"").replace(/\\D/g,"")).filter(v=>v.length>=8&&v.length<=14))];
+  const codes=[...new Set(raw.map(v=>String(v||"").replace(/\D/g,"")).filter(v=>v.length>=8&&v.length<=14))];
   codes.forEach(code=>{
    if(!groups.has(code))groups.set(code,new Map());
    const byRetailer=groups.get(code);
