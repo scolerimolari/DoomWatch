@@ -1,40 +1,18 @@
 {
-  "generatedAt": "2026-11-13T13:26:33+00:00",
-  "source": {
-    "status": "ok",
-    "checkedAt": "2026-11-13T13:26:33+00:00",
-    "url": "https://dev.to/yappman/comparing-uk-supermarket-prices-programmatically-tesco-sainsburys-asda-and-aldi-in-one-schema-4epi",
-    "datasetUrl": "https://api.apify.com/v2/datasets/ynAT9NPps2EdjMOJa/items?format=json&limit=100000",
-    "licence": "CC BY 4.0",
-    "latestDate": "2026-11-13",
-    "recordsImported": 10802,
-    "recordsStored": 10802,
-    "latestSnapshotRows": 211,
-    "retailers": [
-      "Tesco",
-      "Sainsbury's",
-      "Asda",
-      "Aldi"
-    ],
-    "note": "Daily 212-item UK staple basket. Prices are online shelf snapshots, not live store prices or a complete household bill. Product names, descriptions, images and retailer content are not reproduced. Credit Yappman Data, CC BY 4.0."
-  },
-  "historyRows": 10802,
-  "latestDate": "2026-11-13",
-  "latestRows": 211,
-  "retailerCounts": {
-    "aldi": 46,
-    "asda": 48,
-    "sainsburys": 59,
-    "tesco": 58
-  },
-  "eanRows": 161,
-  "matchKeyRows": 211,
-  "matchKeyOnlyRows": 50,
-  "sharedEanProductGroups": 3,
+  "generatedAt": "2026-11-13T13:30:56+00:00",
+  "source": {},
+  "historyRows": 0,
+  "latestDate": "",
+  "latestRows": 0,
+  "retailerCounts": {},
+  "eanRows": 0,
+  "matchKeyRows": 0,
+  "matchKeyOnlyRows": 0,
+  "sharedEanProductGroups": 0,
   "sharedMatchKeyProductGroups": 0,
   "hybridMatchKeyProductGroups": 0,
-  "legacyMatchKeyV1Rows": 211,
+  "legacyMatchKeyV1Rows": 0,
   "sharedLegacyMatchKeyV1Groups": 0,
   "hybridLegacyMatchKeyV1Groups": 0,
-  "sharedNamePackCandidateGroups": 1
+  "sharedNamePackCandidateGroups": 0
 }
