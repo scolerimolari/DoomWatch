@@ -1,92 +1,534 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-13T06:36:50+00:00",
-  "generatedAt": "2026-11-13T06:36:50+00:00",
+  "updatedAt": "2026-11-13T11:21:43+00:00",
+  "generatedAt": "2026-11-13T11:21:43+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:47+00:00"
+      "checkedAt": "2026-11-13T11:21:03+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:47+00:00"
+      "checkedAt": "2026-11-13T11:21:04+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:47+00:00"
+      "checkedAt": "2026-11-13T11:21:04+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:47+00:00"
+      "checkedAt": "2026-11-13T11:21:04+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:47+00:00"
+      "checkedAt": "2026-11-13T11:21:04+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:47+00:00"
+      "checkedAt": "2026-11-13T11:21:04+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:48+00:00"
+      "checkedAt": "2026-11-13T11:21:04+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:48+00:00"
+      "checkedAt": "2026-11-13T11:21:05+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:48+00:00"
+      "checkedAt": "2026-11-13T11:21:05+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:48+00:00"
+      "checkedAt": "2026-11-13T11:21:05+00:00"
     },
     "heatingOil": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:49+00:00",
+      "checkedAt": "2026-11-13T11:21:08+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
-      "observationsImported": 178,
-      "latestObservation": "2026-11-12",
+      "observationsImported": 179,
+      "latestObservation": "2026-11-13",
       "note": "Consumer Council NI published averages. Prices include 5% VAT. National and Ballyclare observations are kept separately."
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:49+00:00",
+      "checkedAt": "2026-11-13T11:21:08+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
       "observationsImported": 463,
       "latestObservation": "2026-11-09",
-      "note": "Official UK weekly average pump prices. Not Northern Ireland-only or local forecourt prices. Prices are in pence per litre."
+      "note": "Official UK weekly average pump prices. Not Northern Ireland-only or local forecourt prices."
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:50+00:00",
+      "checkedAt": "2026-11-13T11:21:09+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
       "latestObservation": "2026-04-01",
-      "note": "Official UK-wide CPIH food and non-alcoholic beverage year-on-year inflation. The CSV already contains inflation percentages; no second inflation calculation is applied. This is not a local supermarket basket or NI-only measure."
+      "note": "Official UK-wide CPIH food inflation. This is not a local supermarket basket."
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-13T06:36:50+00:00",
+      "checkedAt": "2026-11-13T11:21:09+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
       "latestObservation": "2026-04-01",
-      "note": "Official UK-wide CPIH overall year-on-year inflation, supplied for comparison with food."
+      "note": "Official UK-wide CPIH overall inflation."
+    },
+    "groceryBasket": {
+      "status": "unavailable",
+      "checkedAt": "2026-11-13T11:21:43+00:00",
+      "retailers": {
+        "tesco": {
+          "status": "unavailable",
+          "checkedAt": "2026-11-13T11:21:11+00:00",
+          "productsFound": 0,
+          "productsExpected": 25,
+          "failures": [
+            {
+              "productId": "milk",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "whole_milk",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "bread",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "wholemeal_bread",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "eggs",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "butter",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "cheese",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "chicken",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "mince",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "sausages",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "potatoes",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "carrots",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "onions",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "bananas",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "apples",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "broccoli",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "rice",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "pasta",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "flour",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "sugar",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "cooking_oil",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "tea",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "coffee",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "toilet_roll",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "washing_liquid",
+              "error": "HTTP Error 403: Forbidden"
+            }
+          ]
+        },
+        "asda": {
+          "status": "unavailable",
+          "checkedAt": "2026-11-13T11:21:12+00:00",
+          "productsFound": 0,
+          "productsExpected": 25,
+          "failures": [
+            {
+              "productId": "milk",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "whole_milk",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "bread",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "wholemeal_bread",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "eggs",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "butter",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "cheese",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "chicken",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "mince",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "sausages",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "potatoes",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "carrots",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "onions",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "bananas",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "apples",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "broccoli",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "rice",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "pasta",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "flour",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "sugar",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "cooking_oil",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "tea",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "coffee",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "toilet_roll",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "washing_liquid",
+              "error": "HTTP Error 403: Forbidden"
+            }
+          ]
+        },
+        "sainsburys": {
+          "status": "unavailable",
+          "checkedAt": "2026-11-13T11:21:15+00:00",
+          "productsFound": 0,
+          "productsExpected": 25,
+          "failures": [
+            {
+              "productId": "milk",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "whole_milk",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "bread",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "wholemeal_bread",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "eggs",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "butter",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "cheese",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "chicken",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "mince",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "sausages",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "potatoes",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "carrots",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "onions",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "bananas",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "apples",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "broccoli",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "rice",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "pasta",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "flour",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "sugar",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "cooking_oil",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "tea",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "coffee",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "toilet_roll",
+              "error": "HTTP Error 403: Forbidden"
+            },
+            {
+              "productId": "washing_liquid",
+              "error": "HTTP Error 403: Forbidden"
+            }
+          ]
+        },
+        "lidl": {
+          "status": "unavailable",
+          "checkedAt": "2026-11-13T11:21:43+00:00",
+          "productsFound": 0,
+          "productsExpected": 25,
+          "failures": [
+            {
+              "productId": "milk",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "whole_milk",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "bread",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "wholemeal_bread",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "eggs",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "butter",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "cheese",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "chicken",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "mince",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "sausages",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "potatoes",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "carrots",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "onions",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "bananas",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "apples",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "broccoli",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "rice",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "pasta",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "flour",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "sugar",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "cooking_oil",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "tea",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "coffee",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "toilet_roll",
+              "error": "No verifiable matching GBP product offer"
+            },
+            {
+              "productId": "washing_liquid",
+              "error": "No verifiable matching GBP product offer"
+            }
+          ]
+        }
+      },
+      "productsExpected": 25,
+      "observationsStored": 0,
+      "basketSnapshots": 0,
+      "note": "Retailer prices require structured product data. A failed extraction is not evidence that a product is unavailable or has a zero price."
     }
   },
   "commodities": {
     "gold": {
       "symbol": "GC=F",
-      "price": 3900.1,
-      "changePct": -7.019,
+      "price": 3896.3,
+      "changePct": -7.109,
       "currency": "USD",
-      "observedAt": "2026-11-13T06:26:45+00:00",
+      "observedAt": "2026-11-13T11:10:58+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -1098,7 +1540,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 3900.100098
+          "value": 3896.300049
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -1108,10 +1550,10 @@
     },
     "silver": {
       "symbol": "SI=F",
-      "price": 49.915,
-      "changePct": -5.952,
+      "price": 49.86,
+      "changePct": -6.056,
       "currency": "USD",
-      "observedAt": "2026-11-13T06:26:35+00:00",
+      "observedAt": "2026-11-13T11:11:02+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -2123,7 +2565,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 49.915001
+          "value": 49.860001
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -2133,10 +2575,10 @@
     },
     "brent": {
       "symbol": "BZ=F",
-      "price": 96.09,
-      "changePct": 52.5,
+      "price": 95.7,
+      "changePct": 51.881,
       "currency": "USD",
-      "observedAt": "2026-11-13T06:26:40+00:00",
+      "observedAt": "2026-11-13T11:10:47+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -3148,7 +3590,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 96.089996
+          "value": 95.699997
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -5202,10 +5644,10 @@
     },
     "ftse100": {
       "symbol": "^FTSE",
-      "price": 10863.09,
-      "changePct": 9.602,
+      "price": 10890.64,
+      "changePct": 11.042,
       "currency": "GBP",
-      "observedAt": "2026-11-12T16:35:30+00:00",
+      "observedAt": "2026-11-13T11:06:04+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -6222,6 +6664,10 @@
         {
           "date": "2026-11-12",
           "value": 10863.099609
+        },
+        {
+          "date": "2026-11-13",
+          "value": 10890.639648
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -6233,10 +6679,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 68765.25,
-      "changePct": -31.026,
+      "price": 69333.44,
+      "changePct": -30.456,
       "currency": "USD",
-      "observedAt": "2026-11-13T06:36:44+00:00",
+      "observedAt": "2026-11-13T11:21:00+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -7700,11 +8146,11 @@
         },
         {
           "date": "2026-11-12",
-          "value": 71240.109375
+          "value": 71342.96875
         },
         {
           "date": "2026-11-13",
-          "value": 68765.25
+          "value": 69333.4375
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -7716,10 +8162,10 @@
   "fx": {
     "GBPUSD": {
       "symbol": "GBPUSD=X",
-      "price": 1.3228,
-      "changePct": 0.762,
+      "price": 1.323,
+      "changePct": 0.777,
       "currency": "USD",
-      "observedAt": "2026-11-13T06:36:33+00:00",
+      "observedAt": "2026-11-13T11:20:29+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -8763,7 +9209,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 1.322786
+          "value": 1.322996
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -8773,10 +9219,10 @@
     },
     "GBPEUR": {
       "symbol": "GBPEUR=X",
-      "price": 1.1956,
-      "changePct": 5.581,
+      "price": 1.1964,
+      "changePct": 5.652,
       "currency": "EUR",
-      "observedAt": "2026-11-13T06:35:33+00:00",
+      "observedAt": "2026-11-13T11:19:34+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -9820,7 +10266,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 1.1956
+          "value": 1.1964
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -9830,10 +10276,10 @@
     },
     "EURUSD": {
       "symbol": "EURUSD=X",
-      "price": 1.1062,
-      "changePct": -4.572,
+      "price": 1.1055,
+      "changePct": -4.633,
       "currency": "USD",
-      "observedAt": "2026-11-13T06:36:33+00:00",
+      "observedAt": "2026-11-13T11:20:29+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -10877,7 +11323,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 1.106195
+          "value": 1.105461
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -21103,14 +21549,14 @@
       {
         "id": "ni-300l",
         "name": "NI average 300 litres",
-        "price": 318.51,
+        "price": 315.86,
         "currency": "GBP",
         "unit": "GBP",
         "volumeLitres": 300,
-        "pricePerLitre": 1.0617,
-        "pricePer100Litres": 106.17,
-        "observedAt": "2026-11-12",
-        "date": "2026-11-12",
+        "pricePerLitre": 1.0529,
+        "pricePer100Litres": 105.29,
+        "observedAt": "2026-11-13",
+        "date": "2026-11-13",
         "source": "Consumer Council Northern Ireland",
         "url": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
         "history": [
@@ -22003,20 +22449,25 @@
             "date": "2026-11-12",
             "price": 318.51,
             "source": "Consumer Council NI daily archive"
+          },
+          {
+            "date": "2026-11-13",
+            "price": 315.86,
+            "source": "Consumer Council NI daily archive"
           }
         ]
       },
       {
         "id": "ni-500l",
         "name": "NI average 500 litres",
-        "price": 518.73,
+        "price": 514.61,
         "currency": "GBP",
         "unit": "GBP",
         "volumeLitres": 500,
-        "pricePerLitre": 1.0375,
-        "pricePer100Litres": 103.75,
-        "observedAt": "2026-11-12",
-        "date": "2026-11-12",
+        "pricePerLitre": 1.0292,
+        "pricePer100Litres": 102.92,
+        "observedAt": "2026-11-13",
+        "date": "2026-11-13",
         "source": "Consumer Council Northern Ireland",
         "url": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
         "history": [
@@ -22909,20 +23360,25 @@
             "date": "2026-11-12",
             "price": 518.73,
             "source": "Consumer Council NI daily archive"
+          },
+          {
+            "date": "2026-11-13",
+            "price": 514.61,
+            "source": "Consumer Council NI daily archive"
           }
         ]
       },
       {
         "id": "ni-900l",
         "name": "NI average 900 litres",
-        "price": 919.07,
+        "price": 910.76,
         "currency": "GBP",
         "unit": "GBP",
         "volumeLitres": 900,
-        "pricePerLitre": 1.0212,
-        "pricePer100Litres": 102.12,
-        "observedAt": "2026-11-12",
-        "date": "2026-11-12",
+        "pricePerLitre": 1.012,
+        "pricePer100Litres": 101.2,
+        "observedAt": "2026-11-13",
+        "date": "2026-11-13",
         "source": "Consumer Council Northern Ireland",
         "url": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
         "history": [
@@ -23815,20 +24271,25 @@
             "date": "2026-11-12",
             "price": 919.07,
             "source": "Consumer Council NI daily archive"
+          },
+          {
+            "date": "2026-11-13",
+            "price": 910.76,
+            "source": "Consumer Council NI daily archive"
           }
         ]
       },
       {
         "id": "ballyclare-300l",
         "name": "Ballyclare 300 litres",
-        "price": 316.31,
+        "price": 314.56,
         "currency": "GBP",
         "unit": "GBP",
         "volumeLitres": 300,
-        "pricePerLitre": 1.0544,
-        "pricePer100Litres": 105.44,
-        "observedAt": "2026-11-12",
-        "date": "2026-11-12",
+        "pricePerLitre": 1.0485,
+        "pricePer100Litres": 104.85,
+        "observedAt": "2026-11-13",
+        "date": "2026-11-13",
         "source": "Consumer Council NI — Ballyclare",
         "url": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
         "history": [
@@ -23836,20 +24297,25 @@
             "date": "2026-11-12",
             "price": 316.31,
             "source": "Consumer Council NI — Ballyclare"
+          },
+          {
+            "date": "2026-11-13",
+            "price": 314.56,
+            "source": "Consumer Council NI — Ballyclare"
           }
         ]
       },
       {
         "id": "ballyclare-500l",
         "name": "Ballyclare 500 litres",
-        "price": 515.16,
+        "price": 512.3,
         "currency": "GBP",
         "unit": "GBP",
         "volumeLitres": 500,
-        "pricePerLitre": 1.0303,
-        "pricePer100Litres": 103.03,
-        "observedAt": "2026-11-12",
-        "date": "2026-11-12",
+        "pricePerLitre": 1.0246,
+        "pricePer100Litres": 102.46,
+        "observedAt": "2026-11-13",
+        "date": "2026-11-13",
         "source": "Consumer Council NI — Ballyclare",
         "url": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
         "history": [
@@ -23857,20 +24323,25 @@
             "date": "2026-11-12",
             "price": 515.16,
             "source": "Consumer Council NI — Ballyclare"
+          },
+          {
+            "date": "2026-11-13",
+            "price": 512.3,
+            "source": "Consumer Council NI — Ballyclare"
           }
         ]
       },
       {
         "id": "ballyclare-900l",
         "name": "Ballyclare 900 litres",
-        "price": 911.9,
+        "price": 906.13,
         "currency": "GBP",
         "unit": "GBP",
         "volumeLitres": 900,
-        "pricePerLitre": 1.0132,
-        "pricePer100Litres": 101.32,
-        "observedAt": "2026-11-12",
-        "date": "2026-11-12",
+        "pricePerLitre": 1.0068,
+        "pricePer100Litres": 100.68,
+        "observedAt": "2026-11-13",
+        "date": "2026-11-13",
         "source": "Consumer Council NI — Ballyclare",
         "url": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
         "history": [
@@ -23878,11 +24349,16 @@
             "date": "2026-11-12",
             "price": 911.9,
             "source": "Consumer Council NI — Ballyclare"
+          },
+          {
+            "date": "2026-11-13",
+            "price": 906.13,
+            "source": "Consumer Council NI — Ballyclare"
           }
         ]
       }
     ],
-    "updatedAt": "2026-11-13T06:36:49+00:00",
+    "updatedAt": "2026-11-13T11:21:08+00:00",
     "source": "Consumer Council Northern Ireland",
     "sourceUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker",
     "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
@@ -27926,7 +28402,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-13T06:36:49+00:00",
+    "updatedAt": "2026-11-13T11:21:08+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
@@ -27935,7 +28411,183 @@
     "unit": "pence per litre"
   },
   "householdBasket": {
-    "items": [],
+    "items": [
+      {
+        "id": "milk",
+        "name": "Semi-skimmed milk",
+        "targetPack": "2.27L",
+        "targetQuantity": 2.27,
+        "unit": "litre"
+      },
+      {
+        "id": "whole_milk",
+        "name": "Whole milk",
+        "targetPack": "2.27L",
+        "targetQuantity": 2.27,
+        "unit": "litre"
+      },
+      {
+        "id": "bread",
+        "name": "White sliced bread",
+        "targetPack": "800g",
+        "targetQuantity": 800,
+        "unit": "gram"
+      },
+      {
+        "id": "wholemeal_bread",
+        "name": "Wholemeal bread",
+        "targetPack": "800g",
+        "targetQuantity": 800,
+        "unit": "gram"
+      },
+      {
+        "id": "eggs",
+        "name": "Free range eggs",
+        "targetPack": "12 eggs",
+        "targetQuantity": 12,
+        "unit": "each"
+      },
+      {
+        "id": "butter",
+        "name": "Salted butter",
+        "targetPack": "250g",
+        "targetQuantity": 250,
+        "unit": "gram"
+      },
+      {
+        "id": "cheese",
+        "name": "Mature cheddar",
+        "targetPack": "400g",
+        "targetQuantity": 400,
+        "unit": "gram"
+      },
+      {
+        "id": "chicken",
+        "name": "Chicken breast",
+        "targetPack": "1kg",
+        "targetQuantity": 1000,
+        "unit": "gram"
+      },
+      {
+        "id": "mince",
+        "name": "Beef mince",
+        "targetPack": "500g",
+        "targetQuantity": 500,
+        "unit": "gram"
+      },
+      {
+        "id": "sausages",
+        "name": "Pork sausages",
+        "targetPack": "8 pack",
+        "targetQuantity": 8,
+        "unit": "each"
+      },
+      {
+        "id": "potatoes",
+        "name": "White potatoes",
+        "targetPack": "2.5kg",
+        "targetQuantity": 2500,
+        "unit": "gram"
+      },
+      {
+        "id": "carrots",
+        "name": "Carrots",
+        "targetPack": "1kg",
+        "targetQuantity": 1000,
+        "unit": "gram"
+      },
+      {
+        "id": "onions",
+        "name": "Brown onions",
+        "targetPack": "1kg",
+        "targetQuantity": 1000,
+        "unit": "gram"
+      },
+      {
+        "id": "bananas",
+        "name": "Bananas",
+        "targetPack": "1kg",
+        "targetQuantity": 1000,
+        "unit": "gram"
+      },
+      {
+        "id": "apples",
+        "name": "Apples",
+        "targetPack": "6 pack",
+        "targetQuantity": 6,
+        "unit": "each"
+      },
+      {
+        "id": "broccoli",
+        "name": "Broccoli",
+        "targetPack": "1 head",
+        "targetQuantity": 1,
+        "unit": "each"
+      },
+      {
+        "id": "rice",
+        "name": "Long grain rice",
+        "targetPack": "1kg",
+        "targetQuantity": 1000,
+        "unit": "gram"
+      },
+      {
+        "id": "pasta",
+        "name": "Dried pasta",
+        "targetPack": "500g",
+        "targetQuantity": 500,
+        "unit": "gram"
+      },
+      {
+        "id": "flour",
+        "name": "Plain flour",
+        "targetPack": "1.5kg",
+        "targetQuantity": 1500,
+        "unit": "gram"
+      },
+      {
+        "id": "sugar",
+        "name": "Granulated sugar",
+        "targetPack": "1kg",
+        "targetQuantity": 1000,
+        "unit": "gram"
+      },
+      {
+        "id": "cooking_oil",
+        "name": "Vegetable oil",
+        "targetPack": "1L",
+        "targetQuantity": 1,
+        "unit": "litre"
+      },
+      {
+        "id": "tea",
+        "name": "Tea bags",
+        "targetPack": "160 pack",
+        "targetQuantity": 160,
+        "unit": "each"
+      },
+      {
+        "id": "coffee",
+        "name": "Instant coffee",
+        "targetPack": "200g",
+        "targetQuantity": 200,
+        "unit": "gram"
+      },
+      {
+        "id": "toilet_roll",
+        "name": "Toilet roll",
+        "targetPack": "9 pack",
+        "targetQuantity": 9,
+        "unit": "each"
+      },
+      {
+        "id": "washing_liquid",
+        "name": "Laundry detergent",
+        "targetPack": "1.5L",
+        "targetQuantity": 1.5,
+        "unit": "litre"
+      }
+    ],
     "history": [],
     "foodInflationHistory": [
       {
@@ -28565,9 +29217,490 @@
       "source": "ONS / Defra CPIH",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket"
     },
-    "updatedAt": "2026-11-13T06:36:50+00:00"
+    "updatedAt": "2026-11-13T11:21:43+00:00",
+    "observations": [],
+    "retailers": {
+      "tesco": {
+        "status": "unavailable",
+        "checkedAt": "2026-11-13T11:21:11+00:00",
+        "productsFound": 0,
+        "productsExpected": 25,
+        "failures": [
+          {
+            "productId": "milk",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "whole_milk",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "bread",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "wholemeal_bread",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "eggs",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "butter",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "cheese",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "chicken",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "mince",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "sausages",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "potatoes",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "carrots",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "onions",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "bananas",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "apples",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "broccoli",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "rice",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "pasta",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "flour",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "sugar",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "cooking_oil",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "tea",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "coffee",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "toilet_roll",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "washing_liquid",
+            "error": "HTTP Error 403: Forbidden"
+          }
+        ]
+      },
+      "asda": {
+        "status": "unavailable",
+        "checkedAt": "2026-11-13T11:21:12+00:00",
+        "productsFound": 0,
+        "productsExpected": 25,
+        "failures": [
+          {
+            "productId": "milk",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "whole_milk",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "bread",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "wholemeal_bread",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "eggs",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "butter",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "cheese",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "chicken",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "mince",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "sausages",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "potatoes",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "carrots",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "onions",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "bananas",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "apples",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "broccoli",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "rice",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "pasta",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "flour",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "sugar",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "cooking_oil",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "tea",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "coffee",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "toilet_roll",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "washing_liquid",
+            "error": "HTTP Error 403: Forbidden"
+          }
+        ]
+      },
+      "sainsburys": {
+        "status": "unavailable",
+        "checkedAt": "2026-11-13T11:21:15+00:00",
+        "productsFound": 0,
+        "productsExpected": 25,
+        "failures": [
+          {
+            "productId": "milk",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "whole_milk",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "bread",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "wholemeal_bread",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "eggs",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "butter",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "cheese",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "chicken",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "mince",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "sausages",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "potatoes",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "carrots",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "onions",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "bananas",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "apples",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "broccoli",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "rice",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "pasta",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "flour",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "sugar",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "cooking_oil",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "tea",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "coffee",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "toilet_roll",
+            "error": "HTTP Error 403: Forbidden"
+          },
+          {
+            "productId": "washing_liquid",
+            "error": "HTTP Error 403: Forbidden"
+          }
+        ]
+      },
+      "lidl": {
+        "status": "unavailable",
+        "checkedAt": "2026-11-13T11:21:43+00:00",
+        "productsFound": 0,
+        "productsExpected": 25,
+        "failures": [
+          {
+            "productId": "milk",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "whole_milk",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "bread",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "wholemeal_bread",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "eggs",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "butter",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "cheese",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "chicken",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "mince",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "sausages",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "potatoes",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "carrots",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "onions",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "bananas",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "apples",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "broccoli",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "rice",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "pasta",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "flour",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "sugar",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "cooking_oil",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "tea",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "coffee",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "toilet_roll",
+            "error": "No verifiable matching GBP product offer"
+          },
+          {
+            "productId": "washing_liquid",
+            "error": "No verifiable matching GBP product offer"
+          }
+        ]
+      }
+    },
+    "retailerCount": 4,
+    "productCount": 25,
+    "latestDate": "2026-11-13",
+    "comparisonNote": "Only verified structured product offers are recorded. Prices are not invented. Incomplete retailer baskets are not given a complete basket total. Loyalty prices are not inferred from standard prices."
   },
   "news": [
+    {
+      "title": "What we know about the global Microsoft outage",
+      "url": "https://www.bbc.co.uk/news/articles/cwvg238zrnm5o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-13T10:53:40+00:00"
+    },
+    {
+      "title": "Transparency data: List of statistics with pre-release access",
+      "url": "https://www.gov.uk/government/publications/list-of-statistics-with-pre-release-access",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-13T09:52:10Z"
+    },
+    {
+      "title": "Imports, exports and EU trade of animals and animal products: topical issues",
+      "url": "https://www.gov.uk/guidance/imports-exports-and-eu-trade-of-animals-and-animal-products-topical-issues",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-13T09:30:07Z"
+    },
+    {
+      "title": "Heat pumps: How much heat does your home really need?",
+      "url": "https://www.bbc.co.uk/news/articles/cqy43zk3kk04o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-13T09:29:25+00:00"
+    },
+    {
+      "title": "Australian cricket's sandpapergate is back - and it cuts deep in a 'nation of good sports'",
+      "url": "https://www.bbc.co.uk/news/articles/c6702z750zvyo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-13T08:20:28+00:00"
+    },
+    {
+      "title": "Watch: How Microsoft services went down around the world",
+      "url": "https://www.bbc.co.uk/news/videos/cwm2591k27e2o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-13T07:18:17+00:00"
+    },
+    {
+      "title": "African Miss Universe beauty queens in limbo as US visa restrictions bite",
+      "url": "https://www.bbc.co.uk/news/articles/cklyw3neqg2wo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-13T07:01:43+00:00"
+    },
     {
       "title": "Politicians back focus on cost of living",
       "url": "https://www.bbc.co.uk/news/articles/cqj9mjl8jy4no?at_medium=RSS&at_campaign=rss",
@@ -28599,6 +29732,12 @@
       "publishedAt": "2026-11-13T02:48:29+00:00"
     },
     {
+      "title": "Will the Eurovision Song Contest succeed in Asia?",
+      "url": "https://www.bbc.co.uk/news/videos/cxvg23n59y1ro?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-13T02:24:11+00:00"
+    },
+    {
       "title": "Zelensky welcomes US bringing Europe into Russia-Ukraine peace talks",
       "url": "https://www.bbc.co.uk/news/articles/ckn80j9jv3jxo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
@@ -28609,6 +29748,12 @@
       "url": "https://www.bbc.co.uk/news/videos/c6wy9j9v7nl7o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
       "publishedAt": "2026-11-13T01:30:31+00:00"
+    },
+    {
+      "title": "Burnham says 'win-win' deal can be agreed between UK and EU",
+      "url": "https://www.bbc.co.uk/news/articles/cm2l5n07l87vo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-13T01:17:58+00:00"
     },
     {
       "title": "Neither war nor peace in Tigray - is Ethiopia's latest conflict really over?",
@@ -28671,12 +29816,6 @@
       "publishedAt": "2026-11-12T22:51:18+00:00"
     },
     {
-      "title": "Search for British woman missing from Tui cruise in Atlantic called off",
-      "url": "https://www.bbc.co.uk/news/articles/cmy0enrkwkklo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-12T21:27:21+00:00"
-    },
-    {
       "title": "Jensen Huang has resigned, what's next for Nvidia?",
       "url": "https://www.bbc.co.uk/news/videos/c6wy9l859r94o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
@@ -28699,57 +29838,21 @@
       "url": "https://www.bbc.co.uk/news/articles/cr894w453e90o?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-12T19:23:02+00:00"
-    },
-    {
-      "title": "Hegseth awards medal to war memorial guard who reprimanded him and group",
-      "url": "https://www.bbc.co.uk/news/articles/cmvg2r3dq7xno?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-12T18:47:35+00:00"
-    },
-    {
-      "title": "The rise and fall of Jensen Huang - how the tech superstar became mired in scandal",
-      "url": "https://www.bbc.co.uk/news/articles/cmze750zg0jeo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-12T17:11:48+00:00"
-    },
-    {
-      "title": "Israeli strike on Gaza hospital kills six Palestinians, health ministry says",
-      "url": "https://www.bbc.co.uk/news/articles/ckzd9p7e4eqeo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-12T16:54:12+00:00"
-    },
-    {
-      "title": "Policy paper: Greening Government Commitments April 2024 to March 2025 report",
-      "url": "https://www.gov.uk/government/publications/greening-government-commitments-april-2024-to-march-2025-report",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-12T16:25:00Z"
-    },
-    {
-      "title": "Guidance: Public register of reprocessors and exporters of UK packaging waste",
-      "url": "https://www.gov.uk/government/publications/public-register-of-reprocessors-and-exporters-of-uk-packaging-waste",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-12T16:08:51Z"
-    },
-    {
-      "title": "What we know as Nvidia CEO Jensen Huang resigns over affair allegations",
-      "url": "https://www.bbc.co.uk/news/articles/ckgel338xql3o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-12T15:26:39+00:00"
-    },
-    {
-      "title": "Millions of Ebola dollars missing with staff unpaid while virus spreads, charity says",
-      "url": "https://www.bbc.co.uk/news/articles/cx98757ymm6zo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-12T15:18:20+00:00"
-    },
-    {
-      "title": "Who is Nvidia's interim CEO Colette Kress - and who could take over permanently?",
-      "url": "https://www.bbc.co.uk/news/articles/cqgm37dv20e8o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-12T15:10:32+00:00"
     }
   ],
   "supplyNews": [
+    {
+      "title": "Transparency data: List of statistics with pre-release access",
+      "url": "https://www.gov.uk/government/publications/list-of-statistics-with-pre-release-access",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-13T09:52:10Z"
+    },
+    {
+      "title": "Imports, exports and EU trade of animals and animal products: topical issues",
+      "url": "https://www.gov.uk/guidance/imports-exports-and-eu-trade-of-animals-and-animal-products-topical-issues",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-13T09:30:07Z"
+    },
     {
       "title": "Bird flu (avian influenza): latest situation in England",
       "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
@@ -28857,18 +29960,6 @@
       "url": "https://www.gov.uk/guidance/moving-exporting-or-placing-deforestation-free-products-on-the-market-in-northern-ireland",
       "source": "DEFRA",
       "publishedAt": "2026-11-11T16:29:10Z"
-    },
-    {
-      "title": "Government steps in to reduce packaging costs for British businesses and pubs",
-      "url": "https://www.gov.uk/government/news/government-steps-in-to-reduce-packaging-costs-for-british-businessesand-pubs",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-11T16:27:00Z"
-    },
-    {
-      "title": "Transparency data: Defra: spending over £25,000, March 2026",
-      "url": "https://www.gov.uk/government/publications/defra-spending-over-25000-march-2026",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-11T16:16:15Z"
     }
   ],
   "foodInflationHistory": [
