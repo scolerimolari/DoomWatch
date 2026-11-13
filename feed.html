@@ -13,7 +13,7 @@
 .trend-list{display:flex;flex-wrap:wrap;gap:8px}.trend{padding:7px 10px;border:1px solid #796646;background:#202820;color:#e4d4ad;font-size:11px}
 .feed-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:10px}
 .feed-item{padding:13px;background:linear-gradient(145deg,#222b25,#151c17);border:1px solid #4b574e;border-left:4px solid #8b9b78;overflow-wrap:anywhere}
-.feed-item.social{border-left-color:#d6b574}.feed-item strong{display:block;color:#f0d28e;line-height:1.45}.feed-item p{color:#d5d9cf;line-height:1.5;margin:8px 0}.feed-item .meta{margin-top:7px}
+.feed-item.social{border-left-color:#d6b574}.feed-item strong{display:block;color:#f0d28e;line-height:1.45}.feed-item summary{cursor:pointer;list-style:none}.feed-item summary::-webkit-details-marker{display:none}.feed-item summary:after{content:"OPEN +";display:block;color:#b9dc9a;font-size:10px;margin-top:7px}.feed-item[open] summary:after{content:"CLOSE −"}.feed-item p{color:#d5d9cf;line-height:1.5;margin:8px 0}.feed-item .meta{margin-top:7px}
 .pill{display:inline-block;padding:3px 7px;border:1px solid #776746;color:#dfc58e;font-size:10px;margin:2px 3px 2px 0}
 .disclaimer{border-left:4px solid #d6a64b;background:#2a2418;padding:12px;color:#ead8b0}
 @media(max-width:600px){.feed-list{grid-template-columns:1fr}}
@@ -87,7 +87,7 @@ function render(){
   const socialPost=social(a),matched=Object.keys(topics).filter(k=>hits(a,k));
   const status=socialPost?"UNVERIFIED SOCIAL POST":String(a.evidenceStatus||"UNASSESSED").replace(/_/g," ");
   const link=a.url&&/^https?:\/\//i.test(a.url)?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL POST / REPORT ↗</a>':'<span class="muted">No valid source link</span>';
-  return '<article class="feed-item '+(socialPost?"social":"")+'"><strong>'+esc(a.title||"Untitled signal")+'</strong><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(a.source||"Source not supplied")+' · '+esc(a.sourceTrust||"Trust class not supplied")+'</div><div class="meta">'+esc(date(a.publishedAt||a.collectedAt))+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+'<div style="margin-top:10px"><button type="button" class="action-button" data-flag="'+index+'">SAVE TO RUMOUR MONITOR</button></div></article>';
+  return '<details class="feed-item '+(socialPost?"social":"")+'"><summary><strong>'+esc(a.title||"Untitled signal")+'</strong><div class="meta">'+esc(a.source||"Source not supplied")+' · '+esc(date(a.publishedAt||a.collectedAt))+'</div></summary><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+'<div style="margin-top:10px"><button type="button" class="action-button" data-flag="'+index+'">SAVE TO RUMOUR MONITOR</button></div></details>';
  }).join("")||'<div class="panel muted">No records match this filter and search. Try another topic or clear the search.</div>';
  $("feed-status").textContent="SHOWING "+list.length+" OF "+articles.length+" MATCHING RECORDS // FILTER: "+active+" // KEYWORD CLASSIFICATION IS AUTOMATED AND MAY MISS CONTEXT.";
 }
