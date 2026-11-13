@@ -603,7 +603,7 @@ function renderCrossRetailerComparison(rows){
     if(known.size===1&&values.every(v=>v.eans.length))return;
    }
    const prices=values.map(v=>v.price);
-   matches.push({key:method+":"+key,label:method==="Exact EAN"?key:key.split("|")[0],method,
+   matches.push({key:method+":"+key,label:method==="Exact EAN"?key:(method==="Source match key"?"Source match key":"Shared name + pack identity"),method,
     retailers:values.length,low:Math.min(...prices),high:Math.max(...prices)});
   });
  }
