@@ -722,6 +722,10 @@ async function loadGroceryIndex(){
 
 
 // DAILY PRODUCT PRICE HISTORY // PUBLIC FOUR-RETAILER DATASET
+function dailyHtml(value){
+ return safe(value).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
 function dailyProductLabel(row){
  return row.matchKeyV1||row.matchKey||
   (row.retailerProductId?"Product "+row.retailerProductId:"Unlabelled product");
@@ -748,7 +752,7 @@ function renderDailyProductHistory(){
  const retailerSelect=$("dailyRetailerFilter");
  const oldRetailer=retailerSelect.value||"all";
  retailerSelect.innerHTML='<option value="all">All retailers</option>'+
-  retailers.map(key=>'<option value="'+safe(key)+'">'+safe(pretty(key))+'</option>').join("");
+  retailers.map(key=>'<option value="'+dailyHtml(key)+'">'+dailyHtml(pretty(key))+'</option>').join("");
  retailerSelect.value=retailers.includes(oldRetailer)||oldRetailer==="all"?oldRetailer:"all";
  const search=$("dailyProductSearch").value.trim().toLowerCase();
  const filtered=latest.filter(row=>
@@ -761,32 +765,32 @@ function renderDailyProductHistory(){
   " // "+latest.length+" observations // "+retailers.map(pretty).join(", ")+
   " // "+rows.length.toLocaleString("en-GB")+" historical observations stored.";
  $("dailyBasketRows").innerHTML=filtered.map(row=>'<tr>'+
-  '<td>'+safe(pretty(row.retailer))+'</td>'+
-  '<td>'+safe(dailyProductLabel(row))+'</td>'+
-  '<td>'+safe(row.packSize||row.unitMeasure)+'</td>'+
+  '<td>'+dailyHtml(pretty(row.retailer))+'</td>'+
+  '<td>'+dailyHtml(dailyProductLabel(row))+'</td>'+
+  '<td>'+dailyHtml(row.packSize||row.unitMeasure)+'</td>'+
   '<td>'+money(row.price,"GBP")+'</td>'+
-  '<td>'+(row.unitPrice!==null&&row.unitPrice!==undefined?money(row.unitPrice,"GBP")+" / "+safe(row.unitMeasure):"—")+'</td>'+
+  '<td>'+(row.unitPrice!==null&&row.unitPrice!==undefined?money(row.unitPrice,"GBP")+" / "+dailyHtml(row.unitMeasure):"—")+'</td>'+
   '<td>'+safe(date(row.date))+'</td></tr>').join("")||
   '<tr><td colspan="6">No products match this filter.</td></tr>';
  const products=latest.slice().sort((a,b)=>a.retailer.localeCompare(b.retailer)||
   dailyProductLabel(a).localeCompare(dailyProductLabel(b)));
  const productSelect=$("dailyProductSelect");
  const previous=productSelect.value;
- productSelect.innerHTML=products.map(row=>{
-  const key=row.retailer+"|"+row.retailerProductId;
-  return '<option value="'+safe(key)+'">'+safe(pretty(row.retailer))+
-   ' — '+safe(dailyProductLabel(row))+' ('+money(row.price,"GBP")+')</option>';
- }).join("");
- if(products.some(row=>row.retailer+"|"+row.retailerProductId===previous)){
-  productSelect.value=previous;
- }
+ productSelect.innerHTML=products.map((row,index)=>
+  '<option value="'+index+'">'+dailyHtml(pretty(row.retailer))+
+   ' — '+dailyHtml(dailyProductLabel(row))+' ('+money(row.price,"GBP")+')</option>'
+ ).join("");
+ if(previous!==""&&Number(previous)<products.length)productSelect.value=previous;
  renderSelectedDailyProduct();
 }
 function renderSelectedDailyProduct(){
  const {rows}=dailyProductRows();
- const selected=$("dailyProductSelect").value;
- const parts=selected.split("|");
- const retailer=parts[0],productId=parts.slice(1).join("|");
+ const {latest}=dailyProductRows();
+ const products=latest.slice().sort((a,b)=>a.retailer.localeCompare(b.retailer)||
+  dailyProductLabel(a).localeCompare(dailyProductLabel(b)));
+ const selected=products[Number($("dailyProductSelect").value)];
+ if(!selected){chart("dailyProductChart",[]);$("dailyProductHistoryStatus").textContent="No product selected.";return;}
+ const retailer=selected.retailer,productId=String(selected.retailerProductId);
  const history=rows.filter(row=>row.retailer===retailer&&
   String(row.retailerProductId)===productId)
   .sort((a,b)=>String(a.date).localeCompare(String(b.date)));
@@ -794,8 +798,8 @@ function renderSelectedDailyProduct(){
   date:row.date,price:Number(row.price)
  })));
  $("dailyProductHistoryStatus").textContent=history.length?
-  safe(dailyProductLabel(history[history.length-1]))+" // "+
-  safe(pretty(retailer))+" // "+history.length+
+  dailyHtml(dailyProductLabel(history[history.length-1]))+" // "+
+  dailyHtml(pretty(retailer))+" // "+history.length+
   " dated observations // Latest: "+money(history[history.length-1].price,"GBP")+
   " on "+date(history[history.length-1].date):
   "No dated price history for this selection.";
