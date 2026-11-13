@@ -23,7 +23,7 @@
 <header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">FEED // OPEN SOURCE SIGNAL MONITOR</div></div><div class="classification">UNVERIFIED SIGNALS</div></div></header>
 <main>
 <h2>FEED // SOCIAL & OPEN-SOURCE SIGNALS</h2>
-<div class="disclaimer"><strong>READ THIS FIRST:</strong> Social posts and alternative commentary are unverified signals, not established facts. Repetition is not corroboration. Check original sources, date, location and independent evidence before acting or sharing.</div>
+<div class="disclaimer"><strong>READ THIS FIRST:</strong> Bluesky public search is the only direct social-network connection in this build. X, Telegram, Reddit and Mastodon are not connected. Social posts and alternative commentary are unverified signals, not established facts. Repetition is not corroboration. Check original sources, date, location and independent evidence before acting or sharing.</div>
 <div class="signal-grid" style="margin-top:12px">
 <div class="signal-stat"><span class="muted">PUBLIC SOCIAL POSTS</span><strong id="social-count">—</strong><span class="muted">Collected from Bluesky search</span></div>
 <div class="signal-stat"><span class="muted">ALL SIGNAL RECORDS</span><strong id="record-count">—</strong><span class="muted">Existing intelligence archive</span></div>
@@ -53,7 +53,7 @@
 const DATA_URL="./data/intelligence.json",$=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const date=v=>{if(!v)return "Date not supplied";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB");};
-const textOf=a=>(String(a.title||"")+" "+String(a.description||"")).toLowerCase();
+const textOf=a=>(String(a.title||"")+" "+String(a.description||"")+" "+String(a.region||"")).toLowerCase();
 const social=a=>/social_network|unverified_social|bluesky/i.test(String(a.sourceType||"")+" "+String(a.sourceTrust||"")+" "+String(a.source||""));
 const topics={
 CYBER:["cyber","ransomware","malware","phishing","data breach","hack","hacked","ddos","botnet","critical infrastructure"],
