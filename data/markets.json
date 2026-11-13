@@ -1,51 +1,51 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-13T14:25:02+00:00",
-  "generatedAt": "2026-11-13T14:25:02+00:00",
+  "updatedAt": "2026-11-13T14:37:57+00:00",
+  "generatedAt": "2026-11-13T14:37:57+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:24:55+00:00"
+      "checkedAt": "2026-11-13T14:37:53+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:24:56+00:00"
+      "checkedAt": "2026-11-13T14:37:53+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:24:56+00:00"
+      "checkedAt": "2026-11-13T14:37:53+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:24:56+00:00"
+      "checkedAt": "2026-11-13T14:37:53+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:24:56+00:00"
+      "checkedAt": "2026-11-13T14:37:53+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:24:56+00:00"
+      "checkedAt": "2026-11-13T14:37:53+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:24:56+00:00"
+      "checkedAt": "2026-11-13T14:37:53+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:24:56+00:00"
+      "checkedAt": "2026-11-13T14:37:53+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:24:57+00:00"
+      "checkedAt": "2026-11-13T14:37:53+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:24:57+00:00"
+      "checkedAt": "2026-11-13T14:37:53+00:00"
     },
     "heatingOil": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:24:59+00:00",
+      "checkedAt": "2026-11-13T14:37:55+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
       "observationsImported": 179,
@@ -54,7 +54,7 @@
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:25:00+00:00",
+      "checkedAt": "2026-11-13T14:37:55+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
       "observationsImported": 463,
@@ -63,7 +63,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:25:01+00:00",
+      "checkedAt": "2026-11-13T14:37:56+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -72,7 +72,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:25:01+00:00",
+      "checkedAt": "2026-11-13T14:37:56+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -81,7 +81,7 @@
     },
     "supermarketPriceIndex": {
       "status": "ok",
-      "checkedAt": "2026-11-13T14:25:02+00:00",
+      "checkedAt": "2026-11-13T14:37:56+00:00",
       "url": "https://data.yappman.com/shelf-price-index/",
       "datasetUrl": "https://api.apify.com/v2/datasets/AvRCWqFinCiNjx3sP/items?format=json",
       "licence": "CC BY 4.0",
@@ -93,10 +93,10 @@
   "commodities": {
     "gold": {
       "symbol": "GC=F",
-      "price": 3889.6,
-      "changePct": -7.269,
+      "price": 3892.5,
+      "changePct": -7.2,
       "currency": "USD",
-      "observedAt": "2026-11-13T14:14:54+00:00",
+      "observedAt": "2026-11-13T14:27:50+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -1108,7 +1108,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 3889.600098
+          "value": 3892.5
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -1118,10 +1118,10 @@
     },
     "silver": {
       "symbol": "SI=F",
-      "price": 49.55,
-      "changePct": -6.64,
+      "price": 49.6,
+      "changePct": -6.546,
       "currency": "USD",
-      "observedAt": "2026-11-13T14:14:49+00:00",
+      "observedAt": "2026-11-13T14:27:45+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -2133,7 +2133,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 49.549999
+          "value": 49.599998
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -2143,10 +2143,10 @@
     },
     "brent": {
       "symbol": "BZ=F",
-      "price": 96.71,
-      "changePct": 53.484,
+      "price": 96.9,
+      "changePct": 53.785,
       "currency": "USD",
-      "observedAt": "2026-11-13T14:14:50+00:00",
+      "observedAt": "2026-11-13T14:27:46+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -3158,7 +3158,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 96.709999
+          "value": 96.900002
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -3170,10 +3170,10 @@
   "indices": {
     "sp500": {
       "symbol": "^GSPC",
-      "price": 7592.4,
-      "changePct": 10.823,
+      "price": 7587.75,
+      "changePct": 12.62,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:58:23+00:00",
+      "observedAt": "2026-11-13T14:37:52+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -4182,6 +4182,10 @@
         {
           "date": "2026-11-12",
           "value": 7592.399902
+        },
+        {
+          "date": "2026-11-13",
+          "value": 7587.75
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -4191,10 +4195,10 @@
     },
     "nasdaq": {
       "symbol": "^IXIC",
-      "price": 25366.094,
-      "changePct": 8.372,
+      "price": 25280.793,
+      "changePct": 10.54,
       "currency": "USD",
-      "observedAt": "2026-11-12T22:15:59+00:00",
+      "observedAt": "2026-11-13T14:37:48+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -5203,6 +5207,10 @@
         {
           "date": "2026-11-12",
           "value": 25366.089844
+        },
+        {
+          "date": "2026-11-13",
+          "value": 25280.792969
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -5212,10 +5220,10 @@
     },
     "ftse100": {
       "symbol": "^FTSE",
-      "price": 10869.93,
-      "changePct": 10.831,
+      "price": 10864.9,
+      "changePct": 10.779,
       "currency": "GBP",
-      "observedAt": "2026-11-13T14:09:55+00:00",
+      "observedAt": "2026-11-13T14:22:53+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -6235,7 +6243,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 10869.929688
+          "value": 10864.900391
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -6247,10 +6255,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 69224.3,
-      "changePct": -30.566,
+      "price": 68915.82,
+      "changePct": -30.875,
       "currency": "USD",
-      "observedAt": "2026-11-13T14:24:53+00:00",
+      "observedAt": "2026-11-13T14:37:51+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -7718,7 +7726,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 69224.296875
+          "value": 68915.820312
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -7730,10 +7738,10 @@
   "fx": {
     "GBPUSD": {
       "symbol": "GBPUSD=X",
-      "price": 1.323,
-      "changePct": 0.777,
+      "price": 1.3235,
+      "changePct": 0.815,
       "currency": "USD",
-      "observedAt": "2026-11-13T14:24:33+00:00",
+      "observedAt": "2026-11-13T14:37:33+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -8777,7 +8785,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 1.322961
+          "value": 1.323487
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -8787,10 +8795,10 @@
     },
     "GBPEUR": {
       "symbol": "GBPEUR=X",
-      "price": 1.1971,
-      "changePct": 5.714,
+      "price": 1.1974,
+      "changePct": 5.74,
       "currency": "EUR",
-      "observedAt": "2026-11-13T14:23:33+00:00",
+      "observedAt": "2026-11-13T14:37:33+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -9834,7 +9842,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 1.1971
+          "value": 1.1974
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -9847,7 +9855,7 @@
       "price": 1.1051,
       "changePct": -4.667,
       "currency": "USD",
-      "observedAt": "2026-11-13T14:24:33+00:00",
+      "observedAt": "2026-11-13T14:37:33+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -10903,10 +10911,10 @@
   "stocks": [
     {
       "symbol": "AAPL",
-      "price": 354.88,
-      "changePct": 29.769,
+      "price": 359.325,
+      "changePct": 31.645,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:00:01+00:00",
+      "observedAt": "2026-11-13T14:37:53+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -11915,6 +11923,10 @@
         {
           "date": "2026-11-12",
           "value": 354.880005
+        },
+        {
+          "date": "2026-11-13",
+          "value": 359.325012
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -11924,10 +11936,10 @@
     },
     {
       "symbol": "MSFT",
-      "price": 523.0,
-      "changePct": 2.32,
+      "price": 518.27,
+      "changePct": 2.976,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:00:01+00:00",
+      "observedAt": "2026-11-13T14:37:53+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -12936,6 +12948,10 @@
         {
           "date": "2026-11-12",
           "value": 523.0
+        },
+        {
+          "date": "2026-11-13",
+          "value": 518.27002
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -12945,10 +12961,10 @@
     },
     {
       "symbol": "NVDA",
-      "price": 166.19,
-      "changePct": -14.247,
+      "price": 163.6,
+      "changePct": -12.448,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:00:01+00:00",
+      "observedAt": "2026-11-13T14:37:53+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -13957,6 +13973,10 @@
         {
           "date": "2026-11-12",
           "value": 166.190002
+        },
+        {
+          "date": "2026-11-13",
+          "value": 163.600006
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -13966,10 +13986,10 @@
     },
     {
       "symbol": "AMZN",
-      "price": 267.44,
-      "changePct": 9.517,
+      "price": 267.942,
+      "changePct": 12.78,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:00:01+00:00",
+      "observedAt": "2026-11-13T14:37:53+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -14978,6 +14998,10 @@
         {
           "date": "2026-11-12",
           "value": 267.440002
+        },
+        {
+          "date": "2026-11-13",
+          "value": 267.941711
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -14987,10 +15011,10 @@
     },
     {
       "symbol": "GOOGL",
-      "price": 298.7,
-      "changePct": 4.182,
+      "price": 302.265,
+      "changePct": 8.506,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:00:01+00:00",
+      "observedAt": "2026-11-13T14:37:53+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -15999,6 +16023,10 @@
         {
           "date": "2026-11-12",
           "value": 298.700012
+        },
+        {
+          "date": "2026-11-13",
+          "value": 302.265015
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -16008,10 +16036,10 @@
     },
     {
       "symbol": "META",
-      "price": 623.61,
-      "changePct": 2.397,
+      "price": 630.187,
+      "changePct": 3.328,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:00:01+00:00",
+      "observedAt": "2026-11-13T14:37:52+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -17020,6 +17048,10 @@
         {
           "date": "2026-11-12",
           "value": 623.609985
+        },
+        {
+          "date": "2026-11-13",
+          "value": 630.18689
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -17029,10 +17061,10 @@
     },
     {
       "symbol": "BRK-B",
-      "price": 589.83,
-      "changePct": 17.402,
+      "price": 594.27,
+      "changePct": 15.817,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:03:45+00:00",
+      "observedAt": "2026-11-13T14:37:45+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -18041,6 +18073,10 @@
         {
           "date": "2026-11-12",
           "value": 589.830017
+        },
+        {
+          "date": "2026-11-13",
+          "value": 594.27002
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -18050,10 +18086,10 @@
     },
     {
       "symbol": "JPM",
-      "price": 342.82,
-      "changePct": 6.994,
+      "price": 345.07,
+      "changePct": 11.5,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:00:02+00:00",
+      "observedAt": "2026-11-13T14:37:53+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -19062,6 +19098,10 @@
         {
           "date": "2026-11-12",
           "value": 342.820007
+        },
+        {
+          "date": "2026-11-13",
+          "value": 345.070007
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -19071,10 +19111,10 @@
     },
     {
       "symbol": "AVGO",
-      "price": 364.36,
-      "changePct": 2.573,
+      "price": 353.005,
+      "changePct": 3.831,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:00:01+00:00",
+      "observedAt": "2026-11-13T14:37:53+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -20083,6 +20123,10 @@
         {
           "date": "2026-11-12",
           "value": 364.359985
+        },
+        {
+          "date": "2026-11-13",
+          "value": 353.005005
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -20092,10 +20136,10 @@
     },
     {
       "symbol": "TSLA",
-      "price": 397.45,
-      "changePct": -7.699,
+      "price": 390.685,
+      "changePct": -2.812,
       "currency": "USD",
-      "observedAt": "2026-11-12T21:00:00+00:00",
+      "observedAt": "2026-11-13T14:37:54+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -21104,6 +21148,10 @@
         {
           "date": "2026-11-12",
           "value": 397.450012
+        },
+        {
+          "date": "2026-11-13",
+          "value": 390.684998
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -23926,7 +23974,7 @@
         ]
       }
     ],
-    "updatedAt": "2026-11-13T14:24:59+00:00",
+    "updatedAt": "2026-11-13T14:37:55+00:00",
     "source": "Consumer Council Northern Ireland",
     "sourceUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker",
     "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
@@ -27970,7 +28018,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-13T14:25:00+00:00",
+    "updatedAt": "2026-11-13T14:37:55+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
@@ -36889,7 +36937,7 @@
         "missingPackSize": null
       }
     ],
-    "supermarketIndexUpdatedAt": "2026-11-13T14:25:02+00:00",
+    "supermarketIndexUpdatedAt": "2026-11-13T14:37:56+00:00",
     "supermarketIndex": {
       "vintage": "2026-W45",
       "publishedAt": "2026-11-09T12:49:02Z",
