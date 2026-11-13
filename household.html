@@ -587,12 +587,12 @@ function renderCrossRetailerComparison(rows){
   if(price===null||price<=0)return;
   const entry={price,scrapedAt:o.scrapedAt||"",retailer:String(o.retailer||"").toLowerCase(),eans:codes};
   codes.forEach(code=>addLatest(eanGroups,code,entry));
-  const sourceKey=String(o.matchKey||"").trim().toLowerCase().replace(retailerPrefix,"").replace(/\\s+/g," ").trim();
+  const sourceKey=String(o.matchKey||"").trim().toLowerCase().replace(retailerPrefix,"").replace(/\s+/g," ").trim();
   const basis=String(o.matchBasis||"").trim().toLowerCase();
   const confidence=number(o.matchConfidence);
   const sourceEligible=(confidence===null||confidence>=0.90)&&basis!=="name";
   if(sourceKey&&sourceEligible)addLatest(matchGroups,sourceKey,entry);
-  const legacyKey=String(o.matchKeyV1||"").trim().toLowerCase().replace(retailerPrefix,"").replace(/\\s+/g," ").trim();
+  const legacyKey=String(o.matchKeyV1||"").trim().toLowerCase().replace(retailerPrefix,"").replace(/\s+/g," ").trim();
   if(legacyKey&&sourceEligible)addLatest(legacyMatchGroups,legacyKey,entry);
   const nameKey=nameIdentity(o);
   if(nameKey)addLatest(namePackGroups,nameKey,entry);
