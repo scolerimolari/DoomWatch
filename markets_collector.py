@@ -1893,6 +1893,7 @@ def collect_daily_grocery_basket(data):
                 "retailer": retailer,
                 "retailerProductId": product_id,
                 "ean": [str(code) for code in ean if code],
+                "matchKey": str(row.get("matchKey") or "")[:240],
                 "price": price,
                 "wasPrice": was_price,
                 "loyaltyPrice": loyalty,
