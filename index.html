@@ -710,12 +710,14 @@ function renderAlerts() {
 
   $("priority-alerts").innerHTML = important.length
     ? important.map(item => `
-      <div class="intel-card ${item.severity}">
-        <h3>${escapeHTML(item.title)}</h3>
-        <p>${escapeHTML(item.summary)}</p>
-        <div class="meta">${escapeHTML(item.area)} // ${escapeHTML(item.source)}</div>
-      </div>`).join("")
-    : '<div class="panel muted">No priority alerts loaded.</div>';
+      <details class="intel-card ${item.severity}">
+        <summary>${escapeHTML(item.title)}</summary>
+        <p>${escapeHTML(item.summary || "No additional description supplied.")}</p>
+        <div class="meta">${escapeHTML(item.area)} · ${escapeHTML(item.source)} · ${escapeHTML(dateText(item.date))}</div>
+        <div class="meta">INCIDENT SEVERITY: ${escapeHTML(item.severity.toUpperCase())} · SOURCE CLASS: ${escapeHTML(item.sourceTrust)}</div>
+        ${item.url ? `<p><a href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a></p>` : ""}
+      </details>`).join("")
+    : '<div class="panel muted">No explicit medium/high incident severity is recorded. This does not mean no risks exist.</div>';
 }
 
 function renderFeed() {
