@@ -19,6 +19,67 @@ TIMEOUT = 20
 MAX_ARTICLES = 3000
 MAX_FEED_SIZE = 3_000_000
 
+SECTOR_RULES = {
+  1: ("National resilience", ("civil contingencies","national resilience","emergency planning","continuity planning","cabinet office","national risk")),
+  2: ("Food and agriculture", ("food supply","food shortage","food security","agriculture","farming","fertiliser","fertilizer","grain","livestock","crop failure")),
+  3: ("Fuel, energy and oil", ("heating oil","fuel shortage","petrol","diesel","oil price","natural gas","gas supply","refinery","energy security")),
+  4: ("Chemicals, medicines and industrial inputs", ("medicine shortage","medicines","pharmaceutical","medical supplies","chemical","chlorine","industrial inputs","semiconductor")),
+  5: ("Electricity, gas and water", ("power outage","blackout","electricity","electricity grid","gas network","water supply","ni water","wastewater","substation")),
+  6: ("Transport, ports and logistics", ("trafficwatch","road closure","rail disruption","port","harbour","harbor","ferry","shipping","freight","logistics","airport")),
+  7: ("Healthcare and public health", ("public health","nhs","hospital","healthcare","outbreak","infectious disease","virus","ambulance","pharmacy")),
+  8: ("Telecommunications, cyber and infrastructure", ("cyber","ransomware","data breach","phishing","telecom","broadband","mobile network","internet outage","data centre","datacenter")),
+  9: ("Weather, flooding and natural hazards", ("weather warning","flood","storm","wind warning","snow","ice warning","wildfire","coastal erosion","drought")),
+  10: ("Civil defence and community preparedness", ("civil defence","community resilience","emergency shelter","evacuation","household preparedness","emergency plan","volunteer response")),
+  11: ("International events with UK/NI impact", ("geopolitical","international conflict","war","sanctions","blockade","red sea","strait of hormuz","ukraine","shipping disruption","trade disruption","nato"))
+}
+LOCALITY_POINTS = [
+ ("Belfast",54.5973,-5.9301,("belfast","greater belfast")),
+ ("Newtownabbey",54.6598,-5.9086,("newtownabbey","glengormley","carnmoney","whiteabbey")),
+ ("Ballyclare",54.7515,-6.0014,("ballyclare","doagh","parkgate")),
+ ("Antrim",54.7195,-6.2072,("antrim","crumlin")),
+ ("Larne",54.8509,-5.8238,("larne","cairncastle")),
+ ("Carrickfergus",54.7158,-5.8058,("carrickfergus","greenisland")),
+ ("Lisburn",54.5091,-6.0431,("lisburn","hilden","hillsborough")),
+ ("Bangor",54.6608,-5.6681,("bangor","donaghadee")),
+ ("Newtownards",54.5924,-5.6909,("newtownards","comber")),
+ ("Downpatrick",54.3281,-5.7153,("downpatrick","strangford")),
+ ("Newry",54.1751,-6.3402,("newry","bessbrook","warrenpoint","crossmaglen")),
+ ("Armagh",54.3503,-6.6528,("armagh","markethill","tandragee")),
+ ("Portadown",54.4235,-6.4443,("portadown","craigavon","lurgan")),
+ ("Dungannon",54.5034,-6.7670,("dungannon","coalisland")),
+ ("Cookstown",54.6430,-6.7450,("cookstown","magherafelt")),
+ ("Omagh",54.6000,-7.3000,("omagh","strabane")),
+ ("Enniskillen",54.3448,-7.6386,("enniskillen","lisnaskea","fermanagh")),
+ ("Coleraine",55.1333,-6.6667,("coleraine","portstewart","portrush")),
+ ("Ballymena",54.8636,-6.2763,("ballymena","cullybackey","broughshane")),
+ ("Limavady",55.0515,-6.9500,("limavady","dungiven")),
+ ("Derry/Londonderry",54.9970,-7.3090,("derry","londonderry","waterside")),
+ ("Ballycastle",55.2044,-6.2540,("ballycastle","bushmills","cushendall"))
+]
+def enrich_article(article):
+    text = " " + (str(article.get("title","")) + " " + str(article.get("description",""))).lower() + " "
+    ids = set()
+    for sector_id, (_, terms) in SECTOR_RULES.items():
+        if any(term in text for term in terms):
+            ids.add(sector_id)
+    domain = article.get("domain")
+    if isinstance(domain, int) and 1 <= domain <= 11:
+        ids.add(domain)
+    article["sectorIds"] = sorted(ids)
+    article["sectorLabels"] = [SECTOR_RULES[i][0] for i in sorted(ids)]
+    article["sectorClassification"] = "KEYWORD_AND_SOURCE_METADATA"
+    article.pop("locality", None)
+    for name, lat, lon, terms in LOCALITY_POINTS:
+        if any(re.search(r"(?<![a-z])" + re.escape(term) + r"(?![a-z])", text) for term in terms):
+            article["locality"] = {"name":name,"latitude":lat,"longitude":lon,"precision":"APPROXIMATE_TOWN_CENTRE"}
+            if str(article.get("region","")).lower() in ("global","unknown",""):
+                article["region"] = "Northern Ireland"
+            break
+    article.setdefault("evidenceStatus","UNASSESSED")
+    article.setdefault("confidence","UNASSESSED")
+    return article
+
+
 
 def now():
     return datetime.now(timezone.utc)
@@ -767,6 +828,10 @@ def main():
         reverse=True
     )
 
+    # Add transparent sector tags and approximate town-level map metadata.
+    for article in retained:
+        enrich_article(article)
+
     # Backfill source classification on retained historical records.
     feed_metadata = {
         str(item.get("id")): item
@@ -785,6 +850,18 @@ def main():
 
     intelligence["articles"] = retained[:MAX_ARTICLES]
     intelligence["sourceStatus"] = source_status
+
+    intelligence["sectorCoverage"] = [
+        {
+            "id": sector_id,
+            "name": label,
+            "recordCount": sum(1 for article in intelligence["articles"] if sector_id in article.get("sectorIds", [])),
+            "sourceCount": len(set(str(article.get("sourceId") or article.get("source") or "") for article in intelligence["articles"] if sector_id in article.get("sectorIds", []))),
+            "classification": "KEYWORD_AND_SOURCE_METADATA",
+            "disclaimer": "Coverage is not a measure of risk, severity or completeness."
+        }
+        for sector_id, (label, terms) in SECTOR_RULES.items()
+    ]
 
     intelligence["collector"] = {
         "lastRun": iso(),
