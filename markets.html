@@ -71,7 +71,7 @@ main{padding:10px}
 <a href="#crypto">CRYPTO</a>
 <a href="#currencies">FX</a>
 <a href="#stocks">STOCKS</a>
-<a href="#household">GROCERIES</a>
+<a href="#household">HOUSEHOLD COSTS</a>
 <a href="#energy">ENERGY</a>
 <a href="#news">NEWS</a>
 </nav>
@@ -122,7 +122,7 @@ main{padding:10px}
 </section>
 
 <section id="household">
-<h2>07 // HOUSEHOLD COST INTELLIGENCE</h2>
+<h2>07 // HOUSEHOLD COST INDICES</h2>
 
 <div class="panel">
 <h3>UK SUPERMARKET PRICE INDEX // WEEKLY</h3>
@@ -144,7 +144,7 @@ Independent weekly UK supermarket shelf-price index, shown only as an aggregate 
 <div class="chart-wrap"><canvas id="groceryRetailerChart"></canvas></div>
 <div class="scroll">
 <table>
-<thead><tr><th>RETAILER</th><th>INDEX</th><th>WEEKLY CHANGE</th><th>MATCHED PRODUCTS</th></tr></thead>
+<thead><tr><th>RETAILER</th><th>INDEX</th><th>WEEKLY CHANGE</th></tr></thead>
 <tbody id="groceryRetailerRows"></tbody>
 </table>
 </div>
@@ -160,7 +160,7 @@ Independent weekly UK supermarket shelf-price index, shown only as an aggregate 
 <h3>LATEST FOOD CATEGORY READINGS</h3>
 <div class="scroll">
 <table>
-<thead><tr><th>CATEGORY</th><th>INDEX</th><th>WEEKLY CHANGE</th><th>MATCHED</th></tr></thead>
+<thead><tr><th>CATEGORY</th><th>INDEX</th><th>WEEKLY CHANGE</th></tr></thead>
 <tbody id="groceryCategoryRows"></tbody>
 </table>
 </div>
@@ -219,7 +219,7 @@ DATA SUBJECT TO SOURCE AVAILABILITY AND COLLECTION FREQUENCY
 "use strict";
 
 const DATA_URL="./data/markets.json";
-const GROCERY_INDEX_URL="https://data.yappman.com/data/uk-shelf-price-index.json";
+// Grocery/supermarket index is read from the same markets.json file as the rest of the dashboard.
 
 let D={};
 let GROCERY=[];
@@ -510,23 +510,21 @@ const CLASS_NAMES={
  other:"Other"
 };
 
+
 function groceryRows(type){
  return GROCERY.filter(r=>r.recordType===type);
 }
 
 function groceryLatestVintage(){
- const metas=GROCERY.filter(r=>r.recordType==="meta")
+ const rows=GROCERY.filter(r=>r.recordType==="headline"&&r.vintage)
  .sort((a,b)=>String(a.vintage).localeCompare(String(b.vintage)));
- return metas.length?metas[metas.length-1]:null;
-}
-
-function currentGrocerySeries(type,field){
- const meta=groceryLatestVintage();
- if(!meta)return [];
- return GROCERY.filter(r=>
-  r.recordType===type&&
-  r.base===undefined ? false : true
- );
+ if(!rows.length)return null;
+ const latest=rows[rows.length-1];
+ return {
+  vintage:latest.vintage,
+  publishedAt:latest.publishedAt||"",
+  base:100
+ };
 }
 
 function currentRows(type){
@@ -534,7 +532,8 @@ function currentRows(type){
  if(!meta)return [];
  return GROCERY.filter(r=>
   r.recordType===type&&
-  r.vintage>=meta.base
+  r.vintage&&
+  String(r.vintage)<=String(meta.vintage)
  ).sort((a,b)=>String(a.vintage).localeCompare(String(b.vintage)));
 }
 
@@ -558,9 +557,8 @@ function grocerySeries(type,extra,name){
 
 function renderGroceryIndex(){
  const meta=groceryLatestVintage();
-
  if(!meta){
-  $("groceryIndexStatus").innerHTML='<span class="warning">No published grocery index data returned.</span>';
+  $("groceryIndexStatus").innerHTML='<span class="warning">No aggregate supermarket index data is available in markets.json.</span>';
   return;
  }
 
@@ -569,54 +567,48 @@ function renderGroceryIndex(){
             latestRow("class",{class:"food-soft-drinks"});
 
  $("groceryIndexStatus").textContent=
- `LATEST RELEASE: ${meta.vintage} // PUBLISHED: ${date(meta.publishedAt)} // BASE: ${meta.base} = 100 // SOURCE: YAPPMAN DATA`;
+ `LATEST RELEASE: ${meta.vintage} // PUBLISHED: ${date(meta.publishedAt)} // BASE: 100 // SOURCE: YAPPMAN DATA`;
 
  $("groceryIndexCards").innerHTML=`
  <div class="card">
   <div class="name">ALL SUPERMARKETS</div>
   <div class="index-stat">${number(headline?.level)}</div>
   <div class="change">${movement({changePct:headline?.weekOnWeekPct})} weekly</div>
-  <div class="small">Matched products: ${number(headline?.matched)}</div>
  </div>
  <div class="card">
   <div class="name">FOOD & SOFT DRINKS</div>
   <div class="index-stat">${number(food?.level)}</div>
   <div class="change">${movement({changePct:food?.weekOnWeekPct})} weekly</div>
-  <div class="small">Matched products: ${number(food?.matched)}</div>
  </div>
  <div class="card">
   <div class="name">LATEST WEEK</div>
   <div class="index-stat">${safe(meta.vintage)}</div>
   <div class="small">Published ${date(meta.publishedAt)}</div>
-  <div class="small">Index base ${safe(meta.base)}</div>
+  <div class="small">Index base 100</div>
  </div>`;
 
- // Overall headline trend.
  multiChart("groceryHeadlineChart",[
   grocerySeries("headline",{},"All supermarkets")
  ]);
 
- // Retailer comparison.
  const retailerSeries=Object.keys(RETAILER_NAMES).map(key=>
-  grocerySeries("retailer",{retailer:key},RETAILER_NAMES[key])
+  grocerySeries("retailer_subtotal",{retailer:key},RETAILER_NAMES[key])
  );
  multiChart("groceryRetailerChart",retailerSeries);
 
  const retailerRows=Object.keys(RETAILER_NAMES).map(key=>{
-  const r=latestRow("retailer",{retailer:key});
+  const r=latestRow("retailer_subtotal",{retailer:key});
   if(!r)return "";
   return `<tr>
    <td>${RETAILER_NAMES[key]}</td>
    <td>${number(r.level)}</td>
    <td>${movement({changePct:r.weekOnWeekPct})}</td>
-   <td>${number(r.matched)}</td>
   </tr>`;
  }).join("");
 
  $("groceryRetailerRows").innerHTML=retailerRows||
- '<tr><td colspan="4">No retailer readings available.</td></tr>';
+ '<tr><td colspan="3">No aggregate retailer readings available.</td></tr>';
 
- // Food category chart. Excludes non-food classes.
  const foodClasses=[
   "bread-cereals","meat","fish","dairy-eggs","oils-fats",
   "fruit","vegetables","sugar-confectionery","food-other","soft-drinks"
@@ -625,7 +617,6 @@ function renderGroceryIndex(){
  const categorySeries=foodClasses.map(key=>
   grocerySeries("class",{class:key},CLASS_NAMES[key]||key)
  );
-
  multiChart("groceryCategoryChart",categorySeries);
 
  const categoryRows=foodClasses.map(key=>{
@@ -635,47 +626,38 @@ function renderGroceryIndex(){
    <td>${CLASS_NAMES[key]||key}</td>
    <td>${number(r.level)}</td>
    <td>${movement({changePct:r.weekOnWeekPct})}</td>
-   <td>${number(r.matched)}</td>
   </tr>`;
  }).join("");
 
  $("groceryCategoryRows").innerHTML=categoryRows||
- '<tr><td colspan="4">No category readings available.</td></tr>';
+ '<tr><td colspan="3">No aggregate food-category readings available.</td></tr>';
 }
 
-async function loadGroceryIndex(){
- try{
-  const response=await fetch(
-   GROCERY_INDEX_URL+"?t="+Date.now(),
-   {cache:"no-store"}
-  );
-  if(!response.ok)throw new Error("HTTP "+response.status);
+function loadGroceryIndex(){
+ const basket=D.householdBasket||{};
+ const raw=Array.isArray(basket.supermarketIndexHistory)
+  ?basket.supermarketIndexHistory:[];
+ const allowedTypes=new Set([
+  "headline","subtotal","class",
+  "retailer_subtotal","retailer","retailer_class"
+ ]);
 
-  const raw=await response.json();
-  if(!Array.isArray(raw))throw new Error("Unexpected data format");
+ GROCERY=raw.filter(row=>
+  row&&typeof row==="object"&&!Array.isArray(row)&&
+  allowedTypes.has(String(row.recordType||""))&&
+  row.vintage&&Number.isFinite(Number(row.level))
+ );
 
-  GROCERY=raw;
-
-  // Add each row's base from the matching meta record.
-  const bases={};
-  raw.filter(r=>r.recordType==="meta")
-  .forEach(m=>bases[m.vintage]=m.base);
-
-  GROCERY=raw.map(r=>({
-   ...r,
-   base:r.base||bases[r.vintage]||""
-  }));
-
-  renderGroceryIndex();
-
- }catch(error){
+ if(!GROCERY.length){
   $("groceryIndexStatus").innerHTML=
-   `<span class="warning">Grocery index feed unavailable: ${safe(error.message)}. Existing market data is unaffected.</span>`;
+   '<span class="warning">No aggregate supermarket index records are present in the local markets data.</span>';
   $("groceryIndexCards").innerHTML=
-   '<div class="small">Unable to retrieve the independent weekly grocery index.</div>';
+   '<div class="small">The markets collector has not supplied an aggregate index.</div>';
+  return;
  }
-}
 
+ renderGroceryIndex();
+}
 
 function renderFoodInflation(){
  const basket=D.householdBasket||{};
@@ -827,7 +809,9 @@ async function load(){
   const response=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
   if(!response.ok)throw new Error("HTTP "+response.status);
   D=await response.json();
+  if(!D||typeof D!=="object"||Array.isArray(D))throw new Error("Invalid markets data format");
 
+  loadGroceryIndex();
   renderStatus();
 
   const overview=[
@@ -862,7 +846,6 @@ async function load(){
 // Load the independent weekly grocery feed.
 // Failure here does not stop the main DoomWatch markets page.
 load();
-loadGroceryIndex();
 
 let resizeTimer;
 window.addEventListener("resize",()=>{
