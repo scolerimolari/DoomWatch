@@ -778,7 +778,7 @@ def main():
         "generatedAt": iso(),
         "type": "FACTUAL_SOURCE_SNAPSHOT",
         "windowHours": 48,
-        "disclaimer": "Records published or collected within the last 48 hours, grouped by the region declared by each source. Higher-priority source feeds are listed first; this is not incident severity or confirmation of local impact. Open original sources and official advisories.",
+        "disclaimer": "Records published or collected within the last 48 hours, grouped by the region declared by each source. Source class describes publisher type, not truth or verification; higher-priority feeds are listed first. Inclusion is not confirmation of an incident, severity or local impact. Open original sources and official advisories.",
         "totalRecords": sum(len(items) for items in grouped.values()),
         "regions": brief_sections
     }
