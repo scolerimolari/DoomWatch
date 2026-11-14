@@ -1,51 +1,51 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-14T06:14:27+00:00",
-  "generatedAt": "2026-11-14T06:14:27+00:00",
+  "updatedAt": "2026-11-14T10:22:29+00:00",
+  "generatedAt": "2026-11-14T10:22:29+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:15+00:00"
+      "checkedAt": "2026-11-14T10:22:21+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:15+00:00"
+      "checkedAt": "2026-11-14T10:22:21+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:16+00:00"
+      "checkedAt": "2026-11-14T10:22:21+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:16+00:00"
+      "checkedAt": "2026-11-14T10:22:21+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:16+00:00"
+      "checkedAt": "2026-11-14T10:22:22+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:16+00:00"
+      "checkedAt": "2026-11-14T10:22:22+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:16+00:00"
+      "checkedAt": "2026-11-14T10:22:22+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:17+00:00"
+      "checkedAt": "2026-11-14T10:22:22+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:17+00:00"
+      "checkedAt": "2026-11-14T10:22:22+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:17+00:00"
+      "checkedAt": "2026-11-14T10:22:23+00:00"
     },
     "heatingOil": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:23+00:00",
+      "checkedAt": "2026-11-14T10:22:25+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
       "observationsImported": 179,
@@ -54,7 +54,7 @@
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:24+00:00",
+      "checkedAt": "2026-11-14T10:22:26+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
       "observationsImported": 463,
@@ -63,7 +63,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:26+00:00",
+      "checkedAt": "2026-11-14T10:22:28+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -72,7 +72,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:26+00:00",
+      "checkedAt": "2026-11-14T10:22:28+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -81,7 +81,7 @@
     },
     "supermarketPriceIndex": {
       "status": "ok",
-      "checkedAt": "2026-11-14T06:14:26+00:00",
+      "checkedAt": "2026-11-14T10:22:28+00:00",
       "url": "https://data.yappman.com/shelf-price-index/",
       "datasetUrl": "https://api.apify.com/v2/datasets/AvRCWqFinCiNjx3sP/items?format=json",
       "licence": "CC BY 4.0",
@@ -6255,10 +6255,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 67218.04,
-      "changePct": -28.793,
+      "price": 67204.33,
+      "changePct": -28.807,
       "currency": "USD",
-      "observedAt": "2026-11-14T06:14:11+00:00",
+      "observedAt": "2026-11-14T10:22:19+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -7726,11 +7726,11 @@
         },
         {
           "date": "2026-11-13",
-          "value": 68984.929688
+          "value": 68249.273438
         },
         {
           "date": "2026-11-14",
-          "value": 67218.039062
+          "value": 67204.328125
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -23978,7 +23978,7 @@
         ]
       }
     ],
-    "updatedAt": "2026-11-14T06:14:23+00:00",
+    "updatedAt": "2026-11-14T10:22:25+00:00",
     "source": "Consumer Council Northern Ireland",
     "sourceUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker",
     "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
@@ -28022,7 +28022,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-14T06:14:24+00:00",
+    "updatedAt": "2026-11-14T10:22:26+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
@@ -36941,7 +36941,7 @@
         "missingPackSize": null
       }
     ],
-    "supermarketIndexUpdatedAt": "2026-11-14T06:14:26+00:00",
+    "supermarketIndexUpdatedAt": "2026-11-14T10:22:28+00:00",
     "supermarketIndex": {
       "vintage": "2026-W45",
       "publishedAt": "2026-11-09T12:49:02Z",
@@ -36963,16 +36963,46 @@
   },
   "news": [
     {
+      "title": "Football kit giveaway aims to boost participation",
+      "url": "https://www.bbc.co.uk/news/articles/ck20v651473qo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-14T08:13:40+00:00"
+    },
+    {
+      "title": "The rise of 'housefishing' by estate agents",
+      "url": "https://www.bbc.co.uk/news/videos/cmx295lz17wzo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-14T07:45:50+00:00"
+    },
+    {
+      "title": "What we know about the ground stop and what to do if you're affected",
+      "url": "https://www.bbc.co.uk/news/articles/cqx2wyvyr3zzo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-14T07:42:11+00:00"
+    },
+    {
+      "title": "What do Christmas market traders say about rising prices?",
+      "url": "https://www.bbc.co.uk/news/articles/c95y152k8erpo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-14T07:11:26+00:00"
+    },
+    {
+      "title": "Microsoft says services fully restored after day-long global outage",
+      "url": "https://www.bbc.co.uk/news/articles/c6rrg51rkz09o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-14T06:42:27+00:00"
+    },
+    {
+      "title": "Food bank sees donations drop by 10% each year",
+      "url": "https://www.bbc.co.uk/news/articles/c6702j7e48eno?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-14T06:33:06+00:00"
+    },
+    {
       "title": "Trump, Putin and Xi plan historic joint meeting in China next week, White House says",
       "url": "https://www.bbc.co.uk/news/articles/ckz74jzpy18do?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-14T05:52:31+00:00"
-    },
-    {
-      "title": "What we know about the longest ground stop since 9/11",
-      "url": "https://www.bbc.co.uk/news/articles/cqx2wyvyr3zzo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T03:45:21+00:00"
     },
     {
       "title": "'We'll get home one day' - US travellers impacted by nationwide ground stop",
@@ -37023,12 +37053,6 @@
       "publishedAt": "2026-11-13T21:15:24+00:00"
     },
     {
-      "title": "Microsoft 'deeply sorry' for global outage as it reports broad recovery",
-      "url": "https://www.bbc.co.uk/news/articles/c6rrg51rkz09o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-13T21:14:22+00:00"
-    },
-    {
       "title": "Bird flu (avian influenza): latest situation in England",
       "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
       "source": "DEFRA",
@@ -37053,6 +37077,12 @@
       "publishedAt": "2026-11-13T19:03:10+00:00"
     },
     {
+      "title": "Eurovision is finally coming to Asia - meet the stars gearing up to take the stage",
+      "url": "https://www.bbc.co.uk/news/articles/cw4gn0ky2pgdo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-13T19:01:36+00:00"
+    },
+    {
       "title": "Why is Microsoft's outage lasting so long and will emails be lost?",
       "url": "https://www.bbc.co.uk/news/articles/cwvg238zrnm5o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
@@ -37069,6 +37099,12 @@
       "url": "https://www.bbc.co.uk/news/videos/ckp80l667rdjo?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
       "publishedAt": "2026-11-13T18:00:40+00:00"
+    },
+    {
+      "title": "Estonia bans Russian athletes as backlash intensifies ",
+      "url": "https://www.bbc.co.uk/sport/articles/cm4gn9lvlgy2o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-13T17:54:33+00:00"
     },
     {
       "title": "Rosenberg: Uncompromising Putin ups demands for peace with Ukraine",
@@ -37101,46 +37137,10 @@
       "publishedAt": "2026-11-13T15:16:53Z"
     },
     {
-      "title": "At least 24 killed after bus collides with truck in north-east India ",
-      "url": "https://www.bbc.co.uk/news/articles/c6r7g5lp1zrxo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-13T15:16:50+00:00"
-    },
-    {
       "title": "Watch: Divers explore US ship sunk off Florida coast to create new reef",
       "url": "https://www.bbc.co.uk/news/videos/ckqx5ryx905qo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-13T15:09:40+00:00"
-    },
-    {
-      "title": "Guidance: Confined establishments approved to export captive-bred birds to the EU",
-      "url": "https://www.gov.uk/government/publications/confined-establishments-approved-to-export-captive-bred-birds-to-the-eu",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T14:52:14Z"
-    },
-    {
-      "title": "Guidance: Confined establishments approved to export ungulates to the EU",
-      "url": "https://www.gov.uk/government/publications/confined-establishments-approved-to-export-ungulates-to-the-eu",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T14:50:14Z"
-    },
-    {
-      "title": "Research: Seasonal workers reviews and surveys",
-      "url": "https://www.gov.uk/government/publications/seasonal-workers-pilot-review",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T14:50:05Z"
-    },
-    {
-      "title": "Shoplifters 'stealing to order' in Scottish shops ",
-      "url": "https://www.bbc.co.uk/news/videos/cw772xkxjm37o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-13T14:16:09+00:00"
-    },
-    {
-      "title": "Joint Statement on Cooperation in Agriculture between the United Kingdom and Germany",
-      "url": "https://www.gov.uk/government/news/joint-statement-on-cooperation-in-agriculture-between-the-united-kingdom-and-germany",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T14:13:42Z"
     }
   ],
   "supplyNews": [
