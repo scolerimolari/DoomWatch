@@ -266,6 +266,18 @@
       "sourceType": "devolved_government",
       "method": "html_listing",
       "maxItems": 50
+    },
+    {
+      "id": "ni-water-service-updates",
+      "name": "Northern Ireland Water - current service updates",
+      "url": "https://www.niwater.com/whats-happening-in-your-area/current-service-updates/",
+      "domain": 5,
+      "region": "Northern Ireland",
+      "priority": "high",
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "utility_service_update",
+      "method": "niwater_service_updates"
     }
   ]
 }
