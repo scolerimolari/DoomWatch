@@ -766,12 +766,47 @@ def fetch_niwater_service_updates(source):
 
 
 
+def fetch_nie_network_outages(source):
+    """Collect official live NIE Networks faults from its open-data API."""
+    request = urllib.request.Request(source["url"], headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
+    with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+        content_type = response.headers.get("Content-Type", "")
+        body = response.read(MAX_FEED_SIZE)
+    if not body:
+        raise ValueError("NIE Networks outage API returned an empty response")
+    payload = json.loads(body.decode("utf-8-sig", errors="replace"))
+    rows = payload.get("results") or payload.get("records") or []
+    articles, seen = [], set()
+    for row in rows:
+        fields = row.get("fields", row) if isinstance(row, dict) else {}
+        if not isinstance(fields, dict):
+            continue
+        outage_id = clean(fields.get("outageid") or fields.get("event_id") or fields.get("id"))
+        if not outage_id or outage_id in seen:
+            continue
+        seen.add(outage_id)
+        outage_type = clean(fields.get("outagetype"))
+        start_time = clean(fields.get("starttime"))
+        restore_time = clean(fields.get("estrestorefulldatetime"))
+        postcode = clean(fields.get("postcode"))
+        customers = clean(fields.get("numcustaffected"))
+        status_message = clean(fields.get("statusmessage"))
+        updated = clean(fields.get("updatedtimestamp"))
+        title = "NIE Networks power fault" + (" — " + postcode if postcode else "")
+        details = ["Status: ACTIVE (listed in NIE Networks live outage dataset)", "Outage type: " + (outage_type or "Not supplied"), "Affected postcode: " + (postcode or "Not supplied"), "Customers affected: " + (customers or "Not supplied"), "Start time: " + (start_time or "Not supplied"), "Estimated restoration: " + (restore_time or "Not supplied"), "Last updated: " + (updated or "Not supplied"), "Operator message: " + (status_message or "Not supplied")]
+        articles.append({"id": source["id"] + ":" + outage_id, "sourceId": source["id"], "source": source["name"], "title": title, "url": source.get("articleUrl", "https://nienetworks.opendatasoft.com/explore/dataset/nie-networks-network-faults/"), "publishedAt": start_time or updated, "collectedAt": iso(), "description": " | ".join(details), "domain": source.get("domain", 5), "region": "Northern Ireland", "priority": "high", "sourceTrust": "official_primary_source", "sourceType": "electricity_network_outage", "serviceStatus": "ACTIVE", "outageType": outage_type, "affectedPostcodes": postcode, "customersAffected": customers, "estimatedRestorationTime": restore_time, "lastOperatorUpdate": updated, "operatorStatusMessage": status_message, "evidenceStatus": "OFFICIAL_OPERATOR_UPDATE", "confidence": "HIGH"})
+    return articles, content_type, len(body), "NIE_NETWORK_OUTAGES"
+
+
 def fetch_feed(source):
     if source.get("method") == "html_listing":
         return fetch_html_listing(source)
 
     if source.get("method") == "niwater_service_updates":
         return fetch_niwater_service_updates(source)
+
+    if source.get("method") == "nie_network_outages":
+        return fetch_nie_network_outages(source)
 
     if source.get("id") == "gdacs-global":
         return fetch_gdacs_api(source)
