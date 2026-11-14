@@ -149,3 +149,8 @@ h2{margin-top:20px!important;margin-bottom:10px!important}
  .dw-fold-hint{font-size:8px!important}
 }
 @media(prefers-reduced-motion:reduce){.dw-global-nav{scroll-behavior:auto!important}}
+
+.dw-heading-fold>.dw-fold-content{padding:0 12px 12px;min-width:0}
+.dw-heading-fold>.dw-fold-content>*{max-width:100%}
+.dw-heading-fold>.dw-fold-content>h3:first-child{margin-top:8px}
+@media(max-width:700px){.dw-heading-fold>.dw-fold-content{padding:0 9px 10px}}
