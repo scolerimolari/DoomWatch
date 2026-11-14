@@ -6,6 +6,8 @@ name: DoomWatch Intelligence Collector
       - main
     paths:
       - "collector.py"
+      - "observatory_collector.py"
+      - "observatory.html"
       - "feeds.json"
       - "sources.json"
       - "manifest.json"
@@ -50,6 +52,7 @@ jobs:
       - name: Validate collector and source configuration
         run: |
           python -m py_compile collector.py
+          python -m py_compile observatory_collector.py
           python -m json.tool feeds.json > /dev/null
           python -m json.tool sources.json > /dev/null
           python -m json.tool manifest.json > /dev/null
@@ -80,7 +83,7 @@ jobs:
                       self.scripts.append("".join(self.current))
                       self.current = None
 
-          for page in ("index.html", "markets.html", "household.html", "map.html", "feed.html"):
+          for page in ("index.html", "markets.html", "household.html", "map.html", "feed.html", "observatory.html"):
               parser = ScriptExtractor()
               parser.feed(Path(page).read_text(encoding="utf-8"))
               if not parser.scripts:
@@ -93,7 +96,9 @@ jobs:
           node --check doomwatch-ui.js
 
       - name: Run DoomWatch collector
-        run: python collector.py
+        run: |
+          python collector.py
+          python observatory_collector.py
 
       - name: Save updated intelligence safely
         run: |
@@ -103,7 +108,7 @@ jobs:
           for attempt in 1 2 3; do
             echo "Saving intelligence update, attempt $attempt"
 
-            git add data/intelligence.json data/ballyclare-history.json
+            git add data/intelligence.json data/ballyclare-history.json data/observatory.json
 
             if git diff --cached --quiet; then
               echo "No intelligence data changes to commit."
@@ -122,6 +127,7 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             python collector.py
+            python observatory_collector.py
           done
 
           echo "Unable to save intelligence after three attempts."
