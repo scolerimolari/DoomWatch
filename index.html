@@ -1066,6 +1066,14 @@ function renderSourceHealth(){
   const colour=ok?"green":empty?"yellow":"red";
   return '<div class="section-card" style="margin-bottom:6px"><strong class="'+colour+'">'+label+'</strong> // '+escapeHTML(item.name||item.id||"Unknown source")+'<div class="meta">'+escapeHTML(detail+diagnostics)+' // '+escapeHTML(dateText(item.checkedAt))+'</div></div>';
  }).join(""):'<div class="muted">No per-source diagnostics are present in the collector data.</div>';
+ const history=intelligence.sourceHealthHistory||{};
+ const events=Array.isArray(history.events)?history.events.slice().reverse():[];
+ const latest=history.latestBySource&&typeof history.latestBySource==="object"?Object.values(history.latestBySource):[];
+ const failing=latest.filter(x=>String(x.status||"").toUpperCase()==="FAILED");
+ const streaks=failing.filter(x=>Number(x.consecutiveFailures)>1);
+ const transitions=events.filter(x=>x.type==="RECOVERED"||x.type==="STATUS_CHANGE").slice(0,12);
+ const historyPanel='<div class="section-card" style="margin:10px 0"><strong>SOURCE RELIABILITY // 90-DAY HISTORY</strong><div class="grid" style="margin-top:8px"><div><div class="meta">TRACKED SOURCES</div><strong>'+latest.length+'</strong></div><div><div class="meta">CURRENTLY FAILED</div><strong class="'+(failing.length?"red":"green")+'">'+failing.length+'</strong></div><div><div class="meta">REPEATED FAILURES</div><strong class="'+(streaks.length?"yellow":"green")+'">'+streaks.length+'</strong></div><div><div class="meta">RECENT TRANSITIONS</div><strong>'+transitions.length+'</strong></div></div><div class="meta">History begins with the first collector run after this upgrade. A successful empty response counts as a successful check, not proof that a publisher has new content.</div>'+ (transitions.length?transitions.map(x=>'<div class="meta" style="margin-top:6px"><strong class="'+(x.type==="RECOVERED"?"green":"yellow")+'">'+escapeHTML(x.type)+'</strong> // '+escapeHTML(x.name||x.id)+' // '+escapeHTML(x.from||"FIRST SEEN")+' → '+escapeHTML(x.to||"UNKNOWN")+' // '+escapeHTML(dateText(x.at))+'</div>').join(""):'<div class="meta" style="margin-top:6px">No status transitions recorded yet.</div>')+'</div>';
+ list.innerHTML=historyPanel+list.innerHTML;
  if(stale){
   list.innerHTML='<div class="warning">COLLECTION DATA IS MISSING OR OLDER THAN SIX HOURS. Feed status cannot be treated as current.</div>'+list.innerHTML;
  }
