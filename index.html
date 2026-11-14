@@ -138,6 +138,7 @@ footer {
   header {padding:13px}
   .intel-window {height:480px}
 }
+.mesh-public-network{margin:10px 0 14px}.mesh-public-kpis{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}.mesh-map-toolbar{margin:12px 0}.mesh-map-toolbar .controls{margin:7px 0}.mesh-map-toolbar button.active{background:var(--yellow);color:#111;border-color:var(--tan)}.mesh-public-map-frame{width:100%;height:clamp(360px,62vh,680px);border:1px solid var(--olive);background:#0b110d}.mesh-public-map-frame iframe{width:100%;height:100%;border:0;display:block}.mesh-map-footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:9px 2px;font-size:11px}.mesh-public-network .warning{font-size:11px;line-height:1.5}
 </style>
 <link rel="stylesheet" href="./doomwatch.css">
 <style>
@@ -427,6 +428,33 @@ footer {
     <div id="mesh-region-directory" class="grid" style="margin-top:10px"></div>
     <div class="meta">A scope is a routing boundary, not a chat room or proof of activity. The directory separates documented channel names from scope-only entries. Channel listings do not prove current traffic; cross-region delivery depends on repeater configuration and radio paths.</div>
   </div>
+
+  <h3>01A // PUBLIC NETWORK ACTIVITY // LIVE DIRECTORY VIEW</h3>
+  <section class="panel mesh-public-network">
+    <div class="grid mesh-public-kpis">
+      <div class="section-card"><div class="panel-title">DATA SOURCE</div><strong class="green">MESHCORE PUBLIC MAP</strong><div class="meta">Official advertised-node directory</div></div>
+      <div class="section-card"><div class="panel-title">NETWORK OBJECTS</div><strong class="yellow">CLIENTS · REPEATERS</strong><div class="meta">ROOM SERVERS · SENSORS</div></div>
+      <div class="section-card"><div class="panel-title">EVIDENCE STATUS</div><strong class="yellow">PUBLIC ADVERTS</strong><div class="meta">Not a live radio scan or message feed</div></div>
+    </div>
+    <div class="mesh-map-toolbar">
+      <strong class="panel-title">SELECT REGIONAL VIEW</strong>
+      <div class="controls" id="mesh-public-region-controls">
+        <button type="button" class="action-button active" data-mesh-map-region="ni" aria-pressed="true">NORTHERN IRELAND</button>
+        <button type="button" class="action-button" data-mesh-map-region="ireland" aria-pressed="false">ISLAND OF IRELAND</button>
+        <button type="button" class="action-button" data-mesh-map-region="scotland" aria-pressed="false">SCOTLAND</button>
+        <button type="button" class="action-button" data-mesh-map-region="wales" aria-pressed="false">WALES</button>
+        <button type="button" class="action-button" data-mesh-map-region="north" aria-pressed="false">NORTHERN ENGLAND</button>
+        <button type="button" class="action-button" data-mesh-map-region="midlands" aria-pressed="false">MIDLANDS</button>
+        <button type="button" class="action-button" data-mesh-map-region="south" aria-pressed="false">SOUTHERN ENGLAND</button>
+        <button type="button" class="action-button" data-mesh-map-region="uk" aria-pressed="false">UK OVERVIEW</button>
+      </div>
+    </div>
+    <div class="mesh-public-map-frame">
+      <iframe id="mesh-public-map" title="Live public MeshCore node map — Northern Ireland" src="https://map.meshcore.io/?lat=54.7&amp;lon=-6.7&amp;zoom=8" loading="lazy" referrerpolicy="no-referrer" allowfullscreen></iframe>
+    </div>
+    <div class="mesh-map-footer"><span id="mesh-public-map-region" class="green">VIEW: NORTHERN IRELAND</span><a href="https://map.meshcore.io/" target="_blank" rel="noopener noreferrer">OPEN FULL MESHCORE MAP ↗</a></div>
+    <div class="warning" style="margin-top:10px">INTERPRETATION: The public map shows nodes whose adverts have been uploaded with location information. A marker does not prove that a node is currently online, reachable from your radio, or carrying traffic. The map does not expose private messages or room-server queues. Use the map's own node freshness and type filters when assessing individual entries.</div>
+  </section>
 
   <h3>02 // PUBLIC ROOM & AUTOMATED SIGNALS</h3>
   <div class="grid">
@@ -1396,6 +1424,29 @@ function meshRenderDirectory(){
  const list=meshRegions.filter(r=>meshRegionFilter==="all"||(meshRegionFilter==="ioi"?r.group==="ioi":r.group===meshRegionFilter));
  $("mesh-region-directory").innerHTML=list.map(r=>'<div class="section-card"><div class="panel-title">'+meshEscape(r.name)+'</div><div class="big-status yellow" style="font-size:13px">'+meshEscape(r.state)+'</div><div class="meta">SCOPE: '+meshEscape(r.scope)+' · CHANNEL: '+meshEscape(r.channel)+'</div><p>'+meshEscape(r.detail)+'</p><a href="'+meshEscape(r.url)+'" target="_blank" rel="noopener noreferrer">REGION INFORMATION ↗</a></div>').join("");
 }
+const meshPublicViews={
+ ni:{name:"NORTHERN IRELAND",lat:54.7,lon:-6.7,zoom:8},
+ ireland:{name:"ISLAND OF IRELAND",lat:53.25,lon:-8.0,zoom:6},
+ scotland:{name:"SCOTLAND",lat:56.5,lon:-4.2,zoom:6},
+ wales:{name:"WALES",lat:52.3,lon:-3.7,zoom:7},
+ north:{name:"NORTHERN ENGLAND",lat:54.8,lon:-2.1,zoom:6.5},
+ midlands:{name:"MIDLANDS",lat:52.8,lon:-1.5,zoom:7},
+ south:{name:"SOUTHERN ENGLAND",lat:51.0,lon:-1.8,zoom:7},
+ uk:{name:"UNITED KINGDOM",lat:54.2,lon:-2.8,zoom:5}
+};
+function meshSetPublicMap(region){
+ const view=meshPublicViews[region]||meshPublicViews.ni;
+ const frame=$("mesh-public-map");if(!frame)return;
+ frame.src="https://map.meshcore.io/?lat="+encodeURIComponent(view.lat)+"&lon="+encodeURIComponent(view.lon)+"&zoom="+encodeURIComponent(view.zoom);
+ frame.title="Live public MeshCore node map — "+view.name;
+ $("mesh-public-map-region").textContent="VIEW: "+view.name;
+ document.querySelectorAll("[data-mesh-map-region]").forEach(button=>{
+  const active=button.dataset.meshMapRegion===region;
+  button.classList.toggle("active",active);
+  button.setAttribute("aria-pressed",String(active));
+ });
+}
+document.querySelectorAll("[data-mesh-map-region]").forEach(button=>button.addEventListener("click",()=>meshSetPublicMap(button.dataset.meshMapRegion)));
 function meshFeedSignature(x){return [x.region||"",x.channel||"",x.author||"",String(x.message||"").trim().toLowerCase()].join("|");}
 function meshRenderFeed(){
  const region=$("mesh-feed-filter").value;const category=$("mesh-feed-category-filter").value;const query=$("mesh-feed-search").value.trim().toLowerCase();
