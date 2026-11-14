@@ -1,4 +1,4 @@
-const CACHE_NAME = "doomwatch-v30";
+const CACHE_NAME = "doomwatch-v31";
 const APP_FILES = ["./","./index.html","./communications.html","./map.html","./feed.html","./markets.html","./household.html","./manifest.json","./containment.svg","./doomwatch.css","./doomwatch-ui.js"];
 self.addEventListener("install",event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_FILES)));self.skipWaiting();});
 self.addEventListener("activate",event=>{event.waitUntil(caches.keys().then(names=>Promise.all(names.filter(name=>name.startsWith("doomwatch-")&&name!==CACHE_NAME).map(name=>caches.delete(name)))));self.clients.claim();});
@@ -7,4 +7,13 @@ self.addEventListener("fetch",event=>{
  const isData=url.pathname.includes("/data/"),isNavigation=request.mode==="navigate",isHtml=url.pathname.endsWith(".html"),cacheKey=new Request(url.origin+url.pathname);
  if(isData||isNavigation||isHtml){event.respondWith(fetch(request,{cache:"no-store"}).then(response=>{if(response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(cacheKey,copy));}return response;}).catch(async()=>await caches.match(cacheKey)||(isNavigation?await caches.match("./index.html"):Response.error())));return;}
  event.respondWith(caches.match(cacheKey).then(cached=>cached||fetch(request).then(response=>{if(response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(cacheKey,copy));}return response;})));
+});
+self.addEventListener("notificationclick",event=>{
+ event.notification.close();
+ const target=new URL(event.notification.data?.url||"./communications.html",self.location.origin).href;
+ event.waitUntil(self.clients.matchAll({type:"window",includeUncontrolled:true}).then(windows=>{
+  const existing=windows.find(client=>client.url.startsWith(self.location.origin));
+  if(existing){existing.navigate(target);return existing.focus();}
+  return self.clients.openWindow(target);
+ }));
 });
