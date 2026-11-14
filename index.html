@@ -446,6 +446,18 @@ footer {
     </div>
   </div>
 
+  <h3>03 // REGIONAL ACTIVITY & COVERAGE PICTURE</h3>
+  <div class="grid" id="mesh-activity-summary"></div>
+  <div class="panel" style="margin-top:10px">
+    <div class="panel-title">EVIDENCE & FRESHNESS KEY</div>
+    <div class="grid">
+      <div class="section-card"><strong class="green">RECENTLY CONFIRMED</strong><p class="meta">A node has a recorded confirmation date within the last 30 days. This is not proof it is online now.</p></div>
+      <div class="section-card"><strong class="yellow">OLDER CONFIRMATION</strong><p class="meta">Last recorded confirmation is more than 30 days old. Recheck with its operator or a current public map.</p></div>
+      <div class="section-card"><strong class="red">UNCONFIRMED</strong><p class="meta">No usable confirmation date or only an unverified report. Do not treat as operational coverage.</p></div>
+    </div>
+    <div class="meta">Activity is calculated only from records stored in this browser. A channel listing, map marker or node record does not establish radio reachability, uptime or end-to-end coverage.</div>
+  </div>
+
   <h3>03 // MESH MESSAGE FEED</h3>
 <div class="panel"><div class="grid">
 <div><label for="mesh-feed-region">REGION</label><select id="mesh-feed-region"><option value="ioi">Island of Ireland (ioi)</option><option value="bhd">Ulster / Northern Ireland (bhd)</option><option value="dub">Leinster (dub)</option><option value="noc">Connacht (noc)</option><option value="snn">Munster (snn)</option><option value="sco">Scotland (sco)</option><option value="iom">Isle of Man (iom)</option><option value="uk">UK-wide / cross-region</option></select></div>
@@ -467,7 +479,9 @@ footer {
       <div class="grid">
         <div><label for="mesh-node-id">NODE NAME / ID</label><input id="mesh-node-id" placeholder="Node identifier"></div>
         <div><label for="mesh-node-area">TOWN / AREA</label><input id="mesh-node-area" placeholder="e.g. Ballyclare"></div>
+        <div><label for="mesh-node-region">REGION</label><select id="mesh-node-region"><option value="bhd">Ulster / Northern Ireland</option><option value="ioi">Island of Ireland</option><option value="dub">Leinster</option><option value="noc">Connacht</option><option value="snn">Munster</option><option value="sco">Scotland</option><option value="yorkshire">Yorkshire</option><option value="iom">Isle of Man</option><option value="uk">UK-wide / other</option></select></div>
       </div>
+      <div class="grid"><div><label for="mesh-node-lastseen">LAST CONFIRMED DATE</label><input id="mesh-node-lastseen" type="date"></div><div><label for="mesh-node-status">OBSERVED STATUS</label><select id="mesh-node-status"><option value="Not tested">Not tested</option><option value="Heard / received">Heard / received</option><option value="Two-way contact">Two-way contact</option><option value="Owner confirmed">Owner confirmed</option></select></div></div>
       <div class="grid">
         <div><label for="mesh-node-type">TYPE</label><select id="mesh-node-type"><option>Repeater</option><option>Room server</option><option>Companion</option><option>Unknown</option></select></div>
         <div><label for="mesh-node-evidence">EVIDENCE</label><select id="mesh-node-evidence"><option>Owner confirmed</option><option>Personally observed</option><option>Publicly listed</option><option>Unverified report</option></select></div>
@@ -1391,11 +1405,13 @@ function meshRenderFeed(){
 }
 function meshDownloadBackup(){const payload={format:"doomwatch-mesh-archive",version:1,exportedAt:new Date().toISOString(),messages:meshFeed,nodes:meshSaved.nodes};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="doomwatch-mesh-archive.json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);$("mesh-feed-status").textContent="Archive export prepared. Store the JSON backup safely."; }
 function meshMergeBackup(){let data;try{data=JSON.parse($("mesh-feed-import-json").value);}catch(err){$("mesh-feed-status").textContent="Invalid JSON: "+err.message;return;}const incoming=Array.isArray(data)?data:(data&&Array.isArray(data.messages)?data.messages:null);if(!incoming){$("mesh-feed-status").textContent="Backup format not recognised.";return;}const known=new Set(meshFeed.map(meshFeedSignature));let added=0;incoming.forEach(x=>{if(!x||typeof x.message!=="string"||!x.message.trim())return;const item={region:String(x.region||"ioi"),channel:String(x.channel||""),author:String(x.author||""),message:x.message,time:x.time||"",capturedAt:x.capturedAt||"",category:x.category||"General",confidence:x.confidence||"Unverified"};const sig=meshFeedSignature(item);if(!known.has(sig)){known.add(sig);meshFeed.push(item);added++;}});if(data&&Array.isArray(data.nodes)){const nodes=new Set(meshSaved.nodes.map(n=>String(n.id||"")+"|"+String(n.area||"")));data.nodes.forEach(n=>{if(!n||!n.id)return;const key=String(n.id)+"|"+String(n.area||"");if(!nodes.has(key)){nodes.add(key);meshSaved.nodes.push(n);}});meshSaveNodes();}meshSaveFeed();$("mesh-feed-import-json").value="";$("mesh-feed-status").textContent="Merge complete: "+added+" new messages added; duplicates skipped.";meshRender();}
+function meshFreshness(n){if(!n.lastSeen)return "UNCONFIRMED";const age=(Date.now()-new Date(n.lastSeen+"T12:00:00").getTime())/86400000;if(!Number.isFinite(age))return "UNCONFIRMED";return age<=30?"RECENTLY CONFIRMED":"OLDER CONFIRMATION";}
+function meshRenderActivity(){const ids=["ioi","bhd","dub","noc","snn","sco","yorkshire","iom","uk"];const names={ioi:"Island of Ireland",bhd:"Ulster / NI",dub:"Leinster",noc:"Connacht",snn:"Munster",sco:"Scotland",yorkshire:"Yorkshire",iom:"Isle of Man",uk:"UK-wide"};const cards=ids.map(id=>{const nodes=meshSaved.nodes.filter(n=>(n.region||"unknown")===id);const recent=nodes.filter(n=>meshFreshness(n)==="RECENTLY CONFIRMED").length;const stale=nodes.filter(n=>meshFreshness(n)==="OLDER CONFIRMATION").length;const unconfirmed=nodes.length-recent-stale;const posts=meshFeed.filter(m=>m.region===id);const seven=posts.filter(m=>{const d=new Date(m.capturedAt||m.time||"").getTime();return Number.isFinite(d)&&Date.now()-d<=7*86400000;}).length;return '<div class="section-card"><div class="panel-title">'+names[id]+'</div><div class="big-status yellow">'+nodes.length+' NODES LOGGED</div><div class="meta">Recent confirmation: '+recent+' · Older: '+stale+' · Unconfirmed: '+unconfirmed+'</div><div class="meta">Local archive: '+posts.length+' messages · '+seven+' captured in last 7 days</div></div>';});$("mesh-activity-summary").innerHTML=cards.join("");}
 function meshRenderNodes(){
  $("mesh-node-count").textContent=meshSaved.nodes.length;
- $("mesh-node-list").innerHTML=meshSaved.nodes.map((n,i)=>'<div class="section-card"><strong class="yellow">'+meshEscape(n.id)+'</strong><div class="meta">'+meshEscape(n.area||"Location unknown")+' · '+meshEscape(n.type||"Unknown")+' · '+meshEscape(n.evidence||"Unspecified")+'</div><button type="button" class="action-button" data-mesh-delete-node="'+i+'">DELETE</button></div>').join("")||'<p class="muted">No nodes recorded.</p>';
+ $("mesh-node-list").innerHTML=meshSaved.nodes.map((n,i)=>'<div class="section-card"><strong class="yellow">'+meshEscape(n.id)+'</strong><div class="meta">'+meshEscape(n.area||"Location unknown")+' · '+meshEscape(n.type||"Unknown")+' · '+meshEscape(n.evidence||"Unspecified")+'</div><div class="meta">REGION: '+meshEscape(n.region||"Legacy / unknown")+' · STATUS: '+meshEscape(n.status||"Not recorded")+' · LAST CONFIRMED: '+meshEscape(n.lastSeen||"Not recorded")+' · '+meshFreshness(n)+'</div><button type="button" class="action-button" data-mesh-delete-node="'+i+'">DELETE</button></div>').join("")||'<p class="muted">No nodes recorded.</p>';
 }
-function meshRender(){meshRenderDirectory();meshRenderFeed();meshRenderNodes();}
+function meshRender(){meshRenderDirectory();meshRenderActivity();meshRenderFeed();meshRenderNodes();}
 document.querySelectorAll(".mesh-region-filter").forEach(btn=>btn.addEventListener("click",()=>{meshRegionFilter=btn.dataset.region;meshRenderDirectory();}));
 $("mesh-feed-filter").addEventListener("change",meshRenderFeed);
 $("mesh-feed-category-filter").addEventListener("change",meshRenderFeed);
@@ -1405,8 +1421,8 @@ $("mesh-feed-import").addEventListener("click",meshMergeBackup);
 $("mesh-feed-add").addEventListener("click",()=>{const message=$("mesh-feed-message").value.trim();if(!message){$("mesh-feed-status").textContent="Enter a public message first.";return;}const item={region:$("mesh-feed-region").value,channel:$("mesh-feed-channel").value.trim(),author:$("mesh-feed-author").value.trim(),message:message,time:new Date().toLocaleString(),capturedAt:new Date().toISOString(),category:$("mesh-feed-category").value,confidence:$("mesh-feed-confidence").value};if(meshFeed.some(x=>meshFeedSignature(x)===meshFeedSignature(item))){$("mesh-feed-status").textContent="Duplicate skipped: message already archived.";return;}meshFeed.unshift(item);meshSaveFeed();$("mesh-feed-message").value="";$("mesh-feed-status").textContent="Message added to local archive.";meshRenderFeed();});
 $("mesh-add-node").addEventListener("click",()=>{
  const id=$("mesh-node-id").value.trim();if(!id)return;
- meshSaved.nodes.unshift({id,area:$("mesh-node-area").value.trim(),type:$("mesh-node-type").value,evidence:$("mesh-node-evidence").value});
- meshSaveNodes();$("mesh-node-id").value="";$("mesh-node-area").value="";meshRenderNodes();
+ meshSaved.nodes.unshift({id,area:$("mesh-node-area").value.trim(),region:$("mesh-node-region").value,type:$("mesh-node-type").value,evidence:$("mesh-node-evidence").value,lastSeen:$("mesh-node-lastseen").value,status:$("mesh-node-status").value});
+ meshSaveNodes();$("mesh-node-id").value="";$("mesh-node-area").value="";$("mesh-node-lastseen").value="";meshRender();
 });
 document.addEventListener("click",event=>{
  if(event.target.dataset.meshFeedDelete!==undefined){meshFeed.splice(Number(event.target.dataset.meshFeedDelete),1);meshSaveFeed();meshRenderFeed();}
