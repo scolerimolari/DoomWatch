@@ -914,7 +914,10 @@ function renderRumours() {
   `).join("") || '<p class="muted">No claims recorded.</p>';
 }
 
-function showPage(name) {
+function showPage(name, options = {}) {
+  const target = document.getElementById(name);
+  if (!target || !target.classList.contains("page")) name = "overview";
+
   document.querySelectorAll(".page").forEach(page => {
     const active = page.id === name;
     page.classList.toggle("active",active);
@@ -927,6 +930,11 @@ function showPage(name) {
     button.setAttribute("aria-current",active ? "page" : "false");
     button.setAttribute("aria-pressed",String(active));
   });
+
+  // Keep the selected dashboard page in browser history so Android Back/Forward works.
+  if (options.updateHistory !== false && location.hash !== "#" + name) {
+    history.pushState({doomwatchPage:name},"","#" + name);
+  }
 
   window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
 }
@@ -988,10 +996,11 @@ document.addEventListener("click",event => {
   if(button) showPage(button.dataset.page);
 });
 function openPageFromHash(){
-  const target=decodeURIComponent(location.hash.slice(1));
-  if(target && document.getElementById(target)?.classList.contains("page")) showPage(target);
+  const target=decodeURIComponent(location.hash.slice(1)) || "overview";
+  showPage(target,{updateHistory:false});
 }
 window.addEventListener("hashchange",openPageFromHash);
+window.addEventListener("popstate",openPageFromHash);
 openPageFromHash();
 
 /* INTELLIGENCE FILTERS */
