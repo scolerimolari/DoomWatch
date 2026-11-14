@@ -160,6 +160,7 @@ const isNI=a=>/northern ireland/i.test(String(a.region||""))||/(^|[;,/])\s*ni\s*
 function locate(a){
  const locality=a.locality&&typeof a.locality==="object"?String(a.locality.name||""):"";
  if(locality){const exact=TOWNS.find(t=>t.name.toLowerCase()===locality.toLowerCase());if(exact)return exact;const partial=TOWNS.find(t=>t.terms.some(term=>locality.toLowerCase().includes(term)));if(partial)return partial;}
+ if(isFlood(a)&&a.mapTownApproximation){const mapped=TOWNS.find(t=>t.name.toLowerCase()===String(a.mapTownApproximation).toLowerCase());if(mapped)return mapped;}
  if(isPower(a)){const match=String(a.affectedPostcodes||"").match(/\bBT\s?(\d{1,2})\b/i);if(match){const townName=POWER_POSTCODE_TOWNS[Number(match[1])];const postcodeTown=TOWNS.find(t=>t.name===townName);if(postcodeTown)return postcodeTown;}}
  const txt=allText(a);for(const town of TOWNS){if(town.terms.some(term=>hasTerm(txt,term)))return town;}return null;
 }
@@ -229,8 +230,8 @@ function selectTown(name){
  if(group&&map)map.setView([group.town.lat,group.town.lon],10);
 }
 function openRecord(a){
- const town=locate(a),url=safeUrl(a.url);
- $("map-town-details").innerHTML='<strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE TOWN MATCH":"LOCATION NOT IDENTIFIED")+' · '+esc(category(a))+' · '+esc(dateText(stamp(a)))+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">SOURCE: '+esc(a.source||"Not supplied")+' · EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div>'+(url?'<div class="detail-actions"><a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a>'+(town?'<button type="button" id="focus-record-town">FOCUS '+esc(town.name.toUpperCase())+'</button>':"")+'</div>':"");
+ const town=locate(a),url=safeUrl(a.url),locationLabel=isFlood(a)?(a.stationCoordinatesVerified?"VERIFIED STATION COORDINATES // "+a.stationLatitude+", "+a.stationLongitude:"NO VERIFIED STATION COORDINATES"):(town?town.name+" // APPROXIMATE TOWN MATCH":"LOCATION NOT IDENTIFIED");
+ $("map-town-details").innerHTML='<strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(locationLabel)+' · '+esc(category(a))+' · '+esc(dateText(stamp(a)))+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">SOURCE: '+esc(a.source||"Not supplied")+' · EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div>'+(url?'<div class="detail-actions"><a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a>'+(town?'<button type="button" id="focus-record-town">FOCUS '+esc(town.name.toUpperCase())+'</button>':"")+'</div>':"");
  const focus=$("focus-record-town");if(focus)focus.addEventListener("click",()=>selectTown(town.name));
 }
 function renderDetail(group){
