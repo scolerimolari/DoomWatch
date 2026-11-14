@@ -2,6 +2,7 @@
 if(window.__doomwatchUiReady)return;window.__doomwatchUiReady=true;
 const body=document.body,oldHeader=body.querySelector(":scope > header"),oldNav=body.querySelector(":scope > nav");
 const path=location.pathname.toLowerCase(),hash=decodeURIComponent(location.hash.slice(1)).toLowerCase();
+if((path==="/"||path.endsWith("/index.html"))&&!hash){location.replace("./map.html");return;}
 const routes=[
  ["command","index.html#overview","COMMAND"],["operations","operations.html","OPS ROOM"],["map","map.html","MAP"],
  ["intelligence","index.html#intelligence","INTEL"],["sectors","index.html#sections","11 SECTORS"],
@@ -52,6 +53,7 @@ body.insertBefore(skip,body.firstChild);
 // reached through the same consistent route list above.
 if(oldNav)oldNav.remove();
 mast.insertAdjacentElement("afterend",nav);
+nav.classList.add("dw-bottom-dock");
 const wire=document.createElement("div");wire.className="dw-wire";wire.setAttribute("aria-hidden","true");nav.insertAdjacentElement("afterend",wire);
 const top=document.createElement("button");top.type="button";top.className="dw-top";top.textContent="TOP";top.setAttribute("aria-label","Back to top");top.addEventListener("click",()=>window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}));body.appendChild(top);
 function foldSection(section,index){
