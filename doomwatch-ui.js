@@ -18,13 +18,35 @@ const statusline=mast.querySelector("#dw-statusline");
 ["clock","connection","updated"].forEach(id=>{const node=document.getElementById(id);if(node){const wrap=document.createElement("span");wrap.appendChild(node);statusline.appendChild(wrap);}});
 if(oldHeader)oldHeader.hidden=true;
 const nav=document.createElement("nav");nav.className="dw-global-nav";nav.setAttribute("aria-label","All DoomWatch pages and sections");
-routes.forEach(([key,url,label])=>{
+let areaToggle=null;
+routes.forEach(([key,url,label],index)=>{
+ if(index===4){
+  areaToggle=document.createElement("button");areaToggle.type="button";areaToggle.className="dw-nav-toggle";areaToggle.textContent="ALL AREAS +";areaToggle.setAttribute("aria-expanded","false");areaToggle.setAttribute("aria-controls","dw-route-extras");nav.appendChild(areaToggle);
+ }
  const a=document.createElement("a");
  a.href=new URL(url,document.baseURI).href;
  a.textContent=label;
+ a.className=index<4?"dw-route-primary":"dw-route-extra";
+ if(index>=4)a.dataset.dwExtra="true";
  if(key===active){a.setAttribute("aria-current","page");}
  nav.appendChild(a);
 });
+const extras=document.createElement("span");extras.id="dw-route-extras";extras.className="dw-route-extras";
+[...nav.querySelectorAll(".dw-route-extra")].forEach(a=>extras.appendChild(a));
+nav.appendChild(extras);
+if(areaToggle){
+ const setExpanded=expanded=>{nav.classList.toggle("dw-expanded",expanded);areaToggle.setAttribute("aria-expanded",String(expanded));areaToggle.textContent=expanded?"CLOSE AREAS −":"ALL AREAS +";};
+ areaToggle.addEventListener("click",()=>setExpanded(!nav.classList.contains("dw-expanded")));
+ if(nav.querySelector('[aria-current="page"].dw-route-extra'))setExpanded(true);
+}
+const expandAll=document.createElement("button");expandAll.type="button";expandAll.className="dw-nav-action";expandAll.textContent="EXPAND SECTIONS";
+const collapseAll=document.createElement("button");collapseAll.type="button";collapseAll.className="dw-nav-action";collapseAll.textContent="COLLAPSE SECTIONS";
+nav.append(expandAll,collapseAll);
+expandAll.addEventListener("click",()=>document.querySelectorAll("details.dw-fold").forEach(el=>el.open=true));
+collapseAll.addEventListener("click",()=>document.querySelectorAll("details.dw-fold").forEach(el=>el.open=false));
+const skip=document.createElement("a");skip.className="dw-skip-link";skip.href="#dw-main-content";skip.textContent="SKIP TO CONTENT";
+const mainForSkip=document.querySelector("main");if(mainForSkip){mainForSkip.id=mainForSkip.id||"dw-main-content";skip.href="#"+mainForSkip.id;}
+body.insertBefore(skip,body.firstChild);
 // Every page uses this single shared route bar. Page-local section menus are
 // intentionally removed: dashboard partitions and standalone modules are
 // reached through the same consistent route list above.
@@ -74,7 +96,7 @@ if(main){
  main.querySelectorAll(":scope > .page").forEach(page=>foldHeadingGroups(page));
  document.querySelectorAll(".brief-card,.case-panel").forEach((el,i)=>foldSection(el,i));
 }
-function openHashTarget(){const id=decodeURIComponent(location.hash.slice(1));if(!id)return;const target=document.getElementById(id);const fold=target?.closest("details.dw-fold");if(fold)fold.open=true;}
+function openHashTarget(){const id=decodeURIComponent(location.hash.slice(1));if(!id)return;const target=document.getElementById(id);if(!target)return;let parent=target.parentElement;while(parent){if(parent.matches?.("details.dw-fold"))parent.open=true;parent=parent.parentElement;}if(target.matches?.("details.dw-fold"))target.open=true;}
 window.addEventListener("hashchange",openHashTarget);openHashTarget();
 body.classList.add("dw-ready");
 }
