@@ -447,25 +447,21 @@ footer {
   </div>
 
   <h3>03 // MESH MESSAGE FEED</h3>
-  <div class="panel">
-    <div class="grid">
-      <div><label for="mesh-feed-region">REGION</label><select id="mesh-feed-region"><option value="ioi">Island of Ireland (ioi)</option><option value="bhd">Ulster / Northern Ireland (bhd)</option><option value="dub">Leinster (dub)</option><option value="noc">Connacht (noc)</option><option value="snn">Munster (snn)</option><option value="sco">Scotland (sco)</option><option value="iom">Isle of Man (iom)</option><option value="uk">UK-wide / cross-region</option></select></div>
-      <div><label for="mesh-feed-channel">CHANNEL / ROOM</label><input id="mesh-feed-channel" placeholder="e.g. #ireland, Belfast room"></div>
-      <div><label for="mesh-feed-author">CALLSIGN / SOURCE</label><input id="mesh-feed-author" placeholder="Optional sender or bot name"></div>
-    </div>
-    <label for="mesh-feed-message">PUBLIC MESSAGE TEXT</label>
-    <textarea id="mesh-feed-message" placeholder="Paste a message you have received from a public MeshCore channel or room. Do not paste private DMs or personal information."></textarea>
-    <div class="controls"><button type="button" class="action-button" id="mesh-feed-add">IMPORT TO LOCAL FEED</button></div>
-    <div class="meta">Imported entries are marked as manually captured. They are stored only in this browser and are not independently verified by DoomWatch.</div>
-  </div>
-  <div class="grid" style="margin-top:10px">
-    <div class="panel">
-      <div class="panel-title">FEED FILTER</div>
-      <label for="mesh-feed-filter">SHOW REGION</label>
-      <select id="mesh-feed-filter"><option value="all">ALL REGIONS</option><option value="ioi">Island of Ireland</option><option value="bhd">Ulster / Northern Ireland</option><option value="dub">Leinster</option><option value="noc">Connacht</option><option value="snn">Munster</option><option value="sco">Scotland</option><option value="iom">Isle of Man</option><option value="uk">UK-wide</option></select>
-      <div id="mesh-feed-list" style="margin-top:10px"></div>
-    </div>
-    <div class="panel">
+<div class="panel"><div class="grid">
+<div><label for="mesh-feed-region">REGION</label><select id="mesh-feed-region"><option value="ioi">Island of Ireland (ioi)</option><option value="bhd">Ulster / Northern Ireland (bhd)</option><option value="dub">Leinster (dub)</option><option value="noc">Connacht (noc)</option><option value="snn">Munster (snn)</option><option value="sco">Scotland (sco)</option><option value="iom">Isle of Man (iom)</option><option value="uk">UK-wide / cross-region</option></select></div>
+<div><label for="mesh-feed-channel">CHANNEL / ROOM</label><input id="mesh-feed-channel" placeholder="e.g. #ireland, Belfast room"></div>
+<div><label for="mesh-feed-author">CALLSIGN / SOURCE</label><input id="mesh-feed-author" placeholder="Sender or bot name"></div>
+<div><label for="mesh-feed-category">EVENT CATEGORY</label><select id="mesh-feed-category"><option>General</option><option>Emergency</option><option>Infrastructure</option><option>Weather</option><option>Transport</option><option>Community</option><option>Network</option><option>Test</option></select></div>
+<div><label for="mesh-feed-confidence">SOURCE STATUS</label><select id="mesh-feed-confidence"><option>Unverified</option><option>Source identified</option><option>Corroborated</option><option>Official</option></select></div></div>
+<label for="mesh-feed-message">PUBLIC MESSAGE TEXT</label><textarea id="mesh-feed-message" placeholder="Paste a message from a public MeshCore channel or room. Never paste private DMs or personal information."></textarea>
+<div class="controls"><button type="button" class="action-button" id="mesh-feed-add">IMPORT TO LOCAL FEED</button></div><div class="meta">Capture time is automatic. Source status is your assessment, not automatic verification. Existing saved entries remain compatible.</div></div>
+<div class="panel" style="margin-top:10px"><div class="panel-title">SEARCH, FILTER & ARCHIVE CONTROL</div>
+<label for="mesh-feed-search">SEARCH MESSAGE / CALLSIGN / CHANNEL</label><input id="mesh-feed-search" placeholder="Search local archive">
+<div class="grid"><div><label for="mesh-feed-filter">SHOW REGION</label><select id="mesh-feed-filter"><option value="all">ALL REGIONS</option><option value="ioi">Island of Ireland</option><option value="bhd">Ulster / Northern Ireland</option><option value="dub">Leinster</option><option value="noc">Connacht</option><option value="snn">Munster</option><option value="sco">Scotland</option><option value="iom">Isle of Man</option><option value="uk">UK-wide</option></select></div>
+<div><label for="mesh-feed-category-filter">EVENT CATEGORY</label><select id="mesh-feed-category-filter"><option value="all">ALL CATEGORIES</option><option>General</option><option>Emergency</option><option>Infrastructure</option><option>Weather</option><option>Transport</option><option>Community</option><option>Network</option><option>Test</option></select></div></div>
+<div class="controls"><button type="button" class="action-button" id="mesh-feed-export">EXPORT ARCHIVE JSON</button></div>
+<label for="mesh-feed-import-json">RESTORE / MERGE ARCHIVE JSON</label><textarea id="mesh-feed-import-json" placeholder="Paste a previously exported DoomWatch Mesh archive JSON. Existing records are retained; duplicates are skipped."></textarea>
+<div class="controls"><button type="button" class="action-button" id="mesh-feed-import">IMPORT / MERGE BACKUP</button></div><div id="mesh-feed-status" class="meta" aria-live="polite"></div><div id="mesh-feed-list" style="margin-top:10px"></div></div>    <div class="panel">
       <div class="panel-title">NETWORK / MAP NODE REGISTER</div>
       <div class="muted">Optional manually recorded public nodes. Exact recognised town names can be shown as approximate markers on the existing GEOINT map. No inferred positions or coverage.</div>
       <div class="grid">
@@ -1385,12 +1381,15 @@ function meshRenderDirectory(){
  const list=meshRegions.filter(r=>meshRegionFilter==="all"||(meshRegionFilter==="ioi"?r.group==="ioi":r.group===meshRegionFilter));
  $("mesh-region-directory").innerHTML=list.map(r=>'<div class="section-card"><div class="panel-title">'+meshEscape(r.name)+'</div><div class="big-status yellow" style="font-size:13px">'+meshEscape(r.state)+'</div><div class="meta">SCOPE: '+meshEscape(r.scope)+' · CHANNEL: '+meshEscape(r.channel)+'</div><p>'+meshEscape(r.detail)+'</p><a href="'+meshEscape(r.url)+'" target="_blank" rel="noopener noreferrer">REGION INFORMATION ↗</a></div>').join("");
 }
+function meshFeedSignature(x){return [x.region||"",x.channel||"",x.author||"",String(x.message||"").trim().toLowerCase()].join("|");}
 function meshRenderFeed(){
- const filter=$("mesh-feed-filter").value;
- const items=meshFeed.filter(x=>filter==="all"||x.region===filter);
- $("mesh-feed-list").innerHTML=items.length?items.map((x,i)=>'<article class="section-card"><div class="meta">'+meshEscape(x.region.toUpperCase())+' · '+meshEscape(x.channel||"PUBLIC CHANNEL")+' · '+meshEscape(x.time)+'</div><strong class="yellow">'+meshEscape(x.author||"UNATTRIBUTED SOURCE")+'</strong><p style="white-space:pre-wrap">'+meshEscape(x.message)+'</p><div class="meta">MANUALLY IMPORTED · NOT LIVE-VERIFIED</div><button type="button" class="action-button" data-mesh-feed-delete="'+meshFeed.indexOf(x)+'">DELETE ENTRY</button></article>').join(""):'<p class="muted">No messages imported for this region. Connect through the MeshCore app, then copy relevant public messages into the importer above.</p>';
+ const region=$("mesh-feed-filter").value;const category=$("mesh-feed-category-filter").value;const query=$("mesh-feed-search").value.trim().toLowerCase();
+ const items=meshFeed.map((x,index)=>({x,index})).filter(item=>{const x=item.x;const hay=[x.message,x.author,x.channel,x.category,x.confidence].join(" ").toLowerCase();return (region==="all"||x.region===region)&&(category==="all"||(x.category||"General")===category)&&(!query||hay.includes(query));}).sort((a,b)=>String(b.x.capturedAt||b.x.time||"").localeCompare(String(a.x.capturedAt||a.x.time||"")));
+ $("mesh-feed-list").innerHTML=items.length?items.map(item=>{const x=item.x;return '<article class="section-card"><div class="meta">'+meshEscape((x.region||"ioi").toUpperCase())+' · '+meshEscape(x.channel||"PUBLIC CHANNEL")+' · '+meshEscape(x.capturedAt?new Date(x.capturedAt).toLocaleString():x.time||"Capture time unavailable")+'</div><strong class="yellow">'+meshEscape(x.category||"General")+' // '+meshEscape(x.author||"UNATTRIBUTED SOURCE")+'</strong><div class="meta">SOURCE STATUS: '+meshEscape(x.confidence||"Unverified")+'</div><p style="white-space:pre-wrap">'+meshEscape(x.message)+'</p><div class="meta">MANUALLY CAPTURED · NOT LIVE-VERIFIED</div><button type="button" class="action-button" data-mesh-feed-delete="'+item.index+'">DELETE ENTRY</button></article>';}).join(""):'<p class="muted">No matching messages in the local archive.</p>';
  $("mesh-feed-count").textContent=meshFeed.length;
 }
+function meshDownloadBackup(){const payload={format:"doomwatch-mesh-archive",version:1,exportedAt:new Date().toISOString(),messages:meshFeed,nodes:meshSaved.nodes};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="doomwatch-mesh-archive.json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);$("mesh-feed-status").textContent="Archive export prepared. Store the JSON backup safely."; }
+function meshMergeBackup(){let data;try{data=JSON.parse($("mesh-feed-import-json").value);}catch(err){$("mesh-feed-status").textContent="Invalid JSON: "+err.message;return;}const incoming=Array.isArray(data)?data:(data&&Array.isArray(data.messages)?data.messages:null);if(!incoming){$("mesh-feed-status").textContent="Backup format not recognised.";return;}const known=new Set(meshFeed.map(meshFeedSignature));let added=0;incoming.forEach(x=>{if(!x||typeof x.message!=="string"||!x.message.trim())return;const item={region:String(x.region||"ioi"),channel:String(x.channel||""),author:String(x.author||""),message:x.message,time:x.time||"",capturedAt:x.capturedAt||"",category:x.category||"General",confidence:x.confidence||"Unverified"};const sig=meshFeedSignature(item);if(!known.has(sig)){known.add(sig);meshFeed.push(item);added++;}});if(data&&Array.isArray(data.nodes)){const nodes=new Set(meshSaved.nodes.map(n=>String(n.id||"")+"|"+String(n.area||"")));data.nodes.forEach(n=>{if(!n||!n.id)return;const key=String(n.id)+"|"+String(n.area||"");if(!nodes.has(key)){nodes.add(key);meshSaved.nodes.push(n);}});meshSaveNodes();}meshSaveFeed();$("mesh-feed-import-json").value="";$("mesh-feed-status").textContent="Merge complete: "+added+" new messages added; duplicates skipped.";meshRender();}
 function meshRenderNodes(){
  $("mesh-node-count").textContent=meshSaved.nodes.length;
  $("mesh-node-list").innerHTML=meshSaved.nodes.map((n,i)=>'<div class="section-card"><strong class="yellow">'+meshEscape(n.id)+'</strong><div class="meta">'+meshEscape(n.area||"Location unknown")+' · '+meshEscape(n.type||"Unknown")+' · '+meshEscape(n.evidence||"Unspecified")+'</div><button type="button" class="action-button" data-mesh-delete-node="'+i+'">DELETE</button></div>').join("")||'<p class="muted">No nodes recorded.</p>';
@@ -1398,11 +1397,11 @@ function meshRenderNodes(){
 function meshRender(){meshRenderDirectory();meshRenderFeed();meshRenderNodes();}
 document.querySelectorAll(".mesh-region-filter").forEach(btn=>btn.addEventListener("click",()=>{meshRegionFilter=btn.dataset.region;meshRenderDirectory();}));
 $("mesh-feed-filter").addEventListener("change",meshRenderFeed);
-$("mesh-feed-add").addEventListener("click",()=>{
- const message=$("mesh-feed-message").value.trim();if(!message)return;
- meshFeed.unshift({region:$("mesh-feed-region").value,channel:$("mesh-feed-channel").value.trim(),author:$("mesh-feed-author").value.trim(),message,time:new Date().toLocaleString()});
- meshSaveFeed();$("mesh-feed-message").value="";meshRenderFeed();
-});
+$("mesh-feed-category-filter").addEventListener("change",meshRenderFeed);
+$("mesh-feed-search").addEventListener("input",meshRenderFeed);
+$("mesh-feed-export").addEventListener("click",meshDownloadBackup);
+$("mesh-feed-import").addEventListener("click",meshMergeBackup);
+$("mesh-feed-add").addEventListener("click",()=>{const message=$("mesh-feed-message").value.trim();if(!message){$("mesh-feed-status").textContent="Enter a public message first.";return;}const item={region:$("mesh-feed-region").value,channel:$("mesh-feed-channel").value.trim(),author:$("mesh-feed-author").value.trim(),message:message,time:new Date().toLocaleString(),capturedAt:new Date().toISOString(),category:$("mesh-feed-category").value,confidence:$("mesh-feed-confidence").value};if(meshFeed.some(x=>meshFeedSignature(x)===meshFeedSignature(item))){$("mesh-feed-status").textContent="Duplicate skipped: message already archived.";return;}meshFeed.unshift(item);meshSaveFeed();$("mesh-feed-message").value="";$("mesh-feed-status").textContent="Message added to local archive.";meshRenderFeed();});
 $("mesh-add-node").addEventListener("click",()=>{
  const id=$("mesh-node-id").value.trim();if(!id)return;
  meshSaved.nodes.unshift({id,area:$("mesh-node-area").value.trim(),type:$("mesh-node-type").value,evidence:$("mesh-node-evidence").value});
