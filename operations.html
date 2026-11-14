@@ -480,7 +480,7 @@ $("op-watch-export").addEventListener("click",()=>{const data=JSON.stringify({fo
 $("op-regional-filters").addEventListener("click",e=>{const b=e.target.closest("button[data-council]");if(!b)return;regionalCouncil=b.dataset.council;document.querySelectorAll("#op-regional-filters [data-council]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderRegionalPicture();});
 $("op-pathway-filters").addEventListener("click",e=>{const b=e.target.closest("button[data-pathway]");if(!b)return;evidencePathway=b.dataset.pathway;document.querySelectorAll("#op-pathway-filters [data-pathway]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderEvidenceLedger();});
 $("op-evidence-filters").addEventListener("click",e=>{const b=e.target.closest("button[data-evidence]");if(!b)return;evidenceFilter=b.dataset.evidence;document.querySelectorAll("[data-evidence]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderEvents();});
-const initialSearch=new URLSearchParams(location.search).get("search");if(initialSearch){$("op-search").value=initialSearch;}
+const opParams=new URLSearchParams(location.search),initialSearch=opParams.get("search")||opParams.get("dw_title")||opParams.get("dw_area");if(initialSearch){$("op-search").value=initialSearch;}
 load();setInterval(load,5*60*1000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)load();});
 </script>
