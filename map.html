@@ -480,6 +480,9 @@ $("all-time").addEventListener("change",e=>{showAll=e.target.checked;$("age-rang
 $("map-search").addEventListener("input",e=>{searchTerm=e.target.value.trim().toLowerCase();render();});
 $("town-select").addEventListener("change",e=>selectTown(e.target.value));
 document.querySelectorAll("[data-layer],[data-traffic-kind]").forEach(node=>node.addEventListener("change",render));
+$("mesh-nodes-toggle").addEventListener("change",render);
+// Refresh plotted node records when the MeshCore workspace is changed in another tab.
+window.addEventListener("storage",event=>{if(event.key==="doomwatch-meshcore-v1")render();});
 $("density-toggle").addEventListener("change",render);
 $("labels-toggle").addEventListener("change",render);
 $("map-refresh").addEventListener("click",load);
