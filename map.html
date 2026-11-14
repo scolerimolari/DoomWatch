@@ -255,7 +255,7 @@ function renderMarkers(){
   marker.addTo(markerLayer);bounds.push([g.town.lat,g.town.lon]);
   if($("density-toggle").checked)L.circle([g.town.lat,g.town.lon],{radius:Math.min(14000,3500+n*450),color:c,weight:1,opacity:.3,fillColor:c,fillOpacity:.10,interactive:false}).addTo(densityLayer);
  });
- records.filter(a=>isFlood(a)&&Number.isFinite(Number(a.stationLatitude))&&Number.isFinite(Number(a.stationLongitude))).forEach(a=>{
+ records.filter(a=>isFlood(a)&&a.stationCoordinatesVerified===true&&Number.isFinite(Number(a.stationLatitude))&&Number.isFinite(Number(a.stationLongitude))).forEach(a=>{
   const lat=Number(a.stationLatitude),lon=Number(a.stationLongitude),level=String(a.readingLevelMetres||"?");
   const marker=L.circleMarker([lat,lon],{radius:8,weight:2,color:"#082b2b",fillColor:COLORS.FLOOD,fillOpacity:.98});
   marker.bindTooltip((a.stationName||"DfI gauge")+" · "+level+" m · "+String(a.readingTrend||""),{direction:"top",offset:[0,-8],permanent:$("labels-toggle").checked});
