@@ -54,6 +54,27 @@ if(oldNav)oldNav.remove();
 mast.insertAdjacentElement("afterend",nav);
 nav.classList.add("dw-bottom-dock");
 const wire=document.createElement("div");wire.className="dw-wire";wire.setAttribute("aria-hidden","true");nav.insertAdjacentElement("afterend",wire);
+
+/* DOOMWATCH // SHARED INVESTIGATION CONTEXT */
+(function investigationContext(){
+ const KEY="doomwatch-investigation-context-v1",params=new URLSearchParams(location.search),clean=v=>String(v||"").trim().slice(0,500);
+ let state={area:clean(params.get("dw_area")||params.get("q")||params.get("search")),title:clean(params.get("dw_title")),source:clean(params.get("dw_source")),url:clean(params.get("dw_url"))};
+ try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");if(saved&&typeof saved==="object")state={...saved,...Object.fromEntries(Object.entries(state).filter(([,v])=>v))};}catch(_){}
+ const validUrl=v=>{try{const u=new URL(v);return /^https?:$/.test(u.protocol)?u.href:"";}catch(_){return"";}};state.url=validUrl(state.url);
+ const bar=document.createElement("section");bar.className="dw-context-bar";bar.setAttribute("aria-label","Shared investigation context");
+ bar.innerHTML='<div class="dw-context-heading"><strong>ACTIVE INVESTIGATION</strong><span id="dw-context-status">LOCAL WORKSPACE CONTEXT</span></div><div class="dw-context-fields"><label>LOCATION / AREA<input id="dw-context-area" maxlength="500" placeholder="e.g. Ballyclare"></label><label>REPORT / INCIDENT<input id="dw-context-title" maxlength="500" placeholder="Optional report or incident title"></label></div><div class="dw-context-actions"><button type="button" id="dw-context-save">SAVE CONTEXT</button><button type="button" id="dw-context-clear">CLEAR</button><a id="dw-context-source" href="#" hidden target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a></div><p class="dw-context-note">Context follows you between DoomWatch workspaces on this browser only. It is an investigation aid, not a verified incident record.</p>';
+ const main=document.querySelector("main");if(main)main.insertBefore(bar,main.firstChild);
+ const $=id=>document.getElementById(id);
+ function render(){if(!$("dw-context-area"))return;$("dw-context-area").value=state.area||"";$("dw-context-title").value=state.title||"";$("dw-context-status").textContent=state.area||state.title?"CONTEXT ACTIVE · SAVED ON THIS DEVICE":"NO ACTIVE INVESTIGATION";const a=$("dw-context-source");a.hidden=!state.url;if(state.url)a.href=state.url;}
+ function save(){state.area=clean($("dw-context-area").value);state.title=clean($("dw-context-title").value);persist();}
+ function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));$("dw-context-status").textContent="CONTEXT SAVED";}catch(_){$("dw-context-status").textContent="STORAGE UNAVAILABLE";}render();}
+ function set(next){state={...state,...next};state.area=clean(state.area);state.title=clean(state.title);state.source=clean(state.source);state.url=validUrl(state.url);persist();}
+ function clear(){state={area:"",title:"",source:"",url:""};try{localStorage.removeItem(KEY);}catch(_){}render();}
+ $("dw-context-save")?.addEventListener("click",save);$("dw-context-clear")?.addEventListener("click",clear);render();window.DoomWatchContext={get:()=>({...state}),set,clear};
+ if(!state.area){const legacy=clean(params.get("q")||params.get("search"));if(legacy)set({area:legacy});}
+ document.addEventListener("click",event=>{const a=event.target.closest("a[href]");if(!a||(!state.area&&!state.title))return;const u=new URL(a.href,location.href);if(u.origin!==location.origin||a.target==="_blank")return;if(!/\.html$/.test(u.pathname)&&!u.hash)return;["dw_area","dw_title","dw_source","dw_url"].forEach(k=>u.searchParams.delete(k));if(state.area)u.searchParams.set("dw_area",state.area);if(state.title)u.searchParams.set("dw_title",state.title);if(state.source)u.searchParams.set("dw_source",state.source);if(state.url)u.searchParams.set("dw_url",state.url);a.href=u.href;},true);
+})();
+
 const top=document.createElement("button");top.type="button";top.className="dw-top";top.textContent="TOP";top.setAttribute("aria-label","Back to top");top.addEventListener("click",()=>window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}));body.appendChild(top);
 function foldSection(section,index){
  if(section.closest("details.dw-fold"))return;
