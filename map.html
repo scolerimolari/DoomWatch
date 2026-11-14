@@ -322,11 +322,35 @@ function selectTown(name){
  const group=townGroups.find(g=>g.town.name===activeTown);
  if(group&&map)map.setView([group.town.lat,group.town.lon],10);
 }
+
+function mapEvidenceDomain(a){try{return new URL(String(a.url||"")).hostname.toLowerCase().replace(/^www\\./,"");}catch(e){return String(a.source||"unknown").trim().toLowerCase();}}
+function mapEvidenceClass(a){
+ const trust=String(a.sourceTrust||"").toLowerCase(),type=String(a.sourceType||"").toLowerCase(),d=mapEvidenceDomain(a);
+ if(/social|bluesky|unverified_social/.test(trust+" "+type))return "SOCIAL / UNVERIFIED";
+ if(/syndicat|aggregat|wire_service|press_release|republication/.test(trust+" "+type))return "AGGREGATED / SYNDICATED";
+ if(/official|government|public_authority|agency/.test(trust+" "+type)||d.endsWith(".gov.uk")||d.endsWith(".police.uk")||/(nidirect|niwater|trafficwatchni|nienetworks|metoffice|psni|daera-ni)/.test(d))return "OFFICIAL / PUBLIC AUTHORITY";
+ const media=["belfastlive.co.uk","belfasttelegraph.co.uk","irishnews.com","bbc.co.uk","bbc.com","itv.com","rte.ie","reuters.com","apnews.com","theguardian.com","independent.co.uk","sky.com","channel4.com"];
+ if(media.some(x=>d===x||d.endsWith("."+x))||/independent_media|established_media|regional_newsroom|mainstream_media|international_media/.test(trust+" "+type))return "NEWSROOM REPORTING";
+ if(/specialist/.test(trust+" "+type))return "SPECIALIST / TRADE";
+ return "UNKNOWN / UNCLASSIFIED";
+}
+function mapRelatedCoverage(a){
+ const tokens=new Set((String(a.title||"")+" "+String(a.summary||a.description||"").slice(0,300)).toLowerCase().match(/[a-z0-9]{4,}/g)||[]),time=validDate(a)?.getTime()||0,domains=new Set();let matches=0;
+ archive.forEach(b=>{
+  if(b===a||mapEvidenceClass(b)!=="NEWSROOM REPORTING"||mapEvidenceClass(a)!=="NEWSROOM REPORTING")return;
+  const bt=new Set((String(b.title||"")+" "+String(b.summary||b.description||"").slice(0,300)).toLowerCase().match(/[a-z0-9]{4,}/g)||[]),dt=Math.abs((validDate(b)?.getTime()||0)-time);
+  if(dt>72*3600000)return;
+  const overlap=[...tokens].filter(t=>bt.has(t)).length,den=Math.max(1,Math.min(tokens.size,bt.size));
+  if(overlap>=2&&overlap/den>=.55){matches++;domains.add(mapEvidenceDomain(b));}
+ });
+ return {records:matches,publishers:domains.size};
+}
+
 function openRecord(a){
  selectedRecordKey=recordKey(a);document.querySelectorAll("#map-articles .map-item").forEach(node=>node.classList.toggle("dw-selected",node.dataset.recordKey===selectedRecordKey));
  const town=locate(a),url=safeUrl(a.url),locationLabel=isFlood(a)?(a.stationCoordinatesVerified?"VERIFIED STATION COORDINATES // "+a.stationLatitude+", "+a.stationLongitude:"NO VERIFIED STATION COORDINATES"):(town?town.name+" // APPROXIMATE TOWN MATCH":"LOCATION NOT IDENTIFIED");
- const title=String(a.title||"Untitled report"),caseLink="./incident.html?"+(url?"url="+encodeURIComponent(url):"title="+encodeURIComponent(title));
- $("map-town-details").innerHTML='<strong>'+esc(title)+'</strong><div class="meta">'+esc(locationLabel)+' · '+esc(category(a))+' · '+esc(dateText(stamp(a)))+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">SOURCE: '+esc(a.source||"Not supplied")+' · EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a>':"")+'<a href="'+caseLink+'">OPEN INCIDENT CASE FILE ↗</a><a href="./feed.html?q='+encodeURIComponent(title)+'">RELATED FEED ↗</a><a href="./operations.html?search='+encodeURIComponent(title)+'">OPERATIONS ROOM ↗</a>'+(town?'<button type="button" id="focus-record-town">FOCUS '+esc(town.name.toUpperCase())+'</button>':"")+'</div>';
+ const title=String(a.title||"Untitled report"),caseLink="./incident.html?"+(url?"url="+encodeURIComponent(url):"title="+encodeURIComponent(title)),related=mapRelatedCoverage(a),provenance=mapEvidenceClass(a);
+ $("map-town-details").innerHTML='<strong>'+esc(title)+'</strong><div class="meta">'+esc(locationLabel)+' · '+esc(category(a))+' · '+esc(dateText(stamp(a)))+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">SOURCE CLASS: '+esc(provenance)+' · EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="meta">RELATED NEWSROOM COVERAGE: '+related.records+' record(s) · '+related.publishers+' other publisher domain(s). Similarity match only; not proof of independent confirmation.</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a>':"")+'<a href="'+caseLink+'">OPEN INCIDENT CASE FILE ↗</a><a href="./feed.html?q='+encodeURIComponent(title)+'">RELATED FEED ↗</a><a href="./operations.html?search='+encodeURIComponent(title)+'">OPERATIONS ROOM ↗</a>'+(town?'<button type="button" id="focus-record-town">FOCUS '+esc(town.name.toUpperCase())+'</button>':"")+'</div>';
  const focus=$("focus-record-town");if(focus)focus.addEventListener("click",()=>selectTown(town.name));
 }
 function renderDetail(group){
