@@ -231,7 +231,7 @@ def extract_json_signals(source, payload):
         via = str(item.get("via") or "").lower()
         user_reports = item.get("userReports") or {}
         report_level = str((user_reports.get("level") if isinstance(user_reports, dict) else user_reports) or "").lower()
-        if report_level in ("elevated", "spike"):
+        if report_level in ("some", "elevated", "spike"):
             if status == "NO_ISSUE_SIGNAL":
                 status = "UNCONFIRMED_REPORT_SIGNAL"
         incidents = item.get("activeIncidents") or []
@@ -246,7 +246,7 @@ def extract_json_signals(source, payload):
         if isinstance(areas, list):
             for area in areas[:8]:
                 if isinstance(area, dict):
-                    area_names.append(str(area.get("name") or area.get("area") or area.get("postcode") or "")[:40])
+                    area_names.append(str(area.get("name") or area.get("area") or area.get("postcode") or area.get("postcodeDistrict") or area.get("district") or "")[:40])
                 else:
                     area_names.append(str(area)[:40])
         observations.append({
@@ -388,6 +388,7 @@ def main():
     issue_count = sum(1 for p in providers if p["status"] == "ISSUE_SIGNAL")
     unconfirmed_count = sum(1 for p in providers if p["status"] == "UNCONFIRMED_REPORT_SIGNAL")
     stale_count = sum(1 for p in providers if p["status"] == "STALE_ISSUE_SIGNAL")
+    stale_provider_count = sum(1 for p in providers if p["status"] in ("STALE_ISSUE_SIGNAL", "STALE_OR_UNKNOWN"))
     payload = {
         "schemaVersion": 2,
         "generatedAt": utc_now(),
@@ -400,7 +401,7 @@ def main():
         "summary": {
             "currentIssueProviders": issue_count,
             "unconfirmedReportProviders": unconfirmed_count,
-            "staleIssueProviders": stale_count,
+            "staleIssueProviders": stale_count,\n            "staleOrUnknownProviders": stale_provider_count,
         },
         "sources": results,
         "providers": providers,
