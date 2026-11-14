@@ -4,11 +4,10 @@ const body=document.body,oldHeader=body.querySelector(":scope > header"),oldNav=
 const path=location.pathname.toLowerCase(),hash=decodeURIComponent(location.hash.slice(1)).toLowerCase();
 if((path==="/"||path.endsWith("/index.html"))&&!hash){location.replace("./map.html");return;}
 const routes=[
- ["command","index.html#overview","COMMAND"],["operations","operations.html","OPS ROOM"],["map","map.html","MAP"],
- ["intelligence","index.html#intelligence","INTEL"],["sectors","index.html#sections","11 SECTORS"],
+ ["map","map.html","MAP"],["feed","feed.html","FEED"],["operations","operations.html","OPS"],["communications","communications.html","COMMS"],
+ ["command","index.html#overview","COMMAND"],["intelligence","index.html#intelligence","INTEL"],["sectors","index.html#sections","11 SECTORS"],
  ["preparedness","index.html#preparedness","PREP"],["meshcore","index.html#meshcore","MESHCORE"],["markets","markets.html","MARKETS"],
- ["household","household.html","HOUSEHOLD"],["feed","feed.html","FEED"],
- ["communications","communications.html","COMMS"],
+ ["household","household.html","HOUSEHOLD"],
  ["incident","incident.html","CASE FILE"],["backup","index.html#backup-centre","BACKUP"],["sources","index.html#sources","SOURCES"]
 ];
 const active=path.endsWith("/operations.html")?"operations":path.endsWith("/markets.html")?"markets":path.endsWith("/household.html")?"household":path.endsWith("/feed.html")?"feed":path.endsWith("/map.html")?"map":path.endsWith("/communications.html")?"communications":path.endsWith("/incident.html")?"incident":path.endsWith("/meshcore.html")?"meshcore":({intelligence:"intelligence",sections:"sectors",preparedness:"preparedness",meshcore:"meshcore",sources:"sources","backup":"backup"})[hash]||"command";
