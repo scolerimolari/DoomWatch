@@ -301,7 +301,8 @@
       "tier": 1,
       "trust": "official_primary_source",
       "sourceType": "electricity_network_outage",
-      "method": "nie_network_outages"
+      "method": "nie_network_outages",
+      "liveUrl": "https://powercheck.nienetworks.co.uk/TabularFaults.html"
     }
   ]
 }
