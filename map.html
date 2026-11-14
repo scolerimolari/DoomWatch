@@ -46,6 +46,44 @@
 #map-status{overflow-wrap:anywhere}.map-item.dw-selected{border-color:#f2c84b;box-shadow:0 0 0 2px #f2c84b55}.map-event-links{display:grid;gap:5px;margin-top:8px;max-height:220px;overflow:auto}.map-event-links button{width:100%;text-align:left;padding:7px 8px;font-size:10px}
 @media(max-width:850px){.map-workspace{grid-template-columns:1fr}.map-side{grid-template-columns:repeat(2,minmax(0,1fr))}.map-side .map-box:first-child{grid-column:1/-1}}
 @media(max-width:600px){.map-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.map-side{grid-template-columns:1fr}#event-map{height:54vh;min-height:340px}.map-list{grid-template-columns:1fr}}
+
+/* DOOMWATCH GEOINT // CONTAINMENT DISPLAY */
+body:has(#event-map){background:radial-gradient(ellipse at 50% 0%,#243329 0%,#111814 48%,#090e0c 100%);background-attachment:fixed}
+body:has(#event-map) main{max-width:1600px}
+body:has(#event-map) header{border-bottom:2px solid #b72f2f;box-shadow:0 8px 30px #0009}
+body:has(#event-map) .brand:before{content:"";display:block;width:13px;height:42px;background:linear-gradient(#ff5148 0 34%,#7b1717 34% 66%,#ff5148 66%);box-shadow:0 0 14px #f33;margin-right:12px}
+body:has(#event-map) .map-intro{padding:13px 15px;margin:10px 0;background:linear-gradient(110deg,#1b2820,#101713);border:1px solid #56664e;border-left:4px solid #c83b32;box-shadow:inset 0 0 22px #0007}
+body:has(#event-map) .map-intro h2{letter-spacing:1.4px;text-shadow:0 0 12px #d9b56b44}
+body:has(#event-map) .map-kpis{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+body:has(#event-map) .map-kpi{position:relative;overflow:hidden;background:linear-gradient(145deg,#1c2921,#0d1410);border:1px solid #56634f;border-bottom:2px solid #8d2725;box-shadow:inset 0 0 16px #0008}
+body:has(#event-map) .map-kpi:after{content:"";position:absolute;right:-14px;top:-19px;width:42px;height:42px;border:1px solid #b73b3544;transform:rotate(45deg)}
+body:has(#event-map) .map-kpi strong{color:#f5d58e;text-shadow:0 0 12px #e9b95a44;font-variant-numeric:tabular-nums}
+body:has(#event-map) .map-workspace{grid-template-columns:minmax(0,1.65fr) minmax(290px,.8fr);gap:12px}
+body:has(#event-map) .map-canvas-shell{padding:9px!important;background:linear-gradient(145deg,#27362b,#111813);border:1px solid #68745a;box-shadow:0 12px 32px #0009,inset 0 0 18px #0008}
+body:has(#event-map) #event-map{height:min(76vh,820px);min-height:480px;border:1px solid #8b9a76;border-radius:3px;box-shadow:inset 0 0 35px #000;overflow:hidden}
+body:has(#event-map) #event-map:after{content:"";position:absolute;inset:0;z-index:450;pointer-events:none;background:linear-gradient(90deg,#9fd39b08 1px,transparent 1px),linear-gradient(#9fd39b08 1px,transparent 1px),linear-gradient(180deg,transparent 49.8%,#d5f3c508 50%,transparent 50.2%);background-size:48px 48px,48px 48px,100% 100%;box-shadow:inset 0 0 45px #0009}
+body:has(#event-map) #event-map .leaflet-tile{filter:brightness(.62) saturate(.68) contrast(1.12)}
+body:has(#event-map) .leaflet-control-zoom a,.leaflet-control-layers{background:#17221b!important;color:#f1d99c!important;border-color:#75836b!important}
+body:has(#event-map) .leaflet-control-attribution{background:#111a!important;color:#aab7a5!important}
+body:has(#event-map) .leaflet-control-attribution a{color:#d9c18c!important}
+body:has(#event-map) path.dw-map-pulse{filter:drop-shadow(0 0 5px currentColor) drop-shadow(0 0 10px currentColor)}
+body:has(#event-map) .map-side{gap:9px}
+body:has(#event-map) .map-box{background:linear-gradient(145deg,#1b261f,#101713);border:1px solid #53614d;box-shadow:inset 0 0 18px #0007}
+body:has(#event-map) .map-box h3{padding-bottom:7px;border-bottom:1px solid #6b342e;color:#f0d18e;letter-spacing:1px}
+body:has(#event-map) .layer-row{padding:8px 4px;border-bottom:1px solid #344138}
+body:has(#event-map) .layer-row:hover{background:#ffffff08}
+body:has(#event-map) .map-control{border-radius:2px;background:#09100c;border-color:#68765f;box-shadow:inset 0 2px 7px #0009}
+body:has(#event-map) .map-actions button,body:has(#event-map) .map-actions .action-button,body:has(#event-map) .detail-actions button{border:1px solid #8a754e;background:linear-gradient(#354536,#1a261d);color:#f4d89a;letter-spacing:.45px}
+body:has(#event-map) .map-actions button:hover,body:has(#event-map) .map-actions .action-button:hover{border-color:#e5c27b;box-shadow:0 0 12px #d9b66a33}
+body:has(#event-map) .map-key span{background:#101813;border-color:#53614d}
+body:has(#event-map) .map-item{background:linear-gradient(145deg,#202d24,#111813);border-color:#455448}
+body:has(#event-map) .map-item.dw-selected{border-color:#f1c75a;box-shadow:0 0 0 2px #f1c75a66,0 0 18px #d8a84333}
+body:has(#event-map) #map-status{border-left:4px solid #b83932;background:linear-gradient(90deg,#291b19,#111814);color:#f2d69b;letter-spacing:.65px}
+body:has(#event-map) #map-town-details{min-height:90px}
+body:has(#event-map) .map-note{color:#b6c0b1}
+@media(max-width:850px){body:has(#event-map) .map-workspace{grid-template-columns:1fr}body:has(#event-map) #event-map{height:62vh;min-height:400px}}
+@media(max-width:600px){body:has(#event-map) .map-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}body:has(#event-map) .map-workspace{gap:9px}body:has(#event-map) #event-map{height:54vh;min-height:340px}body:has(#event-map) .map-side{grid-template-columns:1fr}body:has(#event-map) .map-intro{padding:10px}body:has(#event-map) .map-intro h2{font-size:1.05rem}}
+
 </style>
 </head>
 <body>
@@ -64,7 +102,7 @@
   <div class="map-kpi"><strong id="kpi-flood">—</strong><span>RIVER GAUGES</span></div>
 </div>
 <div class="map-workspace">
- <div class="panel" style="padding:8px">
+ <div class="panel map-canvas-shell" style="padding:8px">
   <div id="event-map" role="application" aria-label="Interactive map of Northern Ireland report locations"></div>
   <div class="map-key"><span>● Emergency / safety</span><span>● Water service updates</span><span>● Transport / infrastructure</span><span>● Weather / environment</span><span>● River gauges</span><span>● Other reports</span></div>
   <div class="map-note">Incident pins are approximate town-centre matches; NIE power faults use outward postcode districts. River gauges use station-page coordinates when verified, with no approximate pin shown when coordinates are unavailable. Gauge readings are provisional, not flood warnings.</div>
@@ -305,7 +343,7 @@ function renderMarkers(){
   const enabledCats=Object.keys(g.cats).filter(layerEnabled);
   if(!enabledCats.length)return;
   const c=COLORS[g.dominant],n=g.items.length;
-  const marker=L.circleMarker([g.town.lat,g.town.lon],{radius:Math.min(20,7+Math.log2(n)*2),weight:2,color:"#101713",fillColor:c,fillOpacity:.92});
+  const marker=L.circleMarker([g.town.lat,g.town.lon],{radius:Math.min(20,7+Math.log2(n)*2),weight:2,color:"#101713",fillColor:c,fillOpacity:.92,className:"dw-map-pulse"});
   marker.bindTooltip(g.town.name+" · "+n+" reports",{direction:"top",offset:[0,-8],permanent:$("labels-toggle").checked});
   const eventLinks=g.items.slice(0,10).map(a=>'<button type="button" class="dw-map-event" data-record-key="'+esc(recordKey(a))+'">'+esc(a.title||"Untitled report")+' · '+esc(dateText(stamp(a)))+'</button>').join("");
   marker.bindPopup('<strong>'+esc(g.town.name)+' // '+n+' REPORTS</strong><div>Approximate town-centre match · select a report</div><div>'+esc(Object.entries(g.cats).map(([k,v])=>k+": "+v).join(" · "))+'</div><div class="map-event-links">'+eventLinks+'</div><a href="#" class="dw-town-open" data-town="'+esc(g.town.name)+'">OPEN LOCATION DETAILS</a>');
@@ -317,7 +355,7 @@ function renderMarkers(){
  });
  records.filter(a=>layerEnabled("FLOOD")&&isFlood(a)&&a.stationCoordinatesVerified===true&&Number.isFinite(Number(a.stationLatitude))&&Number.isFinite(Number(a.stationLongitude))).forEach(a=>{
   const lat=Number(a.stationLatitude),lon=Number(a.stationLongitude),level=String(a.readingLevelMetres||"?");
-  const marker=L.circleMarker([lat,lon],{radius:8,weight:2,color:"#082b2b",fillColor:COLORS.FLOOD,fillOpacity:.98});
+  const marker=L.circleMarker([lat,lon],{radius:8,weight:2,color:"#082b2b",fillColor:COLORS.FLOOD,fillOpacity:.98,className:"dw-map-pulse"});
   marker.bindTooltip((a.stationName||"DfI gauge")+" · "+level+" m · "+String(a.readingTrend||""),{direction:"top",offset:[0,-8],permanent:$("labels-toggle").checked});
   marker.bindPopup("<strong>DFI RIVER GAUGE // "+esc(a.stationName||"Station")+"</strong><div>Level: "+esc(level)+" m · Trend: "+esc(a.readingTrend||"not supplied")+"</div><div>Updated: "+esc(a.readingAge||"age not supplied")+"</div><div>Station status: "+esc(a.stationStatus||"not verified")+"</div><div>Exact station coordinates from station detail page</div><a href=\""+esc(safeUrl(a.url))+"\" target=\"_blank\" rel=\"noopener noreferrer\">OPEN STATION RECORD ↗</a>");
   marker.addTo(markerLayer);bounds.push([lat,lon]);
