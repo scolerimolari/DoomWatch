@@ -1104,6 +1104,10 @@ def fetch_dfi_river_levels(source):
 
     if not articles:
         raise ValueError("No DfI river gauge readings parsed; upstream page structure may have changed")
+    verified = sum(1 for item in articles if item.get("stationCoordinatesVerified"))
+    stale = sum(1 for item in articles if item.get("stationStatus") == "STALE_OR_NO_CURRENT_READING")
+    print("DfI station detail pages with verified coordinates:", verified, "/", len(articles))
+    print("DfI gauges with stale or no current reading:", stale, "/", len(articles))
     return articles, content_type, len(body), "CONDITIONSVIEW_DFI_RIVER_TABLE_WITH_STATION_COORDINATES"
 
 
