@@ -67,7 +67,7 @@ function statusLabel(status){return ({
  "MAINTENANCE_SIGNAL":"MAINTENANCE NOTICE",
  "NO_ISSUE_SIGNAL":"NO ISSUE SIGNAL IN CURRENT SOURCE DATA",
  "STALE_ISSUE_SIGNAL":"STALE ISSUE REPORT — VERIFY DIRECTLY",
- "STALE_OR_UNKNOWN":"STALE / NO FRESH STATUS DATA"
+ "STALE_OR_UNKNOWN":"STALE OR UNKNOWN — NO CURRENT CONFIRMATION"
 })[status]||"NO CURRENT DATA";}
 function checkForNewIssues(data){
  const key="doomwatch-comms-alert-baseline-v1";
@@ -92,13 +92,13 @@ function render(data){
  const sources=data.sources||[],providers=data.providers||[];
  checkForNewIssues(data);
  const ok=sources.filter(s=>s.status==="OK").length;
- const issues=providers.filter(p=>p.status==="ISSUE_SIGNAL").length;\n const stale=providers.filter(p=>p.status==="STALE_ISSUE_SIGNAL").length;\n const unconfirmed=providers.filter(p=>p.status==="UNCONFIRMED_REPORT_SIGNAL").length;
+ const issues=providers.filter(p=>p.status==="ISSUE_SIGNAL").length;\n const stale=providers.filter(p=>p.status==="STALE_ISSUE_SIGNAL"||p.status==="STALE_OR_UNKNOWN").length;\n const unconfirmed=providers.filter(p=>p.status==="UNCONFIRMED_REPORT_SIGNAL").length;
  $("live-state").textContent=issues?"SIGNAL DETECTED":"MONITORING";
  $("collector-time").textContent=time(data.generatedAt);
  $("provider-count").textContent=providers.length;
  $("issue-count").textContent=issues+" current · "+unconfirmed+" unconfirmed · "+stale+" stale";
  $("source-count").textContent=ok+" / "+sources.length;
- $("collector-status").textContent="LAST SNAPSHOT "+time(data.generatedAt)+" · TARGET INTERVAL "+(data.collectionIntervalMinutes||5)+" MINUTES · DISPLAY POLL 60 SECONDS · "+(issues?"CURRENT ISSUE SIGNALS PRESENT":stale?"STALE REPORTS ONLY":"NO CURRENT ISSUE SIGNAL DETECTED");
+ $("collector-status").textContent="LAST SNAPSHOT "+time(data.generatedAt)+" · TARGET INTERVAL "+(data.collectionIntervalMinutes||5)+" MINUTES · DISPLAY POLL 60 SECONDS · "+(issues?"CURRENT ISSUE SIGNALS PRESENT":data.overallStatus==="STALE_REPORTS_ONLY"?"STALE REPORTS ONLY":data.overallStatus==="STALE_DATA_PRESENT"?"STALE / UNKNOWN SOURCE DATA":data.overallStatus==="UNCONFIRMED_REPORTS"?"UNCONFIRMED REPORTS PRESENT":"NO CURRENT ISSUE SIGNAL DETECTED");
  $("provider-list").innerHTML=providers.length?providers.map(p=>'<article class="comms-card '+cardClass(p.status)+'"><strong>'+esc(p.provider)+'</strong><div class="comms-status">'+esc(statusLabel(p.status))+'</div><div class="comms-detail">Current issue signals: '+p.issueSignals+' · Stale issue signals: '+(p.staleIssueSignals||0)+' · User reports: '+(p.unconfirmedSignals||0)+'</div>'+(p.observations||[]).map(o=>'<div class="comms-detail">'+esc(o.source)+': '+esc(o.status.replaceAll("_"," "))+(o.stale?' · STALE':'')+'<br>Source updated: '+time(o.sourceUpdatedAt)+'<br>'+esc(o.summary||"")+(o.activeIncidents&&o.activeIncidents.length?'<br>Incident: '+esc(o.activeIncidents.join("; ")):'')+(o.reportedAreas&&o.reportedAreas.length?'<br>Reported areas: '+esc(o.reportedAreas.join(", ")):'')+'<br><a href="'+esc(o.url)+'" target="_blank" rel="noopener noreferrer">Open source ↗</a></div>').join("")+'</article>').join(""):'<div class="panel muted">No provider status rows were extracted. This is a coverage gap, not an all-clear.</div>';
  $("source-list").innerHTML=sources.map(s=>'<article class="comms-source"><strong>'+esc(s.name)+'</strong><div class="comms-meta">STATUS: '+esc(s.status)+' · CHECKED: '+time(s.checkedAt)+' · TYPE: '+esc(s.kind)+'</div><div class="comms-detail">'+esc(s.note||"")+'</div><div class="comms-actions"><a class="action-button" href="'+esc(s.displayUrl||s.url)+'" target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a></div></article>').join("");
  $("official-list").innerHTML=(data.officialCheckers||[]).map(s=>'<div class="comms-card"><strong>'+esc(s.name)+'</strong><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">OPEN OFFICIAL CHECKER ↗</a></div>').join("");
