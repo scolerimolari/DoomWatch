@@ -410,7 +410,7 @@ footer {
   <div class="warning"><strong>RADIO ACCESS: NOT CONNECTED</strong><br>DoomWatch cannot independently receive MeshCore radio traffic from this browser. Public channels are not a central internet chat service; private channels and direct messages are encrypted. This page combines a verified public community directory with a local archive for messages you deliberately copy in from public rooms. Nothing here is represented as live radio traffic.</div>
   <div class="grid" style="margin-top:12px">
     <div class="panel"><div class="panel-title">FEED CONNECTION</div><div class="big-status yellow">DIRECT RADIO: OFFLINE</div><div class="muted">No M9 / companion connection</div></div>
-    <div class="panel"><div class="panel-title">PUBLIC REGIONS</div><div class="big-status" id="mesh-region-count">9</div><div class="muted">Known region scopes / channels</div></div>
+    <div class="panel"><div class="panel-title">DIRECTORY ENTRIES</div><div class="big-status" id="mesh-region-count">9</div><div class="muted">Documented scopes / channel references — not live activity</div></div>
     <div class="panel"><div class="panel-title">LOCAL FEED ARCHIVE</div><div class="big-status" id="mesh-feed-count">0</div><div class="muted">Messages manually imported</div></div>
     <div class="panel"><div class="panel-title">MAPPED NODES</div><div class="big-status" id="mesh-node-count">0</div><div class="muted">Manually recorded node locations</div></div>
   </div>
@@ -425,7 +425,7 @@ footer {
       <button type="button" class="action-button mesh-region-filter" data-region="iom">ISLE OF MAN</button>
     </div>
     <div id="mesh-region-directory" class="grid" style="margin-top:10px"></div>
-    <div class="meta">Region scopes are routing boundaries, not guarantees that every node can reach every other node. Island of Ireland uses ioi, with bhd / dub / noc / snn sub-regions. Cross-region delivery depends on repeater configuration and radio paths.</div>
+    <div class="meta">A scope is a routing boundary, not a chat room or proof of activity. The directory separates documented channel names from scope-only entries. Channel listings do not prove current traffic; cross-region delivery depends on repeater configuration and radio paths.</div>
   </div>
 
   <h3>02 // PUBLIC ROOM & AUTOMATED SIGNALS</h3>
@@ -482,15 +482,15 @@ footer {
     </div>
   </div>
 
-  <h3>04 // REGIONAL NETWORK REFERENCES</h3>
+  <h3>04 // REGIONAL NETWORK REFERENCES & COVERAGE</h3>
   <div class="panel">
     <p><a href="https://loraproject.ie/regions/" target="_blank" rel="noopener noreferrer">Island of Ireland MeshCore region scopes and routing guidance ↗</a></p>
-    <p><a href="https://ioi.meshmapper.net/" target="_blank" rel="noopener noreferrer">Island of Ireland MeshMapper ↗</a></p>
+    <p><a href="https://ioi.meshmapper.net/" target="_blank" rel="noopener noreferrer">Island of Ireland MeshMapper ↗</a></p>\n    <p><a href="https://meshcore.mayomesh.net/" target="_blank" rel="noopener noreferrer">Island of Ireland live map / project portal ↗</a></p>\n    <p><a href="https://map.meshcore.dev/" target="_blank" rel="noopener noreferrer">MeshCore Europe-wide repeater / room-server map ↗</a></p>
     <p><a href="https://meshcoreeurope.org/en/community/" target="_blank" rel="noopener noreferrer">MeshCore Europe public community directory ↗</a></p>
     <p><a href="https://meshcoreyorkshire.co.uk/" target="_blank" rel="noopener noreferrer">MeshCore Yorkshire public channel ↗</a></p>
     <p><a href="https://discord.gg/qvhjgyjybs" target="_blank" rel="noopener noreferrer">Mesh Radio Ireland (North & South) community ↗</a></p>
     <p><a href="https://meshcore.gg/" target="_blank" rel="noopener noreferrer">MeshCore community ↗</a></p>
-    <div class="meta">The directory is a starting point, not a complete census of UK mesh activity. A region or channel listing does not mean DoomWatch can read its traffic.</div>
+    <div class="meta">Verification standard: “documented” means a public project or community directory names the scope/channel. It does not mean messages were observed today. Coverage maps show advertised infrastructure, not chat content. DoomWatch does not connect to radio traffic.</div>
   </div>
 </section>
 
@@ -1363,15 +1363,15 @@ const MESH_KEY="doomwatch-meshcore-v1";
 const MESH_FEED_KEY="doomwatch-mesh-feed-v1";
 let meshSaved={nodes:[]},meshFeed=[],meshRegionFilter="all";
 const meshRegions=[
- {id:"ioi",group:"ioi",name:"Island of Ireland",scope:"ioi",channel:"#ireland",detail:"Cross-island public regional scope; sub-regions include bhd, dub, noc and snn.",url:"https://loraproject.ie/regions/",state:"REGIONAL SCOPE"},
- {id:"bhd",group:"ioi",name:"Ulster / Northern Ireland",scope:"bhd",channel:"#norniron",detail:"Ulster sub-region. Belfast public room is listed and accepts bhd / ioi.",url:"https://belfast.chat/",state:"BELFAST ROOM LISTED"},
- {id:"dub",group:"ioi",name:"Leinster",scope:"dub",channel:"#ireland",detail:"Leinster sub-region of the Island of Ireland mesh.",url:"https://loraproject.ie/regions/",state:"REGION SCOPE"},
- {id:"noc",group:"ioi",name:"Connacht",scope:"noc",channel:"#ireland",detail:"Connacht sub-region of the Island of Ireland mesh.",url:"https://loraproject.ie/regions/",state:"REGION SCOPE"},
- {id:"snn",group:"ioi",name:"Munster",scope:"snn",channel:"#ireland",detail:"Munster sub-region of the Island of Ireland mesh.",url:"https://loraproject.ie/regions/",state:"REGION SCOPE"},
- {id:"sco",group:"sco",name:"Scotland",scope:"sco",channel:"#scotland",detail:"Scotland region scope; consult the Scottish mesh community for current local channels.",url:"https://wiki.scotmesh.uk/",state:"REGION SCOPE"},
- {id:"yorkshire",group:"uk",name:"Yorkshire, England",scope:"yorkshire",channel:"#yorkshire",detail:"Public Yorkshire channel for local chat, coverage reports and operator support.",url:"https://meshcoreyorkshire.co.uk/",state:"PUBLIC CHANNEL LISTED"},
- {id:"iom",group:"iom",name:"Isle of Man",scope:"iom",channel:"#manx",detail:"Isle of Man region scope.",url:"https://loraproject.ie/regions/",state:"REGION SCOPE"},
- {id:"uk",group:"uk",name:"UK-wide",scope:"eu / community",channel:"#meshcore-uk",detail:"A UK-wide community channel is listed in the public MeshCore Europe directory. Cross-region radio delivery is not guaranteed.",url:"https://meshcoreeurope.org/en/community/",state:"PUBLIC LISTING"}
+ {id:"ioi",group:"ioi",name:"Island of Ireland",scope:"ioi",channel:"#ireland",detail:"The Ireland project documents #ireland on the ioi scope. This is a channel/scope reference, not a live message feed.",url:"https://loraproject.ie/regions/",state:"CHANNEL + SCOPE DOCUMENTED"},
+ {id:"bhd",group:"ioi",name:"Ulster / Northern Ireland",scope:"bhd",channel:"No dedicated public hashtag verified",detail:"bhd is the Ulster region scope. Belfast has a public room server accepting bhd and ioi; no separate #norniron channel is verified here.",url:"https://belfast.chat/",state:"BELFAST ROOM LISTED"},
+ {id:"dub",group:"ioi",name:"Leinster",scope:"dub",channel:"No dedicated public hashtag verified",detail:"dub is the Leinster sub-region scope. The public guidance does not identify a separate Leinster hashtag channel.",url:"https://loraproject.ie/regions/",state:"SCOPE ONLY"},
+ {id:"noc",group:"ioi",name:"Connacht",scope:"noc",channel:"#mayo-mesh (directory listing)",detail:"noc is the Connacht sub-region scope. MeshCore Europe lists #mayo-mesh for County Mayo; current message activity is not confirmed.",url:"https://meshcoreeurope.org/en/community/",state:"SCOPE + CHANNEL LISTED"},
+ {id:"snn",group:"ioi",name:"Munster",scope:"snn",channel:"No dedicated public hashtag verified",detail:"snn is the Munster sub-region scope. No separate Munster public channel is confirmed in the sources checked.",url:"https://loraproject.ie/regions/",state:"SCOPE ONLY"},
+ {id:"sco",group:"sco",name:"Scotland",scope:"sco",channel:"#scotland",detail:"The Ireland project guidance documents #scotland on sco and directs users to Scotland's own project for local detail.",url:"https://wiki.scotmesh.uk/",state:"CHANNEL + SCOPE DOCUMENTED"},
+ {id:"yorkshire",group:"uk",name:"Yorkshire, England",scope:"yorkshire",channel:"#yorkshire",detail:"Dedicated public channel for local chat, coverage reports and operator support. Public listing; live traffic not independently checked.",url:"https://meshcoreyorkshire.uk/",state:"PUBLIC CHANNEL DOCUMENTED"},
+ {id:"iom",group:"iom",name:"Isle of Man",scope:"iom",channel:"#manx / #isleofman",detail:"The Ireland project documents these as possible Isle of Man channel names; confirm the exact channel with local operators before relying on it.",url:"https://loraproject.ie/regions/",state:"CHANNEL NAMES DOCUMENTED"},
+ {id:"uk",group:"uk",name:"UK-wide",scope:"eu (cross-region scope)",channel:"#meshcore-uk",detail:"Listed by MeshCore Europe as a UK-wide public channel. The eu scope is for intentionally cross-region traffic; it is not a UK-only scope.",url:"https://meshcoreeurope.org/en/community/",state:"PUBLIC CHANNEL LISTED"}
 ];
 function meshLoad(){
  try{const raw=localStorage.getItem(MESH_KEY);if(raw){const parsed=JSON.parse(raw);if(parsed&&typeof parsed==="object")meshSaved={...meshSaved,...parsed,nodes:Array.isArray(parsed.nodes)?parsed.nodes:[]};}}catch(e){}
