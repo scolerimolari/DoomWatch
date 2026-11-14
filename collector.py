@@ -2,6 +2,7 @@ import json
 import re
 import hashlib
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import urlencode, urljoin, urlparse
 import xml.etree.ElementTree as ET
 
@@ -1005,6 +1006,23 @@ def fetch_dfi_river_levels(source):
     parser.feed(body.decode("utf-8-sig", errors="replace"))
     parser.close()
 
+    def fetch_station_detail(item):
+        href = urljoin(source["url"], item["href"])
+        try:
+            station_request = urllib.request.Request(
+                href,
+                headers={"User-Agent": USER_AGENT, "Accept": "text/html,application/xhtml+xml"}
+            )
+            with urllib.request.urlopen(station_request, timeout=TIMEOUT) as station_response:
+                station_body = station_response.read(MAX_FEED_SIZE).decode("utf-8-sig", errors="replace")
+            return href, station_body, ""
+        except Exception as exc:
+            return href, "", clean(str(exc))[:180]
+
+    # Fetch station metadata concurrently so a slow station page does not stall the full collector.
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        station_details = {href: (station_body, error) for href, station_body, error in executor.map(fetch_station_detail, parser.items)}
+
     articles = []
     seen = set()
     for item in parser.items:
@@ -1025,20 +1043,7 @@ def fetch_dfi_river_levels(source):
         age_match = re.search(r"\b(\d+\s*(?:min|mins|minutes|h|hr|hrs|hour|hours)\s+ago|just now)\b", context, re.IGNORECASE)
         reading_age = age_match.group(1) if age_match else "age not supplied"
 
-        station_body = ""
-        station_content_type = ""
-        station_error = ""
-        try:
-            station_request = urllib.request.Request(
-                href,
-                headers={"User-Agent": USER_AGENT, "Accept": "text/html,application/xhtml+xml"}
-            )
-            with urllib.request.urlopen(station_request, timeout=TIMEOUT) as station_response:
-                station_content_type = station_response.headers.get("Content-Type", "")
-                station_body = station_response.read(MAX_FEED_SIZE).decode("utf-8-sig", errors="replace")
-        except Exception as exc:
-            station_error = clean(str(exc))[:180]
-
+        station_body, station_error = station_details.get(href, ("", "station detail page not fetched"))
         station_text = clean(station_body)
         station_code_match = re.search(r"Station code\s+(\d{6})", station_text, re.IGNORECASE)
         if station_code_match:
