@@ -990,7 +990,7 @@ RIVER_STATION_TOWNS = {
 
 
 def fetch_dfi_river_levels(source):
-    """Collect provisional DfI readings republished in a consolidated station table."""
+    """Collect provisional DfI readings and station coordinates from station detail pages."""
     request = urllib.request.Request(
         source["url"],
         headers={"User-Agent": USER_AGENT, "Accept": "text/html,application/xhtml+xml"}
@@ -1024,23 +1024,57 @@ def fetch_dfi_river_levels(source):
         trend = {"▲": "RISING", "▼": "FALLING", "→": "STEADY"}.get(trend_match.group(1) if trend_match else "", "NOT REPORTED")
         age_match = re.search(r"\b(\d+\s*(?:min|mins|minutes|h|hr|hrs|hour|hours)\s+ago|just now)\b", context, re.IGNORECASE)
         reading_age = age_match.group(1) if age_match else "age not supplied"
+
+        station_body = ""
+        station_content_type = ""
+        station_error = ""
+        try:
+            station_request = urllib.request.Request(
+                href,
+                headers={"User-Agent": USER_AGENT, "Accept": "text/html,application/xhtml+xml"}
+            )
+            with urllib.request.urlopen(station_request, timeout=TIMEOUT) as station_response:
+                station_content_type = station_response.headers.get("Content-Type", "")
+                station_body = station_response.read(MAX_FEED_SIZE).decode("utf-8-sig", errors="replace")
+        except Exception as exc:
+            station_error = clean(str(exc))[:180]
+
+        station_code_match = re.search(r"Station code\s+(\d{6})", station_body, re.IGNORECASE)
+        if station_code_match:
+            station_code = station_code_match.group(1)
+        coordinate_match = re.search(
+            r"Coordinates\s+(-?\d{1,2}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)",
+            station_body,
+            re.IGNORECASE
+        )
+        latitude = float(coordinate_match.group(1)) if coordinate_match else None
+        longitude = float(coordinate_match.group(2)) if coordinate_match else None
+        has_current_reading = not bool(re.search(
+            r"No reading since\s+\d{1,2}\s+[A-Za-z]{3}\s+\d{4}",
+            station_body,
+            re.IGNORECASE
+        ))
+        status = "CURRENT_READING" if has_current_reading else "STALE_OR_NO_CURRENT_READING"
         town = RIVER_STATION_TOWNS.get(station_code, "")
         if not town:
             lower = name.lower()
             town = next((t for t in ("Antrim", "Ballymena", "Belfast", "Coleraine", "Cookstown", "Derry/Londonderry", "Dungannon", "Enniskillen", "Limavady", "Lisburn", "Omagh", "Portadown") if t.lower() in lower), "")
-        town_text = (" // nearest town " + town) if town else ""
-        stable_key = station_code or hashlib.sha1(href.encode("utf-8")).hexdigest()[:12]
-        title = "RIVER GAUGE // " + name + " — " + level + " m" + town_text
+        location_text = (
+            "Verified station coordinates: " + str(latitude) + ", " + str(longitude) + "."
+            if latitude is not None and longitude is not None
+            else "Station coordinates unavailable; do not plot this record as an exact location."
+        )
+        title = "RIVER GAUGE // " + name + " — " + level + " m"
         description = (
             "DfI Rivers water-level observation relayed by ConditionsView. "
             + "Latest published level: " + level + " m. Trend: " + trend + ". "
             + "Provider reports this reading was updated " + reading_age + ". "
-            + "Nearest town used for map plotting: " + (town or "not assigned") + ". "
+            + "Station status: " + status + ". " + location_text + " "
             + "Each gauge has its own reference zero; do not compare levels between stations. "
             + "This is a provisional measurement, not a flood warning or a prediction."
         )
         articles.append({
-            "id": source["id"] + ":" + stable_key,
+            "id": source["id"] + ":" + (station_code or hashlib.sha1(href.encode("utf-8")).hexdigest()[:12]),
             "sourceId": source["id"],
             "source": source["name"],
             "title": title,
@@ -1058,14 +1092,19 @@ def fetch_dfi_river_levels(source):
             "readingLevelMetres": level,
             "readingTrend": trend,
             "readingAge": reading_age,
+            "stationStatus": status,
+            "stationLatitude": latitude,
+            "stationLongitude": longitude,
+            "stationCoordinatesVerified": latitude is not None and longitude is not None,
             "mapTownApproximation": town,
+            "stationPageError": station_error,
             "evidenceStatus": "PROVISIONAL_DFI_READING_VIA_AGGREGATOR",
             "confidence": "PROVISIONAL"
         })
 
     if not articles:
         raise ValueError("No DfI river gauge readings parsed; upstream page structure may have changed")
-    return articles, content_type, len(body), "CONDITIONSVIEW_DFI_RIVER_TABLE"
+    return articles, content_type, len(body), "CONDITIONSVIEW_DFI_RIVER_TABLE_WITH_STATION_COORDINATES"
 
 
 def fetch_feed(source):
