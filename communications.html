@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111714">
+<meta name="description" content="DoomWatch live communications and telecoms outage watch for the UK and Northern Ireland.">
+<title>DOOMWATCH // LIVE COMMS WATCH</title>
+<link rel="stylesheet" href="./doomwatch.css">
+<style>
+.comms-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.comms-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px;margin:12px 0}
+.comms-card{background:linear-gradient(145deg,#222b25,#131a16);border:1px solid #4b574e;border-left:4px solid #74836d;padding:13px;min-width:0}
+.comms-card.issue{border-left-color:#e34a3e}.comms-card.clear{border-left-color:#8cc978}.comms-card.unknown{border-left-color:#c6a36b}
+.comms-card strong{display:block;color:#f0d28e;font-size:14px;margin-bottom:7px}
+.comms-status{font-size:12px;font-weight:800;letter-spacing:1px}
+.comms-detail{font-size:11px;color:#aeb7aa;line-height:1.5;margin-top:8px;overflow-wrap:anywhere}
+.comms-actions{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
+.comms-actions a,.comms-actions button{display:inline-block;padding:9px 11px;font-size:10px}
+.comms-source{padding:11px;background:#121a15;border:1px solid #3e4b40;margin:8px 0;overflow-wrap:anywhere}
+.comms-source strong{color:#e4c787}
+.comms-warning{border-left:4px solid #e34a3e;background:#301a18;padding:12px;line-height:1.55}
+.comms-good{border-left:4px solid #8cc978;background:#17251a;padding:12px;line-height:1.55}
+.comms-meta{font-size:10px;color:#9da89c;line-height:1.5}
+.comms-table{width:100%;border-collapse:collapse;font-size:11px}
+.comms-table th,.comms-table td{text-align:left;padding:8px;border-bottom:1px solid #3d493f;vertical-align:top}
+@media(max-width:600px){.comms-table{display:block;overflow-x:auto;white-space:normal}}
+</style>
+</head>
+<body>
+<header class="dw-masthead">
+ <div class="dw-brand"><img class="dw-emblem" src="./containment.svg" alt=""><div><div class="dw-wordmark">DOOMWATCH</div><div class="dw-tagline">OPERATION CONTAINMENT // LIVE COMMS WATCH</div></div></div>
+ <div class="dw-hardware"><div class="dw-statusbox"><strong>COMMS MONITOR</strong><span id="live-state">CONNECTING</span><div class="dw-lamps"><i class="dw-lamp amber"></i><i class="dw-lamp"></i><i class="dw-lamp"></i></div></div><div class="dw-valves"><i class="dw-valve red"></i><i class="dw-valve"></i></div></div>
+</header>
+<nav class="dw-global-nav" aria-label="DoomWatch modules">
+ <a href="./index.html">COMMAND</a><a href="./markets.html">MARKETS</a><a href="./household.html">HOUSEHOLD</a><a href="./feed.html">FEED</a><a href="./map.html">MAP</a><a href="./communications.html" aria-current="page">COMMS</a>
+</nav>
+<main>
+ <div class="comms-head"><div><h2>LIVE // TELECOMS & CONNECTIVITY WATCH</h2><div class="muted">Mobile networks, broadband infrastructure and independent outage indicators.</div></div><div class="comms-actions"><button id="refresh">↻ CHECK NOW</button><a class="action-button" href="./index.html">← COMMAND</a></div></div>
+ <div id="collector-status" class="terminal" role="status" aria-live="polite">CONNECTING TO COMMS INTELLIGENCE…</div>
+ <div class="comms-grid">
+  <div class="comms-card unknown"><strong>COLLECTOR</strong><div class="comms-status" id="collector-time">WAITING</div><div class="comms-detail">Last successful snapshot timestamp</div></div>
+  <div class="comms-card unknown"><strong>PROVIDER SIGNALS</strong><div class="comms-status" id="provider-count">—</div><div class="comms-detail">Providers with parsed status observations</div></div>
+  <div class="comms-card unknown"><strong>ISSUE INDICATORS</strong><div class="comms-status" id="issue-count">—</div><div class="comms-detail">Independent signals only; not confirmed faults</div></div>
+  <div class="comms-card unknown"><strong>SOURCE HEALTH</strong><div class="comms-status" id="source-count">—</div><div class="comms-detail">Public status pages successfully parsed</div></div>
+ </div>
+ <h2>01 // NETWORK STATUS INDICATORS</h2>
+ <div id="provider-list" class="comms-grid"><div class="panel muted">Waiting for first collector snapshot.</div></div>
+ <h2>02 // SOURCE HEALTH & OBSERVATIONS</h2>
+ <div id="source-list"><div class="panel muted">Waiting for source diagnostics.</div></div>
+ <h2>03 // OFFICIAL SERVICE CHECKERS</h2>
+ <div id="official-list" class="comms-grid"></div>
+ <h2>04 // OPERATING LIMITATIONS</h2>
+ <div class="comms-warning"><strong>READ THIS CORRECTLY:</strong> An issue indicator is an independent traffic or community-report signal, not proof of an outage. “No issue signal” does not prove a service is available. Public sources do not currently provide dependable postcode-level live confirmation for Ballyclare. Check the relevant operator directly before making decisions.</div>
+ <p class="comms-meta">Collector target: every 5 minutes. This page refreshes its display every 60 seconds. GitHub Actions scheduling is best-effort and can be delayed or skipped. A page update is not a guarantee of real-time detection.</p>
+ <ul id="limitations" class="comms-meta"></ul>
+</main>
+<script>
+const DATA_URL="./data/communications.json";
+const $=id=>document.getElementById(id);
+const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+const time=value=>{if(!value)return"Not recorded";const d=new Date(value);return Number.isNaN(d.getTime())?esc(value):d.toLocaleString();};
+function cardClass(status){return status==="ISSUE_SIGNAL"?"issue":status==="NO_ISSUE_SIGNAL"?"clear":"unknown";}
+function statusLabel(status){return status==="ISSUE_SIGNAL"?"ISSUE SIGNAL — INVESTIGATE":status==="NO_ISSUE_SIGNAL"?"NO ISSUE SIGNAL DETECTED":"NO DATA";}
+function render(data){
+ const sources=data.sources||[],providers=data.providers||[];
+ const ok=sources.filter(s=>s.status==="OK").length;
+ const issues=providers.filter(p=>p.status==="ISSUE_SIGNAL").length;
+ $("live-state").textContent=issues?"SIGNAL DETECTED":"MONITORING";
+ $("collector-time").textContent=time(data.generatedAt);
+ $("provider-count").textContent=providers.length;
+ $("issue-count").textContent=issues;
+ $("source-count").textContent=ok+" / "+sources.length;
+ $("collector-status").textContent="LAST SNAPSHOT "+time(data.generatedAt)+" · TARGET INTERVAL "+(data.collectionIntervalMinutes||5)+" MINUTES · DISPLAY POLL 60 SECONDS";
+ $("provider-list").innerHTML=providers.length?providers.map(p=>'<article class="comms-card '+cardClass(p.status)+'"><strong>'+esc(p.provider)+'</strong><div class="comms-status">'+esc(statusLabel(p.status))+'</div><div class="comms-detail">Issue signals: '+p.issueSignals+' · No-issue signals: '+p.noIssueSignals+'</div>'+(p.observations||[]).map(o=>'<div class="comms-detail">'+esc(o.source)+': '+esc(o.status.replaceAll("_"," "))+'<br><a href="'+esc(o.url)+'" target="_blank" rel="noopener noreferrer">Open source ↗</a></div>').join("")+'</article>').join(""):'<div class="panel muted">No provider status rows were extracted. This is a coverage gap, not an all-clear.</div>';
+ $("source-list").innerHTML=sources.map(s=>'<article class="comms-source"><strong>'+esc(s.name)+'</strong><div class="comms-meta">STATUS: '+esc(s.status)+' · CHECKED: '+time(s.checkedAt)+' · TYPE: '+esc(s.kind)+'</div><div class="comms-detail">'+esc(s.note||"")+'</div><div class="comms-actions"><a class="action-button" href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a></div></article>').join("");
+ $("official-list").innerHTML=(data.officialCheckers||[]).map(s=>'<div class="comms-card"><strong>'+esc(s.name)+'</strong><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">OPEN OFFICIAL CHECKER ↗</a></div>').join("");
+ $("limitations").innerHTML=(data.limitations||[]).map(x=>"<li>"+esc(x)+"</li>").join("");
+}
+async function load(){
+ $("collector-status").textContent="CHECKING LATEST SNAPSHOT…";
+ try{
+  const response=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const data=await response.json();render(data);
+ }catch(error){
+  $("collector-status").textContent="COMMS SNAPSHOT UNAVAILABLE: "+error.message;
+  $("live-state").textContent="DATA UNAVAILABLE";
+ }
+}
+$("refresh").addEventListener("click",load);
+load();
+setInterval(load,60000);
+</script>
+<script src="./doomwatch-ui.js"></script>
+</body>
+</html>
