@@ -1626,6 +1626,10 @@ def main():
         elif current_state == "FAILED" and not first_failure:
             first_failure = checked_at
 
+        status_item["consecutiveFailures"] = failure_streak
+        status_item["lastSuccessfulAt"] = last_success
+        status_item["firstFailureAt"] = first_failure
+
         latest_by_source[source_id] = {
             "id": source_id,
             "name": status_item.get("name") or previous.get("name") or source_id,
