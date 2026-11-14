@@ -66,7 +66,7 @@
  <div class="panel" style="padding:8px">
   <div id="event-map" role="application" aria-label="Interactive map of Northern Ireland report locations"></div>
   <div class="map-key"><span>● Emergency / safety</span><span>● Transport / infrastructure</span><span>● Weather / environment</span><span>● River gauges</span><span>● Other reports</span></div>
-  <div class="map-note">Map pins indicate approximate town-centre matches, not exact incident or gauge coordinates. NIE power faults are grouped by outward postcode district. River gauge pins are approximate town-centre plots, not the physical station locations.</div>
+  <div class="map-note">Incident pins are approximate town-centre matches; NIE power faults use outward postcode districts. River gauges use station-page coordinates when verified, with no approximate pin shown when coordinates are unavailable. Gauge readings are provisional, not flood warnings.</div>
  </div>
  <aside class="map-side">
   <section class="map-box">
@@ -215,7 +215,7 @@ function getFiltered(){
 }
 function makeGroups(items){
  const groups=new Map();
- items.forEach(a=>{const town=locate(a);if(!town)return;const g=groups.get(town.name)||{town,items:[],cats:{}};g.items.push(a);g.cats[category(a)]=(g.cats[category(a)]||0)+1;groups.set(town.name,g);});
+ items.forEach(a=>{if(isFlood(a))return;const town=locate(a);if(!town)return;const g=groups.get(town.name)||{town,items:[],cats:{}};g.items.push(a);g.cats[category(a)]=(g.cats[category(a)]||0)+1;groups.set(town.name,g);});
  return [...groups.values()].map(g=>{g.dominant=Object.keys(g.cats).sort((a,b)=>g.cats[b]-g.cats[a])[0]||"OTHER";return g;});
 }
 function selectTown(name){
@@ -249,6 +249,13 @@ function renderMarkers(){
   marker.addTo(markerLayer);bounds.push([g.town.lat,g.town.lon]);
   if($("density-toggle").checked)L.circle([g.town.lat,g.town.lon],{radius:Math.min(14000,3500+n*450),color:c,weight:1,opacity:.3,fillColor:c,fillOpacity:.10,interactive:false}).addTo(densityLayer);
  });
+ records.filter(a=>isFlood(a)&&Number.isFinite(Number(a.stationLatitude))&&Number.isFinite(Number(a.stationLongitude))).forEach(a=>{
+  const lat=Number(a.stationLatitude),lon=Number(a.stationLongitude),level=String(a.readingLevelMetres||"?");
+  const marker=L.circleMarker([lat,lon],{radius:8,weight:2,color:"#082b2b",fillColor:COLORS.FLOOD,fillOpacity:.98});
+  marker.bindTooltip((a.stationName||"DfI gauge")+" · "+level+" m · "+String(a.readingTrend||""),{direction:"top",offset:[0,-8],permanent:$("labels-toggle").checked});
+  marker.bindPopup("<strong>DFI RIVER GAUGE // "+esc(a.stationName||"Station")+"</strong><div>Level: "+esc(level)+" m · Trend: "+esc(a.readingTrend||"not supplied")+"</div><div>Updated: "+esc(a.readingAge||"age not supplied")+"</div><div>Station status: "+esc(a.stationStatus||"not verified")+"</div><div>Exact station coordinates from station detail page</div><a href=\""+esc(safeUrl(a.url))+"\" target=\"_blank\" rel=\"noopener noreferrer\">OPEN STATION RECORD ↗</a>");
+  marker.addTo(markerLayer);bounds.push([lat,lon]);
+ });
  if($("density-toggle").checked)densityLayer.addTo(map);
  if(bounds.length&&!activeTown)map.fitBounds(bounds,{padding:[24,24],maxZoom:9});
  else if(bounds.length&&activeTown){const t=TOWNS.find(x=>x.name===activeTown);if(t)map.setView([t.lat,t.lon],10);}
@@ -266,9 +273,9 @@ function render(){
  $("town-select").value=activeTown;
  if(map)renderMarkers();else renderFallback(townGroups);
  const list=records.slice(0,100);
- $("map-articles").innerHTML=list.map((a,i)=>{const town=locate(a),c=category(a),traffic=isTraffic(a),url=safeUrl(a.url),d=validDate(a);return '<details class="map-item '+c.toLowerCase()+(traffic?' traffic':'')+'"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED")+' · '+(isPower(a)?'<strong>POWER</strong> · ':isFlood(a)?'<strong>RIVER GAUGE</strong> · ':traffic?'<strong>TRAFFIC</strong> · ':'')+esc(c)+' · '+esc(d?dateText(d):"DATE NOT SUPPLIED")+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':"<span class='muted'>No valid article URL supplied</span>")+(town?'<button type="button" data-focus-town="'+esc(town.name)+'">SHOW ON MAP</button>':"")+'</div></details>';}).join("")||'<div class="panel muted">No reports match the current filters. Try a longer time window or clear the search.</div>';
+ $("map-articles").innerHTML=list.map((a,i)=>{const town=locate(a),c=category(a),traffic=isTraffic(a),url=safeUrl(a.url),d=validDate(a),locationLabel=isFlood(a)?(a.stationCoordinatesVerified?"STATION COORDINATES VERIFIED": "NO VERIFIED STATION COORDINATES"):(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED");return '<details class="map-item '+c.toLowerCase()+(traffic?' traffic':'')+'"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(locationLabel)+' · '+(isPower(a)?'<strong>POWER</strong> · ':isFlood(a)?'<strong>RIVER GAUGE</strong> · ':traffic?'<strong>TRAFFIC</strong> · ':'')+esc(c)+' · '+esc(d?dateText(d):"DATE NOT SUPPLIED")+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':"<span class='muted'>No valid article URL supplied</span>")+(town?'<button type="button" data-focus-town="'+esc(town.name)+'">SHOW ON MAP</button>':"")+'</div></details>';}).join("")||'<div class="panel muted">No reports match the current filters. Try a longer time window or clear the search.</div>';
  $("map-articles").querySelectorAll("[data-focus-town]").forEach(btn=>btn.addEventListener("click",()=>{selectTown(btn.dataset.focusTown);$("map-town-details").scrollIntoView({behavior:"smooth",block:"nearest"});}));
- $("map-list-status").textContent=records.length+" matching archive records · "+records.filter(locate).length+" with approximate town matches · "+records.filter(isTraffic).length+" traffic updates · "+records.filter(isPower).length+" NIE power faults · "+records.filter(isFlood).length+" river gauge readings · showing up to 100 source-linked reports. Power markers are approximate postcode matches; river gauge markers are approximate town plots, not station coordinates.";
+ $("map-list-status").textContent=records.length+" matching archive records · "+records.filter(locate).length+" with approximate town matches · "+records.filter(isTraffic).length+" traffic updates · "+records.filter(isPower).length+" NIE power faults · "+records.filter(isFlood).length+" river gauge readings · showing up to 100 source-linked reports. Power markers are approximate postcode matches; river gauge markers use verified station coordinates when available.";
  if(activeTown){const g=townGroups.find(x=>x.town.name===activeTown);renderDetail(g);}else renderDetail(null);
  $("map-status").textContent=(map?"OPENSTREETMAP":"OFFLINE SCHEMATIC")+" // "+records.length+" FILTERED REPORTS // "+townGroups.length+" TOWN LOCATIONS // "+(records.length-records.filter(locate).length)+" WITHOUT TOWN MATCH";
 }
