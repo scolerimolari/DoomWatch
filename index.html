@@ -273,6 +273,24 @@ footer {
     <div class="meta">LIVE COMMS WATCH IS A SEPARATE FIVE-MINUTE BEST-EFFORT MONITOR. THIRD-PARTY SIGNALS ARE NOT OPERATOR-CONFIRMED FAULTS.</div>
   </div>
 
+
+  <h2>04B // OPERATIONAL IMPACT FUSION</h2>
+  <section class="panel" id="operational-fusion">
+    <div class="muted">CONNECTING REPORTED DEVELOPMENTS TO POTENTIAL NI OPERATIONAL CONSEQUENCES. THESE ARE SCREENING PATHWAYS, NOT CONFIRMED LOCAL IMPACTS OR PREDICTIONS.</div>
+    <div class="grid" style="margin-top:10px">
+      <div class="panel"><div class="panel-title">NI-RELEVANT RECORDS</div><div class="big-status" id="fusion-ni-count">—</div></div>
+      <div class="panel"><div class="panel-title">INFRASTRUCTURE / SERVICE</div><div class="big-status" id="fusion-infra-count">—</div></div>
+      <div class="panel"><div class="panel-title">SUPPLY / ESSENTIALS</div><div class="big-status" id="fusion-supply-count">—</div></div>
+      <div class="panel"><div class="panel-title">HEALTH / HAZARDS</div><div class="big-status" id="fusion-hazard-count">—</div></div>
+    </div>
+    <div class="controls" style="margin-top:10px">
+      <label for="fusion-filter" class="panel-title">OPERATIONAL VIEW</label>
+      <select id="fusion-filter"><option value="ALL">ALL RELEVANT DEVELOPMENTS</option><option value="INFRASTRUCTURE">INFRASTRUCTURE & SERVICES</option><option value="SUPPLY">SUPPLY & ESSENTIALS</option><option value="HAZARD">HEALTH & HAZARDS</option><option value="TRANSPORT">TRANSPORT & ACCESS</option></select>
+    </div>
+    <div id="fusion-records" style="margin-top:10px">Waiting for intelligence snapshot.</div>
+    <div class="meta" style="margin-top:8px">A record is included because its source/category/title matches a defined screening rule. It is not evidence that Ballyclare or any other specific community is affected. Always check the original operator or authority notice before acting.</div>
+  </section>
+
   <h2>04 // SYSTEM DIAGNOSTICS</h2>
   <div class="grid">
     <div class="panel">
@@ -810,6 +828,42 @@ function renderEvidencePicture(){
  target.innerHTML=candidates.length?candidates.map(g=>'<div class="section-card" style="margin:7px 0"><strong>'+escapeHTML(g.items[0].title||"Related newsroom coverage")+'</strong><div class="meta">'+g.publishers+' distinct newsroom domains · '+g.items.length+' records · potential related coverage only</div>'+g.items.slice(0,4).map(a=>'<div class="meta">'+escapeHTML(a.source||"Unknown publisher")+' · '+escapeHTML(dateText(a.date))+'</div>').join("")+'</div>').join(""):'<div class="muted">No recent potential multi-publisher newsroom groups detected in the current archive.</div>';
 }
 
+
+function operationalTheme(item){
+ const t=(item.sourceId+" "+item.sourceType+" "+item.category+" "+item.title+" "+item.summary).toLowerCase();
+ if(/roadworks|traffic|transport|rail|bus|port|ferry|airport|logistics|fuel distribution|road closure/.test(t))return "TRANSPORT";
+ if(/electricity|power outage|power cut|grid|gas network|water service|water outage|telecom|broadband|mobile network|cyber.?attack|infrastructure/.test(t))return "INFRASTRUCTURE";
+ if(/food supply|food shortage|food security|supermarket|grocery|fuel supply|heating oil|petrol|diesel|fertili[sz]er|supply chain|port disruption|commodity/.test(t))return "SUPPLY";
+ if(/flood|storm|weather warning|wildfire|fire service|chemical|pollution|contamination|disease|outbreak|public health|hospital|healthcare|avian influenza|bird flu/.test(t))return "HAZARD";
+ return "";
+}
+function operationalImplication(theme){
+ const map={
+  INFRASTRUCTURE:["Possible interruption to an essential service","Check the relevant network operator's live status; identify backup lighting, charging, water and communications arrangements if a disruption is confirmed."],
+  SUPPLY:["Possible pressure on availability, delivery or price","Treat this as a watch item, not a shortage. Check local availability and avoid panic buying; review essential household stocks in normal rotation."],
+  HAZARD:["Possible health, environmental or severe-weather implications","Follow the relevant public authority advice and local warnings. Do not infer a local exposure from a national or overseas report."],
+  TRANSPORT:["Possible effect on journeys, deliveries or access","Check TrafficWatchNI or the transport operator before travel and allow an alternative route where a confirmed closure exists."]
+ };
+ return map[theme]||["Potential operational relevance","Check the original source for confirmed local details."];
+}
+function renderOperationalFusion(){
+ const filter=$("fusion-filter")?.value||"ALL";
+ const matched=articles.map(item=>({item,theme:operationalTheme(item)})).filter(x=>x.theme&&["NI","UK"].includes(x.item.area));
+ const set=(id,v)=>{const n=$(id);if(n)n.textContent=String(v);};
+ set("fusion-ni-count",matched.filter(x=>x.item.area==="NI").length);
+ set("fusion-infra-count",matched.filter(x=>x.theme==="INFRASTRUCTURE").length);
+ set("fusion-supply-count",matched.filter(x=>x.theme==="SUPPLY").length);
+ set("fusion-hazard-count",matched.filter(x=>x.theme==="HAZARD").length);
+ const priority={high:0,medium:1,low:2,unassessed:3};
+ const selected=matched.filter(x=>filter==="ALL"||x.theme===filter).sort((a,b)=>(a.item.area==="NI"?0:1)-(b.item.area==="NI"?0:1)||(priority[a.item.severity]??3)-(priority[b.item.severity]??3)||new Date(b.item.date||0)-new Date(a.item.date||0)).slice(0,8);
+ const target=$("fusion-records");if(!target)return;
+ target.innerHTML=selected.length?selected.map(({item,theme})=>{
+  const [pathway,action]=operationalImplication(theme),mapUrl="./map.html?search="+encodeURIComponent(item.title||"");
+  const original=item.url?'<a href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">ORIGINAL SOURCE ↗</a>':"";
+  return '<article class="section-card" style="margin:8px 0"><div class="meta">'+escapeHTML(item.area)+' · '+theme+' · '+escapeHTML(item.source||"Source not supplied")+' · '+escapeHTML(dateText(item.date))+'</div><strong>'+escapeHTML(item.title)+'</strong><p><strong>IMPACT PATHWAY:</strong> '+escapeHTML(pathway)+'</p><p>'+escapeHTML(action)+'</p><div class="meta">RECORDED SEVERITY: '+escapeHTML(String(item.severity||"unassessed").toUpperCase())+' · EVIDENCE: '+escapeHTML(item.evidenceStatus||"UNASSESSED")+' · SOURCE CLASS: '+escapeHTML(item.sourceTrust||"UNCLASSIFIED")+'</div><div class="controls">'+original+' <a href="'+mapUrl+'">CHECK MAP ↗</a></div></article>';
+ }).join(""):'<div class="panel muted">No matching NI/UK developments in this operational category in the current intelligence snapshot. This is not confirmation that no disruption or risk exists.</div>';
+}
+
 function renderAlerts() {
   const important = articles.filter(item =>
     item.severity === "high" || item.severity === "medium"
@@ -1082,6 +1136,7 @@ async function loadIntelligence() {
     renderEvidencePicture();
     renderAlerts();
     renderInfrastructureWatch();
+    renderOperationalFusion();
     renderFeed();
     renderSections();
 
