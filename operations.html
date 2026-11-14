@@ -52,6 +52,20 @@ body{background:var(--op-bg);color:#e8eadf;font-family:Consolas,Monaco,monospace
 .op-disclaimer{padding:10px;border:1px solid #755c3e;background:#211d15;color:#d6c7a6;font-size:10px;line-height:1.5;margin:12px 0}
 .op-footer{padding:18px;text-align:center;color:#899483;font-size:9px;letter-spacing:1px}
 @media(min-width:760px){.op-main{padding:18px}.op-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.op-grid{grid-template-columns:1.2fr .8fr}.op-controls{grid-template-columns:2fr 1fr 1fr}.op-market{grid-template-columns:repeat(2,1fr)}}
+
+.op-timeline{display:grid;gap:9px;margin-top:10px}
+.op-story{background:#121a14;border:1px solid #4a5845;border-left:4px solid #9c8755;padding:10px;min-width:0}
+.op-story summary{cursor:pointer;list-style:none;color:#f0d989;font-size:12px;font-weight:700;line-height:1.45}
+.op-story summary::-webkit-details-marker{display:none}
+.op-story summary:after{content:"OPEN CHRONOLOGY +";display:block;color:#a8c58f;font-size:9px;font-weight:400;margin-top:5px}
+.op-story[open] summary:after{content:"CLOSE CHRONOLOGY −"}
+.op-story-meta{color:#aeb9a8;font-size:10px;line-height:1.5;margin:6px 0}
+.op-chronology{border-left:2px solid #596b4f;margin:10px 0 0 5px;padding-left:12px;display:grid;gap:9px}
+.op-chronology-item{position:relative;padding:7px;background:#1a241b;border:1px solid #394837}
+.op-chronology-item:before{content:"";position:absolute;left:-18px;top:12px;width:8px;height:8px;border-radius:50%;background:#d6b574;border:1px solid #10140f}
+.op-chronology-item strong{display:block;color:#e8d59c;font-size:11px;line-height:1.4}
+.op-chronology-item .op-meta{margin:4px 0}
+.op-timeline-note{font-size:10px;color:#aeb9a8;line-height:1.5}
 </style>
 </head>
 <body>
@@ -110,6 +124,12 @@ body{background:var(--op-bg);color:#e8eadf;font-family:Consolas,Monaco,monospace
  </div>
  <div class="op-status" id="op-event-status" role="status" aria-live="polite">CONNECTING TO SHARED INTELLIGENCE ARCHIVE…</div>
  <div id="op-events"><div class="op-empty">No records loaded.</div></div>
+</section>
+
+<section class="op-panel">
+ <h2>06 // DEVELOPING EVENTS — INCIDENT TIMELINE</h2>
+ <div class="op-timeline-note">Automated grouping of similar reports within the selected region and time window. Entries are shown in chronological order. Publisher count means archive sources only — it is not independent corroboration or confirmation of an incident.</div>
+ <div id="op-timeline"><div class="op-empty">Waiting for intelligence snapshot…</div></div>
 </section>
 <div class="op-disclaimer"><strong>ASSESSMENT RULES:</strong> Source class is not truth status. Evidence marked UNASSESSED has not been independently verified by DoomWatch. A “no issue signal” is not proof of service availability. Stale information is never presented as current confirmation. Cross-domain links are analytical prompts only. For immediate danger or urgent assistance, use the relevant emergency service.</div>
 </main>
@@ -193,9 +213,33 @@ function filtered(){
   return true;
  }).sort((a,b)=>rank(b)-rank(a)||stamp(b)-stamp(a));
 }
+
+const timelineStop=new Set("about after again against also among around because been being between could first from have into more most near over said says should since some such than that their them then there these they this those through under until very what when where which while with would".split(" "));
+function timelineTokens(a){const raw=(title(a)+" "+bodyText(a).slice(0,450)).toLowerCase();return new Set((raw.match(/[a-z0-9]{4,}/g)||[]).filter(w=>!timelineStop.has(w)));}
+function timelineStamp(a){return dt(a.publishedAt||a.date||a.timestamp||a.updatedAt||a.collectedAt);}
+function timelineGroups(list){
+ const groups=[];
+ for(const a of [...list].sort((x,y)=>timelineStamp(y)-timelineStamp(x))){
+  const tokens=timelineTokens(a),time=timelineStamp(a),bucket=region(a);let best=null,scoreBest=0;
+  for(const g of groups){if(g.bucket!==bucket||Math.abs(time-g.latest)>72*3600000)continue;const overlap=[...tokens].filter(t=>g.anchor.has(t));const score=overlap.length/Math.max(1,Math.min(tokens.size,g.anchor.size));if(overlap.length>=2&&score>=.52&&score>scoreBest){best=g;scoreBest=score;}}
+  if(best){best.items.push(a);best.latest=Math.max(best.latest,time);}else groups.push({items:[a],anchor:tokens,bucket,latest:time});
+ }
+ return groups.sort((a,b)=>b.latest-a.latest||b.items.length-a.items.length);
+}
+function renderTimeline(list){
+ const groups=timelineGroups(list).slice(0,12);
+ $("op-timeline").innerHTML=groups.length?'<div class="op-timeline">'+groups.map((g,i)=>{
+  const ordered=[...g.items].sort((a,b)=>timelineStamp(a)-timelineStamp(b));
+  const lead=[...g.items].sort((a,b)=>timelineStamp(b)-timelineStamp(a))[0];
+  const publishers=new Set(g.items.map(a=>String(a.source||a.publisher||"Source not supplied"))).size;
+  const entries=ordered.slice(-8).map(a=>{const u=linkOf(a),when=timelineStamp(a),place=niTown(a),map=region(a)==="NI"&&place?'<a href="./map.html?search='+encodeURIComponent(place)+'">MAP ↗</a>':'',original=u?'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':'',collected=a.collectedAt&&dt(a.collectedAt)!==when?' · collected '+esc(fmt(a.collectedAt)):'';return '<div class="op-chronology-item"><strong>'+esc(title(a))+'</strong><div class="op-meta">'+esc(fmt(when))+' · '+esc(a.source||a.publisher||"Source not supplied")+' · '+esc(sourceClass(a))+' · '+esc(evidence(a))+collected+'</div>'+(bodyText(a)?'<div class="op-muted">'+esc(bodyText(a).slice(0,240))+'</div>':'')+'<div class="op-links">'+original+map+'<a href="'+feedUrl(a)+'">FEED ↗</a></div></div>';}).join("");
+  return '<details class="op-story" '+(i===0?'open':'')+'><summary>'+esc(title(lead))+'</summary><div class="op-story-meta">'+esc(g.bucket)+' · '+g.items.length+' archive record(s) · '+publishers+' publisher(s) · '+esc(fmt(g.latest))+' latest report</div><div class="op-chronology">'+entries+'</div>'+(g.items.length>8?'<p class="op-timeline-note">Showing the latest 8 of '+g.items.length+' grouped records.</p>':'')+'</details>';
+ }).join("")+'</div>':'<div class="op-empty">No related-report groups found in this filtered view. Try widening the time window or clearing the search. Single reports remain available in Event Explorer.</div>';
+}
 function renderEvents(){
  const list=filtered();$("op-event-status").textContent=list.length+" RECORDS MATCH // "+articles.length+" TOTAL ARCHIVE RECORDS // FILTERED VIEW IS NOT A COMPLETE INCIDENT REGISTER";
  $("kpi-reports").textContent=list.length.toLocaleString("en-GB");$("kpi-ni").textContent=list.filter(a=>region(a)==="NI").length.toLocaleString("en-GB");$("kpi-explicit").textContent=list.filter(a=>["HIGH","MEDIUM"].includes(severity(a))).length.toLocaleString("en-GB");
+ renderTimeline(list);
  $("op-events").innerHTML=list.length?list.slice(0,80).map(eventCard).join(""):'<div class="op-empty">No records match these filters. Widen the time window or clear the search.</div>';
 }
 function renderPriority(){
@@ -249,6 +293,7 @@ async function load(){
 }
 ["op-search","op-region","op-window"].forEach(id=>$(id).addEventListener(id==="op-search"?"input":"change",renderEvents));
 $("op-evidence-filters").addEventListener("click",e=>{const b=e.target.closest("button[data-evidence]");if(!b)return;evidenceFilter=b.dataset.evidence;document.querySelectorAll("[data-evidence]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderEvents();});
+const initialSearch=new URLSearchParams(location.search).get("search");if(initialSearch){$("op-search").value=initialSearch;}
 load();setInterval(load,5*60*1000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)load();});
 </script>
