@@ -55,7 +55,7 @@ function foldHeadingGroups(container){
   const block=[heading];let j=i+1;
   while(j<children.length&&!/^H[23]$/.test(children[j].tagName)){block.push(children[j]);j++;}
   if(block.length===1)continue;
-  const label=(heading.textContent||"SECTION").replace(/\\s+/g," ").trim();
+  const label=(heading.textContent||"SECTION").replace(/\s+/g," ").trim();
   const details=document.createElement("details");details.className="dw-fold dw-heading-fold";details.dataset.dwFold="true";
   if(groupIndex===0)details.open=true;
   const summary=document.createElement("summary");summary.textContent=label;
