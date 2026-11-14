@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#171914">
+<meta name="description" content="DoomWatch Operations Room — connected Northern Ireland resilience intelligence.">
+<title>DOOMWATCH // OPERATIONS ROOM</title>
+<link rel="stylesheet" href="./doomwatch.css">
+<style>
+:root{--op-bg:#10140f;--op-panel:#1b211a;--op-line:#46513d;--op-gold:#e7c45a;--op-red:#c84d40;--op-green:#91bd79;--op-muted:#aab2a2}
+body{background:var(--op-bg);color:#e8eadf;font-family:Consolas,Monaco,monospace}
+.op-main{max-width:1500px;margin:auto;padding:12px}
+.op-hero{padding:15px;background:linear-gradient(125deg,#283329,#101611);border:1px solid #68755c;border-top:4px solid var(--op-red);box-shadow:inset 0 1px #ffffff14}
+.op-kicker{color:var(--op-gold);font-size:10px;letter-spacing:2px}
+.op-hero h1{font-size:clamp(22px,5vw,34px);letter-spacing:2px;color:#f2d56e;margin:8px 0}
+.op-hero p{max-width:900px;color:#c0c9b9;line-height:1.5;font-size:12px}
+.op-stamp{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.op-stamp span,.op-tag{border:1px solid #59674e;padding:5px 7px;color:#d8dfd0;font-size:10px}
+.op-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.op-kpi{background:var(--op-panel);border:1px solid var(--op-line);border-top:3px solid #65734f;padding:11px;min-width:0}
+.op-kpi strong{display:block;color:var(--op-gold);font-size:clamp(20px,5vw,29px);overflow-wrap:anywhere}
+.op-kpi span{display:block;color:var(--op-muted);font-size:9px;letter-spacing:1px;margin-top:5px}
+.op-grid{display:grid;grid-template-columns:1fr;gap:10px;margin:10px 0}
+.op-panel{background:var(--op-panel);border:1px solid var(--op-line);padding:12px;min-width:0}
+.op-panel h2{font-size:13px;color:var(--op-gold);letter-spacing:1.5px;border-bottom:1px solid #536044;padding-bottom:8px;margin:0 0 10px}
+.op-panel h3{font-size:12px;color:#e4c77c;margin:8px 0}
+.op-muted{color:var(--op-muted);font-size:10px;line-height:1.5}
+.op-status{font-size:11px;padding:8px;background:#101710;border-left:3px solid var(--op-green);margin:8px 0;line-height:1.5}
+.op-status.warn{border-left-color:#d2a64c}.op-status.bad{border-left-color:var(--op-red)}
+.op-service{display:flex;justify-content:space-between;gap:8px;border-top:1px solid #3b4738;padding:8px 0;font-size:11px}
+.op-service b{color:#e9dfc2;text-align:right}
+.op-controls{display:grid;grid-template-columns:1fr;gap:8px;margin:12px 0}
+.op-controls input,.op-controls select{width:100%;background:#0c120d;color:#f5f3e8;border:1px solid #65734f;padding:10px;font:12px monospace}
+.op-buttons{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.op-buttons button{background:#303b2d;color:#eee;border:1px solid #8c805c;padding:8px 10px;font:10px monospace}
+.op-buttons button[aria-pressed=true]{background:#7d342d;border-color:#e1a18b}
+.op-event{background:#131a14;border:1px solid #45513e;border-left:4px solid #71835a;padding:11px;margin:8px 0;overflow-wrap:anywhere}
+.op-event.high{border-left-color:var(--op-red)}.op-event.medium{border-left-color:#d6aa4d}
+.op-event h3{margin:0 0 7px;font-size:13px;line-height:1.45;color:#f0d989}
+.op-meta{font-size:10px;color:#aeb9a8;line-height:1.5;margin:6px 0}
+.op-evidence{display:flex;gap:5px;flex-wrap:wrap;margin:7px 0}
+.op-evidence span{font-size:9px;border:1px solid #5a674e;padding:4px 6px;color:#c9d2c0}
+.op-links{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.op-links a{display:inline-block;background:#26342a;border:1px solid #65734f;padding:7px 8px;font-size:10px;color:#e4edda;text-decoration:none}
+.op-links a:hover{border-color:var(--op-gold)}
+.op-empty{padding:15px;color:var(--op-muted);font-size:11px;border:1px dashed #59644f}
+.op-market{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.op-market>div{background:#101610;border:1px solid #3f4c3a;padding:9px;min-width:0}
+.op-market strong{display:block;color:var(--op-gold);font-size:16px;overflow-wrap:anywhere}
+.op-market span{display:block;color:var(--op-muted);font-size:9px;line-height:1.4;margin-top:4px}
+.op-disclaimer{padding:10px;border:1px solid #755c3e;background:#211d15;color:#d6c7a6;font-size:10px;line-height:1.5;margin:12px 0}
+.op-footer{padding:18px;text-align:center;color:#899483;font-size:9px;letter-spacing:1px}
+@media(min-width:760px){.op-main{padding:18px}.op-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.op-grid{grid-template-columns:1.2fr .8fr}.op-controls{grid-template-columns:2fr 1fr 1fr}.op-market{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<main class="op-main">
+<section class="op-hero">
+ <div class="op-kicker">DOOMWATCH // OPERATION CONTAINMENT // FIELD INTELLIGENCE</div>
+ <h1>OPERATIONS ROOM</h1>
+ <p>A connected operational picture across Northern Ireland, UK-wide resilience, infrastructure, communications and market indicators. This is an analytical aid, not an emergency service or a live control-room feed.</p>
+ <div class="op-stamp"><span id="op-data-time">COLLECTING SNAPSHOT…</span><span id="op-refresh">AUTO-REFRESH 5 MIN</span><span id="op-integrity">EVIDENCE LABELS ACTIVE</span></div>
+</section>
+<section class="op-kpis" aria-label="Situation summary">
+ <div class="op-kpi"><strong id="kpi-reports">—</strong><span>REPORTS IN SELECTED WINDOW</span></div>
+ <div class="op-kpi"><strong id="kpi-ni">—</strong><span>NI / LOCAL REPORTS</span></div>
+ <div class="op-kpi"><strong id="kpi-explicit">—</strong><span>EXPLICIT HIGH / MEDIUM SEVERITY</span></div>
+ <div class="op-kpi"><strong id="kpi-watch">—</strong><span>INFRASTRUCTURE / SERVICE WATCHPOINTS</span></div>
+</section>
+<section class="op-grid">
+ <div class="op-panel">
+  <h2>01 // PRIORITY PICTURE</h2>
+  <div class="op-muted">Priority ordering uses explicit severity, NI relevance and recency. It does not generate a predictive risk score.</div>
+  <div id="op-priority"><div class="op-empty">Waiting for intelligence snapshot…</div></div>
+ </div>
+ <div class="op-panel">
+  <h2>02 // INFRASTRUCTURE & COMMUNICATIONS</h2>
+  <div id="op-comms"><div class="op-empty">Waiting for communications snapshot…</div></div>
+  <div class="op-links"><a href="./communications.html">OPEN LIVE COMMS ↗</a><a href="./map.html">OPEN INFRASTRUCTURE MAP ↗</a></div>
+ </div>
+</section>
+<section class="op-grid">
+ <div class="op-panel">
+  <h2>03 // MARKET & HOUSEHOLD PRESSURE INDICATORS</h2>
+  <div id="op-markets"><div class="op-empty">Waiting for markets snapshot…</div></div>
+  <div class="op-links"><a href="./markets.html">MARKETS DETAIL ↗</a><a href="./household.html">HOUSEHOLD DETAIL ↗</a></div>
+  <p class="op-muted">Indicators are context, not proof that a news event has caused a price movement. Coverage and dates differ by dataset.</p>
+ </div>
+ <div class="op-panel">
+  <h2>04 // CROSS-DOMAIN WATCHPOINTS</h2>
+  <div id="op-watchpoints"><div class="op-empty">Waiting for cross-domain analysis…</div></div>
+  <p class="op-muted">Potential exposure pathways are keyword prompts for analyst review, not confirmed impacts.</p>
+ </div>
+</section>
+<section class="op-panel">
+ <h2>05 // EVENT EXPLORER</h2>
+ <div class="op-muted">Search and filter the same intelligence archive used by Feed and Map. Social posts remain unverified leads. Multiple publishers may repeat the same original report.</div>
+ <div class="op-controls">
+  <input id="op-search" type="search" placeholder="Search event, town, source, sector or keyword…">
+  <select id="op-region"><option value="ALL">ALL REGIONS</option><option value="NI">NORTHERN IRELAND</option><option value="UK">UNITED KINGDOM</option><option value="INTERNATIONAL">INTERNATIONAL</option><option value="UNKNOWN">UNSPECIFIED</option></select>
+  <select id="op-window"><option value="24">LAST 24 HOURS</option><option value="72" selected>LAST 72 HOURS</option><option value="168">LAST 7 DAYS</option><option value="720">LAST 30 DAYS</option><option value="ALL">ALL AVAILABLE</option></select>
+ </div>
+ <div class="op-buttons" id="op-evidence-filters">
+  <button type="button" data-evidence="ALL" aria-pressed="true">ALL EVIDENCE</button>
+  <button type="button" data-evidence="OFFICIAL" aria-pressed="false">OFFICIAL</button>
+  <button type="button" data-evidence="MEDIA" aria-pressed="false">NEWSROOMS</button>
+  <button type="button" data-evidence="SOCIAL" aria-pressed="false">SOCIAL / UNVERIFIED</button>
+  <button type="button" data-evidence="SEVERITY" aria-pressed="false">EXPLICIT SEVERITY</button>
+ </div>
+ <div class="op-status" id="op-event-status" role="status" aria-live="polite">CONNECTING TO SHARED INTELLIGENCE ARCHIVE…</div>
+ <div id="op-events"><div class="op-empty">No records loaded.</div></div>
+</section>
+<div class="op-disclaimer"><strong>ASSESSMENT RULES:</strong> Source class is not truth status. Evidence marked UNASSESSED has not been independently verified by DoomWatch. A “no issue signal” is not proof of service availability. Stale information is never presented as current confirmation. Cross-domain links are analytical prompts only. For immediate danger or urgent assistance, use the relevant emergency service.</div>
+</main>
+<footer class="op-footer">DOOMWATCH // OPERATIONS ROOM // OPEN-SOURCE RESILIENCE MONITORING</footer>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const dt=v=>{if(!v)return 0;const n=new Date(v).getTime();return Number.isFinite(n)?n:0;};
+const fmt=v=>v?new Date(v).toLocaleString("en-GB"):"DATE NOT SUPPLIED";
+const arr=v=>Array.isArray(v)?v:[];
+let articles=[],marketData={},commsData={},evidenceFilter="ALL",loadedAt=0;
+const sectors={1:"National resilience",2:"Food and agriculture",3:"Fuel, energy and oil",4:"Chemicals, medicines and industrial inputs",5:"Electricity, gas and water",6:"Transport, ports and logistics",7:"Healthcare and public health",8:"Telecommunications, cyber and infrastructure",9:"Weather, flooding and natural hazards",10:"Civil defence and community preparedness",11:"International events with UK/NI impact"};
+function flatten(data){
+ const out=[],seen=new Set();
+ const add=item=>{if(!item||typeof item!=="object")return;const id=String(item.id||item.url||item.link||item.title||"");if(id&&seen.has(id))return;if(id)seen.add(id);out.push(item);};
+ const walk=v=>{if(Array.isArray(v)){v.forEach(x=>{if(x&&typeof x==="object")add(x);});}else if(v&&typeof v==="object"){Object.values(v).forEach(x=>{if(Array.isArray(x))walk(x);});}};
+ walk(data.articles);walk(data.items);walk(data.alerts);
+ if(Array.isArray(data.sections))data.sections.forEach(s=>{if(!s||typeof s!=="object")return;["articles","items","stories","updates"].forEach(k=>walk(s[k]));});
+ return out;
+}
+function title(a){return String(a.title||a.headline||a.name||a.claim||"Untitled intelligence record");}
+function bodyText(a){return String(a.description||a.summary||a.content||a.text||a.snippet||"");}
+function region(a){
+ const r=String(a.region||a.area||a.location||"").toLowerCase(),t=(title(a)+" "+bodyText(a)).toLowerCase();
+ if(/northern ireland|\bni\b/.test(r)||/belfast|derry|londonderry|ballyclare|antrim|newtownabbey|ballymena|coleraine|armagh|omagh|newry|larne|lisburn|carrickfergus/.test(t))return"NI";
+ if(/international|global|worldwide|world/.test(r))return"INTERNATIONAL";
+ if(/united kingdom|\buk\b|britain|england|scotland|wales/.test(r))return"UK";
+ return"UNKNOWN";
+}
+function sourceClass(a){
+ const trust=String(a.sourceTrust||a.trust||"").toLowerCase(),type=String(a.sourceType||a.type||"").toLowerCase(),source=String(a.source||a.publisher||"").toLowerCase();
+ if(/social_network|unverified_social|bluesky/.test(type+" "+trust+" "+source))return"SOCIAL";
+ if(/official/.test(trust))return"OFFICIAL";
+ if(/regional_newsroom|mainstream_media|international_media|news_media|established_media/.test(type+" "+trust))return"MEDIA";
+ if(/specialist/.test(trust))return"SPECIALIST";
+ return"OTHER";
+}
+function severity(a){const s=String(a.incidentSeverity||a.severity||a.alertLevel||a.riskLevel||"").toLowerCase();if(/critical|severe|high|urgent|red/.test(s))return"HIGH";if(/medium|moderate|elevated|amber/.test(s))return"MEDIUM";if(/low|minor|green/.test(s))return"LOW";return"UNASSESSED";}
+function evidence(a){return String(a.evidenceStatus||a.status||a.verification||"UNASSESSED").toUpperCase();}
+function stamp(a){return dt(a.publishedAt||a.date||a.timestamp||a.updatedAt||a.collectedAt);}
+function linkOf(a){const u=String(a.url||a.link||a.sourceUrl||"");return /^https:\/\//i.test(u)?u:"";}
+function sectorLabels(a){const ids=arr(a.sectorIds).map(Number).filter(n=>sectors[n]);const labels=arr(a.sectorLabels);return labels.length?labels:ids.map(n=>sectors[n]);}
+function niTown(a){return String(a.locality?.name||a.area||a.location||"").trim();}
+function mapUrl(a){const q=niTown(a)||title(a);return "./map.html?search="+encodeURIComponent(q);}
+function feedUrl(a){return "./feed.html?q="+encodeURIComponent(title(a).slice(0,100));}
+function explicitPriority(a){return severity(a)==="HIGH"?3:severity(a)==="MEDIUM"?2:0;}
+function rank(a){return explicitPriority(a)*100+(region(a)==="NI"?25:region(a)==="UK"?10:0)+Math.min(20,Math.floor((Date.now()-stamp(a))/86400000)*-1+20);}
+function eventCard(a){
+ const s=severity(a),r=region(a),src=sourceClass(a),labels=sectorLabels(a),when=stamp(a);
+ const source=String(a.source||a.publisher||"Source not supplied");
+ const map=r==="NI"?'<a href="'+mapUrl(a)+'">VIEW MAP ↗</a>':'';
+ const original=linkOf(a)?'<a href="'+esc(linkOf(a))+'" target="_blank" rel="noopener noreferrer">ORIGINAL SOURCE ↗</a>':"";
+ const sectorsHtml=labels.slice(0,4).map(x=>'<span>'+esc(x)+'</span>').join("");
+ const severityLabel=s==="UNASSESSED"?"SEVERITY NOT ASSESSED":s+" SEVERITY (SOURCE LABEL)";
+ return '<article class="op-event '+(s==="HIGH"?"high":s==="MEDIUM"?"medium":"")+'"><h3>'+esc(title(a))+'</h3><div class="op-meta">'+esc(source)+' · '+esc(r)+' · '+esc(fmt(when))+'</div><div class="op-evidence"><span>'+esc(src)+'</span><span>'+esc(severityLabel)+'</span><span>'+esc(evidence(a))+'</span></div>'+(bodyText(a)?'<p class="op-muted">'+esc(bodyText(a).slice(0,460))+'</p>':"")+(sectorsHtml?'<div class="op-evidence">'+sectorsHtml+'</div>':"")+'<div class="op-links">'+original+map+'<a href="'+feedUrl(a)+'">RELATED FEED ↗</a></div></article>';
+}
+function filtered(){
+ const q=$("op-search").value.trim().toLowerCase(),r=$("op-region").value,w=$("op-window").value;
+ const cutoff=w==="ALL"?0:Date.now()-Number(w)*3600000;
+ return articles.filter(a=>{
+  const t=(title(a)+" "+bodyText(a)+" "+String(a.source||"")+" "+String(a.region||"")+" "+sectorLabels(a).join(" ")).toLowerCase();
+  if(q&&!t.includes(q))return false;
+  if(r!=="ALL"&&region(a)!==r)return false;
+  if(cutoff&&(!stamp(a)||stamp(a)<cutoff))return false;
+  const sc=sourceClass(a),sev=severity(a);
+  if(evidenceFilter==="OFFICIAL"&&sc!=="OFFICIAL")return false;
+  if(evidenceFilter==="MEDIA"&&sc!=="MEDIA")return false;
+  if(evidenceFilter==="SOCIAL"&&sc!=="SOCIAL")return false;
+  if(evidenceFilter==="SEVERITY"&&!["HIGH","MEDIUM"].includes(sev))return false;
+  return true;
+ }).sort((a,b)=>rank(b)-rank(a)||stamp(b)-stamp(a));
+}
+function renderEvents(){
+ const list=filtered();$("op-event-status").textContent=list.length+" RECORDS MATCH // "+articles.length+" TOTAL ARCHIVE RECORDS // FILTERED VIEW IS NOT A COMPLETE INCIDENT REGISTER";
+ $("kpi-reports").textContent=list.length.toLocaleString("en-GB");$("kpi-ni").textContent=list.filter(a=>region(a)==="NI").length.toLocaleString("en-GB");$("kpi-explicit").textContent=list.filter(a=>["HIGH","MEDIUM"].includes(severity(a))).length.toLocaleString("en-GB");
+ $("op-events").innerHTML=list.length?list.slice(0,80).map(eventCard).join(""):'<div class="op-empty">No records match these filters. Widen the time window or clear the search.</div>';
+}
+function renderPriority(){
+ const list=articles.filter(a=>["HIGH","MEDIUM"].includes(severity(a))).sort((a,b)=>rank(b)-rank(a)||stamp(b)-stamp(a)).slice(0,5);
+ $("op-priority").innerHTML=list.length?list.map(eventCard).join(""):'<div class="op-status">No records carry an explicit HIGH or MEDIUM incident-severity label in this snapshot. This is not a finding that no risks exist.</div>';
+}
+function renderComms(){
+ const d=commsData||{},s=d.summary||{},providers=arr(d.providers),issues=providers.filter(p=>["ISSUE_SIGNAL","STALE_ISSUE_SIGNAL","UNCONFIRMED_REPORT_SIGNAL","MAINTENANCE_SIGNAL"].includes(p.status));
+ $("kpi-watch").textContent=issues.length;
+ const label=d.overallStatus==="STALE_REPORTS_ONLY"?"STALE REPORTS ONLY":d.overallStatus==="STALE_DATA_PRESENT"?"STALE / UNKNOWN SOURCE DATA":d.overallStatus==="UNCONFIRMED_REPORTS"?"UNCONFIRMED USER REPORTS":d.overallStatus==="ISSUES_PRESENT"?"CURRENT ISSUE SIGNALS PRESENT":String(d.overallStatus||"STATUS NOT SUPPLIED").replaceAll("_"," ");
+ $("op-comms").innerHTML='<div class="op-status '+(issues.length?"warn":"")+'">'+esc(label)+' · SNAPSHOT '+esc(fmt(d.generatedAt))+'</div>'+
+ '<div class="op-service"><span>Current issue providers</span><b>'+Number(s.currentIssueProviders||0)+'</b></div>'+
+ '<div class="op-service"><span>Stale issue reports</span><b>'+Number(s.staleIssueProviders||0)+'</b></div>'+
+ '<div class="op-service"><span>Stale / unknown providers</span><b>'+Number(s.staleOrUnknownProviders||0)+'</b></div>'+
+ '<div class="op-service"><span>Unconfirmed user reports</span><b>'+Number(s.unconfirmedReportProviders||0)+'</b></div>'+
+ (issues.length?issues.slice(0,6).map(p=>'<div class="op-service"><span>'+esc(p.provider)+'</span><b>'+esc(p.status.replaceAll("_"," "))+'</b></div>').join(""):"")+
+ '<p class="op-muted">A lack of detected issue signals does not confirm service availability. Postcode and operator checks remain authoritative.</p>';
+}
+function renderMarkets(){
+ const d=marketData||{},oil=arr(d.heatingOil?.items),fuel=arr(d.fuel?.items),brent=arr(d.commodities).find(x=>/brent/i.test(String(x.name||x.label||x.symbol||"")));
+ const food=d.foodInflation||{},overall=d.overallInflation||{};
+ const values=[];
+ if(oil[0])values.push({v:"£"+Number(oil[0].price).toFixed(2),l:"NI heating oil · "+oil[0].volumeLitres+"L",d:oil[0].observedAt,u:oil[0].url});
+ if(fuel[0])values.push({v:Number(fuel[0].price).toFixed(1)+"p",l:"UK average "+(fuel[0].name||fuel[0].label||"road fuel"),d:fuel[0].observedAt,u:fuel[0].url});
+ if(brent)values.push({v:brent.price!==undefined?String(brent.price):"—",l:"Brent crude · "+(brent.currency||"source units"),d:brent.observedAt||d.updatedAt,u:brent.url});
+ if(food.value!==undefined)values.push({v:Number(food.value).toFixed(1)+"%",l:"Food inflation · UK CPIH",d:food.date,u:food.url});
+ if(overall.value!==undefined)values.push({v:Number(overall.value).toFixed(1)+"%",l:"Overall inflation · UK CPIH",d:overall.date,u:overall.url});
+ $("op-markets").innerHTML=values.length?'<div class="op-market">'+values.map(x=>'<div><strong>'+esc(x.v)+'</strong><span>'+esc(x.l)+'<br>Observation: '+esc(x.d||"Not supplied")+(x.u?' · <a href="'+esc(x.u)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"")+'</span></div>').join("")+'</div><p class="op-muted">Markets snapshot: '+esc(fmt(d.updatedAt||d.generatedAt))+'</p>':'<div class="op-empty">Market indicators unavailable.</div>';
+}
+function renderWatchpoints(){
+ const t=articles.map(a=>(title(a)+" "+bodyText(a)).toLowerCase()).join(" ");
+ const groups=[
+  ["ENERGY → HOUSEHOLD","fuel|oil|gas|electricity|power station|energy prices","Heating oil, road fuel and energy price indicators. Check Markets for actual observations."],
+  ["PORTS / SHIPPING → SUPPLY","port|shipping|freight|container|ferry|strait|maritime","Potential freight or import exposure. Check original reporting and local port / ferry notices."],
+  ["CYBER → ESSENTIAL SERVICES","cyber|ransomware|malware|data breach|telecom|communications","Potential cross-sector service exposure. Verify with the named operator or official incident notice."],
+  ["WEATHER → TRANSPORT / UTILITIES","flood|storm|wind warning|heavy rain|snow|ice|weather warning","Potential road, power and water disruption. Compare with official warnings and live local sources."],
+  ["FOOD / AGRICULTURE → PRICES","food supply|agriculture|livestock|fertiliser|crop|food shortage","Potential supply-chain watchpoint. Do not infer local shortages from national price indices."]
+ ];
+ const found=groups.filter(g=>new RegExp(g[1],"i").test(t));
+ $("op-watchpoints").innerHTML=found.length?found.map(g=>'<div class="op-status warn"><strong>'+esc(g[0])+'</strong><br>'+esc(g[2])+'</div>').join(""):'<div class="op-status">No keyword-triggered cross-domain prompts in the current archive. This is not proof of no exposure.</div>';
+}
+async function load(){
+ const status=$("op-event-status");status.textContent="REFRESHING INTELLIGENCE, MARKETS AND COMMUNICATIONS SNAPSHOTS…";
+ const urls=["./data/intelligence.json","./data/markets.json","./data/communications.json"];
+ const results=await Promise.allSettled(urls.map(u=>fetch(u+"?t="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error(u+" HTTP "+r.status);return r.json();})));
+ if(results[0].status==="fulfilled"){articles=flatten(results[0].value);loadedAt=Date.now();}else{status.textContent="INTELLIGENCE ARCHIVE FAILED // "+results[0].reason.message;}
+ if(results[1].status==="fulfilled")marketData=results[1].value;
+ if(results[2].status==="fulfilled")commsData=results[2].value;
+ $("op-data-time").textContent="INTELLIGENCE "+(loadedAt?new Date(loadedAt).toLocaleTimeString("en-GB"):"UNAVAILABLE")+" · MARKETS "+(marketData.updatedAt?fmt(marketData.updatedAt):"UNAVAILABLE");
+ renderPriority();renderComms();renderMarkets();renderWatchpoints();renderEvents();
+}
+["op-search","op-region","op-window"].forEach(id=>$(id).addEventListener(id==="op-search"?"input":"change",renderEvents));
+$("op-evidence-filters").addEventListener("click",e=>{const b=e.target.closest("button[data-evidence]");if(!b)return;evidenceFilter=b.dataset.evidence;document.querySelectorAll("[data-evidence]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderEvents();});
+load();setInterval(load,5*60*1000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)load();});
+</script>
+<script src="./doomwatch-ui.js"></script>
+<script src="./doomwatch-watch.js"></script>
+</body>
+</html>
