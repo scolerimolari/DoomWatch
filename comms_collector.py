@@ -231,7 +231,7 @@ def extract_json_signals(source, payload):
         via = str(item.get("via") or "").lower()
         user_reports = item.get("userReports") or {}
         report_level = str((user_reports.get("level") if isinstance(user_reports, dict) else user_reports) or "").lower()
-        if via == "crowd" or report_level in ("elevated", "spike"):
+        if report_level in ("elevated", "spike"):
             if status == "NO_ISSUE_SIGNAL":
                 status = "UNCONFIRMED_REPORT_SIGNAL"
         incidents = item.get("activeIncidents") or []
