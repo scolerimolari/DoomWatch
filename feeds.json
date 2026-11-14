@@ -278,6 +278,17 @@
       "trust": "official_primary_source",
       "sourceType": "utility_service_update",
       "method": "niwater_service_updates"
+    },
+    {
+      "id": "trafficwatch-belfast-events",
+      "name": "TrafficWatchNI Greater Belfast events",
+      "url": "https://rss.trafficwatchni.com/trafficwatchni_events_belfast_rss.xml",
+      "domain": 6,
+      "region": "Northern Ireland",
+      "priority": "medium",
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "transport_events"
     }
   ]
 }
