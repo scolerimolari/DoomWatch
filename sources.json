@@ -803,8 +803,8 @@
       "platform": "website",
       "type": "devolved_government",
       "url": "https://www.northernireland.gov.uk/press-releases",
-      "endpoint": null,
-      "method": "manual_review",
+      "endpoint": "https://www.northernireland.gov.uk/press-releases",
+      "method": "html_listing",
       "region": "Northern Ireland",
       "sectors": [
         1,
@@ -819,8 +819,8 @@
         10
       ],
       "trust": "official_primary_source",
-      "status": "manual_review",
-      "notes": "Central official publication stream covering all eight NI departments and cross-government announcements. No RSS or Atom endpoint verified; use the press-release index as the authoritative landing page."
+      "status": "active",
+      "notes": "Official NI Executive press-release listing covering all eight departments. Collector extracts article links from the listing; no RSS feed is assumed."
     },
     {
       "id": "department-health-ni",
