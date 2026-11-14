@@ -1039,19 +1039,20 @@ def fetch_dfi_river_levels(source):
         except Exception as exc:
             station_error = clean(str(exc))[:180]
 
-        station_code_match = re.search(r"Station code\s+(\d{6})", station_body, re.IGNORECASE)
+        station_text = clean(station_body)
+        station_code_match = re.search(r"Station code\s+(\d{6})", station_text, re.IGNORECASE)
         if station_code_match:
             station_code = station_code_match.group(1)
         coordinate_match = re.search(
             r"Coordinates\s+(-?\d{1,2}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)",
-            station_body,
+            station_text,
             re.IGNORECASE
         )
         latitude = float(coordinate_match.group(1)) if coordinate_match else None
         longitude = float(coordinate_match.group(2)) if coordinate_match else None
         has_current_reading = not bool(re.search(
             r"No reading since\s+\d{1,2}\s+[A-Za-z]{3}\s+\d{4}",
-            station_body,
+            station_text,
             re.IGNORECASE
         ))
         status = "CURRENT_READING" if has_current_reading else "STALE_OR_NO_CURRENT_READING"
