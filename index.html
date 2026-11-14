@@ -314,6 +314,8 @@ footer {
   <div class="panel" style="margin-top:12px">
     <div class="panel-title">SOURCE HEALTH // LIVE FEED DIAGNOSTICS</div>
     <div id="source-health-summary" class="muted">Awaiting collector diagnostics.</div>
+    <div class="controls" style="margin-top:10px"><button type="button" class="action-button" id="dw-run-diagnostics">RUN SYSTEM CHECKS</button><span class="meta" id="dw-diagnostics-time">NOT RUN</span></div>
+    <div id="dw-system-diagnostics" class="section-card" style="margin-top:8px" aria-live="polite">System checks are manual and read-only. They do not contact individual publishers or prove that a source is truthful.</div>
     <details style="margin-top:10px"><summary class="panel-title">VIEW ALL SOURCE DIAGNOSTICS</summary><div id="source-health-list" style="margin-top:10px"></div></details>
   </div>
 </section>
@@ -1068,6 +1070,67 @@ function renderSourceHealth(){
   list.innerHTML='<div class="warning">COLLECTION DATA IS MISSING OR OLDER THAN SIX HOURS. Feed status cannot be treated as current.</div>'+list.innerHTML;
  }
 }
+
+async function runSystemDiagnostics(){
+ const target=$("dw-system-diagnostics"),stamp=$("dw-diagnostics-time"),button=$("dw-run-diagnostics");
+ if(!target||!button)return;
+ button.disabled=true;button.textContent="CHECKING…";
+ const checks=[];
+ const add=(name,state,detail)=>checks.push({name,state,detail});
+ try{
+  const data=intelligence;
+  if(!data||typeof data!=="object"||Array.isArray(data))add("Collector payload","FAIL","No valid collector object is currently loaded.");
+  else{
+   add("Collector payload","PASS","JSON object loaded into the dashboard.");
+   const run=data.collector?.lastRun||data.collectorLastRun||"";
+   const age=run?Date.now()-new Date(run).getTime():NaN;
+   if(!Number.isFinite(age))add("Collector timestamp","WARN","Missing or invalid last-run timestamp; freshness cannot be established.");
+   else if(age<0)add("Collector timestamp","WARN","Timestamp is in the future; check the collector clock.");
+   else if(age>6*3600000)add("Collector timestamp","FAIL","Last run is "+(age/3600000).toFixed(1)+" hours old (six-hour threshold).");
+   else add("Collector timestamp","PASS","Last run "+(age/3600000).toFixed(1)+" hours ago.");
+   const statuses=Array.isArray(data.sourceStatus)?data.sourceStatus:[];
+   if(!statuses.length)add("Per-source diagnostics","WARN","No sourceStatus entries supplied by the collector.");
+   else{
+    const known=statuses.filter(x=>["OK","EMPTY","FAILED"].includes(String(x.status||"").toUpperCase())).length;
+    const failed=statuses.filter(x=>String(x.status||"").toUpperCase()==="FAILED").length;
+    const unknown=statuses.length-known;
+    add("Per-source diagnostics",failed||unknown?"WARN":"PASS",statuses.length+" source entries; "+failed+" failed; "+unknown+" unrecognised statuses. EMPTY means checked but returned no records.");
+   }
+   const count=Array.isArray(articles)?articles.length:0;
+   add("Article index",count?"PASS":"WARN",count+" flattened records currently available to dashboard views.");
+   const configured=Number(data.collector?.configuredFeeds)||0;
+   if(configured&&statuses.length&&statuses.length!==configured)add("Feed inventory","WARN",configured+" configured feeds but "+statuses.length+" status entries.");
+   else if(configured)add("Feed inventory","PASS",configured+" configured feeds reported.");
+   else add("Feed inventory","WARN","Configured feed count not supplied.");
+  }
+ }catch(e){add("Collector diagnostics","FAIL",String(e.message||e));}
+ try{
+  const response=await fetch("./data/communications.json?diag="+Date.now(),{cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const payload=await response.json();
+  if(!payload||typeof payload!=="object"||Array.isArray(payload))throw new Error("Unexpected JSON structure");
+  add("Communications data","PASS","Endpoint returned valid JSON"+(payload.generatedAt?"; generated "+dateText(payload.generatedAt):"; generated timestamp absent")+".");
+ }catch(e){add("Communications data","WARN","Not available or invalid: "+String(e.message||e));}
+ try{
+  if(!("serviceWorker" in navigator))add("Service worker","WARN","This browser does not expose service-worker support.");
+  else{
+   const reg=await navigator.serviceWorker.getRegistration("./");
+   if(!reg)add("Service worker","WARN","No registration found for this application scope.");
+   else add("Service worker","PASS","Registered; active worker "+(reg.active?.state||"not active")+".");
+  }
+ }catch(e){add("Service worker","WARN",String(e.message||e));}
+ try{
+  let bytes=0,stores=0;
+  for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i)||"";if(key.startsWith("doomwatch-")){stores++;bytes+=(key.length+String(localStorage.getItem(key)||"").length)*2;}}
+  add("Local browser records","PASS",stores+" DoomWatch localStorage keys; approximately "+(bytes/1024).toFixed(1)+" KiB. No records were changed.");
+ }catch(e){add("Local browser records","WARN","Storage could not be inspected: "+String(e.message||e));}
+ const rank={FAIL:0,WARN:1,PASS:2};
+ const fails=checks.filter(x=>x.state==="FAIL").length,warns=checks.filter(x=>x.state==="WARN").length;
+ target.innerHTML='<strong class="'+(fails?"red":warns?"yellow":"green")+'">'+(fails?"CHECKS NEED ATTENTION":warns?"CHECKS PARTIALLY COMPLETE":"CHECKS PASSED")+'</strong><div class="meta">'+checks.length+" checks · "+fails+" failures · "+warns+" warnings · "+new Date().toLocaleString()+'</div>'+checks.sort((a,b)=>rank[a.state]-rank[b.state]).map(x=>'<div class="section-card" style="margin-top:6px"><strong class="'+(x.state==="PASS"?"green":x.state==="FAIL"?"red":"yellow")+'">'+x.state+'</strong> // '+escapeHTML(x.name)+'<div class="meta">'+escapeHTML(x.detail)+'</div></div>').join("")+'<p class="meta">LIMITATION: checks validate DoomWatch's current browser view and published data endpoints. They do not probe each publisher, validate claims, test radio reachability, or confirm collector scheduling outside this page.</p>';
+ stamp.textContent="LAST RUN: "+new Date().toLocaleTimeString();
+ button.disabled=false;button.textContent="RUN SYSTEM CHECKS";
+}
+$("dw-run-diagnostics")?.addEventListener("click",runSystemDiagnostics);
 
 function renderDailyBrief() {
   const brief = intelligence.dailyBrief;
