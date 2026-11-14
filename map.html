@@ -84,6 +84,87 @@ body:has(#event-map) .map-note{color:#b6c0b1}
 @media(max-width:850px){body:has(#event-map) .map-workspace{grid-template-columns:1fr}body:has(#event-map) #event-map{height:62vh;min-height:400px}}
 @media(max-width:600px){body:has(#event-map) .map-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}body:has(#event-map) .map-workspace{gap:9px}body:has(#event-map) #event-map{height:54vh;min-height:340px}body:has(#event-map) .map-side{grid-template-columns:1fr}body:has(#event-map) .map-intro{padding:10px}body:has(#event-map) .map-intro h2{font-size:1.05rem}}
 
+
+/* GEOINT GLASS // COMMAND DISPLAY REDESIGN */
+body:has(#event-map){background:radial-gradient(ellipse at 48% -12%,#31463a 0%,#17231c 36%,#080d0b 82%);color:#e7eee7}
+body:has(#event-map) main{max-width:1700px!important}
+body:has(#event-map) .map-intro{
+ position:relative;isolation:isolate;overflow:hidden;padding:16px 18px;
+ background:linear-gradient(115deg,rgba(34,57,44,.78),rgba(10,19,14,.72));
+ border:1px solid rgba(170,207,166,.32);border-left:3px solid #d45a4c;border-radius:10px;
+ box-shadow:0 14px 40px #0008,inset 0 1px #ffffff20;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)
+}
+body:has(#event-map) .map-intro:after{content:"";position:absolute;z-index:-1;right:-55px;top:-95px;width:260px;height:260px;border:1px solid #a9d9ad26;border-radius:50%;box-shadow:0 0 0 24px #a9d9ad08,0 0 0 48px #a9d9ad05}
+body:has(#event-map) .map-intro h2{font-size:clamp(17px,2.5vw,24px)!important;letter-spacing:2px!important;color:#f0d89b!important;text-shadow:0 0 18px #a9d9ad35}
+body:has(#event-map) .map-intro .muted{color:#c0d0c2;max-width:680px}
+body:has(#event-map) .map-kpis{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+body:has(#event-map) .map-kpi{
+ position:relative;overflow:hidden;min-height:76px;padding:12px 13px;
+ background:linear-gradient(145deg,rgba(42,62,49,.72),rgba(10,17,13,.78));
+ border:1px solid rgba(164,195,158,.26);border-radius:9px;
+ box-shadow:inset 0 1px #ffffff18,0 8px 24px #0006;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
+}
+body:has(#event-map) .map-kpi:after{content:"";position:absolute;right:-20px;bottom:-34px;width:86px;height:86px;border:1px solid #a5d4a022;border-radius:50%;box-shadow:0 0 0 12px #a5d4a00a}
+body:has(#event-map) .map-kpi strong{font-size:clamp(21px,3vw,30px);color:#e9f3d5;text-shadow:0 0 14px #b4df9b55}
+body:has(#event-map) .map-kpi span{font-size:9px;letter-spacing:1.15px;color:#a9c0ad}
+body:has(#event-map) .map-workspace{grid-template-columns:minmax(0,1fr) minmax(285px,350px);gap:13px;align-items:start}
+body:has(#event-map) .map-canvas-shell{
+ position:relative;padding:10px!important;overflow:hidden;
+ background:linear-gradient(145deg,rgba(46,66,52,.72),rgba(9,16,12,.88))!important;
+ border:1px solid rgba(179,213,169,.4)!important;border-radius:13px!important;
+ box-shadow:0 18px 48px #0009,inset 0 1px #ffffff24!important;
+ backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)
+}
+body:has(#event-map) .map-canvas-shell:before{
+ content:"GEOINT DISPLAY  /  NORTHERN IRELAND";position:absolute;z-index:800;top:20px;right:20px;
+ padding:7px 10px;border:1px solid #a8c99b66;border-radius:5px;
+ background:rgba(8,17,12,.76);color:#dcebd3;font:700 9px Consolas,monospace;letter-spacing:1.25px;
+ box-shadow:0 4px 16px #0008;pointer-events:none;backdrop-filter:blur(12px)
+}
+body:has(#event-map) #event-map{
+ height:min(78vh,900px);min-height:500px;border:1px solid #8da58a66;border-radius:8px;
+ box-shadow:inset 0 0 50px #000b,0 4px 18px #0008;overflow:hidden
+}
+body:has(#event-map) #event-map .leaflet-tile{filter:brightness(.54) saturate(.72) contrast(1.16) hue-rotate(5deg)}
+body:has(#event-map) .leaflet-control-zoom,.leaflet-control-layers{
+ overflow:hidden;border:1px solid #a4c49a66!important;border-radius:7px!important;
+ box-shadow:0 5px 18px #0008!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
+}
+body:has(#event-map) .leaflet-control-zoom a,body:has(#event-map) .leaflet-control-layers{
+ background:rgba(12,24,17,.88)!important;color:#e2f0dc!important;border-color:#607c62!important
+}
+body:has(#event-map) .leaflet-control-attribution{background:rgba(7,13,9,.78)!important;color:#a9bba8!important;border-radius:5px 0 0 0}
+body:has(#event-map) .leaflet-control-attribution a{color:#c4dfb9!important}
+body:has(#event-map) .map-key{padding:9px 2px 2px}
+body:has(#event-map) .map-key span{border:1px solid #8ba78355;border-radius:5px;background:rgba(15,27,19,.78);color:#d0e0ce;backdrop-filter:blur(8px)}
+body:has(#event-map) .map-side{gap:10px}
+body:has(#event-map) .map-box{
+ background:linear-gradient(145deg,rgba(39,58,44,.78),rgba(11,19,14,.84))!important;
+ border:1px solid rgba(165,199,157,.3)!important;border-radius:10px!important;
+ box-shadow:0 10px 28px #0007,inset 0 1px #ffffff18!important;
+ backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)
+}
+body:has(#event-map) .map-box h3{color:#e7d5a4!important;border-bottom:1px solid #a2bd8955;padding-bottom:9px;letter-spacing:1.3px}
+body:has(#event-map) .layer-row{border-bottom:1px solid #9ab49a20;color:#d7e3d5;padding:8px 5px;border-radius:4px}
+body:has(#event-map) .layer-row:hover{background:#b8ddb10c}
+body:has(#event-map) .layer-row input{accent-color:#b5d99b}
+body:has(#event-map) .map-control{border:1px solid #8caf8055;border-radius:6px;background:rgba(5,13,8,.8);color:#e5efe1}
+body:has(#event-map) .map-actions button,body:has(#event-map) .map-actions .action-button,body:has(#event-map) .detail-actions button{
+ border:1px solid #9dbb8a77;border-radius:6px;background:linear-gradient(135deg,rgba(62,88,63,.88),rgba(19,35,24,.94));
+ color:#e4f0dc;box-shadow:inset 0 1px #ffffff20,0 3px 10px #0005
+}
+body:has(#event-map) .map-actions button:hover,body:has(#event-map) .map-actions .action-button:hover,body:has(#event-map) .detail-actions button:hover{
+ border-color:#e6d39b;box-shadow:0 0 16px #b3d89a33,inset 0 1px #ffffff2a
+}
+body:has(#event-map) .map-note{color:#aec1b0}
+body:has(#event-map) .map-item{background:linear-gradient(145deg,rgba(38,58,43,.8),rgba(12,20,15,.88));border:1px solid #8eaa8640;border-left-width:3px;border-radius:7px}
+body:has(#event-map) .map-item strong{color:#e8d8a8}
+body:has(#event-map) .map-item.dw-selected{box-shadow:0 0 0 2px #f0d17c77,0 0 22px #c6a75c33}
+body:has(#event-map) #map-status{border:1px solid #9cbd8a55;border-left:3px solid #d45a4c;border-radius:7px;background:linear-gradient(100deg,rgba(57,37,29,.82),rgba(14,25,17,.88));color:#f0dfb5;box-shadow:0 7px 20px #0006;backdrop-filter:blur(12px)}
+@media(min-width:1100px){body:has(#event-map) .map-side{position:sticky;top:72px;max-height:calc(100vh - 84px);overflow:auto;padding-right:3px;scrollbar-width:thin}}
+@media(max-width:850px){body:has(#event-map) .map-workspace{grid-template-columns:1fr}body:has(#event-map) #event-map{height:66vh;min-height:430px}body:has(#event-map) .map-side{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){body:has(#event-map) .map-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}body:has(#event-map) .map-workspace{gap:10px}body:has(#event-map) .map-canvas-shell{padding:6px!important;border-radius:9px!important}body:has(#event-map) .map-canvas-shell:before{top:13px;right:13px;font-size:8px;padding:6px 7px}body:has(#event-map) #event-map{height:58vh;min-height:370px}body:has(#event-map) .map-side{grid-template-columns:1fr}body:has(#event-map) .map-intro{padding:12px;border-radius:8px}}
+@media(prefers-reduced-motion:reduce){body:has(#event-map) .map-kpi,body:has(#event-map) .map-box{backdrop-filter:none;-webkit-backdrop-filter:none}}
 </style>
 </head>
 <body>
