@@ -20,17 +20,17 @@ MAX_ARTICLES = 3000
 MAX_FEED_SIZE = 3_000_000
 
 SECTOR_RULES = {
-  1: ("National resilience", ("civil contingencies","national resilience","emergency planning","continuity planning","cabinet office","national risk")),
-  2: ("Food and agriculture", ("food supply","food shortage","food security","agriculture","farming","fertiliser","fertilizer","grain","livestock","crop failure")),
-  3: ("Fuel, energy and oil", ("heating oil","fuel shortage","petrol","diesel","oil price","natural gas","gas supply","refinery","energy security")),
-  4: ("Chemicals, medicines and industrial inputs", ("medicine shortage","medicines","pharmaceutical","medical supplies","chemical","chlorine","industrial inputs","semiconductor")),
-  5: ("Electricity, gas and water", ("power outage","blackout","electricity","electricity grid","gas network","water supply","ni water","wastewater","substation")),
-  6: ("Transport, ports and logistics", ("trafficwatch","road closure","rail disruption","port","harbour","harbor","ferry","shipping","freight","logistics","airport")),
-  7: ("Healthcare and public health", ("public health","nhs","hospital","healthcare","outbreak","infectious disease","virus","ambulance","pharmacy")),
-  8: ("Telecommunications, cyber and infrastructure", ("cyber","ransomware","data breach","phishing","telecom","broadband","mobile network","internet outage","data centre","datacenter")),
-  9: ("Weather, flooding and natural hazards", ("weather warning","flood","storm","wind warning","snow","ice warning","wildfire","coastal erosion","drought")),
-  10: ("Civil defence and community preparedness", ("civil defence","community resilience","emergency shelter","evacuation","household preparedness","emergency plan","volunteer response")),
-  11: ("International events with UK/NI impact", ("geopolitical","international conflict","armed conflict","military operation","sanctions","blockade","red sea","strait of hormuz","ukraine","russia","iran","israel","gaza","nato","shipping disruption","trade disruption"))
+  1: ("National resilience", ("civil contingencies","civil contingency","national resilience","emergency planning","emergency preparedness","continuity planning","business continuity","cabinet office","national risk","resilience forum","emergency response plan","major incident")),
+  2: ("Food and agriculture", ("food supply","food shortage","food security","food prices","food imports","food processing","agriculture","farming","farmers","fertiliser","fertilizer","grain","livestock","crop failure","animal disease","avian influenza","poultry","veterinary medicine","agri-food")),
+  3: ("Fuel, energy and oil", ("heating oil","home heating oil","kerosene","fuel shortage","fuel supply","fuel prices","petrol","diesel","oil price","natural gas","gas supply","gas storage","refinery","energy security","petrol station","fuel terminal")),
+  4: ("Chemicals, medicines and industrial inputs", ("medicine shortage","medicines","medicine recall","drug shortage","pharmaceutical","medical supplies","medical device","personal protective equipment","chemical","chlorine","ammonia","industrial gas","industrial inputs","semiconductor","critical raw material","fertiliser supply")),
+  5: ("Electricity, gas and water", ("power outage","electricity outage","blackout","electricity","electricity grid","gas network","gas outage","water supply","water outage","drinking water","boil water","water quality","ni water","wastewater","sewage","substation","electricity network","grid operator")),
+  6: ("Transport, ports and logistics", ("trafficwatch","road closure","road disruption","rail disruption","port of belfast","belfast harbour","larne port","port disruption","ports","harbour","harbor","ferry","ferry cancellation","shipping","freight","logistics","airport","freight terminal","border delay","lorry driver")),
+  7: ("Healthcare and public health", ("public health","public health agency","pha ni","uk health security agency","ukhsa","nhs","hospital","healthcare","health protection","outbreak","infectious disease","respiratory infection","ambulance","pharmacy","health service disruption","disease surveillance")),
+  8: ("Telecommunications, cyber and infrastructure", ("cyber","cyber attack","cyber incident","ransomware","data breach","phishing","telecom","telecommunications","broadband","mobile network","mobile outage","internet outage","data centre","datacenter","undersea cable","subsea cable","critical national infrastructure","digital infrastructure")),
+  9: ("Weather, flooding and natural hazards", ("weather warning","met office warning","flood","flood warning","river level","storm","wind warning","snow","ice warning","wildfire","coastal flooding","coastal erosion","drought","heatwave","severe weather")),
+  10: ("Civil defence and community preparedness", ("civil defence","community resilience","community emergency plan","emergency shelter","evacuation","evacuation centre","household preparedness","emergency plan","volunteer response","emergency support centre","local resilience forum")),
+  11: ("International events with UK/NI impact", ("geopolitical","international conflict","armed conflict","military operation","military escalation","sanctions","blockade","red sea","strait of hormuz","ukraine","russia","iran","israel","gaza","nato","shipping disruption","trade disruption","export controls","energy chokepoint","maritime security"))
 }
 LOCALITY_POINTS = [
  ("Belfast",54.5973,-5.9301,("belfast","greater belfast")),
@@ -57,28 +57,43 @@ LOCALITY_POINTS = [
  ("Ballycastle",55.2044,-6.2540,("ballycastle","bushmills","cushendall"))
 ]
 def enrich_article(article):
-    text = " " + (str(article.get("title","")) + " " + str(article.get("description",""))).lower() + " "
+    text = " " + " ".join(str(article.get(field,"") or "") for field in ("title", "description", "summary")).lower() + " "
     keyword_ids = set()
     for sector_id, (_, terms) in SECTOR_RULES.items():
         if any(re.search(r"(?<![a-z0-9])" + re.escape(term) + r"(?![a-z0-9])", text) for term in terms):
             keyword_ids.add(sector_id)
     source_ids = set()
     domain = article.get("domain")
-    if isinstance(domain, int) and 1 <= domain <= 11:
+    source_type = str(article.get("sourceType") or article.get("type") or "").strip().lower()
+    # Broad news publishers are not sector specialists. Their records must earn
+    # sector placement through article text, not the feed's default domain.
+    broad_publishers = {"mainstream_media", "international_media", "news_media"}
+    if isinstance(domain, int) and 1 <= domain <= 11 and source_type not in broad_publishers:
         source_ids.add(domain)
     ids = keyword_ids | source_ids
     article["sectorIds"] = sorted(ids)
     article["sectorKeywordIds"] = sorted(keyword_ids)
     article["sectorSourceIds"] = sorted(source_ids)
     article["sectorLabels"] = [SECTOR_RULES[i][0] for i in sorted(ids)]
-    article["sectorClassification"] = "KEYWORD_AND_SOURCE_METADATA"
+    if keyword_ids and source_ids:
+        article["sectorClassification"] = "KEYWORD_AND_SOURCE_METADATA"
+    elif keyword_ids:
+        article["sectorClassification"] = "KEYWORD_MATCH"
+    elif source_ids:
+        article["sectorClassification"] = "SOURCE_METADATA"
+    else:
+        article["sectorClassification"] = "UNCLASSIFIED"
     article.pop("locality", None)
-    for name, lat, lon, terms in LOCALITY_POINTS:
-        if any(re.search(r"(?<![a-z])" + re.escape(term) + r"(?![a-z])", text) for term in terms):
-            article["locality"] = {"name":name,"latitude":lat,"longitude":lon,"precision":"APPROXIMATE_TOWN_CENTRE"}
-            if str(article.get("region","")).lower() in ("global","unknown",""):
-                article["region"] = "Northern Ireland"
-            break
+    declared_region = str(article.get("region") or "").strip().lower()
+    # Do not turn an international story that merely mentions an NI place
+    # into a local map incident.
+    if declared_region not in ("international", "global", "world", "worldwide"):
+        for name, lat, lon, terms in LOCALITY_POINTS:
+            if any(re.search(r"(?<![a-z])" + re.escape(term) + r"(?![a-z])", text) for term in terms):
+                article["locality"] = {"name":name,"latitude":lat,"longitude":lon,"precision":"APPROXIMATE_TOWN_CENTRE"}
+                if declared_region in ("unknown", ""):
+                    article["region"] = "Northern Ireland"
+                break
     article.setdefault("evidenceStatus","UNASSESSED")
     article.setdefault("confidence","UNASSESSED")
     return article
