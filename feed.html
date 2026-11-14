@@ -201,7 +201,7 @@ function render(){
    const mapLink=mapSearch?'<a class="action-button" href="./map.html?'+mapParams.toString()+'">FIND ON MAP ↗</a>':"";
    const caseLink='<a class="action-button" href="./incident.html?'+(a.url?'url='+encodeURIComponent(a.url):'title='+encodeURIComponent(a.title||""))+'">OPEN INCIDENT CASE FILE ↗</a>';
    const globalIndex=list.indexOf(a);
-   return '<div class="cluster-source"><strong>'+esc(a.source||"Source not supplied")+'</strong> · '+esc(date(a.publishedAt||a.collectedAt))+'<p>'+esc(a.title||"Untitled report")+'</p><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(provenance)+" · "+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+' '+mapLink+' '+caseLink+'<div style="margin-top:8px"><button type="button" class="action-button" data-flag="'+globalIndex+'">SAVE TO RUMOUR MONITOR</button></div></div>';
+   return '<div class="cluster-source"><strong>'+esc(a.source||"Source not supplied")+'</strong> · '+esc(date(a.publishedAt||a.collectedAt))+'<p>'+esc(a.title||"Untitled report")+'</p><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(provenance)+" · "+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+' '+mapLink+' '+caseLink+'<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px"><button type="button" class="action-button" data-investigate="'+globalIndex+'">SET AS ACTIVE INVESTIGATION</button><button type="button" class="action-button" data-flag="'+globalIndex+'">SAVE TO RUMOUR MONITOR</button></div></div>';
   }).join("");
   return '<details class="cluster"><summary><h3>'+esc(lead.title||"Untitled story")+'</h3><div class="cluster-meta">'+esc(cluster.bucket)+' · '+items.length+' report(s) · '+sources+' distinct publisher(s) · '+stats.newsrooms+' newsroom publisher(s) · latest '+esc(date(cluster.latest))+'</div></summary><div class="cluster-note"><strong>'+esc(corroborationLabel(stats))+'</strong><br>A newsroom count is not proof of independent sourcing. Records explicitly labelled as syndicated or aggregated, official releases and social reposts are excluded from newsroom counts. Open the originals and compare reporting before treating this as corroboration. · <a href="./operations.html?search='+encodeURIComponent(lead.title||"") +'">TRACK IN OPS TIMELINE ↗</a></div><div class="cluster-sources">'+sourcesHtml+'</div></details>';
  }).join("")||'<div class="panel muted">No records match this filter and search. Try another topic or clear the search.</div>';
@@ -246,6 +246,12 @@ async function load(){
  }catch(e){$("feed-status").textContent="SIGNAL ARCHIVE FAILED // "+e.message;}
 }
 const initialFeedQuery=new URLSearchParams(location.search).get("q")||"";if(initialFeedQuery)$("feed-search").value=initialFeedQuery;
+$("feed-items").addEventListener("click",event=>{
+ const pick=event.target.closest("[data-investigate]");if(!pick)return;
+ const item=rendered[Number(pick.dataset.investigate)];if(!item)return;
+ if(window.DoomWatchContext)window.DoomWatchContext.set({area:String(item.locality?.name||item.area||item.location||""),title:String(item.title||item.description||"Untitled report"),source:String(item.source||""),url:String(item.url||"")});
+ pick.textContent="INVESTIGATION CONTEXT SET";pick.disabled=true;
+});
 $("feed-items").addEventListener("click",event=>{
  const button=event.target.closest("[data-flag]");
  if(!button)return;
