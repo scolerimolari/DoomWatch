@@ -853,11 +853,8 @@ def main():
         reverse=True
     )
 
-    # Add transparent sector tags and approximate town-level map metadata.
-    for article in retained:
-        enrich_article(article)
-
-    # Backfill source classification on retained historical records.
+    # Backfill publisher metadata before classification so historical records
+    # from broad news feeds are treated consistently with newly collected ones.
     feed_metadata = {
         str(item.get("id")): item
         for item in feeds
@@ -872,6 +869,10 @@ def main():
                 "sourceType",
                 metadata.get("type", "unclassified")
             )
+
+    # Add transparent sector tags and approximate town-level map metadata.
+    for article in retained:
+        enrich_article(article)
 
     intelligence["articles"] = retained[:MAX_ARTICLES]
     intelligence["sourceStatus"] = source_status
