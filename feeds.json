@@ -289,6 +289,19 @@
       "tier": 1,
       "trust": "official_primary_source",
       "sourceType": "transport_events"
+    },
+    {
+      "id": "nie-network-outages",
+      "name": "NIE Networks - live network outages",
+      "url": "https://nienetworks.opendatasoft.com/api/explore/v2.1/catalog/datasets/nie-networks-network-faults/records?limit=100",
+      "articleUrl": "https://nienetworks.opendatasoft.com/explore/dataset/nie-networks-network-faults/",
+      "domain": 5,
+      "region": "Northern Ireland",
+      "priority": "high",
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "electricity_network_outage",
+      "method": "nie_network_outages"
     }
   ]
 }
