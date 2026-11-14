@@ -245,7 +245,7 @@ async function load(){
   $("feed-status").textContent="ARCHIVE CONNECTED // "+articles.length+" RECORDS // AUTO-CHECK EVERY 5 MINUTES WHILE OPEN";
  }catch(e){$("feed-status").textContent="SIGNAL ARCHIVE FAILED // "+e.message;}
 }
-const initialFeedQuery=new URLSearchParams(location.search).get("q")||"";if(initialFeedQuery)$("feed-search").value=initialFeedQuery;
+const feedParams=new URLSearchParams(location.search),initialFeedQuery=feedParams.get("q")||feedParams.get("dw_title")||feedParams.get("dw_area")||"";if(initialFeedQuery)$("feed-search").value=initialFeedQuery;
 $("feed-items").addEventListener("click",event=>{
  const pick=event.target.closest("[data-investigate]");if(!pick)return;
  const item=rendered[Number(pick.dataset.investigate)];if(!item)return;
