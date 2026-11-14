@@ -105,7 +105,7 @@ class TableParser(HTMLParser):
         elif tag == "style":
             self.in_style = False
         elif tag in ("td", "th") and self.cell is not None:
-            value = re.sub(r"\\s+", " ", " ".join(self.cell)).strip()
+            value = re.sub(r"\s+", " ", " ".join(self.cell)).strip()
             self.row.append(value)
             self.cell = None
         elif tag == "tr" and self.row is not None:
