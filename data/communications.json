@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-14T12:18:22.805Z",
+  "generatedAt": "2026-11-14T12:18:29Z",
   "collectionIntervalMinutes": 5,
   "displayRefreshSeconds": 60,
-  "overallStatus": "AWAITING_FIRST_POLL",
+  "overallStatus": "SIGNALS_PRESENT",
   "sources": [
     {
       "id": "signalchecker-mobile",
@@ -11,10 +11,10 @@
       "url": "https://www.signalchecker.co.uk/network-status",
       "kind": "independent_traffic_signal",
       "scope": "UK-wide network indicators",
-      "status": "PENDING_FIRST_POLL",
-      "checkedAt": null,
+      "status": "SOURCE_UNAVAILABLE",
+      "checkedAt": "2026-11-14T12:18:28Z",
       "providerSignals": [],
-      "note": "Waiting for the first scheduled collector run."
+      "note": "HTTPError: HTTP Error 403: Forbidden"
     },
     {
       "id": "status-pages-mobile",
@@ -22,10 +22,10 @@
       "url": "https://status-pages.com/mobile",
       "kind": "community_reports",
       "scope": "UK-wide reports and area groupings",
-      "status": "PENDING_FIRST_POLL",
-      "checkedAt": null,
+      "status": "NO_STRUCTURED_STATUS",
+      "checkedAt": "2026-11-14T12:18:28Z",
       "providerSignals": [],
-      "note": "Waiting for the first scheduled collector run."
+      "note": "Page was reachable, but no recognised current-status rows were extracted."
     },
     {
       "id": "updownsignal-mobile",
@@ -33,10 +33,32 @@
       "url": "https://updownsignal.com/en-gb/industries/mobile-carriers/",
       "kind": "independent_traffic_and_reports",
       "scope": "UK-wide carrier indicators",
-      "status": "PENDING_FIRST_POLL",
-      "checkedAt": null,
-      "providerSignals": [],
-      "note": "Waiting for the first scheduled collector run."
+      "status": "OK",
+      "checkedAt": "2026-11-14T12:18:29Z",
+      "providerSignals": [
+        {
+          "provider": "Vodafone",
+          "reportedStatus": "ISSUE_SIGNAL",
+          "sourceRow": "Vodafone UK | Partial Outage | Data connectivity issues in South East England | 2026-11-13 22:18 | 2026-11-14 03:18",
+          "scope": "UK-wide; not a Ballyclare-specific confirmation",
+          "evidenceClass": "independent_traffic_and_reports"
+        },
+        {
+          "provider": "EE",
+          "reportedStatus": "NO_ISSUE_SIGNAL",
+          "sourceRow": "EE | Operational | No reported issues | - | 2026-11-14 04:18",
+          "scope": "UK-wide; not a Ballyclare-specific confirmation",
+          "evidenceClass": "independent_traffic_and_reports"
+        },
+        {
+          "provider": "O2",
+          "reportedStatus": "NO_ISSUE_SIGNAL",
+          "sourceRow": "O2 | Operational | No reported issues | - | 2026-11-14 04:18",
+          "scope": "UK-wide; not a Ballyclare-specific confirmation",
+          "evidenceClass": "independent_traffic_and_reports"
+        }
+      ],
+      "note": "Rows are third-party status indicators, not operator confirmation."
     },
     {
       "id": "updownsignal-openreach",
@@ -44,13 +66,62 @@
       "url": "https://updownsignal.com/en-gb/industries/internet-providers/openreach/",
       "kind": "community_reports",
       "scope": "UK-wide fixed broadband infrastructure reports",
-      "status": "PENDING_FIRST_POLL",
-      "checkedAt": null,
+      "status": "NO_STRUCTURED_STATUS",
+      "checkedAt": "2026-11-14T12:18:29Z",
       "providerSignals": [],
-      "note": "Waiting for the first scheduled collector run."
+      "note": "Page was reachable, but no recognised current-status rows were extracted."
     }
   ],
-  "providers": [],
+  "providers": [
+    {
+      "provider": "EE",
+      "status": "NO_ISSUE_SIGNAL",
+      "issueSignals": 0,
+      "noIssueSignals": 1,
+      "observations": [
+        {
+          "sourceId": "updownsignal-mobile",
+          "source": "UpDownSignal UK mobile carriers",
+          "url": "https://updownsignal.com/en-gb/industries/mobile-carriers/",
+          "status": "NO_ISSUE_SIGNAL",
+          "sourceRow": "EE | Operational | No reported issues | - | 2026-11-14 04:18",
+          "evidenceClass": "independent_traffic_and_reports"
+        }
+      ]
+    },
+    {
+      "provider": "O2",
+      "status": "NO_ISSUE_SIGNAL",
+      "issueSignals": 0,
+      "noIssueSignals": 1,
+      "observations": [
+        {
+          "sourceId": "updownsignal-mobile",
+          "source": "UpDownSignal UK mobile carriers",
+          "url": "https://updownsignal.com/en-gb/industries/mobile-carriers/",
+          "status": "NO_ISSUE_SIGNAL",
+          "sourceRow": "O2 | Operational | No reported issues | - | 2026-11-14 04:18",
+          "evidenceClass": "independent_traffic_and_reports"
+        }
+      ]
+    },
+    {
+      "provider": "Vodafone",
+      "status": "ISSUE_SIGNAL",
+      "issueSignals": 1,
+      "noIssueSignals": 0,
+      "observations": [
+        {
+          "sourceId": "updownsignal-mobile",
+          "source": "UpDownSignal UK mobile carriers",
+          "url": "https://updownsignal.com/en-gb/industries/mobile-carriers/",
+          "status": "ISSUE_SIGNAL",
+          "sourceRow": "Vodafone UK | Partial Outage | Data connectivity issues in South East England | 2026-11-13 22:18 | 2026-11-14 03:18",
+          "evidenceClass": "independent_traffic_and_reports"
+        }
+      ]
+    }
+  ],
   "officialCheckers": [
     {
       "name": "EE service status",
