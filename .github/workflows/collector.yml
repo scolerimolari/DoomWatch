@@ -103,7 +103,7 @@ jobs:
           for attempt in 1 2 3; do
             echo "Saving intelligence update, attempt $attempt"
 
-            git add data/intelligence.json
+            git add data/intelligence.json data/ballyclare-history.json
 
             if git diff --cached --quiet; then
               echo "No intelligence data changes to commit."
