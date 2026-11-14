@@ -187,8 +187,9 @@ function getFiltered(){
  const cutoff=Date.now()-ageDays*86400000;
  return archive.filter(a=>{
   if(!showAll){const d=validDate(a);if(d&&d.getTime()<cutoff)return false;}
-  const c=category(a);if(!layerEnabled(c))return false;
-  if(isTraffic(a)&&!layerEnabled("TRAFFIC"))return false;
+  const c=category(a);
+  if(isTraffic(a)){if(!layerEnabled("TRAFFIC"))return false;}
+  else if(!layerEnabled(c))return false;
   if(activeTown&&locate(a)?.name!==activeTown)return false;
   if(searchTerm&&!allText(a).includes(searchTerm))return false;
   return true;
