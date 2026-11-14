@@ -33,7 +33,7 @@
 <body>
 <header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">INTELLIGENCE OBSERVATORY // SIX SOURCE FLOWS</div></div><div class="classification">OPEN SOURCE // REVIEW REQUIRED</div></div></header>
 <main>
-<section class="obs-hero">
+<div class="obs-hero">
  <div class="obs-kicker">OPERATION CONTAINMENT / MULTI-DOMAIN COLLECTION</div>
  <div class="obs-title">INTELLIGENCE OBSERVATORY</div>
  <div class="obs-sub">Six distinct collection and assessment streams. One common record format. Source reliability is separated from claim confidence. Social posts, alternative commentary and machine-generated matches remain leads until independently checked.</div>
@@ -44,8 +44,8 @@
   <div class="obs-stat"><span>SNAPSHOT UPDATED</span><strong id="obs-updated" style="font-size:12px">WAITING</strong></div>
  </div>
  <div class="obs-status" id="obs-status" aria-live="polite">CONNECTING TO OBSERVATORY SNAPSHOT…</div>
-</section>
-<section class="panel" id="obs-integrations" style="margin:12px 0;border:1px solid #596653"><div class="panel-title">CONNECTED DOOMWATCH WORKSPACES</div><div class="obs-actions"><a href="./feed.html">FEED / SIGNAL ROOM ↗</a><a href="./map.html">LIVE MAP ↗</a><a href="./operations.html">OPERATIONS ↗</a><a href="./markets.html">MARKETS ↗</a><a href="./index.html#intelligence">INTELLIGENCE / GRAPHS ↗</a><a href="./meshcore.html">MESHCORE ↗</a></div><div class="obs-status" style="margin-top:8px">Use the shared investigation context to carry an area or report between workspaces. New catalogue records remain in this observatory until a human chooses to open a case file.</div></section>
+</div>
+<div class="panel" id="obs-integrations" style="margin:12px 0;border:1px solid #596653"><div class="panel-title">CONNECTED DOOMWATCH WORKSPACES</div><div class="obs-actions"><a href="./feed.html">FEED / SIGNAL ROOM ↗</a><a href="./map.html">LIVE MAP ↗</a><a href="./operations.html">OPERATIONS ↗</a><a href="./markets.html">MARKETS ↗</a><a href="./index.html#intelligence">INTELLIGENCE / GRAPHS ↗</a><a href="./meshcore.html">MESHCORE ↗</a></div><div class="obs-status" style="margin-top:8px">Use the shared investigation context to carry an area or report between workspaces. New catalogue records remain in this observatory until a human chooses to open a case file.</div></div>
 <div class="obs-note"><strong>ASSESSMENT RULE:</strong> Reliability grades describe the type of source, not whether a particular claim is true. Repeated posts, syndicated copy and reports citing one original source are not independent corroboration. No automatic escalation establishes an incident.</div>
 <h2>SELECT AN INTELLIGENCE FLOW</h2>
 <div class="obs-tabs" id="obs-tabs" role="tablist" aria-label="Six intelligence flows">
@@ -56,7 +56,7 @@
  <button type="button" data-flow="digital" role="tab" aria-selected="false"><strong>05 / DIGITAL INFRASTRUCTURE</strong><span>Cyber, telecoms & utility dependencies</span></button>
  <button type="button" data-flow="independent" role="tab" aria-selected="false"><strong>06 / INDEPENDENT MEDIA</strong><span>Investigative & regional journalism</span></button>
 </div>
-<section class="obs-flow-head">
+<div class="obs-flow-head">
  <h2 id="flow-name">01 / OSINT OBSERVATORY</h2>
  <div id="flow-description" class="obs-status">Loading flow description…</div>
  <div class="obs-stats">
@@ -65,7 +65,7 @@
   <div class="obs-stat"><span>GRADE A / B</span><strong id="flow-high">—</strong></div>
   <div class="obs-stat"><span>UNASSESSED CLAIMS</span><strong id="flow-unassessed">—</strong></div>
  </div>
-</section>
+</div>
 <div class="obs-toolbar">
  <input id="obs-search" type="search" placeholder="Search this flow by source, topic, place or claim…">
  <select id="obs-grade" aria-label="Filter by source reliability"><option value="ALL">ALL SOURCE GRADES</option><option value="A">GRADE A</option><option value="B">GRADE B</option><option value="C">GRADE C</option><option value="D">GRADE D</option><option value="E">GRADE E</option><option value="U">GRADE U</option></select>
