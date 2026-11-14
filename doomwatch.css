@@ -118,3 +118,6 @@ h2{margin-top:20px!important;margin-bottom:10px!important}
 .dw-global-nav a{touch-action:pan-x;}
 .dw-global-nav a:focus-visible,.dw-local-nav a:focus-visible,.dw-local-nav button:focus-visible{outline:2px solid var(--dw-yellow);outline-offset:2px;}
 @media(max-width:700px){.dw-local-nav{top:51px!important;}}
+
+/* Unified navigation and mobile interaction pass */
+.dw-global-nav{position:sticky!important;top:0!important;z-index:10000!important;display:flex!important;overflow-x:auto!important;scrollbar-width:thin!important;overscroll-behavior-x:contain!important;touch-action:pan-x!important}.dw-global-nav a{flex:0 0 auto!important;min-height:42px!important;white-space:nowrap!important;touch-action:pan-x!important}.dw-global-nav a[aria-current="page"]{outline:1px solid #e45b4e!important;outline-offset:-3px!important}.dw-local-nav{position:sticky!important;top:56px!important;z-index:9999!important}.dw-global-nav a:focus-visible,.dw-local-nav a:focus-visible,.dw-local-nav button:focus-visible{outline:2px solid #e5bd68!important;outline-offset:2px!important}@media(max-width:700px){.dw-global-nav{min-height:48px!important}.dw-global-nav a{min-width:72px!important;padding:8px 9px!important;font-size:9px!important}.dw-local-nav{top:48px!important}}@media(prefers-reduced-motion:reduce){.dw-global-nav,.dw-local-nav{scroll-behavior:auto!important}}
