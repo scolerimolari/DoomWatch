@@ -18,19 +18,17 @@ const statusline=mast.querySelector("#dw-statusline");
 ["clock","connection","updated"].forEach(id=>{const node=document.getElementById(id);if(node){const wrap=document.createElement("span");wrap.appendChild(node);statusline.appendChild(wrap);}});
 if(oldHeader)oldHeader.hidden=true;
 const nav=document.createElement("nav");nav.className="dw-global-nav";nav.setAttribute("aria-label","All DoomWatch pages and sections");
-const routeHrefs=new Set();
-routes.forEach(([key,url,label])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.textContent=label;if(key===active){a.setAttribute("aria-current","page");}nav.appendChild(a);routeHrefs.add(new URL(url,document.baseURI).pathname);});
-if(oldNav){
- const extras=[...oldNav.children];
- extras.forEach(el=>{
-  if(el.tagName==="A"){
-   const href=el.getAttribute("href")||"";
-   if(href.startsWith("#")){el.classList.add("dw-section-link");nav.appendChild(el);}
-   else if(href && !routeHrefs.has(new URL(href,document.baseURI).pathname)){el.classList.add("dw-section-link");nav.appendChild(el);}
-  }else if(el.tagName==="BUTTON"){el.classList.add("dw-section-tab");nav.appendChild(el);}
- });
- oldNav.remove();
-}
+routes.forEach(([key,url,label])=>{
+ const a=document.createElement("a");
+ a.href=new URL(url,document.baseURI).href;
+ a.textContent=label;
+ if(key===active){a.setAttribute("aria-current","page");}
+ nav.appendChild(a);
+});
+// Every page uses this single shared route bar. Page-local section menus are
+// intentionally removed: dashboard partitions and standalone modules are
+// reached through the same consistent route list above.
+if(oldNav)oldNav.remove();
 mast.insertAdjacentElement("afterend",nav);
 const wire=document.createElement("div");wire.className="dw-wire";wire.setAttribute("aria-hidden","true");nav.insertAdjacentElement("afterend",wire);
 const top=document.createElement("button");top.type="button";top.className="dw-top";top.textContent="TOP";top.setAttribute("aria-label","Back to top");top.addEventListener("click",()=>window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}));body.appendChild(top);
