@@ -45,11 +45,36 @@ function foldSection(section,index){
  const hint=document.createElement("span");hint.className="dw-fold-hint";hint.textContent="COLLAPSE / EXPAND";summary.appendChild(hint);
  section.parentNode.insertBefore(details,section);details.appendChild(summary);details.appendChild(section);
 }
+function foldHeadingGroups(container){
+ if(!container)return;
+ const children=[...container.children];
+ let groupIndex=0;
+ for(let i=0;i<children.length;i++){
+  const heading=children[i];
+  if(!/^H[23]$/.test(heading.tagName)||heading.closest("details.dw-fold"))continue;
+  const block=[heading];let j=i+1;
+  while(j<children.length&&!/^H[23]$/.test(children[j].tagName)){block.push(children[j]);j++;}
+  if(block.length===1)continue;
+  const label=(heading.textContent||"SECTION").replace(/\\s+/g," ").trim();
+  const details=document.createElement("details");details.className="dw-fold dw-heading-fold";details.dataset.dwFold="true";
+  if(groupIndex===0)details.open=true;
+  const summary=document.createElement("summary");summary.textContent=label;
+  const hint=document.createElement("span");hint.className="dw-fold-hint";hint.textContent="COLLAPSE / EXPAND";summary.appendChild(hint);
+  const content=document.createElement("div");content.className="dw-fold-content";
+  heading.parentNode.insertBefore(details,heading);
+  details.appendChild(summary);details.appendChild(content);
+  block.forEach(node=>content.appendChild(node));
+  groupIndex++;i=j-1;
+ }
+}
 const main=document.querySelector("main");
 if(main){
  let groups=[...main.children].filter(el=>el.tagName==="SECTION"&&!el.classList.contains("page")&&!el.classList.contains("op-hero")&&!el.classList.contains("op-kpis"));
  groups.forEach((el,i)=>foldSection(el,i));
  document.querySelectorAll(".map-box").forEach((el,i)=>foldSection(el,i));
+ foldHeadingGroups(main);
+ main.querySelectorAll(":scope > .page").forEach(page=>foldHeadingGroups(page));
+ document.querySelectorAll(".brief-card,.case-panel").forEach((el,i)=>foldSection(el,i));
 }
 function openHashTarget(){const id=decodeURIComponent(location.hash.slice(1));if(!id)return;const target=document.getElementById(id);const fold=target?.closest("details.dw-fold");if(fold)fold.open=true;}
 window.addEventListener("hashchange",openHashTarget);openHashTarget();
