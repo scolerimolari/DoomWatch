@@ -1455,11 +1455,14 @@ try{const saved=JSON.parse(localStorage.getItem(MESH_HISTORY_KEY)||"null");if(sa
 function meshHistoryRegion(n){
  const lat=Number(n.lat),lon=Number(n.lon);if(!Number.isFinite(lat)||!Number.isFinite(lon))return null;
  if(lat<49.5||lat>61.5||lon< -11.5||lon>3.5)return null;
- if(lat>=54.0&&lon< -5.2)return "ni";
- if(lat<55.5&&lon< -5.2)return "ireland";
- if(lat>=55.3&&lon< -0.5)return "scotland";
- if(lat>=51.3&&lon< -2.5)return "wales";
- return "england";
+ const polygonContains=(points)=>{let inside=false;for(let i=0,j=points.length-1;i<points.length;j=i++){const a=points[i],b=points[j];if(((a[0]>lat)!==(b[0]>lat))&&(lon<(b[1]-a[1])*(lat-a[0])/(b[0]-a[0])+a[1]))inside=!inside;}return inside;};
+ const niBoundary=[[55.31,-7.35],[55.22,-6.02],[54.98,-5.42],[54.08,-5.42],[54.04,-7.35],[54.32,-8.18],[55.05,-8.18]];
+ if(polygonContains(niBoundary))return "ni";
+ if(lat>=55.55&&lon> -7.5&&lon< -0.5)return "scotland";
+ if(lat>=51.3&&lat<53.55&&lon> -5.5&&lon< -2.5)return "wales";
+ if(lon< -5.2&&lat<55.5)return "ireland";
+ if(lat>=49.5&&lat<=56.0&&lon>= -6.5&&lon<=2.2)return "england";
+ return null;
 }
 function meshHistoryKey(n){return String(n.public_key||n.pk||n.key||"").toLowerCase();}
 function meshHistoryName(n){return String(n.adv_name||n.name||n.n||"Unnamed node").slice(0,100);}
