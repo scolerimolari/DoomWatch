@@ -204,7 +204,7 @@ def classify_indicator(value):
 def walk_provider_objects(value):
     if isinstance(value, dict):
         keys = {str(k).lower() for k in value}
-        if keys.intersection({"name", "provider", "title"}) and keys.intersection(
+        if keys.intersection({"name", "provider", "title", "displayname"}) and keys.intersection(
             {"indicator", "status", "summary", "overallstatus"}
         ):
             yield value
@@ -217,11 +217,11 @@ def walk_provider_objects(value):
 
 def extract_json_signals(source, payload):
     observations = []
-    checked_at = payload.get("checkedAt") or payload.get("lastChecked") or payload.get("updatedAt")
+    checked_at = payload.get("checkedAt") or payload.get("lastChecked") or payload.get("updatedAt") or payload.get("generatedAt")
     category_name = payload.get("name") or payload.get("category") or source["scope"]
     seen = set()
     for item in walk_provider_objects(payload):
-        name = item.get("name") or item.get("provider") or item.get("title")
+        name = item.get("name") or item.get("provider") or item.get("title") or item.get("displayName")
         provider = canonical_provider(name)
         if not provider or provider in seen:
             continue
