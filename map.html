@@ -118,6 +118,21 @@
    <input class="map-control" id="map-search" type="search" placeholder="Town, headline, source…">
    <div class="map-actions"><button type="button" id="ballyclare-watch" aria-pressed="false">BALLYCLARE AREA WATCH: OFF</button></div>
    <div class="map-note">Local traffic filter for Ballyclare, Doagh, Parkgate and connecting routes: A8, A57, M2 J2–J4, B94 and B59. Reports without a reliable point remain in the source list, not an invented map pin.</div>
+   <div class="map-box" id="ballyclare-history" style="margin-top:10px">
+    <h3>BALLYCLARE // INCIDENT HISTORY</h3>
+    <p class="map-note">Historical view of matching TrafficWatchNI incidents and roadworks retained in the DoomWatch archive. Counts are records, not proof of separate incidents or a statistically validated hotspot.</p>
+    <label class="map-label" for="history-window">HISTORY WINDOW</label>
+    <select class="map-control" id="history-window"><option value="30">LAST 30 DAYS</option><option value="90" selected>LAST 90 DAYS</option><option value="365">LAST 12 MONTHS</option><option value="0">ALL DATED ARCHIVE</option></select>
+    <div class="map-kpis" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+     <div class="map-kpi"><strong id="history-incidents">—</strong><span>INCIDENT RECORDS</span></div>
+     <div class="map-kpi"><strong id="history-roadworks">—</strong><span>ROADWORKS RECORDS</span></div>
+    </div>
+    <div class="map-note" id="history-coverage">Waiting for archive…</div>
+    <h3 style="margin-top:12px">REPEATED LOCATIONS / ROUTES</h3>
+    <div id="history-hotspots" class="map-note">No history loaded.</div>
+    <h3 style="margin-top:12px">CHRONOLOGY // SOURCE RECORDS</h3>
+    <div id="history-timeline" class="map-list"></div>
+   </div>
    <label class="map-label" for="town-select">FOCUS LOCATION</label>
    <select class="map-control" id="town-select"><option value="">ALL LOCATIONS</option></select>
    <div class="map-actions"><button type="button" id="clear-filters">CLEAR FILTERS</button><button type="button" id="fit-map">FIT NI MAP</button></div>
@@ -300,6 +315,20 @@ function renderMarkers(){
  else if(bounds.length&&!activeTown)map.fitBounds(bounds,{padding:[24,24],maxZoom:9});
  else if(bounds.length&&activeTown){const t=TOWNS.find(x=>x.name===activeTown);if(t)map.setView([t.lat,t.lon],10);}
 }
+function renderBallyclareHistory(){
+ const node=$("history-window");if(!node)return;
+ const days=Number(node.value)||0,cutoff=days?Date.now()-days*86400000:0;
+ const matches=archive.filter(a=>matchesBallyclareWatch(a)&&["incident","roadworks"].includes(trafficKind(a))).filter(a=>{const d=validDate(a);return d&&(!cutoff||d.getTime()>=cutoff);}).sort((a,b)=>(validDate(b)?.getTime()||0)-(validDate(a)?.getTime()||0));
+ const incidents=matches.filter(a=>trafficKind(a)==="incident"),works=matches.filter(a=>trafficKind(a)==="roadworks");
+ $("history-incidents").textContent=incidents.length.toLocaleString("en-GB");
+ $("history-roadworks").textContent=works.length.toLocaleString("en-GB");
+ const dates=matches.map(validDate).filter(Boolean),oldest=dates.length?dates[dates.length-1]:null,newest=dates.length?dates[0]:null;
+ $("history-coverage").textContent=matches.length+" dated archive records in this window"+(oldest?" · "+oldest.toLocaleDateString("en-GB")+" to "+newest.toLocaleDateString("en-GB"):"")+" · undated records excluded. Archive retention is limited; this is not a complete official incident register.";
+ const routeTerms=["A8","A57","B94","B59","M2","BALLYCLARE","DOAGH","PARKGATE","BALLYNURE","TEMPLEPATRICK","HILLHEAD ROAD","BALLYEASTON","BALLYCORR","BALLYBOLEY"];
+ const ranked=routeTerms.map(term=>({term,count:matches.filter(a=>hasTerm(allText(a).toUpperCase(),term)).length})).filter(x=>x.count>0).sort((a,b)=>b.count-a.count);
+ $("history-hotspots").innerHTML=ranked.length?ranked.slice(0,8).map(x=>'<div class="layer-row"><strong>'+esc(x.term)+'</strong><span style="margin-left:auto">'+x.count+' record'+(x.count===1?'':'s')+'</span></div>').join(""):"No repeated route/place terms identified in this window.";
+ $("history-timeline").innerHTML=matches.slice(0,30).map(a=>{const url=safeUrl(a.url);return '<div class="map-item traffic"><strong>'+esc(a.title||"Untitled traffic record")+'</strong><div class="meta">'+(trafficKind(a)==="incident"?"ROAD INCIDENT":"ROADWORKS / CLOSURE")+' · '+esc(dateText(stamp(a)))+'</div><div class="map-note">'+esc(a.summary||a.description||"No additional details supplied.")+'</div>'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL TRAFFICWATCHNI RECORD ↗</a>':"")+'</div>';}).join("")||'<div class="map-note">No dated incident or roadworks records match this period.</div>';
+}
 function render(){
  records=getFiltered();townGroups=makeGroups(records);
  $("kpi-total").textContent=records.length.toLocaleString("en-GB");
@@ -327,7 +356,7 @@ async function load(){
   const data=await response.json();
   archive=(Array.isArray(data.articles)?data.articles:[]).filter(isNI).sort((a,b)=>(validDate(b)?.getTime()||0)-(validDate(a)?.getTime()||0));
   $("map-status").textContent="ARCHIVE LINK ACTIVE // "+archive.length+" NORTHERN IRELAND / LOCAL RECORDS AVAILABLE";
-  render();
+  render();renderBallyclareHistory();
  }catch(error){
   $("map-status").textContent="INTELLIGENCE LINK FAILED // "+error.message;
   $("map-list-status").textContent="The shared intelligence archive could not be loaded. Check the connection and refresh. No sample incidents have been invented.";
@@ -343,6 +372,7 @@ document.querySelectorAll("[data-layer],[data-traffic-kind]").forEach(node=>node
 $("density-toggle").addEventListener("change",render);
 $("labels-toggle").addEventListener("change",render);
 $("map-refresh").addEventListener("click",load);
+$("history-window").addEventListener("change",renderBallyclareHistory);
  $("ballyclare-watch").addEventListener("click",()=>{ballyclareWatch=!ballyclareWatch;$("ballyclare-watch").setAttribute("aria-pressed",String(ballyclareWatch));$("ballyclare-watch").textContent="BALLYCLARE AREA WATCH: "+(ballyclareWatch?"ON":"OFF");if(ballyclareWatch){activeTown="";$("town-select").value="";document.querySelector('[data-layer="TRAFFIC"]').checked=true;document.querySelector('[data-traffic-kind="incident"]').checked=true;document.querySelector('[data-traffic-kind="roadworks"]').checked=true;}render();});
 $("fit-map").addEventListener("click",()=>{ballyclareWatch=false;$("ballyclare-watch").setAttribute("aria-pressed","false");$("ballyclare-watch").textContent="BALLYCLARE AREA WATCH: OFF";activeTown="";$("town-select").value="";if(map)map.setView([54.62,-6.55],8);render();});
 $("clear-filters").addEventListener("click",()=>{ballyclareWatch=false;$("ballyclare-watch").setAttribute("aria-pressed","false");$("ballyclare-watch").textContent="BALLYCLARE AREA WATCH: OFF";activeTown="";searchTerm="";showAll=false;$("map-search").value="";$("town-select").value="";$("all-time").checked=false;$("age-range").disabled=false;$("age-range").value="30";ageDays=30;document.querySelectorAll("[data-layer]").forEach(x=>x.checked=true);$("density-toggle").checked=false;$("labels-toggle").checked=true;updateAge();render();});
