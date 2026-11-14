@@ -234,6 +234,21 @@ footer {
     <div id="daily-brief" class="muted">Awaiting the next collector run.</div>
   </details>
 
+
+  <h2>03A // EVIDENCE & SOURCE PICTURE</h2>
+  <section class="panel" id="evidence-picture">
+    <div class="muted">SOURCE PROVENANCE AND POTENTIAL MULTI-PUBLISHER COVERAGE. PUBLISHER COUNT IS NOT PROOF OF INDEPENDENT REPORTING.</div>
+    <div class="grid" style="margin-top:10px">
+      <div class="panel"><div class="panel-title">NEWSROOM RECORDS</div><div class="big-status" id="evidence-newsroom-count">—</div></div>
+      <div class="panel"><div class="panel-title">OFFICIAL RECORDS</div><div class="big-status" id="evidence-official-count">—</div></div>
+      <div class="panel"><div class="panel-title">UNVERIFIED SOCIAL</div><div class="big-status" id="evidence-social-count">—</div></div>
+      <div class="panel"><div class="panel-title">POTENTIAL CROSS-PUBLISHER GROUPS</div><div class="big-status" id="evidence-groups-count">—</div></div>
+    </div>
+    <div id="evidence-groups" style="margin-top:10px" class="muted">Waiting for source records.</div>
+    <div class="muted" style="margin-top:8px">Classification uses publisher metadata and a transparent domain list. Unknown sources remain unclassified; copied or syndicated material may still appear under multiple publisher names.</div>
+    <p><a class="action-button" href="./feed.html">OPEN SOURCE COMPARISON IN FEED ↗</a> <a class="action-button" href="./map.html">VIEW GEOGRAPHIC PICTURE ↗</a></p>
+  </section>
+
   <h2>03 // PRIORITY ALERTS</h2>
   <div id="priority-alerts">
     <div class="panel muted">No incidents with an explicit medium or high severity assessment are recorded.</div>
@@ -769,6 +784,32 @@ function renderStatus() {
   $("terminal-status").textContent = "OPERATIONAL";
 }
 
+
+function evidenceDomain(item){try{return new URL(String(item.url||"")).hostname.toLowerCase().replace(/^www\\./,"");}catch(e){return String(item.source||"unknown").trim().toLowerCase();}}
+function evidenceClass(item){
+ const trust=String(item.sourceTrust||"").toLowerCase(),type=String(item.sourceType||"").toLowerCase(),domain=evidenceDomain(item);
+ if(/social|bluesky|unverified_social/.test(trust+" "+type))return "SOCIAL / UNVERIFIED";
+ if(/syndicat|aggregat|wire_service|press_release|republication/.test(trust+" "+type))return "AGGREGATED / SYNDICATED";
+ if(/official|government|public_authority|agency/.test(trust+" "+type)||domain.endsWith(".gov.uk")||domain.endsWith(".police.uk")||/(nidirect|niwater|trafficwatchni|nienetworks|metoffice|psni|daera-ni)/.test(domain))return "OFFICIAL / PUBLIC AUTHORITY";
+ const media=["belfastlive.co.uk","belfasttelegraph.co.uk","irishnews.com","bbc.co.uk","bbc.com","itv.com","rte.ie","reuters.com","apnews.com","theguardian.com","independent.co.uk","sky.com","channel4.com"];
+ if(media.some(d=>domain===d||domain.endsWith("."+d))||/independent_media|established_media|regional_newsroom|mainstream_media|international_media/.test(trust+" "+type))return "NEWSROOM REPORTING";
+ if(/specialist/.test(trust+" "+type))return "SPECIALIST / TRADE";
+ return "UNKNOWN / UNCLASSIFIED";
+}
+function evidenceTokens(item){const stop=new Set("about after again also been between could first from have into more most other said says that their them then there these this what when where which with".split(" "));return new Set((String(item.title||"")+" "+String(item.summary||"").slice(0,300)).toLowerCase().match(/[a-z0-9]{4,}/g)?.filter(x=>!stop.has(x))||[]);}
+function renderEvidencePicture(){
+ const counts={"NEWSROOM REPORTING":0,"OFFICIAL / PUBLIC AUTHORITY":0,"SOCIAL / UNVERIFIED":0};
+ articles.forEach(a=>{const c=evidenceClass(a);if(counts[c]!==undefined)counts[c]++;});
+ const set=(id,v)=>{const n=$(id);if(n)n.textContent=String(v);};
+ set("evidence-newsroom-count",counts["NEWSROOM REPORTING"]);set("evidence-official-count",counts["OFFICIAL / PUBLIC AUTHORITY"]);set("evidence-social-count",counts["SOCIAL / UNVERIFIED"]);
+ const recent=articles.filter(a=>{const d=new Date(a.date||0);return !Number.isNaN(d.getTime())&&d.getTime()>Date.now()-72*3600000;}).slice(0,350),groups=[];
+ recent.forEach(a=>{if(evidenceClass(a)!=="NEWSROOM REPORTING")return;const tok=evidenceTokens(a),time=new Date(a.date||0).getTime();let found=null;for(const g of groups){if(Math.abs(time-g.time)>72*3600000)continue;const overlap=[...tok].filter(t=>g.tokens.has(t)).length,den=Math.max(1,Math.min(tok.size,g.tokens.size));if(overlap>=2&&overlap/den>=.55){found=g;break;}}if(found){found.items.push(a);tok.forEach(t=>found.tokens.add(t));}else groups.push({items:[a],tokens:tok,time});});
+ const candidates=groups.map(g=>({items:g.items,publishers:new Set(g.items.map(evidenceDomain)).size})).filter(g=>g.publishers>=2).sort((a,b)=>b.publishers-a.publishers).slice(0,4);
+ set("evidence-groups-count",candidates.length);
+ const target=$("evidence-groups");if(!target)return;
+ target.innerHTML=candidates.length?candidates.map(g=>'<div class="section-card" style="margin:7px 0"><strong>'+escapeHTML(g.items[0].title||"Related newsroom coverage")+'</strong><div class="meta">'+g.publishers+' distinct newsroom domains · '+g.items.length+' records · potential related coverage only</div>'+g.items.slice(0,4).map(a=>'<div class="meta">'+escapeHTML(a.source||"Unknown publisher")+' · '+escapeHTML(dateText(a.date))+'</div>').join("")+'</div>').join(""):'<div class="muted">No recent potential multi-publisher newsroom groups detected in the current archive.</div>';
+}
+
 function renderAlerts() {
   const important = articles.filter(item =>
     item.severity === "high" || item.severity === "medium"
@@ -1038,6 +1079,7 @@ async function loadIntelligence() {
 
     renderStatus();
     renderSourceHealth();
+    renderEvidencePicture();
     renderAlerts();
     renderInfrastructureWatch();
     renderFeed();
