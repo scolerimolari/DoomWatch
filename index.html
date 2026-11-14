@@ -432,9 +432,10 @@ footer {
     <div class="grid">
       <div><label for="mesh-node-id">NODE ID / NAME</label><input id="mesh-node-id" placeholder="Node identifier"></div>
       <div><label for="mesh-node-type">NODE TYPE</label><select id="mesh-node-type"><option>Companion</option><option>Repeater</option><option>Room server / gateway</option><option>Unknown</option></select></div>
-      <div><label for="mesh-node-area">LOCATION / AREA</label><input id="mesh-node-area" placeholder="Approximate area, if known"></div>
+      <div><label for="mesh-node-area">LOCATION / AREA</label><input id="mesh-node-area" placeholder="Exact town name for map plotting, e.g. Ballyclare"></div>
       <div><label for="mesh-node-evidence">BASIS</label><select id="mesh-node-evidence"><option>Personally observed</option><option>Owner confirmed</option><option>Publicly listed</option><option>Unverified report</option></select></div>
     </div>
+    <div class="meta">MAP LINK: enter an exact recognised town name (for example Ballyclare, Antrim or Belfast) to plot an approximate town-centre marker. Other area descriptions remain in your register but are not guessed onto the map.</div>
     <button class="action-button" id="mesh-add-node">ADD NODE RECORD</button>
     <div id="mesh-node-list" style="margin-top:12px"></div>
   </div>
@@ -474,6 +475,7 @@ NOTE: This is a manual message template, not a connected radio console.</div>
     <p><a href="https://docs.meshcore.io/" target="_blank" rel="noopener noreferrer">MeshCore documentation ↗</a></p>
     <p><a href="https://app.meshcore.nz/" target="_blank" rel="noopener noreferrer">MeshCore companion app ↗</a></p>
     <p><a href="https://map.meshcore.io/" target="_blank" rel="noopener noreferrer">Community mesh map ↗</a></p>
+    <p><a href="./map.html">OPEN DOOMWATCH GEOINT MAP // MESHCORE LAYER ↗</a></p>
     <div class="meta">External maps and community listings may be incomplete or stale. Do not treat a plotted node as verified coverage or a guaranteed communications path.</div>
   </div>
 </section>
