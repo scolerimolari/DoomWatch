@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-14T12:18:29Z",
+  "generatedAt": "2026-11-14T12:18:48Z",
   "collectionIntervalMinutes": 5,
   "displayRefreshSeconds": 60,
   "overallStatus": "SIGNALS_PRESENT",
@@ -12,7 +12,7 @@
       "kind": "independent_traffic_signal",
       "scope": "UK-wide network indicators",
       "status": "SOURCE_UNAVAILABLE",
-      "checkedAt": "2026-11-14T12:18:28Z",
+      "checkedAt": "2026-11-14T12:18:46Z",
       "providerSignals": [],
       "note": "HTTPError: HTTP Error 403: Forbidden"
     },
@@ -23,7 +23,7 @@
       "kind": "community_reports",
       "scope": "UK-wide reports and area groupings",
       "status": "NO_STRUCTURED_STATUS",
-      "checkedAt": "2026-11-14T12:18:28Z",
+      "checkedAt": "2026-11-14T12:18:46Z",
       "providerSignals": [],
       "note": "Page was reachable, but no recognised current-status rows were extracted."
     },
@@ -34,7 +34,7 @@
       "kind": "independent_traffic_and_reports",
       "scope": "UK-wide carrier indicators",
       "status": "OK",
-      "checkedAt": "2026-11-14T12:18:29Z",
+      "checkedAt": "2026-11-14T12:18:46Z",
       "providerSignals": [
         {
           "provider": "Vodafone",
@@ -67,7 +67,7 @@
       "kind": "community_reports",
       "scope": "UK-wide fixed broadband infrastructure reports",
       "status": "NO_STRUCTURED_STATUS",
-      "checkedAt": "2026-11-14T12:18:29Z",
+      "checkedAt": "2026-11-14T12:18:47Z",
       "providerSignals": [],
       "note": "Page was reachable, but no recognised current-status rows were extracted."
     }
