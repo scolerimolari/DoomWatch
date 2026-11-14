@@ -43,7 +43,7 @@
 .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#1b241e;color:#eee;border:1px solid #8c754d}
 .leaflet-popup-content{margin:11px;line-height:1.5}.leaflet-popup-content a{color:#b9dc9a!important}
 .leaflet-control-attribution{font-size:9px!important}
-#map-status{overflow-wrap:anywhere}
+#map-status{overflow-wrap:anywhere}.map-item.dw-selected{border-color:#f2c84b;box-shadow:0 0 0 2px #f2c84b55}.map-event-links{display:grid;gap:5px;margin-top:8px;max-height:220px;overflow:auto}.map-event-links button{width:100%;text-align:left;padding:7px 8px;font-size:10px}
 @media(max-width:850px){.map-workspace{grid-template-columns:1fr}.map-side{grid-template-columns:repeat(2,minmax(0,1fr))}.map-side .map-box:first-child{grid-column:1/-1}}
 @media(max-width:600px){.map-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.map-side{grid-template-columns:1fr}#event-map{height:54vh;min-height:340px}.map-list{grid-template-columns:1fr}}
 </style>
@@ -109,14 +109,14 @@
   </section>
   <section class="map-box">
    <h3>TIME WINDOW</h3>
-   <label class="map-label" for="age-range">SHOW REPORTS FROM LAST <strong id="age-label">30 DAYS</strong></label>
+   <label class="map-label" for="date-window">REPORTING WINDOW</label><select class="map-control" id="date-window"><option value="1">LAST 24 HOURS</option><option value="3">LAST 72 HOURS</option><option value="7">LAST 7 DAYS</option><option value="30" selected>LAST 30 DAYS</option><option value="90">LAST 90 DAYS</option><option value="all">ENTIRE ARCHIVE</option></select><label class="map-label" for="age-range">CUSTOM WINDOW // <strong id="age-label">30 DAYS</strong></label>
    <div class="map-timeline"><input id="age-range" type="range" min="1" max="90" value="30" step="1"><span id="age-value">30d</span></div>
    <label class="layer-row" style="margin-top:7px"><input type="checkbox" id="all-time"> Include entire archive</label>
    <div class="map-note">The slider changes the reporting window. Undated records remain visible and are labelled as undated.</div>
   </section>
   <section class="map-box">
    <h3>SEARCH & LOCATION</h3>
-   <label class="map-label" for="map-search">SEARCH REPORTS</label>
+   <label class="map-label" for="category-filter">INCIDENT CATEGORY</label><select class="map-control" id="category-filter"><option value="">ALL CATEGORIES</option><option value="EMERGENCY">EMERGENCY / SAFETY</option><option value="WATER">WATER SERVICE</option><option value="POWER">POWER</option><option value="FLOOD">RIVER GAUGES</option><option value="TRAFFIC">TRAFFIC</option><option value="TRANSPORT">TRANSPORT / INFRASTRUCTURE</option><option value="WEATHER">WEATHER / ENVIRONMENT</option><option value="OTHER">OTHER</option></select><label class="map-label" for="map-search">SEARCH REPORTS</label>
    <input class="map-control" id="map-search" type="search" placeholder="Town, headline, source…">
    <div class="map-actions"><button type="button" id="ballyclare-watch" aria-pressed="false">BALLYCLARE AREA WATCH: OFF</button></div>
    <div class="map-note">Local traffic filter for Ballyclare, Doagh, Parkgate and connecting routes: A8, A57, M2 J2–J4, B94 and B59. Reports without a reliable point remain in the source list, not an invented map pin.</div>
@@ -223,7 +223,9 @@ function category(a){
 }
 function uniqueSources(items){return new Set(items.map(a=>String(a.sourceId||a.source||"unknown"))).size;}
 function validDate(a){const d=new Date(stamp(a));return stamp(a)&&!Number.isNaN(d.getTime())?d:null;}
-let archive=[],historyArchive=[],records=[],townGroups=[],map=null,markerLayer=null,densityLayer=null,activeTown="",searchTerm="",ageDays=30,showAll=false,ballyclareWatch=false;
+function recordKey(a){return safeUrl(a.url)||[String(a.title||"").toLowerCase(),String(stamp(a)||""),String(a.sourceId||a.source||"")].join("|");}
+function recordCategory(a){return isTraffic(a)?"TRAFFIC":category(a);}
+let archive=[],historyArchive=[],records=[],townGroups=[],map=null,markerLayer=null,densityLayer=null,activeTown="",searchTerm="",ageDays=30,showAll=false,ballyclareWatch=false,categoryFilter="",selectedRecordKey="";
 function initMap(){
  if(window.L&&typeof L.map==="function"){
   try{
@@ -263,6 +265,7 @@ function getFiltered(){
    if(toggle&&!toggle.checked)return false;
   } else if(!layerEnabled(c))return false;
   if(activeTown&&locate(a)?.name!==activeTown)return false;
+  if(categoryFilter&&recordCategory(a)!==categoryFilter)return false;
   if(searchTerm&&!allText(a).includes(searchTerm))return false;
   return true;
  }).sort((a,b)=>(validDate(b)?.getTime()||0)-(validDate(a)?.getTime()||0));
@@ -281,6 +284,7 @@ function selectTown(name){
  if(group&&map)map.setView([group.town.lat,group.town.lon],10);
 }
 function openRecord(a){
+ selectedRecordKey=recordKey(a);document.querySelectorAll("#map-articles .map-item").forEach(node=>node.classList.toggle("dw-selected",node.dataset.recordKey===selectedRecordKey));
  const town=locate(a),url=safeUrl(a.url),locationLabel=isFlood(a)?(a.stationCoordinatesVerified?"VERIFIED STATION COORDINATES // "+a.stationLatitude+", "+a.stationLongitude:"NO VERIFIED STATION COORDINATES"):(town?town.name+" // APPROXIMATE TOWN MATCH":"LOCATION NOT IDENTIFIED");
  const title=String(a.title||"Untitled report"),caseLink="./incident.html?"+(url?"url="+encodeURIComponent(url):"title="+encodeURIComponent(title));
  $("map-town-details").innerHTML='<strong>'+esc(title)+'</strong><div class="meta">'+esc(locationLabel)+' · '+esc(category(a))+' · '+esc(dateText(stamp(a)))+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">SOURCE: '+esc(a.source||"Not supplied")+' · EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a>':"")+'<a href="'+caseLink+'">OPEN INCIDENT CASE FILE ↗</a><a href="./feed.html?q='+encodeURIComponent(title)+'">RELATED FEED ↗</a><a href="./operations.html?search='+encodeURIComponent(title)+'">OPERATIONS ROOM ↗</a>'+(town?'<button type="button" id="focus-record-town">FOCUS '+esc(town.name.toUpperCase())+'</button>':"")+'</div>';
@@ -302,8 +306,10 @@ function renderMarkers(){
   const c=COLORS[g.dominant],n=g.items.length;
   const marker=L.circleMarker([g.town.lat,g.town.lon],{radius:Math.min(20,7+Math.log2(n)*2),weight:2,color:"#101713",fillColor:c,fillOpacity:.92});
   marker.bindTooltip(g.town.name+" · "+n+" reports",{direction:"top",offset:[0,-8],permanent:$("labels-toggle").checked});
-  marker.bindPopup('<strong>'+esc(g.town.name)+' // '+n+' REPORTS</strong><div>Approximate town-centre match</div><div>'+esc(Object.entries(g.cats).map(([k,v])=>k+": "+v).join(" · "))+'</div><a href="#" class="dw-town-open" data-town="'+esc(g.town.name)+'">OPEN LOCATION DETAILS</a>');
+  const eventLinks=g.items.slice(0,10).map(a=>'<button type="button" class="dw-map-event" data-record-key="'+esc(recordKey(a))+'">'+esc(a.title||"Untitled report")+' · '+esc(dateText(stamp(a)))+'</button>').join("");
+  marker.bindPopup('<strong>'+esc(g.town.name)+' // '+n+' REPORTS</strong><div>Approximate town-centre match · select a report</div><div>'+esc(Object.entries(g.cats).map(([k,v])=>k+": "+v).join(" · "))+'</div><div class="map-event-links">'+eventLinks+'</div><a href="#" class="dw-town-open" data-town="'+esc(g.town.name)+'">OPEN LOCATION DETAILS</a>');
   marker.on("click",()=>{activeTown=g.town.name;$("town-select").value=activeTown;renderDetail(g);});
+  marker.on("popupopen",event=>{event.popup.getElement()?.querySelectorAll(".dw-map-event").forEach(btn=>btn.addEventListener("click",()=>{const item=records.find(a=>recordKey(a)===btn.dataset.recordKey);if(item){openRecord(item);const target=[...document.querySelectorAll("#map-articles [data-record-key]")].find(node=>node.dataset.recordKey===recordKey(item));if(target){target.open=true;target.scrollIntoView({behavior:"smooth",block:"center"});}}}));});
   marker.on("popupopen",event=>{const link=event.popup.getElement()?.querySelector(".dw-town-open");if(link)link.addEventListener("click",e=>{e.preventDefault();selectTown(g.town.name);map.closePopup();$("map-town-details").scrollIntoView({behavior:"smooth",block:"nearest"});});});
   marker.addTo(markerLayer);bounds.push([g.town.lat,g.town.lon]);
   if($("density-toggle").checked)L.circle([g.town.lat,g.town.lon],{radius:Math.min(14000,3500+n*450),color:c,weight:1,opacity:.3,fillColor:c,fillOpacity:.10,interactive:false}).addTo(densityLayer);
@@ -337,6 +343,7 @@ function renderBallyclareHistory(){
 }
 function render(){
  records=getFiltered();townGroups=makeGroups(records);
+ const params=new URLSearchParams(location.search);if(searchTerm)params.set("search",$("map-search").value.trim());else params.delete("search");if(categoryFilter)params.set("category",categoryFilter);else params.delete("category");params.set("window",showAll?"all":String(ageDays));history.replaceState(null,"",location.pathname+"?"+params.toString());
  $("kpi-total").textContent=records.length.toLocaleString("en-GB");
  $("kpi-located").textContent=records.filter(locate).length.toLocaleString("en-GB");
  $("kpi-towns").textContent=townGroups.length.toLocaleString("en-GB");
@@ -348,14 +355,16 @@ function render(){
  $("town-select").value=activeTown;
  if(map)renderMarkers();else renderFallback(townGroups);
  const list=records.slice(0,100);
- $("map-articles").innerHTML=list.map((a,i)=>{const town=locate(a),c=category(a),traffic=isTraffic(a),url=safeUrl(a.url),d=validDate(a),locationLabel=isFlood(a)?(a.stationCoordinatesVerified?"STATION COORDINATES VERIFIED": "NO VERIFIED STATION COORDINATES"):(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED");return '<details class="map-item '+c.toLowerCase()+(traffic?' traffic':'')+'"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(locationLabel)+' · '+(isPower(a)?'<strong>POWER</strong> · ':isFlood(a)?'<strong>RIVER GAUGE</strong> · ':traffic?'<strong>'+esc(trafficLabel(a))+'</strong> · ':'')+esc(c)+' · '+esc(d?dateText(d):"DATE NOT SUPPLIED")+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':"<span class='muted'>No valid article URL supplied</span>")+(town?'<button type="button" data-focus-town="'+esc(town.name)+'">SHOW ON MAP</button>':"")+(a.title?'<a href="./feed.html?q='+encodeURIComponent(a.title)+'">FIND RELATED FEED REPORTS ↗</a>':"")+(a.title?'<a href="./operations.html?search='+encodeURIComponent(a.title)+'">TRACK IN OPS TIMELINE ↗</a>':"")+'<button type="button" data-inspect-index="'+i+'">INSPECT INCIDENT</button>'+'</div></details>';}).join("")||'<div class="panel muted">No reports match the current filters. Try a longer time window or clear the search.</div>';
+ $("map-articles").innerHTML=list.map((a,i)=>{const town=locate(a),c=category(a),traffic=isTraffic(a),url=safeUrl(a.url),d=validDate(a),locationLabel=isFlood(a)?(a.stationCoordinatesVerified?"STATION COORDINATES VERIFIED": "NO VERIFIED STATION COORDINATES"):(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED");return '<details class="map-item '+c.toLowerCase()+(traffic?' traffic':'')+(recordKey(a)===selectedRecordKey?' dw-selected':'')+'" data-record-key="'+esc(recordKey(a))+'"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(locationLabel)+' · '+(isPower(a)?'<strong>POWER</strong> · ':isFlood(a)?'<strong>RIVER GAUGE</strong> · ':traffic?'<strong>'+esc(trafficLabel(a))+'</strong> · ':'')+esc(c)+' · '+esc(d?dateText(d):"DATE NOT SUPPLIED")+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':"<span class='muted'>No valid article URL supplied</span>")+(town?'<button type="button" data-focus-town="'+esc(town.name)+'">SHOW ON MAP</button>':"")+(a.title?'<a href="./feed.html?q='+encodeURIComponent(a.title)+'">FIND RELATED FEED REPORTS ↗</a>':"")+(a.title?'<a href="./operations.html?search='+encodeURIComponent(a.title)+'">TRACK IN OPS TIMELINE ↗</a>':"")+'<button type="button" data-inspect-index="'+i+'">INSPECT INCIDENT</button>'+'</div></details>';}).join("")||'<div class="panel muted">No reports match the current filters. Try a longer time window or clear the search.</div>';
  $("map-articles").querySelectorAll("[data-focus-town]").forEach(btn=>btn.addEventListener("click",()=>{selectTown(btn.dataset.focusTown);$("map-town-details").scrollIntoView({behavior:"smooth",block:"nearest"});}));
  $("map-articles").querySelectorAll("[data-inspect-index]").forEach(btn=>btn.addEventListener("click",()=>{const item=records[Number(btn.dataset.inspectIndex)];if(item){openRecord(item);$("map-town-details").scrollIntoView({behavior:"smooth",block:"nearest"});}}));
  $("map-list-status").textContent=(ballyclareWatch?"BALLYCLARE AREA WATCH · ":"")+records.length+" matching archive records · "+records.filter(locate).length+" with approximate town matches · "+records.filter(a=>isTraffic(a)&&trafficKind(a)==="incident").length+" incidents · "+records.filter(a=>isTraffic(a)&&trafficKind(a)==="roadworks").length+" roadworks · "+records.filter(a=>isTraffic(a)&&trafficKind(a)==="event").length+" planned events · "+records.filter(a=>isTraffic(a)&&trafficKind(a)==="news").length+" travel news · "+records.filter(isPower).length+" NIE power faults · "+records.filter(isWater).length+" NI Water service updates · "+records.filter(isFlood).length+" river gauge readings · showing up to 100 source-linked reports. Power markers are approximate postcode matches; NI Water notices are mapped only where the notice identifies a recognised town; river gauge markers use verified station coordinates when available.";
  if(activeTown){const g=townGroups.find(x=>x.town.name===activeTown);renderDetail(g);}else renderDetail(null);
  $("map-status").textContent=(ballyclareWatch?"BALLYCLARE AREA WATCH // ":"")+(map?"OPENSTREETMAP":"OFFLINE SCHEMATIC")+" // "+records.length+" FILTERED REPORTS // "+townGroups.length+" TOWN LOCATIONS // "+(records.length-records.filter(locate).length)+" WITHOUT TOWN MATCH";
 }
-const initialMapSearch=new URLSearchParams(location.search).get("search")||"";if(initialMapSearch){searchTerm=initialMapSearch.toLowerCase();$("map-search").value=initialMapSearch;}
+const initialParams=new URLSearchParams(location.search),initialMapSearch=initialParams.get("search")||"";if(initialMapSearch){searchTerm=initialMapSearch.toLowerCase();$("map-search").value=initialMapSearch;}
+const initialWindow=initialParams.get("window")||"30";if(["1","3","7","30","90","all"].includes(initialWindow)){showAll=initialWindow==="all";ageDays=showAll?30:Number(initialWindow);$("date-window").value=initialWindow;$("all-time").checked=showAll;$("age-range").value=String(ageDays);$("age-range").disabled=showAll;}
+const initialCategory=initialParams.get("category")||"";if(["EMERGENCY","WATER","POWER","FLOOD","TRAFFIC","TRANSPORT","WEATHER","OTHER"].includes(initialCategory)){categoryFilter=initialCategory;$("category-filter").value=categoryFilter;}
 async function load(){
  $("map-status").textContent="REFRESHING SHARED INTELLIGENCE ARCHIVE…";
  try{
@@ -377,7 +386,9 @@ async function load(){
  }
 }
 function updateAge(){ageDays=Number($("age-range").value)||30;$("age-label").textContent=ageDays+" DAYS";$("age-value").textContent=ageDays+"d";if(!$("all-time").checked)render();}
-$("age-range").addEventListener("input",updateAge);
+$("age-range").addEventListener("input",()=>{showAll=false;$("all-time").checked=false;$("date-window").value="";updateAge();});
+$("date-window").addEventListener("change",e=>{showAll=e.target.value==="all";ageDays=showAll?30:Number(e.target.value);$("all-time").checked=showAll;$("age-range").disabled=showAll;$("age-range").value=String(ageDays);updateAge();render();});
+$("category-filter").addEventListener("change",e=>{categoryFilter=e.target.value;render();});
 $("all-time").addEventListener("change",e=>{showAll=e.target.checked;$("age-range").disabled=showAll;render();});
 $("map-search").addEventListener("input",e=>{searchTerm=e.target.value.trim().toLowerCase();render();});
 $("town-select").addEventListener("change",e=>selectTown(e.target.value));
@@ -388,7 +399,7 @@ $("map-refresh").addEventListener("click",load);
 $("history-window").addEventListener("change",renderBallyclareHistory);
  $("ballyclare-watch").addEventListener("click",()=>{ballyclareWatch=!ballyclareWatch;$("ballyclare-watch").setAttribute("aria-pressed",String(ballyclareWatch));$("ballyclare-watch").textContent="BALLYCLARE AREA WATCH: "+(ballyclareWatch?"ON":"OFF");if(ballyclareWatch){activeTown="";$("town-select").value="";document.querySelector('[data-layer="TRAFFIC"]').checked=true;document.querySelector('[data-traffic-kind="incident"]').checked=true;document.querySelector('[data-traffic-kind="roadworks"]').checked=true;}render();});
 $("fit-map").addEventListener("click",()=>{ballyclareWatch=false;$("ballyclare-watch").setAttribute("aria-pressed","false");$("ballyclare-watch").textContent="BALLYCLARE AREA WATCH: OFF";activeTown="";$("town-select").value="";if(map)map.setView([54.62,-6.55],8);render();});
-$("clear-filters").addEventListener("click",()=>{ballyclareWatch=false;$("ballyclare-watch").setAttribute("aria-pressed","false");$("ballyclare-watch").textContent="BALLYCLARE AREA WATCH: OFF";activeTown="";searchTerm="";showAll=false;$("map-search").value="";$("town-select").value="";$("all-time").checked=false;$("age-range").disabled=false;$("age-range").value="30";ageDays=30;document.querySelectorAll("[data-layer]").forEach(x=>x.checked=true);$("density-toggle").checked=false;$("labels-toggle").checked=true;updateAge();render();});
+$("clear-filters").addEventListener("click",()=>{ballyclareWatch=false;$("ballyclare-watch").setAttribute("aria-pressed","false");$("ballyclare-watch").textContent="BALLYCLARE AREA WATCH: OFF";activeTown="";searchTerm="";showAll=false;categoryFilter="";$("category-filter").value="";$("date-window").value="30";$("map-search").value="";$("town-select").value="";$("all-time").checked=false;$("age-range").disabled=false;$("age-range").value="30";ageDays=30;document.querySelectorAll("[data-layer]").forEach(x=>x.checked=true);$("density-toggle").checked=false;$("labels-toggle").checked=true;updateAge();render();});
 document.addEventListener("click",e=>{const link=e.target.closest(".dw-town-open");if(link){e.preventDefault();selectTown(link.dataset.town);}});
 initMap();updateAge();load();
 </script>
