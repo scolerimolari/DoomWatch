@@ -169,7 +169,7 @@ function sourceClass(a){
  const trust=String(a.sourceTrust||a.trust||"").toLowerCase(),type=String(a.sourceType||a.type||"").toLowerCase(),source=String(a.source||a.publisher||"").toLowerCase();
  if(/social_network|unverified_social|bluesky/.test(type+" "+trust+" "+source))return"SOCIAL";
  if(/official/.test(trust))return"OFFICIAL";
- if(/regional_newsroom|mainstream_media|international_media|news_media|established_media/.test(type+" "+trust))return"MEDIA";
+ if(/regional_newsroom|mainstream_media|international_media|news_media|established_media|independent_media/.test(type+" "+trust))return"MEDIA";
  if(/specialist/.test(trust))return"SPECIALIST";
  return"OTHER";
 }
@@ -227,7 +227,7 @@ function timelineGroups(list){
  return groups.sort((a,b)=>b.latest-a.latest||b.items.length-a.items.length);
 }
 function renderTimeline(list){
- const groups=timelineGroups(list).slice(0,12);
+ const groups=timelineGroups(list).filter(g=>g.items.length>=2).slice(0,12);
  $("op-timeline").innerHTML=groups.length?'<div class="op-timeline">'+groups.map((g,i)=>{
   const ordered=[...g.items].sort((a,b)=>timelineStamp(a)-timelineStamp(b));
   const lead=[...g.items].sort((a,b)=>timelineStamp(b)-timelineStamp(a))[0];
