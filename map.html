@@ -220,7 +220,7 @@ function renderMarkers(){
   if(!enabledCats.length)return;
   const c=COLORS[g.dominant],n=g.items.length;
   const marker=L.circleMarker([g.town.lat,g.town.lon],{radius:Math.min(20,7+Math.log2(n)*2),weight:2,color:"#101713",fillColor:c,fillOpacity:.92});
-  marker.bindTooltip(g.town.name+" · "+n+" reports",{direction:"top",offset:[0,-8]});
+  marker.bindTooltip(g.town.name+" · "+n+" reports",{direction:"top",offset:[0,-8],permanent:$("labels-toggle").checked});
   marker.bindPopup('<strong>'+esc(g.town.name)+' // '+n+' REPORTS</strong><div>Approximate town-centre match</div><div>'+esc(Object.entries(g.cats).map(([k,v])=>k+": "+v).join(" · "))+'</div><a href="#" class="dw-town-open" data-town="'+esc(g.town.name)+'">OPEN LOCATION DETAILS</a>');
   marker.on("click",()=>{activeTown=g.town.name;$("town-select").value=activeTown;renderDetail(g);});
   marker.addTo(markerLayer);bounds.push([g.town.lat,g.town.lon]);
@@ -268,7 +268,7 @@ $("map-search").addEventListener("input",e=>{searchTerm=e.target.value.trim().to
 $("town-select").addEventListener("change",e=>selectTown(e.target.value));
 document.querySelectorAll("[data-layer]").forEach(node=>node.addEventListener("change",render));
 $("density-toggle").addEventListener("change",render);
-$("labels-toggle").addEventListener("change",e=>{if(!map)return;markerLayer.eachLayer(layer=>{if(e.target.checked)layer.openTooltip?.();else layer.closeTooltip?.();});});
+$("labels-toggle").addEventListener("change",render);
 $("map-refresh").addEventListener("click",load);
 $("fit-map").addEventListener("click",()=>{activeTown="";$("town-select").value="";if(map)map.setView([54.62,-6.55],8);render();});
 $("clear-filters").addEventListener("click",()=>{activeTown="";searchTerm="";showAll=false;$("map-search").value="";$("town-select").value="";$("all-time").checked=false;$("age-range").disabled=false;$("age-range").value="30";ageDays=30;document.querySelectorAll("[data-layer]").forEach(x=>x.checked=true);$("density-toggle").checked=false;$("labels-toggle").checked=true;updateAge();render();});
