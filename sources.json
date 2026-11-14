@@ -854,6 +854,24 @@
       "trust": "official_primary_source",
       "status": "active",
       "notes": "DfI Traffic Information and Control Centre RSS feed for Greater Belfast planned road events; feed availability and content are shown in collector diagnostics."
+    },
+    {
+      "id": "nie-network-outages",
+      "name": "NIE Networks - live network outages",
+      "platform": "open_data_api",
+      "type": "electricity_network_outage",
+      "url": "https://nienetworks.opendatasoft.com/explore/dataset/nie-networks-network-faults/",
+      "endpoint": "https://nienetworks.opendatasoft.com/api/explore/v2.1/catalog/datasets/nie-networks-network-faults/records?limit=100",
+      "method": "nie_network_outages",
+      "region": "Northern Ireland",
+      "sectors": [
+        5
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "refreshFrequency": "Approximately 30 minutes",
+      "licence": "CC BY 4.0",
+      "notes": "Official live network fault records with outage ID, type, start time, estimated restoration, postcode, affected customer count, operator status and last update. Locations are not plotted as exact GPS points."
     }
   ]
 }
