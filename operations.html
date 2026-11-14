@@ -66,6 +66,17 @@ body{background:var(--op-bg);color:#e8eadf;font-family:Consolas,Monaco,monospace
 .op-chronology-item strong{display:block;color:#e8d59c;font-size:11px;line-height:1.4}
 .op-chronology-item .op-meta{margin:4px 0}
 .op-timeline-note{font-size:10px;color:#aeb9a8;line-height:1.5}
+#op-pathway-filters{margin:10px 0}
+#op-pathway-filters button[aria-pressed="true"]{border-color:#e0b56c;background:#47351f;color:#fff}
+.op-ledger-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:10px;margin-top:10px}
+.op-ledger-card{min-width:0;padding:12px;background:#151d18;border:1px solid #4c5b4d;border-left:3px solid #b99a60;overflow-wrap:anywhere}
+.op-ledger-card.report{border-left-color:#a9c48d}.op-ledger-card.comms{border-left-color:#7cb5c9}.op-ledger-card.market{border-left-color:#d5a65d}
+.op-ledger-card h3{margin:0 0 6px;color:#ead19b;font-size:12px}
+.op-ledger-meta{font-size:10px;color:#aebba9;line-height:1.5;margin:5px 0}
+.op-ledger-card p{font-size:12px;line-height:1.45;margin:7px 0;color:#d7ded4}
+.op-ledger-tag{display:inline-block;padding:3px 6px;margin:2px 3px 2px 0;border:1px solid #586554;color:#c6d5bd;font-size:9px;letter-spacing:.04em}
+.op-ledger-note{padding:10px;border:1px dashed #56614e;color:#b8c4b2;font-size:11px;line-height:1.5;margin-top:8px}
+
 </style>
 </head>
 <body>
@@ -107,8 +118,24 @@ body{background:var(--op-bg);color:#e8eadf;font-family:Consolas,Monaco,monospace
   <p class="op-muted">Potential exposure pathways are keyword prompts for analyst review, not confirmed impacts.</p>
  </div>
 </section>
+<section class="op-panel" id="op-evidence-ledger">
+ <h2>05 // CROSS-DOMAIN EVIDENCE LEDGER</h2>
+ <p class="op-muted">A source-linked view joining the intelligence archive, communications status feed and market datasets. Each source remains separate: shared topic is a review pathway, not proof of a common cause or cascading failure.</p>
+ <div class="op-buttons" id="op-pathway-filters" role="group" aria-label="Select cross-domain pathway">
+  <button type="button" data-pathway="ALL" aria-pressed="true">ALL PATHWAYS</button>
+  <button type="button" data-pathway="ENERGY">ENERGY / WATER</button>
+  <button type="button" data-pathway="COMMS">COMMUNICATIONS</button>
+  <button type="button" data-pathway="TRANSPORT">TRANSPORT / IMPORTS</button>
+  <button type="button" data-pathway="FOOD">FOOD / AGRICULTURE</button>
+  <button type="button" data-pathway="WEATHER">WEATHER / UTILITIES</button>
+  <button type="button" data-pathway="HEALTH">HEALTH / EMERGENCY</button>
+ </div>
+ <div class="op-status" id="op-ledger-status" role="status" aria-live="polite">WAITING FOR SOURCE SNAPSHOTS…</div>
+ <div id="op-ledger-results"><div class="op-empty">No evidence loaded.</div></div>
+ <div class="op-disclaimer"><strong>READ THIS CORRECTLY:</strong> Intelligence records are reports, not independently verified incidents. Communications statuses may be stale or based on aggregated user reports. Market indicators are economic context, not proof of shortages or service failure. A town name is not a verified asset location. No causal relationship is inferred.</div>
+</section>
 <section class="op-panel">
- <h2>05 // EVENT EXPLORER</h2>
+ <h2>06 // EVENT EXPLORER</h2>
  <div class="op-muted">Search and filter the same intelligence archive used by Feed and Map. Social posts remain unverified leads. Multiple publishers may repeat the same original report.</div>
  <div class="op-controls">
   <input id="op-search" type="search" placeholder="Search event, town, source, sector or keyword…">
@@ -127,7 +154,7 @@ body{background:var(--op-bg);color:#e8eadf;font-family:Consolas,Monaco,monospace
 </section>
 
 <section class="op-panel">
- <h2>06 // DEVELOPING EVENTS — INCIDENT TIMELINE</h2>
+ <h2>07 // DEVELOPING EVENTS — INCIDENT TIMELINE</h2>
  <div class="op-timeline-note">Automated grouping of similar reports within the selected region and time window. Entries are shown in chronological order. Publisher count means archive sources only — it is not independent corroboration or confirmation of an incident.</div>
  <div id="op-timeline"><div class="op-empty">Waiting for intelligence snapshot…</div></div>
 </section>
@@ -270,6 +297,60 @@ function renderMarkets(){
  if(overall.value!==undefined)values.push({v:Number(overall.value).toFixed(1)+"%",l:"Overall inflation · UK CPIH",d:overall.date,u:overall.url});
  $("op-markets").innerHTML=values.length?'<div class="op-market">'+values.map(x=>'<div><strong>'+esc(x.v)+'</strong><span>'+esc(x.l)+'<br>Observation: '+esc(x.d||"Not supplied")+(x.u?' · <a href="'+esc(x.u)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"")+'</span></div>').join("")+'</div><p class="op-muted">Markets snapshot: '+esc(fmt(d.updatedAt||d.generatedAt))+'</p>':'<div class="op-empty">Market indicators unavailable.</div>';
 }
+const CROSS_DOMAIN_PATHWAYS=[
+ {id:"ENERGY",label:"ENERGY / WATER",re:/\b(fuel|heating oil|petrol|diesel|gas|electricity|power|energy|oil terminal|water supply|water treatment|pumping station)\b/i,markets:["oil","fuel","brent"],note:"Market prices provide context only; they do not establish local supply or utility disruption."},
+ {id:"COMMS",label:"COMMUNICATIONS",re:/\b(telecom|broadband|mobile network|mobile outage|communications|ransomware|cyber attack|data centre|fibre network|internet outage)\b/i,comms:true,markets:[],note:"Provider status is national/aggregated unless an observation explicitly supplies a locality."},
+ {id:"TRANSPORT",label:"TRANSPORT / IMPORTS",re:/\b(port|harbour|shipping|freight|container|ferry|rail|road closure|logistics|airport|fuel distribution|supply route)\b/i,markets:["fuel","brent"],note:"No route capacity, inventory, port throughput or delivery dependency is calculated."},
+ {id:"FOOD",label:"FOOD / AGRICULTURE",re:/\b(food supply|food shortage|agriculture|livestock|fertili[sz]er|crop|harvest|supermarket|food processing|animal disease)\b/i,markets:["food"],note:"National inflation and shelf-price indices are not local stock levels or household basket prices."},
+ {id:"WEATHER",label:"WEATHER / UTILITIES",re:/\b(flood|flooding|storm|wind warning|heavy rain|snow|ice|weather warning|drought|heatwave|river level)\b/i,markets:[],note:"Weather reports are not evidence of damage to a specific utility asset."},
+ {id:"HEALTH",label:"HEALTH / EMERGENCY",re:/\b(hospital|health service|nhs|ambulance|emergency response|care home|public health|medicine shortage|pharmacy|clinical service)\b/i,markets:[],note:"No hospital, care facility, ambulance or medicine inventory status is connected to this archive."}
+];
+let evidencePathway="ALL";
+function ledgerMarketRows(keys){
+ const d=marketData||{},rows=[];
+ const push=(label,value,date,source,url,scope)=>{if(value!==undefined&&value!==null&&value!=="")rows.push({label,value,date,source,url,scope});};
+ if(keys.includes("oil")){const x=arr(d.heatingOil?.items)[0];if(x)push("NI heating oil · "+(x.volumeLitres||"")+"L","£"+Number(x.price).toFixed(2),x.observedAt,x.source,x.url,"Northern Ireland published average");}
+ if(keys.includes("fuel")){arr(d.fuel?.items).slice(0,2).forEach(x=>push(x.name||x.label||x.id,Number(x.price).toFixed(1)+" "+(x.unit||"p/litre"),x.observedAt,x.source||"UK Government weekly series",x.url||d.sources?.roadFuel?.url,"UK-wide average; not local forecourt pricing"));}
+ if(keys.includes("brent")){const x=d.commodities?.brent;if(x)push("Brent crude",String(x.price)+" "+(x.currency||"USD"),x.observedAt,x.source||"Market data endpoint",x.url,"Global benchmark; not NI wholesale or retail pricing");}
+ if(keys.includes("food")){const x=d.foodInflation;if(x&&x.value!==undefined)push("Food inflation · UK CPIH",Number(x.value).toFixed(1)+"%",x.date,x.source||"UK Government",x.url,"UK-wide inflation measure; not local food availability");}
+ return rows;
+}
+function ledgerRecordCard(a){
+ const when=stamp(a),loc=niTown(a),r=region(a),src=String(a.source||a.publisher||"Source not supplied"),u=linkOf(a);
+ return '<article class="op-ledger-card report"><h3>'+esc(title(a))+'</h3><div class="op-ledger-meta">'+esc(src)+' · '+esc(r)+' · '+esc(when?fmt(when):"DATE NOT SUPPLIED")+'</div><div><span class="op-ledger-tag">REPORT / ARCHIVE</span><span class="op-ledger-tag">'+esc(sourceClass(a))+'</span><span class="op-ledger-tag">'+esc(evidence(a))+'</span><span class="op-ledger-tag">'+esc(severity(a))+'</span></div>'+(loc?'<p>Recorded location text: '+esc(loc)+' <span class="op-ledger-meta">('+esc(r)+' archive classification; not geocoded)</span></p>': '<p class="op-ledger-meta">No explicit locality supplied in the record.</p>')+(bodyText(a)?'<p>'+esc(bodyText(a).slice(0,260))+'</p>':"")+'<div class="op-links">'+(u?'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">ORIGINAL SOURCE ↗</a>':"")+(r==="NI"&&loc?'<a href="'+mapUrl(a)+'">SEARCH MAP ↗</a>':"")+'<a href="'+caseUrl(a)+'">CASE RECORD ↗</a></div></article>';
+}
+function ledgerCommsCards(){
+ const providers=arr(commsData?.providers);
+ if(!providers.length)return '<div class="op-ledger-note">No provider-level communications records are present in this snapshot.</div>';
+ return providers.map(p=>{
+  const observations=arr(p.observations),obs=observations[0]||{},reported=arr(obs.reportedAreas).map(x=>typeof x==="string"?x:(x.name||x.area||"")).filter(Boolean);
+  const status=String(p.status||"STATUS NOT SUPPLIED").replaceAll("_"," ");
+  return '<article class="op-ledger-card comms"><h3>'+esc(p.provider||"Provider not supplied")+'</h3><div class="op-ledger-meta">PROVIDER STATUS · '+esc(status)+'</div><div><span class="op-ledger-tag">'+esc(obs.evidenceClass||"CLASS NOT SUPPLIED")+'</span><span class="op-ledger-tag">'+(obs.stale?"STALE OBSERVATION":"CHECK SOURCE AGE")+'</span></div><p>'+esc(obs.summary||"No summary supplied")+'</p><div class="op-ledger-meta">Source: '+esc(obs.source||obs.sourceId||"Not supplied")+' · Updated: '+esc(obs.sourceUpdatedAt?fmt(obs.sourceUpdatedAt):"Not supplied")+' · Checked: '+esc(obs.checkedAt?fmt(obs.checkedAt):"Not supplied")+'</div>'+(reported.length?'<p>Reported areas: '+esc(reported.join(", "))+'</p>':'<p class="op-ledger-meta">No reported area supplied; do not infer a local outage.</p>')+(obs.url?'<a href="'+esc(obs.url)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"")+'</article>';
+ }).join("");
+}
+function renderEvidenceLedger(){
+ const target=$("op-ledger-results"),status=$("op-ledger-status");if(!target||!status)return;
+ const pathways=evidencePathway==="ALL"?CROSS_DOMAIN_PATHWAYS:CROSS_DOMAIN_PATHWAYS.filter(x=>x.id===evidencePathway);
+ const cards=[];
+ let reportCount=0,commsCount=0,marketCount=0;
+ pathways.forEach(path=>{
+  const hits=articles.filter(a=>path.re.test(title(a)+" "+bodyText(a))).sort((a,b)=>stamp(b)-stamp(a)).slice(0,6);
+  reportCount+=hits.length;
+  cards.push('<div class="op-ledger-card"><h3>'+esc(path.label)+'</h3><p>'+esc(path.note)+'</p><div class="op-ledger-meta">'+hits.length+' matching archive report(s) shown · keyword screening, not event linkage</div></div>');
+  if(hits.length)cards.push(...hits.map(ledgerRecordCard));
+  else cards.push('<div class="op-ledger-note">No matching archive report in the current intelligence snapshot. This is not evidence that the sector is unaffected.</div>');
+  if(path.comms){
+   const providers=arr(commsData?.providers);
+   commsCount=providers.length;
+   cards.push('<div class="op-ledger-card"><h3>COMMUNICATIONS PROVIDER STATUS</h3><div class="op-ledger-meta">'+providers.length+' provider records in separate communications dataset</div><p>Provider-level evidence is shown separately from newsroom reports. A status of operational or no issue signal does not prove service availability.</p></div>');
+   cards.push(ledgerCommsCards());
+  }
+  const rows=ledgerMarketRows(path.markets||[]);marketCount+=rows.length;
+  if(rows.length)cards.push(...rows.map(x=>'<article class="op-ledger-card market"><h3>'+esc(x.label)+' · '+esc(x.value)+'</h3><div class="op-ledger-meta">OBSERVATION '+esc(x.date||"DATE NOT SUPPLIED")+' · '+esc(x.source||"SOURCE NOT SUPPLIED")+'</div><p>'+esc(x.scope)+'</p>'+(x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">DATA SOURCE ↗</a>':"")+'</article>'));
+ });
+ status.textContent=reportCount+" matching archive reports · "+commsCount+" communications provider records · "+marketCount+" market observations // SOURCES KEPT DISTINCT";
+ target.innerHTML='<div class="op-ledger-grid">'+cards.join("")+'</div><div class="op-ledger-note">Snapshot times: intelligence '+esc(intelSnapshotAt?fmt(intelSnapshotAt):"not supplied")+' · communications '+esc(commsData?.generatedAt?fmt(commsData.generatedAt):"not supplied")+' · markets '+esc(marketData?.updatedAt?fmt(marketData.updatedAt):"not supplied")+'. Different collection intervals mean these are not necessarily simultaneous observations.</div>';
+}
 function renderWatchpoints(){
  const t=articles.map(a=>(title(a)+" "+bodyText(a)).toLowerCase()).join(" ");
  const groups=[
@@ -290,9 +371,10 @@ async function load(){
  if(results[1].status==="fulfilled")marketData=results[1].value;
  if(results[2].status==="fulfilled")commsData=results[2].value;
  $("op-data-time").textContent="INTELLIGENCE "+(intelSnapshotAt?fmt(intelSnapshotAt):"TIMESTAMP NOT SUPPLIED")+" · MARKETS "+(marketData.updatedAt?fmt(marketData.updatedAt):"UNAVAILABLE")+" · COMMS "+(commsData.generatedAt?fmt(commsData.generatedAt):"UNAVAILABLE");
- renderPriority();renderComms();renderMarkets();renderWatchpoints();renderEvents();
+ renderPriority();renderComms();renderMarkets();renderWatchpoints();renderEvidenceLedger();renderEvents();
 }
 ["op-search","op-region","op-window"].forEach(id=>$(id).addEventListener(id==="op-search"?"input":"change",renderEvents));
+$("op-pathway-filters").addEventListener("click",e=>{const b=e.target.closest("button[data-pathway]");if(!b)return;evidencePathway=b.dataset.pathway;document.querySelectorAll("#op-pathway-filters [data-pathway]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderEvidenceLedger();});
 $("op-evidence-filters").addEventListener("click",e=>{const b=e.target.closest("button[data-evidence]");if(!b)return;evidenceFilter=b.dataset.evidence;document.querySelectorAll("[data-evidence]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderEvents();});
 const initialSearch=new URLSearchParams(location.search).get("search");if(initialSearch){$("op-search").value=initialSearch;}
 load();setInterval(load,5*60*1000);
