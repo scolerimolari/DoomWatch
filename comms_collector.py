@@ -401,7 +401,8 @@ def main():
         "summary": {
             "currentIssueProviders": issue_count,
             "unconfirmedReportProviders": unconfirmed_count,
-            "staleIssueProviders": stale_count,\n            "staleOrUnknownProviders": stale_provider_count,
+            "staleIssueProviders": stale_count,
+            "staleOrUnknownProviders": stale_provider_count,
         },
         "sources": results,
         "providers": providers,
