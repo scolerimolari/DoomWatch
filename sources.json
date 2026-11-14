@@ -873,6 +873,24 @@
       "licence": "CC BY 4.0",
       "notes": "Primary collector uses the public NIE open-data API, with a fallback to NIE Networks' own Powercheck live outage table. Captures active and planned interruptions, postcodes, start times and estimated restoration where published. CC BY 4.0 applies to the open-data dataset.",
       "liveUrl": "https://powercheck.nienetworks.co.uk/TabularFaults.html"
+    },
+    {
+      "id": "dfi-river-levels",
+      "name": "DfI Rivers — NI live river gauge readings",
+      "platform": "third_party_aggregator",
+      "type": "river_level_observation",
+      "url": "https://www.infrastructure-ni.gov.uk/articles/dfi-rivers-water-level-network",
+      "endpoint": "https://conditionsview.com/en/water/country/gb-nir",
+      "method": "dfi_river_levels",
+      "region": "Northern Ireland",
+      "sectors": [
+        9
+      ],
+      "trust": "third_party_aggregator",
+      "status": "active",
+      "refreshFrequency": "Collector schedule; upstream DfI readings generally hourly",
+      "licence": "Open Government Licence v3.0 (DfI data)",
+      "notes": "Consolidated live station table republishes DfI Rivers readings. ConditionsView is an independent aggregator, not the official DfI viewer. Readings are provisional and may be delayed; gauge levels use station-specific zeroes and are not flood warnings. Map placement is approximate town-centre only."
     }
   ]
 }
