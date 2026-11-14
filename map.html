@@ -123,6 +123,7 @@ body:has(#event-map) .map-note{color:#b6c0b1}
    <label class="layer-row"><input type="checkbox" data-layer="TRANSPORT" checked><i class="layer-dot" style="background:#d6b574"></i> Other transport / infrastructure</label>
    <label class="layer-row"><input type="checkbox" data-layer="WEATHER" checked><i class="layer-dot" style="background:#79bde0"></i> Weather / environment</label>
    <label class="layer-row"><input type="checkbox" data-layer="OTHER" checked><i class="layer-dot" style="background:#a8d58b"></i> Other local reports</label>
+   <label class="layer-row"><input type="checkbox" id="mesh-nodes-toggle" checked><i class="layer-dot" style="background:#e84b45"></i> MeshCore field nodes <span id="mesh-node-layer-count" style="margin-left:auto">0</span></label>
    <label class="layer-row"><input type="checkbox" id="density-toggle"><i class="layer-dot" style="background:#e6d08a;opacity:.5"></i> Activity density overlay</label>
    <label class="layer-row"><input type="checkbox" id="labels-toggle" checked> Show town labels</label>
   </section>
@@ -374,6 +375,20 @@ function renderMarkers(){
  if(!map||!markerLayer)return;
  markerLayer.clearLayers();densityLayer.clearLayers();
  const bounds=[];
+ // Read the MeshCore workspace register. Only exact known town names are plotted.
+ let meshNodes=[];
+ try{const raw=localStorage.getItem("doomwatch-meshcore-v1");const parsed=raw?JSON.parse(raw):null;meshNodes=parsed&&Array.isArray(parsed.nodes)?parsed.nodes:[];}catch(e){meshNodes=[];}
+ const townByName=new Map(TOWNS.map(t=>[String(t.name||"").trim().toLowerCase(),t]));
+ const plottedMesh=meshNodes.map(n=>({node:n,town:townByName.get(String(n.area||"").trim().toLowerCase())})).filter(x=>x.town);
+ const meshCount=$("mesh-node-layer-count");if(meshCount)meshCount.textContent=plottedMesh.length+" / "+meshNodes.length;
+ if($("mesh-nodes-toggle")?.checked){
+  plottedMesh.forEach(({node,town})=>{
+   const marker=L.circleMarker([town.lat,town.lon],{radius:9,weight:2,color:"#ffb2a8",fillColor:"#e84b45",fillOpacity:.96,className:"dw-map-pulse"});
+   marker.bindTooltip("MESHCORE // "+String(node.id||"UNNAMED"),{direction:"top",offset:[0,-8]});
+   marker.bindPopup('<strong>MESHCORE NODE // '+esc(node.id||"UNNAMED")+'</strong><div>Area match: '+esc(town.name)+' · approximate town position only</div><div>Type: '+esc(node.type||"Not recorded")+'</div><div>Evidence: '+esc(node.evidence||"Not recorded")+'</div><div class="map-note">Manual node register only — not live telemetry, an exact radio position or proof of coverage.</div>');
+   marker.addTo(markerLayer);bounds.push([town.lat,town.lon]);
+  });
+ }
  townGroups.forEach(g=>{
   const enabledCats=Object.keys(g.cats).filter(layerEnabled);
   if(!enabledCats.length)return;
