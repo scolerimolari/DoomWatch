@@ -174,7 +174,7 @@ function render(){
   const sourcesHtml=items.map((a,index)=>{
    const socialPost=social(a),matched=Object.keys(topics).filter(k=>hits(a,k));
    const status=socialPost?"UNVERIFIED SOCIAL POST":String(a.evidenceStatus||"UNASSESSED").replace(/_/g," ");
-   const link=a.url&&/^https?:\\/\\//i.test(a.url)?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT / POST ↗</a>':'<span class="muted">No valid source link</span>';
+   const link=a.url&&/^https?:\/\//i.test(a.url)?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT / POST ↗</a>':'<span class="muted">No valid source link</span>';
    const globalIndex=list.indexOf(a);
    return '<div class="cluster-source"><strong>'+esc(a.source||"Source not supplied")+'</strong> · '+esc(date(a.publishedAt||a.collectedAt))+'<p>'+esc(a.title||"Untitled report")+'</p><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+'<div style="margin-top:8px"><button type="button" class="action-button" data-flag="'+globalIndex+'">SAVE TO RUMOUR MONITOR</button></div></div>';
   }).join("");
