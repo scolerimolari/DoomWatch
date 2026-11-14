@@ -196,6 +196,12 @@ body.dw-map-immersive .map-canvas-shell:before{top:20px;right:20px}
 }
 @media(prefers-reduced-motion:reduce){body.dw-map-immersive .map-side,.dw-map-drawer{transition:none}}
 
+
+.dw-map-toolbar{align-items:center;max-width:calc(100vw - 32px)}
+.dw-map-toolbar select{max-width:145px;min-width:105px;border:1px solid #a7c99799;border-radius:7px;padding:9px 8px;background:rgba(9,22,14,.94);color:#e7f0dc;font:700 9px Consolas,monospace;letter-spacing:.35px;box-shadow:0 5px 18px #0008}
+.dw-map-toolbar button:disabled{opacity:.4;cursor:not-allowed}
+#dw-map-coordinates{padding:8px 9px;border:1px solid #a7c99755;border-radius:6px;background:#08130de8;color:#bcd2b5;font:9px Consolas,monospace;letter-spacing:.3px}
+@media(max-width:600px){.dw-map-toolbar{max-height:38vh;overflow:auto;padding:2px}.dw-map-toolbar select{flex:1;min-width:0;max-width:none;padding:8px 5px;font-size:8px}.dw-map-toolbar button{padding:8px 7px;font-size:8px}#dw-map-coordinates{order:5;flex:1;text-align:center}}
 </style>
 </head>
 <body>
@@ -703,7 +709,7 @@ document.addEventListener("click",e=>{const link=e.target.closest(".dw-town-open
  drawerHead.innerHTML='<span>SELECTED INTELLIGENCE // DETAIL DRAWER</span><button type="button" id="dw-map-close-detail" aria-label="Close detail drawer">CLOSE ×</button>';
  drawer.appendChild(drawerHead);document.body.appendChild(drawer);
  const toolbar=document.createElement("div");toolbar.className="dw-map-toolbar";toolbar.setAttribute("aria-label","Immersive map controls");
- toolbar.innerHTML='<button type="button" id="dw-map-console-toggle" aria-expanded="true">HIDE CONSOLE −</button><button type="button" id="dw-map-fit">FIT NI ↗</button><button type="button" id="dw-map-exit">EXIT MAP MODE ×</button>';
+ toolbar.innerHTML='<button type="button" id="dw-map-console-toggle" aria-expanded="true">CONSOLE −</button><select id="dw-map-preset" aria-label="Operational map preset"><option value="">QUICK VIEWS</option><option value="ni">NI WIDE</option><option value="ballyclare">BALLYCLARE</option><option value="infrastructure">INFRASTRUCTURE</option><option value="transport">TRANSPORT</option><option value="utilities">WATER + POWER</option></select><select id="dw-map-saved" aria-label="Saved map views"><option value="">SAVED VIEWS</option></select><button type="button" id="dw-map-save">SAVE VIEW +</button><button type="button" id="dw-map-fit">FIT NI ↗</button><button type="button" id="dw-map-exit">EXIT ×</button><span id="dw-map-coordinates" role="status">MAP COORDINATES // TAP MAP</span><button type="button" id="dw-map-copy-coords" disabled>COPY COORDS</button>';
  document.body.appendChild(toolbar);
  const launch=document.createElement("button");launch.type="button";launch.className="action-button";launch.id="dw-map-launch";launch.textContent="⛶ IMMERSIVE MAP";
  intro.querySelector(".map-actions")?.prepend(launch);
@@ -725,6 +731,54 @@ document.addEventListener("click",e=>{const link=e.target.closest(".dw-town-open
   const b=document.getElementById("dw-map-console-toggle");b.textContent=closed?"SHOW CONSOLE +":"HIDE CONSOLE −";b.setAttribute("aria-expanded",String(!closed));resizeMap();
  });
  document.getElementById("dw-map-fit").addEventListener("click",()=>document.getElementById("fit-map")?.click());
+ const preset=document.getElementById("dw-map-preset"),saved=document.getElementById("dw-map-saved");
+ const layerNodes=[...document.querySelectorAll("[data-layer]")],trafficNodes=[...document.querySelectorAll("[data-traffic-kind]")];
+ const storageKey="doomwatch-map-presets-v1";
+ function readSaved(){try{const v=JSON.parse(localStorage.getItem(storageKey)||"[]");return Array.isArray(v)?v.filter(x=>x&&typeof x.name==="string"&&x.state):[];}catch(e){return[];}}
+ function refreshSaved(){const items=readSaved();saved.innerHTML='<option value="">SAVED VIEWS ('+items.length+')</option>'+items.map((x,i)=>'<option value="'+i+'">'+String(x.name).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))+'</option>').join("");}
+ function captureView(){
+  const center=typeof map!=="undefined"&&map?map.getCenter():null;
+  return {center:center?[center.lat,center.lng]:[54.62,-6.55],zoom:map?map.getZoom():8,ageDays,showAll,activeTown,search:$("map-search").value,categoryFilter,ballyclareWatch,layers:layerNodes.map(x=>[x.dataset.layer,x.checked]),traffic:trafficNodes.map(x=>[x.dataset.trafficKind,x.checked]),mesh:$("mesh-nodes-toggle").checked,dependency:$("dependency-screen-toggle").checked,impact:$("impact-screen-toggle").checked,density:$("density-toggle").checked,labels:$("labels-toggle").checked};
+ }
+ function applyState(st){
+  if(!st||typeof st!=="object")return;
+  ballyclareWatch=!!st.ballyclareWatch;activeTown=st.activeTown||"";searchTerm=String(st.search||"").trim().toLowerCase();categoryFilter=st.categoryFilter||"";showAll=!!st.showAll;ageDays=Math.max(1,Math.min(90,Number(st.ageDays)||30));
+  $("ballyclare-watch").setAttribute("aria-pressed",String(ballyclareWatch));$("ballyclare-watch").textContent="BALLYCLARE AREA WATCH: "+(ballyclareWatch?"ON":"OFF");
+  $("map-search").value=st.search||"";$("category-filter").value=categoryFilter;$("town-select").value=activeTown;
+  $("date-window").value=showAll?"all":String(ageDays);$("all-time").checked=showAll;$("age-range").disabled=showAll;$("age-range").value=String(ageDays);$("age-label").textContent=ageDays+" DAYS";$("age-value").textContent=ageDays+"d";
+  (st.layers||[]).forEach(([k,v])=>{const n=layerNodes.find(x=>x.dataset.layer===k);if(n)n.checked=!!v;});
+  (st.traffic||[]).forEach(([k,v])=>{const n=trafficNodes.find(x=>x.dataset.trafficKind===k);if(n)n.checked=!!v;});
+  $("mesh-nodes-toggle").checked=st.mesh!==false;$("dependency-screen-toggle").checked=!!st.dependency;$("impact-screen-toggle").checked=st.impact!==false;$("density-toggle").checked=!!st.density;$("labels-toggle").checked=st.labels!==false;
+  render();if(map&&Array.isArray(st.center))map.setView(st.center,Math.max(5,Math.min(17,Number(st.zoom)||8)));resizeMap();
+ }
+ function setPreset(name){
+  const all=()=>layerNodes.forEach(x=>x.checked=true),only=keys=>layerNodes.forEach(x=>x.checked=keys.includes(x.dataset.layer));
+  ballyclareWatch=false;activeTown="";searchTerm="";$("map-search").value="";categoryFilter="";$("category-filter").value="";showAll=false;ageDays=30;$("date-window").value="30";$("age-range").value="30";$("age-range").disabled=false;$("all-time").checked=false;
+  all();trafficNodes.forEach(x=>x.checked=x.dataset.trafficKind==="incident"||x.dataset.trafficKind==="roadworks");
+  $("mesh-nodes-toggle").checked=true;$("dependency-screen-toggle").checked=false;$("impact-screen-toggle").checked=true;$("density-toggle").checked=false;$("labels-toggle").checked=true;
+  let centre=[54.62,-6.55],zoom=8;
+  if(name==="ballyclare"){ballyclareWatch=true;only(["TRAFFIC"]);trafficNodes.forEach(x=>x.checked=["incident","roadworks"].includes(x.dataset.trafficKind));centre=[54.7515,-6.0014];zoom=11;}
+  if(name==="infrastructure"){only(["WATER","POWER","FLOOD","TRANSPORT","EMERGENCY"]);$("dependency-screen-toggle").checked=true;centre=[54.62,-6.55];zoom=8;}
+  if(name==="transport"){only(["TRAFFIC","TRANSPORT"]);trafficNodes.forEach(x=>x.checked=true);centre=[54.62,-6.55];zoom=8;}
+  if(name==="utilities"){only(["WATER","POWER","FLOOD"]);categoryFilter="";$("category-filter").value="";centre=[54.62,-6.55];zoom=8;}
+  $("ballyclare-watch").setAttribute("aria-pressed",String(ballyclareWatch));$("ballyclare-watch").textContent="BALLYCLARE AREA WATCH: "+(ballyclareWatch?"ON":"OFF");
+  render();if(map)map.setView(centre,zoom);resizeMap();
+ }
+ preset.addEventListener("change",()=>{if(preset.value)setPreset(preset.value);preset.value="";});
+ document.getElementById("dw-map-save").addEventListener("click",()=>{
+  const name=prompt("Name this map view (e.g. Belfast utilities):");if(!name||!name.trim())return;
+  const items=readSaved();const clean=name.trim().slice(0,36);const existing=items.findIndex(x=>x.name.toLowerCase()===clean.toLowerCase());
+  const entry={name:clean,state:captureView(),savedAt:new Date().toISOString()};if(existing>=0)items[existing]=entry;else items.unshift(entry);
+  try{localStorage.setItem(storageKey,JSON.stringify(items.slice(0,12)));refreshSaved();saved.value=String(Math.max(0,items.findIndex(x=>x.name===clean)));$("map-status").textContent="MAP VIEW SAVED LOCALLY // "+clean;}catch(e){$("map-status").textContent="SAVE FAILED // BROWSER STORAGE UNAVAILABLE";}
+ });
+ saved.addEventListener("change",()=>{const items=readSaved(),item=items[Number(saved.value)];if(item){applyState(item.state);$("map-status").textContent="SAVED MAP VIEW RESTORED // "+item.name;}});
+ refreshSaved();
+ if(typeof map!=="undefined"&&map){
+  const coord=document.getElementById("dw-map-coordinates"),copy=document.getElementById("dw-map-copy-coords");let lastCoords="";
+  map.on("click",e=>{lastCoords=e.latlng.lat.toFixed(5)+", "+e.latlng.lng.toFixed(5);coord.textContent="COORDINATES // "+lastCoords;copy.disabled=false;});
+  copy.addEventListener("click",async()=>{if(!lastCoords)return;try{await navigator.clipboard.writeText(lastCoords);}catch(e){const t=document.createElement("textarea");t.value=lastCoords;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove();}copy.textContent="COPIED ✓";setTimeout(()=>copy.textContent="COPY COORDS",1300);});
+ }
+
  document.getElementById("dw-map-close-detail").addEventListener("click",()=>{manualClose=true;drawer.classList.remove("is-open");});
  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&immersive)exit();});
 })();
