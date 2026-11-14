@@ -1426,7 +1426,7 @@ $("mesh-add-node").addEventListener("click",()=>{
 });
 document.addEventListener("click",event=>{
  if(event.target.dataset.meshFeedDelete!==undefined){meshFeed.splice(Number(event.target.dataset.meshFeedDelete),1);meshSaveFeed();meshRenderFeed();}
- if(event.target.dataset.meshDeleteNode!==undefined){meshSaved.nodes.splice(Number(event.target.dataset.meshDeleteNode),1);meshSaveNodes();meshRenderNodes();}
+ if(event.target.dataset.meshDeleteNode!==undefined){meshSaved.nodes.splice(Number(event.target.dataset.meshDeleteNode),1);meshSaveNodes();meshRender();}
 });
 meshLoad();
 
