@@ -796,6 +796,48 @@
       "trust": "official_primary_source",
       "status": "manual_review",
       "notes": "Food safety alerts, recalls, food-chain incidents and regulatory updates relevant to Northern Ireland. No NI-specific RSS endpoint verified."
+    },
+    {
+      "id": "ni-executive",
+      "name": "Northern Ireland Executive",
+      "platform": "website",
+      "type": "devolved_government",
+      "url": "https://www.northernireland.gov.uk/press-releases",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Central official publication stream covering all eight NI departments and cross-government announcements. No RSS or Atom endpoint verified; use the press-release index as the authoritative landing page."
+    },
+    {
+      "id": "department-health-ni",
+      "name": "Department of Health Northern Ireland",
+      "platform": "website",
+      "type": "government_department",
+      "url": "https://www.health-ni.gov.uk/",
+      "endpoint": null,
+      "method": "manual_review",
+      "region": "Northern Ireland",
+      "sectors": [
+        4,
+        7
+      ],
+      "trust": "official_primary_source",
+      "status": "manual_review",
+      "notes": "Departmental health policy, service resilience, medicines, public health and health-system announcements. No RSS endpoint verified."
     }
   ]
 }
