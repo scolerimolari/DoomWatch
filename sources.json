@@ -891,6 +891,70 @@
       "refreshFrequency": "Collector schedule; upstream DfI readings generally hourly",
       "licence": "Open Government Licence v3.0 (DfI data)",
       "notes": "Consolidated live station table republishes DfI Rivers readings. ConditionsView is an independent aggregator, not the official DfI viewer. Readings are provisional and may be delayed; gauge levels use station-specific zeroes and are not flood warnings. Map placement is approximate town-centre only."
+    },
+    {
+      "id": "trafficwatch-incidents",
+      "name": "TrafficWatchNI road incidents",
+      "platform": "website",
+      "type": "transport_incidents",
+      "url": "https://www.trafficwatchni.com/twni/",
+      "endpoint": "https://rss.trafficwatchni.com/trafficwatchni_incidents_rss.xml",
+      "method": "rss",
+      "region": "Northern Ireland",
+      "sectors": [
+        6
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "notes": "DfI Traffic Information and Control Centre national incidents RSS. The collector captures the published incident items; verify the linked source for live status and exact location."
+    },
+    {
+      "id": "trafficwatch-roadworks",
+      "name": "TrafficWatchNI roadworks",
+      "platform": "website",
+      "type": "transport_roadworks",
+      "url": "https://www.trafficwatchni.com/twni/",
+      "endpoint": "https://rss.trafficwatchni.com/trafficwatchni_roadworks_rss.xml",
+      "method": "rss",
+      "region": "Northern Ireland",
+      "sectors": [
+        6
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "notes": "DfI Traffic Information and Control Centre national roadworks RSS. The feed can contain a large published works schedule; inclusion does not mean every item is an active closure or a current delay."
+    },
+    {
+      "id": "trafficwatch-events",
+      "name": "TrafficWatchNI planned road events",
+      "platform": "website",
+      "type": "transport_events",
+      "url": "https://www.trafficwatchni.com/twni/",
+      "endpoint": "https://rss.trafficwatchni.com/trafficwatchni_events_rss.xml",
+      "method": "rss",
+      "region": "Northern Ireland",
+      "sectors": [
+        6
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "notes": "DfI Traffic Information and Control Centre national planned road events RSS. Empty responses are shown as empty feed results, not proof that no events exist."
+    },
+    {
+      "id": "trafficwatch-news",
+      "name": "TrafficWatchNI transport news",
+      "platform": "website",
+      "type": "transport_news",
+      "url": "https://www.trafficwatchni.com/twni/",
+      "endpoint": "https://rss.trafficwatchni.com/trafficwatchni_news_rss.xml",
+      "method": "rss",
+      "region": "Northern Ireland",
+      "sectors": [
+        6
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "notes": "DfI Traffic Information and Control Centre national traffic and travel news RSS. News reports are not a substitute for live road status."
     }
   ]
 }
