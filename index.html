@@ -835,7 +835,7 @@ const SECTOR_PATHWAYS = [
  {path:"Conflict, sanctions or chokepoint disruption → shipping, insurance, energy and commodity markets → UK/NI prices and availability",indicators:"Shipping route changes · freight and insurance costs · energy prices · official trade or travel advisories"}
 ];
 function sectorMatch(item,index){
- if(Array.isArray(item.sectorIds))return item.sectorIds.includes(index+1);
+ if(Array.isArray(item.sectorIds)&&item.sectorIds.length)return item.sectorIds.includes(index+1);
  const text=[item.title,item.summary,item.source,item.category,item.area].join(" ").toLowerCase();
  const cat=String(item.category||"").toLowerCase();
  if(cat&&SECTORS[index].toLowerCase().includes(cat))return true;
