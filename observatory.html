@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111714">
+<meta name="description" content="DoomWatch six-flow open-source intelligence observatory.">
+<title>DOOMWATCH // INTELLIGENCE OBSERVATORY</title>
+<link rel="stylesheet" href="./doomwatch.css">
+<style>
+.obs-hero{padding:16px;border:1px solid #65735c;background:radial-gradient(circle at 90% 10%,#35432d 0,#18221a 40%,#111713 100%);margin-bottom:12px}
+.obs-kicker{font-size:10px;letter-spacing:2px;color:#d5b46e}.obs-title{font-size:clamp(22px,5vw,34px);font-weight:900;color:#f0d28e;letter-spacing:2px;margin:7px 0}
+.obs-sub{max-width:900px;color:#d2d8ce;line-height:1.55}.obs-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:12px 0}
+.obs-stat{padding:11px;background:#141b16;border:1px solid #4b584a}.obs-stat span{display:block;color:#aeb7a7;font-size:10px;letter-spacing:1px}.obs-stat strong{display:block;color:#f0d28e;font-size:22px;margin-top:5px;overflow-wrap:anywhere}
+.obs-tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px;margin:12px 0}
+.obs-tabs button{padding:12px 9px;text-align:left;background:#1a241c;border:1px solid #596653;color:#d9dfd2;cursor:pointer;font:inherit}
+.obs-tabs button strong{display:block;color:#f0d28e;font-size:11px;letter-spacing:1px}.obs-tabs button span{display:block;color:#aab4a5;font-size:10px;margin-top:5px}.obs-tabs button.active{border-color:#e0bd68;background:#2b3528;box-shadow:inset 0 0 0 1px #a98c50}
+.obs-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}.obs-toolbar input{flex:1;min-width:190px;margin:0}.obs-toolbar select{width:auto;min-width:145px;margin:0}
+.obs-flow-head{padding:13px;background:#18221b;border:1px solid #596653;margin:10px 0}.obs-flow-head h2{margin:0 0 8px}
+.obs-records{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:9px}
+.obs-record{background:linear-gradient(145deg,#222b25,#151c17);border:1px solid #4b574e;border-left:4px solid #7d9473;padding:12px;min-width:0;overflow-wrap:anywhere}
+.obs-record.grade-A{border-left-color:#75bd83}.obs-record.grade-B{border-left-color:#9bbd76}.obs-record.grade-C{border-left-color:#c3a45d}.obs-record.grade-D{border-left-color:#c58a5d}.obs-record.grade-E{border-left-color:#bd795e}.obs-record.grade-U{border-left-color:#68745e}
+.obs-record h3{color:#f0d28e;margin:0 0 7px;line-height:1.4;font-size:14px}.obs-record p{color:#d3d9ce;font-size:12px;line-height:1.5;margin:8px 0}
+.obs-tags{display:flex;gap:4px;flex-wrap:wrap}.obs-tag{border:1px solid #64715a;padding:3px 6px;color:#c9d1bd;font-size:9px;letter-spacing:.5px}.obs-tag.grade{color:#f0d28e;border-color:#b99b60}.obs-meta{font-size:10px;color:#aab4a5;line-height:1.55;margin-top:8px}
+.obs-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.obs-actions a{font-size:10px;padding:7px 8px;border:1px solid #68775e;background:#202a21}
+.obs-directory{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:8px}.obs-source{padding:11px;background:#171f19;border:1px solid #485448}.obs-source strong{display:block;color:#e6d09b;font-size:12px}.obs-source p{font-size:11px;color:#c2cabb;line-height:1.45;margin:7px 0}.obs-source a{font-size:10px}
+.obs-note{padding:12px;border-left:4px solid #c19d53;background:#282317;color:#e3d6b5;font-size:11px;line-height:1.55;margin:12px 0}
+.obs-empty{padding:18px;border:1px dashed #596653;color:#aeb7a7;line-height:1.5}
+.obs-status{font-size:11px;color:#aeb7a7;line-height:1.5}
+@media(max-width:600px){.obs-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.obs-records{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">INTELLIGENCE OBSERVATORY // SIX SOURCE FLOWS</div></div><div class="classification">OPEN SOURCE // REVIEW REQUIRED</div></div></header>
+<main>
+<section class="obs-hero">
+ <div class="obs-kicker">OPERATION CONTAINMENT / MULTI-DOMAIN COLLECTION</div>
+ <div class="obs-title">INTELLIGENCE OBSERVATORY</div>
+ <div class="obs-sub">Six distinct collection and assessment streams. One common record format. Source reliability is separated from claim confidence. Social posts, alternative commentary and machine-generated matches remain leads until independently checked.</div>
+ <div class="obs-stats">
+  <div class="obs-stat"><span>FLOW RECORDS</span><strong id="obs-total">—</strong></div>
+  <div class="obs-stat"><span>UNIQUE SOURCES</span><strong id="obs-sources">—</strong></div>
+  <div class="obs-stat"><span>ARCHIVE RECORDS</span><strong id="obs-archive">—</strong></div>
+  <div class="obs-stat"><span>SNAPSHOT UPDATED</span><strong id="obs-updated" style="font-size:12px">WAITING</strong></div>
+ </div>
+ <div class="obs-status" id="obs-status" aria-live="polite">CONNECTING TO OBSERVATORY SNAPSHOT…</div>
+</section>
+<div class="obs-note"><strong>ASSESSMENT RULE:</strong> Reliability grades describe the type of source, not whether a particular claim is true. Repeated posts, syndicated copy and reports citing one original source are not independent corroboration. No automatic escalation establishes an incident.</div>
+<h2>SELECT AN INTELLIGENCE FLOW</h2>
+<div class="obs-tabs" id="obs-tabs" role="tablist" aria-label="Six intelligence flows">
+ <button type="button" class="active" data-flow="osint" role="tab" aria-selected="true"><strong>01 / OSINT OBSERVATORY</strong><span>Satellite, geospatial, transport & hazards</span></button>
+ <button type="button" data-flow="community" role="tab" aria-selected="false"><strong>02 / COMMUNITY SIGNALS</strong><span>Public social & local reporting</span></button>
+ <button type="button" data-flow="fringe" role="tab" aria-selected="false"><strong>03 / FRINGE & EMERGING</strong><span>Alternative sources & weak signals</span></button>
+ <button type="button" data-flow="economic" role="tab" aria-selected="false"><strong>04 / ECONOMIC STRESS</strong><span>Food, fuel, trade & financial pressure</span></button>
+ <button type="button" data-flow="digital" role="tab" aria-selected="false"><strong>05 / DIGITAL INFRASTRUCTURE</strong><span>Cyber, telecoms & utility dependencies</span></button>
+ <button type="button" data-flow="independent" role="tab" aria-selected="false"><strong>06 / INDEPENDENT MEDIA</strong><span>Investigative & regional journalism</span></button>
+</div>
+<section class="obs-flow-head">
+ <h2 id="flow-name">01 / OSINT OBSERVATORY</h2>
+ <div id="flow-description" class="obs-status">Loading flow description…</div>
+ <div class="obs-stats">
+  <div class="obs-stat"><span>VISIBLE RECORDS</span><strong id="flow-records">—</strong></div>
+  <div class="obs-stat"><span>REPORTING SOURCES</span><strong id="flow-sources">—</strong></div>
+  <div class="obs-stat"><span>GRADE A / B</span><strong id="flow-high">—</strong></div>
+  <div class="obs-stat"><span>UNASSESSED CLAIMS</span><strong id="flow-unassessed">—</strong></div>
+ </div>
+</section>
+<div class="obs-toolbar">
+ <input id="obs-search" type="search" placeholder="Search this flow by source, topic, place or claim…">
+ <select id="obs-grade" aria-label="Filter by source reliability"><option value="ALL">ALL SOURCE GRADES</option><option value="A">GRADE A</option><option value="B">GRADE B</option><option value="C">GRADE C</option><option value="D">GRADE D</option><option value="E">GRADE E</option><option value="U">GRADE U</option></select>
+ <button type="button" class="action-button" id="obs-clear">CLEAR</button>
+</div>
+<div class="obs-status" id="flow-status">Loading records…</div>
+<div class="obs-records" id="obs-records"></div>
+<h2 style="margin-top:20px">SOURCE REGISTER // ACCESS & LIMITATIONS</h2>
+<div class="obs-status" style="margin:-3px 0 9px">Sources are grouped by flow. Candidate and directory entries are not represented as successfully polled. Status reflects the current integration state, not source quality.</div>
+<div class="obs-directory" id="obs-directory"></div>
+<h2 style="margin-top:20px">COLLECTOR HEALTH</h2>
+<div class="obs-directory" id="obs-health"></div>
+<h2 style="margin-top:20px">RELIABILITY & EVIDENCE STANDARD</h2>
+<div class="panel">
+ <div class="obs-directory">
+  <div class="obs-source"><strong>GRADE A — OFFICIAL / PRIMARY</strong><p>Government, regulator, operator or primary catalogue. Strong provenance, but may be delayed, incomplete or narrowly scoped.</p></div>
+  <div class="obs-source"><strong>GRADE B — ESTABLISHED / INVESTIGATIVE</strong><p>Established newsroom, independent investigation or research organisation. Check documents, named sources and corrections.</p></div>
+  <div class="obs-source"><strong>GRADE C — SPECIALIST / ADVOCACY</strong><p>Specialist publisher, advocacy organisation or aggregator. Useful leads; check methodology and underlying evidence.</p></div>
+  <div class="obs-source"><strong>GRADE D — COMMENTARY / ALTERNATIVE</strong><p>Commentary and alternative publishers. Monitor narratives and leads; independently verify factual claims.</p></div>
+  <div class="obs-source"><strong>GRADE E — SOCIAL / COMMUNITY</strong><p>Unverified user-generated content. Treat as a lead only; identity, location, timing and context may be wrong.</p></div>
+  <div class="obs-source"><strong>GRADE U — UNCLASSIFIED</strong><p>Insufficient publisher metadata to assign a source class. Do not infer reliability from appearance or repetition.</p></div>
+ </div>
+ <p class="obs-status" style="margin-top:12px">Evidence labels are inherited from upstream records or describe a specific catalogue record. Claim confidence remains unassessed unless a numeric value was supplied upstream. Reliability grade is never converted into a confidence score.</p>
+</div>
+<div class="obs-note"><strong>IMPORTANT LIMITS:</strong> OpenSky now requires OAuth2 for automated API use; Reddit requires approved API access; Telegram/X are not treated as unrestricted data sources; AIS services may be commercial; Cloudflare Radar API access requires a token; RIPE Atlas needs selected measurements. These connectors are deliberately not bypassed. Copernicus records are catalogue metadata only, not interpreted satellite imagery. Economic Stress is currently a qualitative signal stream, not a validated composite index.</div>
+</main>
+<footer>DOOMWATCH // INTELLIGENCE OBSERVATORY<br>PUBLIC / AUTHORISED SOURCES ONLY // HUMAN REVIEW REQUIRED</footer>
+<script src="./doomwatch-ui.js"></script>
+<script>
+"use strict";
+const DATA_URL="./data/observatory.json";
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const date=v=>{if(!v)return"DATE NOT SUPPLIED";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB");};
+const flowOrder=["osint","community","fringe","economic","digital","independent"];
+let data=null,activeFlow="osint";
+const names={osint:"01 / OSINT OBSERVATORY",community:"02 / COMMUNITY SIGNALS",fringe:"03 / FRINGE & EMERGING SIGNALS",economic:"04 / ECONOMIC STRESS",digital:"05 / DIGITAL INFRASTRUCTURE",independent:"06 / INDEPENDENT MEDIA"};
+function mapLink(record){
+ const params=new URLSearchParams();
+ const term=record.region&&record.region!=="Not stated"?record.region:record.title;
+ if(term)params.set("search",term);
+ if(record.url)params.set("record",record.url);
+ return "./map.html?"+params.toString();
+}
+function caseLink(record){
+ const p=new URLSearchParams();
+ if(record.url)p.set("url",record.url);else p.set("title",record.title);
+ return "./incident.html?"+p.toString();
+}
+function renderRecord(r){
+ const grade=String(r.reliabilityGrade||"U").toUpperCase();
+ const evidence=String(r.evidenceStatus||"UNASSESSED").replace(/_/g," ");
+ const conf=(typeof r.claimConfidence==="number")?"CLAIM CONFIDENCE "+r.claimConfidence+"/5":"CLAIM CONFIDENCE UNASSESSED";
+ const sourceUrl=r.url&&/^https?:\/\//i.test(r.url)?'<a href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ↗</a>':"";
+ const summary=r.summary?'<p>'+esc(r.summary)+'</p>':'<p class="obs-status">No summary supplied by source.</p>';
+ const cve=r.cve?'<span class="obs-tag">'+esc(r.cve)+'</span>':"";
+ const ransomware=r.ransomwareUse&&r.ransomwareUse!=="Unknown"?'<span class="obs-tag">RANSOMWARE: '+esc(r.ransomwareUse)+'</span>':"";
+ return '<article class="obs-record grade-'+esc(grade)+'"><div class="obs-tags"><span class="obs-tag grade">SOURCE GRADE '+esc(grade)+'</span><span class="obs-tag">'+esc(r.reliabilityLabel||"Unclassified")+'</span><span class="obs-tag">'+esc(evidence)+'</span>'+cve+ransomware+'</div><h3>'+esc(r.title)+'</h3>'+summary+'<div class="obs-meta"><strong>'+esc(r.source||"Source not specified")+'</strong><br>TYPE: '+esc(r.sourceType||"unclassified")+' · REGION: '+esc(r.region||"Not stated")+'<br>PUBLISHED: '+esc(date(r.publishedAt))+'<br>'+esc(conf)+'</div><div class="obs-actions">'+sourceUrl+'<a href="'+esc(mapLink(r))+'">MAP / LOCATION ↗</a><a href="'+esc(caseLink(r))+'">CASE FILE ↗</a></div></article>';
+}
+function render(){
+ if(!data)return;
+ const flow=data.flows?.[activeFlow]||{records:[],directory:[],registeredSources:[],description:"No flow data."};
+ const q=$("obs-search").value.trim().toLowerCase(),grade=$("obs-grade").value;
+ const all=Array.isArray(flow.records)?flow.records:[];
+ const visible=all.filter(r=>{
+  const hay=[r.title,r.summary,r.source,r.region,r.sourceType,r.evidenceStatus].join(" ").toLowerCase();
+  return (!q||hay.includes(q))&&(grade==="ALL"||String(r.reliabilityGrade||"U").toUpperCase()===grade);
+ });
+ $("flow-name").textContent=names[activeFlow]||flow.name;
+ $("flow-description").textContent=flow.description||"";
+ $("flow-records").textContent=visible.length+" / "+all.length;
+ $("flow-sources").textContent=flow.sourceCount??new Set(all.map(r=>r.sourceId).filter(Boolean)).size;
+ $("flow-high").textContent=all.filter(r=>["A","B"].includes(String(r.reliabilityGrade||"U").toUpperCase())).length;
+ $("flow-unassessed").textContent=all.filter(r=>!r.evidenceStatus||String(r.evidenceStatus).includes("UNASSESSED")).length;
+ $("flow-status").textContent=visible.length?"Showing "+visible.length+" records. Sorted newest first where source dates are available.":"No records match this flow and filter. This is not proof that no relevant activity exists.";
+ $("obs-records").innerHTML=visible.length?visible.map(renderRecord).join(""):'<div class="obs-empty">No records in this view. Check another flow or clear the search. Some source connectors require API approval, credentials or manual review.</div>';
+ const directory=(data.sourceDirectory||[]).filter(s=>s.flow===activeFlow);
+ const registry=flow.registeredSources||[];
+ const merged=[...directory,...registry.filter(s=>!directory.some(d=>d.id===s.id)).map(s=>({...s,flow:activeFlow,method:s.method||"Source register",access:s.notes||"See publisher documentation.",status:s.status||"registered"}))];
+ $("obs-directory").innerHTML=merged.length?merged.map(s=>'<div class="obs-source"><strong>'+esc(s.name||s.id)+'</strong><p>'+esc(s.method||"Registered source")+' · STATUS: '+esc(s.status||"directory")+'<br>'+esc(s.access||s.notes||"See source documentation.")+'</p><a href="'+esc(s.url||s.endpoint||"#")+'" target="_blank" rel="noopener noreferrer">OPEN SOURCE / DOCUMENTATION ↗</a></div>').join(""):'<div class="obs-empty">No source directory entries for this flow.</div>';
+ $("obs-tabs").querySelectorAll("button[data-flow]").forEach(b=>{const on=b.dataset.flow===activeFlow;b.classList.toggle("active",on);b.setAttribute("aria-selected",String(on));});
+}
+function selectFlow(key){
+ if(!flowOrder.includes(key))return;
+ activeFlow=key;
+ $("obs-search").value="";
+ $("obs-grade").value="ALL";
+ render();
+}
+$("obs-tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-flow]");if(b)selectFlow(b.dataset.flow);});
+$("obs-search").addEventListener("input",render);
+$("obs-grade").addEventListener("change",render);
+$("obs-clear").addEventListener("click",()=>{$("obs-search").value="";$("obs-grade").value="ALL";render();});
+async function load(){
+ try{
+  const response=await fetch(DATA_URL+"?v="+Date.now(),{cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  data=await response.json();
+  $("obs-total").textContent=data.totalFlowRecords??"—";
+  $("obs-sources").textContent=data.uniqueSourceCount??"—";
+  $("obs-archive").textContent=data.archiveRecordCount??"—";
+  $("obs-updated").textContent=date(data.generatedAt);
+  $("obs-status").textContent="Snapshot loaded. Archive last collection: "+date(data.archiveLastRun)+". API collectors report independently below.";
+  const health=data.collectorStatus||[];
+  $("obs-health").innerHTML=health.map(s=>'<div class="obs-source"><strong>'+esc(s.name||s.id)+' — '+esc(s.status)+'</strong><p>CHECKED: '+esc(date(s.checkedAt))+'<br>RECORDS: '+esc(s.articleCount??0)+(s.catalogVersion?'<br>CATALOGUE: '+esc(s.catalogVersion):"")+(s.error?'<br>ERROR: '+esc(s.error):"")+'</p></div>').join("");
+  render();
+ }catch(error){
+  $("obs-status").textContent="OBSERVATORY SNAPSHOT UNAVAILABLE: "+error.message;
+  $("obs-records").innerHTML='<div class="obs-empty">The collector has not published a snapshot yet, or the request failed. Check the GitHub Actions collector run and try again after it completes.</div>';
+  $("obs-health").innerHTML='<div class="obs-empty">Collector health is unavailable until a snapshot is published.</div>';
+ }
+}
+load();
+</script>
+</body>
+</html>
