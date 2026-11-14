@@ -766,6 +766,112 @@ def fetch_niwater_service_updates(source):
 
 
 
+class NIEPowercheckTableParser(HTMLParser):
+    """Extract official outage and planned-work rows from NIE Powercheck."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.rows = []
+        self.current_row = None
+        self.current_cell = None
+        self.ignored = 0
+
+    def handle_starttag(self, tag, attrs):
+        tag = tag.lower()
+        if tag in ("script", "style", "noscript"):
+            self.ignored += 1
+            return
+        if self.ignored:
+            return
+        if tag == "tr":
+            self.current_row = []
+        elif tag in ("td", "th") and self.current_row is not None:
+            self.current_cell = []
+
+    def handle_endtag(self, tag):
+        tag = tag.lower()
+        if tag in ("script", "style", "noscript") and self.ignored:
+            self.ignored -= 1
+            return
+        if self.ignored:
+            return
+        if tag in ("td", "th") and self.current_row is not None and self.current_cell is not None:
+            self.current_row.append(clean(" ".join(self.current_cell)))
+            self.current_cell = None
+        elif tag == "tr" and self.current_row is not None:
+            if self.current_row:
+                self.rows.append(self.current_row)
+            self.current_row = None
+            self.current_cell = None
+
+    def handle_data(self, data):
+        if not self.ignored and self.current_cell is not None:
+            self.current_cell.append(data)
+
+
+def fetch_nie_powercheck(source):
+    """Fallback to NIE's own public Powercheck outage table."""
+    url = source.get("liveUrl", "https://powercheck.nienetworks.co.uk/TabularFaults.html")
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml"
+        }
+    )
+    with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+        content_type = response.headers.get("Content-Type", "")
+        body = response.read(MAX_FEED_SIZE)
+    if not body:
+        raise ValueError("NIE Powercheck returned an empty response")
+    html = body.decode("utf-8-sig", errors="replace")
+    parser = NIEPowercheckTableParser()
+    parser.feed(html)
+    articles, seen = [], set()
+    for row in parser.rows:
+        if len(row) < 5 or "event" in row[0].lower() or "plan number" in row[0].lower():
+            continue
+        event_id, outage_type, postcodes, start_time, restore_time = row[:5]
+        if not event_id or not postcodes:
+            continue
+        if event_id in seen:
+            continue
+        seen.add(event_id)
+        planned = "plan" in (event_id + " " + outage_type).lower() or "planned" in outage_type.lower()
+        status = "PLANNED" if planned else "ACTIVE"
+        details = [
+            "Status: " + status,
+            "Outage type: " + (outage_type or "Not supplied"),
+            "Affected postcodes: " + (postcodes or "Not supplied"),
+            "Start time: " + (start_time or "Not supplied"),
+            "Estimated restoration: " + (restore_time or "Not supplied"),
+            "Source: NIE Networks official Powercheck live table"
+        ]
+        articles.append({
+            "id": source["id"] + ":" + event_id,
+            "sourceId": source["id"],
+            "source": source["name"],
+            "title": "NIE Networks " + ("planned outage" if planned else "power fault") + " — " + postcodes,
+            "url": url,
+            "publishedAt": start_time,
+            "collectedAt": iso(),
+            "description": " | ".join(details),
+            "domain": source.get("domain", 5),
+            "region": "Northern Ireland",
+            "priority": "high",
+            "sourceTrust": "official_primary_source",
+            "sourceType": "electricity_network_outage",
+            "serviceStatus": status,
+            "outageType": outage_type,
+            "affectedPostcodes": postcodes,
+            "estimatedRestorationTime": restore_time,
+            "evidenceStatus": "OFFICIAL_OPERATOR_UPDATE",
+            "confidence": "HIGH"
+        })
+    if not articles and not re.search(r"no active alerts at present", html, flags=re.IGNORECASE):
+        raise ValueError("NIE Powercheck page did not expose an outage table or explicit no-alert status")
+    return articles, content_type, len(body), "NIE_POWERCHECK_HTML"
+
+
 def fetch_nie_network_outages(source):
     """Collect official live NIE Networks faults from its open-data API."""
     endpoints = [
@@ -794,7 +900,8 @@ def fetch_nie_network_outages(source):
         except Exception as error:
             last_error = error
     if not body:
-        raise ValueError("NIE Networks outage API unavailable on all public endpoints: " + str(last_error))
+        print("NIE OPEN DATA API UNAVAILABLE:", str(last_error)[:200], "- using official Powercheck table")
+        return fetch_nie_powercheck(source)
     if "csv" in content_type.lower() or body[:100].count(b",") > 3 and not body.lstrip().startswith(b"{"):
         import csv
         import io
