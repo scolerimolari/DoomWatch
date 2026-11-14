@@ -992,6 +992,46 @@
       "trust": "independent_commentary",
       "status": "candidate",
       "notes": "Foreign-policy and military-strategy analysis. Commentary and analysis must be distinguished from independently verified reporting."
+    },
+    {
+      "id": "ons-release-calendar",
+      "name": "ONS release calendar — published statistics",
+      "platform": "website",
+      "type": "economic_statistics",
+      "url": "https://www.ons.gov.uk/releasecalendar",
+      "endpoint": "https://www.ons.gov.uk/releasecalendar?highlight=true&limit=10&page=1&release-type=type-published&rss=&sort=date-newest",
+      "method": "rss",
+      "region": "UK",
+      "sectors": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "notes": "Official published statistical releases; release notices only, not raw time-series observations."
+    },
+    {
+      "id": "nisra-upcoming-releases",
+      "name": "NISRA — upcoming official statistics",
+      "platform": "website",
+      "type": "economic_statistics",
+      "url": "https://www.nisra.gov.uk/upcoming-releases",
+      "endpoint": "https://www.nisra.gov.uk/upcoming-releases",
+      "method": "html_listing",
+      "region": "Northern Ireland",
+      "sectors": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "notes": "Official NI statistical release listing; publication metadata and titles only, not numeric series."
     }
   ]
 }
