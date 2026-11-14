@@ -245,6 +245,7 @@ footer {
       <div class="panel"><div class="panel-title">WATER // NI WATER</div><div class="big-status" id="infra-water">—</div><div class="muted">Service update records</div></div>
       <div class="panel"><div class="panel-title">ROADS // TRAFFICWATCHNI</div><div class="big-status" id="infra-roads">—</div><div class="muted">Incident records</div></div>
       <div class="panel"><div class="panel-title">PLANNED DISRUPTION</div><div class="big-status" id="infra-planned">—</div><div class="muted">Roadworks and events</div></div>
+      <div class="panel"><div class="panel-title">TELECOMS // BROADBAND</div><div class="big-status" id="infra-comms">CHECKING</div><div class="muted" id="infra-comms-detail">Live communications watch</div><a href="./communications.html">OPEN LIVE COMMS WATCH ↗</a></div>
     </div>
     <div id="infra-latest" class="muted" style="margin-top:10px">Waiting for collector data.</div>
     <div class="controls">
@@ -1190,6 +1191,32 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(() => {});
   });
 }
+</script>
+
+<script>
+async function loadCommsSummary(){
+ const status=document.getElementById("infra-comms");
+ const detail=document.getElementById("infra-comms-detail");
+ if(!status||!detail)return;
+ try{
+  const response=await fetch("./data/communications.json?t="+Date.now(),{cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const data=await response.json();
+  const summary=data.summary||{};
+  const current=summary.currentIssueProviders||0;
+  const unconfirmed=summary.unconfirmedReportProviders||0;
+  const stale=(summary.staleIssueProviders||0)+(summary.staleOrUnknownProviders||0);
+  status.textContent=current?"ISSUE SIGNAL: "+current:stale?"STALE / UNKNOWN":"NO CURRENT SIGNAL";
+  status.className="big-status "+(current?"red":stale?"yellow":"green");
+  detail.textContent="Unconfirmed reports: "+unconfirmed+" · Stale/unknown: "+stale+" · Updated "+new Date(data.generatedAt).toLocaleTimeString();
+ }catch(error){
+  status.textContent="DATA UNAVAILABLE";
+  status.className="big-status yellow";
+  detail.textContent="Open the live communications watch for diagnostics.";
+ }
+}
+loadCommsSummary();
+setInterval(loadCommsSummary,60000);
 </script>
 
 <script src="./doomwatch-ui.js"></script>
