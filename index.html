@@ -477,7 +477,7 @@ footer {
     </div>
     <div class="meta" id="mesh-history-status" aria-live="polite">Not checked yet on this device. First successful check creates a baseline; later checks reveal changes.</div>
     <div id="mesh-history-list" class="mesh-history-list"><p class="muted">No local history yet. Run the first directory check to establish a baseline.</p></div>
-    <div class="mesh-history-foot"><span id="mesh-history-last">LAST CHECK: NEVER</span><button type="button" class="action-button" id="mesh-history-export">EXPORT HISTORY JSON</button></div>
+    <div class="mesh-history-foot"><span id="mesh-history-last">LAST CHECK: NEVER</span><div class="controls"><button type="button" class="action-button" id="mesh-history-export">EXPORT HISTORY JSON</button><button type="button" class="action-button" id="mesh-history-import-trigger">IMPORT / MERGE BACKUP</button><input id="mesh-history-import-file" type="file" accept=".json,application/json" hidden></div></div><div class="meta" id="mesh-history-import-status" aria-live="polite">Export this history to move it to another browser or device. Import merges records; it does not replace existing history.</div>
     <div class="warning" style="margin-top:10px">EVIDENCE LIMIT: This compares snapshots of the public advertised-node directory. “Not returned” does not prove a radio is offline or removed. History is stored only in this browser on this device; it is not shared with other DoomWatch users. The first check is a baseline, not a backdated history.</div>
   </section>
 
@@ -1696,6 +1696,41 @@ $("mesh-history-region").addEventListener("change",meshHistoryRender);
 $("mesh-history-kind").addEventListener("change",meshHistoryRender);
 $("mesh-a-export").addEventListener("click",()=>{const rows=[["checked_at","total_nodes","repeaters","room_servers","regions_json","types_json"],...meshHistory.checks.slice().reverse().map(x=>[x.at,x.count,x.repeaters??"",x.roomServers??"",JSON.stringify(x.regions||{}),JSON.stringify(x.types||{})])];const csv=rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n");const blob=new Blob([csv],{type:"text/csv"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="doomwatch-mesh-network-analytics.csv";a.click();URL.revokeObjectURL(url);});
 $("mesh-history-export").addEventListener("click",()=>{const blob=new Blob([JSON.stringify({format:"doomwatch-mesh-public-history",version:1,exportedAt:new Date().toISOString(),history:meshHistory},null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="doomwatch-mesh-public-history.json";a.click();URL.revokeObjectURL(url);});
+$("mesh-history-import-trigger").addEventListener("click",()=>$("mesh-history-import-file").click());
+$("mesh-history-import-file").addEventListener("change",event=>{
+ const file=event.target.files&&event.target.files[0];if(!file)return;
+ const status=$("mesh-history-import-status");status.textContent="Reading backup…";
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const data=JSON.parse(String(reader.result||""));
+   if(!data||data.format!=="doomwatch-mesh-public-history"||data.version!==1||!data.history||typeof data.history!=="object")throw new Error("This is not a supported DoomWatch MeshCore history backup.");
+   const incoming=data.history;
+   if(!incoming.nodes||typeof incoming.nodes!=="object"||!Array.isArray(incoming.events)||!Array.isArray(incoming.checks))throw new Error("Backup is missing required history sections.");
+   let nodeAdds=0,nodeUpdates=0,checkAdds=0,eventAdds=0;
+   Object.entries(incoming.nodes).slice(0,6000).forEach(([key,node])=>{
+    if(!key||key.length>160||!node||typeof node!=="object")return;
+    const prior=meshHistory.nodes[key];
+    if(!prior){meshHistory.nodes[key]=node;nodeAdds++;}
+    else if(String(node.lastSeen||node.firstSeen||"")>String(prior.lastSeen||prior.firstSeen||"")){meshHistory.nodes[key]={...prior,...node};nodeUpdates++;}
+   });
+   const checkMap=new Map(meshHistory.checks.filter(x=>x&&x.at).map(x=>[String(x.at),x]));
+   incoming.checks.forEach(x=>{if(!x||!x.at||!Number.isFinite(Number(x.count))||!Number.isFinite(Date.parse(x.at)))return;if(!checkMap.has(String(x.at))){checkMap.set(String(x.at),x);checkAdds++;}});
+   meshHistory.checks=[...checkMap.values()].sort((a,b)=>Date.parse(b.at)-Date.parse(a.at)).slice(0,100);
+   const eventMap=new Map(meshHistory.events.filter(x=>x&&x.at).map(x=>[[String(x.at),String(x.kind||""),String(x.key||x.name||"")].join("|"),x]));
+   incoming.events.forEach(x=>{if(!x||!x.at||!x.kind||!Number.isFinite(Date.parse(x.at)))return;const k=[String(x.at),String(x.kind),String(x.key||x.name||"")].join("|");if(!eventMap.has(k)){eventMap.set(k,x);eventAdds++;}});
+   meshHistory.events=[...eventMap.values()].sort((a,b)=>Date.parse(b.at)-Date.parse(a.at)).slice(0,1000);
+   const dates=[meshHistory.lastCheck,incoming.lastCheck].filter(x=>x&&Number.isFinite(Date.parse(x))).sort();
+   meshHistory.lastCheck=dates.length?dates[dates.length-1]:null;
+   meshHistory.baseline=!!(meshHistory.baseline||incoming.baseline);
+   meshHistorySave();meshHistoryRender();
+   status.textContent="MERGE COMPLETE — "+nodeAdds+" nodes added, "+nodeUpdates+" node records updated, "+checkAdds+" snapshots added and "+eventAdds+" events added. Existing history retained.";
+  }catch(error){status.textContent="IMPORT FAILED — "+error.message+" Existing history was not replaced.";}
+  event.target.value="";
+ };
+ reader.onerror=()=>{status.textContent="Could not read that file. Existing history was not changed.";event.target.value="";};
+ reader.readAsText(file);
+});
 meshHistoryRender();
 const meshPublicViews={
  ni:{name:"NORTHERN IRELAND",lat:54.7,lon:-6.7,zoom:8},
