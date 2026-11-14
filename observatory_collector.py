@@ -177,6 +177,7 @@ def normalize_record(a, flow):
   "source":str(a.get("source") or a.get("sourceId") or "Source not specified")[:180],
   "sourceId":str(a.get("sourceId") or ""),
   "sourceType":str(a.get("sourceType") or "unclassified"),
+  "sourcePriority":str(a.get("priority") or "medium").upper(),
   "sourceTrust":str(a.get("sourceTrust") or "unclassified"),
   "reliabilityGrade":grade,
   "reliabilityLabel":label,
@@ -273,14 +274,16 @@ def build():
  flows={}
  all_records=[]
  for key,definition in FLOW_DEFS.items():
-  selected=[normalize_record(a,key) for a in articles if isinstance(a,dict) and flow_match(a,key)]
-  selected.extend([r for r in api_records if r.get("flow")==key])
+  archive_selected=[normalize_record(a,key) for a in articles if isinstance(a,dict) and flow_match(a,key)]
+  api_selected=[r for r in api_records if r.get("flow")==key]
   unique={}
-  for r in selected:
+  for r in archive_selected+api_selected:
    unique[r["id"]]=r
-  records=list(unique.values())
+  api_kept=[r for r in unique.values() if r.get("recordKind") in ("CISA_KEV","SATELLITE_CATALOGUE")]
+  archive_kept=[r for r in unique.values() if r.get("recordKind") not in ("CISA_KEV","SATELLITE_CATALOGUE")]
+  archive_kept.sort(key=lambda x:x.get("publishedAt") or x.get("collectedAt") or "",reverse=True)
+  records=(api_kept+archive_kept[:max(0,MAX_RECORDS-len(api_kept))])
   records.sort(key=lambda x:x.get("publishedAt") or x.get("collectedAt") or "",reverse=True)
-  records=records[:MAX_RECORDS]
   source_ids=set(r["sourceId"] for r in records if r.get("sourceId"))
   directory=[s for s in SOURCE_DIRECTORY if s["flow"]==key]
   registry=[s for s in source_register.get("sources",[]) if isinstance(s,dict) and (
@@ -297,6 +300,7 @@ def build():
   }
   all_records.extend(records)
  total_sources=len({r.get("sourceId") for r in all_records if r.get("sourceId")})
+ statuses.extend([s for s in archive.get("sourceStatus",[]) if isinstance(s,dict)])
  data={
   "schemaVersion":1,
   "generatedAt":iso(),
