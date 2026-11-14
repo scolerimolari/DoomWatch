@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-14T12:19:37Z",
+  "generatedAt": "2026-11-14T12:19:53Z",
   "collectionIntervalMinutes": 5,
   "displayRefreshSeconds": 60,
   "staleAfterMinutes": 120,
@@ -20,7 +20,7 @@
       "scope": "UK mobile networks",
       "format": "json",
       "status": "NO_STRUCTURED_STATUS",
-      "checkedAt": "2026-11-14T12:19:35Z",
+      "checkedAt": "2026-11-14T12:19:51Z",
       "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
       "providerSignals": [],
       "note": "Page was reachable, but no recognised current provider-status rows were extracted."
@@ -34,7 +34,7 @@
       "scope": "UK fixed broadband providers",
       "format": "json",
       "status": "NO_STRUCTURED_STATUS",
-      "checkedAt": "2026-11-14T12:19:35Z",
+      "checkedAt": "2026-11-14T12:19:51Z",
       "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
       "providerSignals": [],
       "note": "Page was reachable, but no recognised current provider-status rows were extracted."
@@ -48,8 +48,8 @@
       "scope": "UK-wide carrier indicators",
       "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-14T12:19:35Z",
-      "sourceUpdatedAt": "2026-11-14 04:19:36",
+      "checkedAt": "2026-11-14T12:19:52Z",
+      "sourceUpdatedAt": "2026-11-14 04:19:52",
       "providerSignals": [
         {
           "provider": "EE",
@@ -59,7 +59,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-14 04:19:36",
+          "sourceUpdatedAt": "2026-11-14 04:19:52",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -70,7 +70,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-14 04:19:36",
+          "sourceUpdatedAt": "2026-11-14 04:19:52",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -81,7 +81,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-14 04:19:36",
+          "sourceUpdatedAt": "2026-11-14 04:19:52",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -92,7 +92,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-14 04:19:36",
+          "sourceUpdatedAt": "2026-11-14 04:19:52",
           "evidenceClass": "independent_traffic_and_reports"
         }
       ],
@@ -107,7 +107,7 @@
       "scope": "UK-wide fixed broadband infrastructure reports",
       "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-14T12:19:36Z",
+      "checkedAt": "2026-11-14T12:19:52Z",
       "sourceUpdatedAt": null,
       "providerSignals": [
         {
@@ -143,8 +143,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14 04:19:36",
-          "checkedAt": "2026-11-14T12:19:35Z",
+          "sourceUpdatedAt": "2026-11-14 04:19:52",
+          "checkedAt": "2026-11-14T12:19:52Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -168,8 +168,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14 04:19:36",
-          "checkedAt": "2026-11-14T12:19:35Z",
+          "sourceUpdatedAt": "2026-11-14 04:19:52",
+          "checkedAt": "2026-11-14T12:19:52Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -194,7 +194,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": null,
-          "checkedAt": "2026-11-14T12:19:36Z",
+          "checkedAt": "2026-11-14T12:19:52Z",
           "evidenceClass": "community_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -218,8 +218,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14 04:19:36",
-          "checkedAt": "2026-11-14T12:19:35Z",
+          "sourceUpdatedAt": "2026-11-14 04:19:52",
+          "checkedAt": "2026-11-14T12:19:52Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -243,8 +243,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14 04:19:36",
-          "checkedAt": "2026-11-14T12:19:35Z",
+          "sourceUpdatedAt": "2026-11-14 04:19:52",
+          "checkedAt": "2026-11-14T12:19:52Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
