@@ -95,7 +95,7 @@ jobs:
           for script in /tmp/dw-script-*.js; do node --check "$script"; done
           node --check doomwatch-ui.js
 
-      # The observatory is generated after the main archive so each flow uses the same current source snapshot.
+      # Generate all six intelligence flows from the refreshed archive and current source register.
       - name: Run DoomWatch collector
         run: |
           python collector.py
