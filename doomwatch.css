@@ -121,3 +121,31 @@ h2{margin-top:20px!important;margin-bottom:10px!important}
 
 /* Unified navigation and mobile interaction pass */
 .dw-global-nav{position:sticky!important;top:0!important;z-index:10000!important;display:flex!important;overflow-x:auto!important;scrollbar-width:thin!important;overscroll-behavior-x:contain!important;touch-action:pan-x!important}.dw-global-nav a{flex:0 0 auto!important;min-height:42px!important;white-space:nowrap!important;touch-action:pan-x!important}.dw-global-nav a[aria-current="page"]{outline:1px solid #e45b4e!important;outline-offset:-3px!important}.dw-local-nav{position:sticky!important;top:56px!important;z-index:9999!important}.dw-global-nav a:focus-visible,.dw-local-nav a:focus-visible,.dw-local-nav button:focus-visible{outline:2px solid #e5bd68!important;outline-offset:2px!important}@media(max-width:700px){.dw-global-nav{min-height:48px!important}.dw-global-nav a{min-width:72px!important;padding:8px 9px!important;font-size:9px!important}.dw-local-nav{top:48px!important}}@media(prefers-reduced-motion:reduce){.dw-global-nav,.dw-local-nav{scroll-behavior:auto!important}}
+
+
+/* DOOMWATCH // SINGLE GLOBAL NAV + COLLAPSIBLE WORKSPACES */
+.dw-global-nav{position:sticky!important;top:0!important;z-index:10000!important;display:flex!important;align-items:center!important;gap:6px!important;min-height:52px!important;padding:7px 9px!important;overflow-x:auto!important;overflow-y:hidden!important;white-space:nowrap!important;background:#151b16!important;border-bottom:2px solid #b94b40!important;scrollbar-width:thin!important;overscroll-behavior-x:contain!important;touch-action:pan-x!important}
+.dw-global-nav a,.dw-global-nav button{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;min-height:38px!important;padding:8px 11px!important;border:1px solid #53604e!important;border-radius:3px!important;background:linear-gradient(#303a31,#1b241e)!important;color:#e7d5a8!important;font:700 10px/1.2 Consolas,monospace!important;letter-spacing:.06em!important;text-decoration:none!important;white-space:nowrap!important}
+.dw-global-nav a[aria-current="page"],.dw-global-nav button.active{background:#704039!important;border-color:#e0b85f!important;color:#fff!important}
+.dw-global-nav .dw-section-link,.dw-global-nav .dw-section-tab{border-style:dashed!important;color:#b9d19d!important}
+.dw-global-nav .dw-section-link:first-of-type,.dw-global-nav .dw-section-tab:first-of-type{margin-left:10px!important}
+.dw-local-nav{display:none!important}
+.dw-wire{pointer-events:none!important}
+.dw-fold{margin:10px 0!important;border:1px solid #465344!important;border-left:3px solid #b94b40!important;background:rgba(20,27,22,.92)!important;min-width:0!important}
+.dw-fold>summary{display:flex!important;align-items:center!important;gap:10px!important;min-height:43px!important;padding:11px 13px!important;cursor:pointer!important;list-style:none!important;color:#f0d28e!important;font-weight:800!important;letter-spacing:.035em!important}
+.dw-fold>summary::-webkit-details-marker{display:none!important}
+.dw-fold>summary:after{content:"+";margin-left:auto;color:#f2c84b;font-size:20px;font-weight:900}
+.dw-fold[open]>summary:after{content:"−"}
+.dw-fold-hint{margin-left:auto;color:#899889;font-size:9px;font-weight:400;letter-spacing:.08em}
+.dw-fold[open] .dw-fold-hint{display:none}
+.dw-fold>section{margin:0!important}
+.dw-fold>section>h2:first-child,.dw-fold>section>h3:first-child{margin-top:8px!important}
+.dw-fold:focus-within{border-color:#b89b62!important}
+@media(max-width:700px){
+ .dw-global-nav{min-height:47px!important;padding:5px!important;gap:4px!important}
+ .dw-global-nav a,.dw-global-nav button{min-height:37px!important;padding:7px 9px!important;font-size:9px!important}
+ .dw-fold{margin:8px 0!important}
+ .dw-fold>summary{padding:10px!important;font-size:11px!important}
+ .dw-fold-hint{font-size:8px!important}
+}
+@media(prefers-reduced-motion:reduce){.dw-global-nav{scroll-behavior:auto!important}}
