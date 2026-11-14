@@ -1,123 +1,253 @@
 {
-  "schemaVersion": 1,
-  "generatedAt": "2026-11-14T12:18:48Z",
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-14T12:19:37Z",
   "collectionIntervalMinutes": 5,
   "displayRefreshSeconds": 60,
-  "overallStatus": "SIGNALS_PRESENT",
+  "staleAfterMinutes": 120,
+  "overallStatus": "STALE_REPORTS_ONLY",
+  "summary": {
+    "currentIssueProviders": 0,
+    "unconfirmedReportProviders": 0,
+    "staleIssueProviders": 1
+  },
   "sources": [
     {
-      "id": "signalchecker-mobile",
-      "name": "Signalchecker UK mobile network status",
-      "url": "https://www.signalchecker.co.uk/network-status",
-      "kind": "independent_traffic_signal",
-      "scope": "UK-wide network indicators",
-      "status": "SOURCE_UNAVAILABLE",
-      "checkedAt": "2026-11-14T12:18:46Z",
+      "id": "statuspages-mobile",
+      "name": "StatusPages UK mobile networks data",
+      "url": "https://status-pages.com/mobile/data.json",
+      "displayUrl": "https://status-pages.com/mobile",
+      "kind": "provider_status_and_community_reports",
+      "scope": "UK mobile networks",
+      "format": "json",
+      "status": "NO_STRUCTURED_STATUS",
+      "checkedAt": "2026-11-14T12:19:35Z",
+      "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
       "providerSignals": [],
-      "note": "HTTPError: HTTP Error 403: Forbidden"
+      "note": "Page was reachable, but no recognised current provider-status rows were extracted."
     },
     {
-      "id": "status-pages-mobile",
-      "name": "StatusPages UK mobile networks",
-      "url": "https://status-pages.com/mobile",
-      "kind": "community_reports",
-      "scope": "UK-wide reports and area groupings",
+      "id": "statuspages-broadband",
+      "name": "StatusPages UK broadband data",
+      "url": "https://status-pages.com/broadband/data.json",
+      "displayUrl": "https://status-pages.com/broadband",
+      "kind": "provider_status_and_community_reports",
+      "scope": "UK fixed broadband providers",
+      "format": "json",
       "status": "NO_STRUCTURED_STATUS",
-      "checkedAt": "2026-11-14T12:18:46Z",
+      "checkedAt": "2026-11-14T12:19:35Z",
+      "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
       "providerSignals": [],
-      "note": "Page was reachable, but no recognised current-status rows were extracted."
+      "note": "Page was reachable, but no recognised current provider-status rows were extracted."
     },
     {
       "id": "updownsignal-mobile",
       "name": "UpDownSignal UK mobile carriers",
       "url": "https://updownsignal.com/en-gb/industries/mobile-carriers/",
+      "displayUrl": "https://updownsignal.com/en-gb/industries/mobile-carriers/",
       "kind": "independent_traffic_and_reports",
       "scope": "UK-wide carrier indicators",
+      "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-14T12:18:46Z",
+      "checkedAt": "2026-11-14T12:19:35Z",
+      "sourceUpdatedAt": "2026-11-14 04:19:36",
       "providerSignals": [
-        {
-          "provider": "Vodafone",
-          "reportedStatus": "ISSUE_SIGNAL",
-          "sourceRow": "Vodafone UK | Partial Outage | Data connectivity issues in South East England | 2026-11-13 22:18 | 2026-11-14 03:18",
-          "scope": "UK-wide; not a Ballyclare-specific confirmation",
-          "evidenceClass": "independent_traffic_and_reports"
-        },
         {
           "provider": "EE",
           "reportedStatus": "NO_ISSUE_SIGNAL",
-          "sourceRow": "EE | Operational | No reported issues | - | 2026-11-14 04:18",
-          "scope": "UK-wide; not a Ballyclare-specific confirmation",
+          "rawIndicator": "Operational",
+          "summary": "",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "independent_status_indicator",
+          "sourceUpdatedAt": "2026-11-14 04:19:36",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
           "provider": "O2",
           "reportedStatus": "NO_ISSUE_SIGNAL",
-          "sourceRow": "O2 | Operational | No reported issues | - | 2026-11-14 04:18",
-          "scope": "UK-wide; not a Ballyclare-specific confirmation",
+          "rawIndicator": "Operational",
+          "summary": "",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "independent_status_indicator",
+          "sourceUpdatedAt": "2026-11-14 04:19:36",
+          "evidenceClass": "independent_traffic_and_reports"
+        },
+        {
+          "provider": "Vodafone",
+          "reportedStatus": "NO_ISSUE_SIGNAL",
+          "rawIndicator": "Operational",
+          "summary": "",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "independent_status_indicator",
+          "sourceUpdatedAt": "2026-11-14 04:19:36",
+          "evidenceClass": "independent_traffic_and_reports"
+        },
+        {
+          "provider": "Three",
+          "reportedStatus": "NO_ISSUE_SIGNAL",
+          "rawIndicator": "Operational",
+          "summary": "",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "independent_status_indicator",
+          "sourceUpdatedAt": "2026-11-14 04:19:36",
           "evidenceClass": "independent_traffic_and_reports"
         }
       ],
-      "note": "Rows are third-party status indicators, not operator confirmation."
+      "note": "Source data is independent/provider-status aggregation; read evidence class and source timestamp."
     },
     {
       "id": "updownsignal-openreach",
       "name": "UpDownSignal Openreach",
       "url": "https://updownsignal.com/en-gb/industries/internet-providers/openreach/",
+      "displayUrl": "https://updownsignal.com/en-gb/industries/internet-providers/openreach/",
       "kind": "community_reports",
       "scope": "UK-wide fixed broadband infrastructure reports",
-      "status": "NO_STRUCTURED_STATUS",
-      "checkedAt": "2026-11-14T12:18:47Z",
-      "providerSignals": [],
-      "note": "Page was reachable, but no recognised current-status rows were extracted."
+      "format": "html",
+      "status": "OK",
+      "checkedAt": "2026-11-14T12:19:36Z",
+      "sourceUpdatedAt": null,
+      "providerSignals": [
+        {
+          "provider": "Openreach",
+          "reportedStatus": "ISSUE_SIGNAL",
+          "rawIndicator": "Service Disruption",
+          "summary": "",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "independent_status_indicator",
+          "sourceUpdatedAt": null,
+          "evidenceClass": "community_reports"
+        }
+      ],
+      "note": "Source data is independent/provider-status aggregation; read evidence class and source timestamp."
     }
   ],
   "providers": [
     {
       "provider": "EE",
-      "status": "NO_ISSUE_SIGNAL",
+      "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
-      "noIssueSignals": 1,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 0,
       "observations": [
         {
           "sourceId": "updownsignal-mobile",
           "source": "UpDownSignal UK mobile carriers",
           "url": "https://updownsignal.com/en-gb/industries/mobile-carriers/",
           "status": "NO_ISSUE_SIGNAL",
-          "sourceRow": "EE | Operational | No reported issues | - | 2026-11-14 04:18",
-          "evidenceClass": "independent_traffic_and_reports"
+          "rawIndicator": "Operational",
+          "summary": "",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14 04:19:36",
+          "checkedAt": "2026-11-14T12:19:35Z",
+          "evidenceClass": "independent_traffic_and_reports",
+          "via": "independent_status_indicator",
+          "stale": true
         }
       ]
     },
     {
       "provider": "O2",
-      "status": "NO_ISSUE_SIGNAL",
+      "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
-      "noIssueSignals": 1,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 0,
       "observations": [
         {
           "sourceId": "updownsignal-mobile",
           "source": "UpDownSignal UK mobile carriers",
           "url": "https://updownsignal.com/en-gb/industries/mobile-carriers/",
           "status": "NO_ISSUE_SIGNAL",
-          "sourceRow": "O2 | Operational | No reported issues | - | 2026-11-14 04:18",
-          "evidenceClass": "independent_traffic_and_reports"
+          "rawIndicator": "Operational",
+          "summary": "",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14 04:19:36",
+          "checkedAt": "2026-11-14T12:19:35Z",
+          "evidenceClass": "independent_traffic_and_reports",
+          "via": "independent_status_indicator",
+          "stale": true
         }
       ]
     },
     {
-      "provider": "Vodafone",
-      "status": "ISSUE_SIGNAL",
-      "issueSignals": 1,
+      "provider": "Openreach",
+      "status": "STALE_ISSUE_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 1,
       "noIssueSignals": 0,
+      "unconfirmedSignals": 0,
+      "observations": [
+        {
+          "sourceId": "updownsignal-openreach",
+          "source": "UpDownSignal Openreach",
+          "url": "https://updownsignal.com/en-gb/industries/internet-providers/openreach/",
+          "status": "ISSUE_SIGNAL",
+          "rawIndicator": "Service Disruption",
+          "summary": "",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": null,
+          "checkedAt": "2026-11-14T12:19:36Z",
+          "evidenceClass": "community_reports",
+          "via": "independent_status_indicator",
+          "stale": true
+        }
+      ]
+    },
+    {
+      "provider": "Three",
+      "status": "STALE_OR_UNKNOWN",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 0,
       "observations": [
         {
           "sourceId": "updownsignal-mobile",
           "source": "UpDownSignal UK mobile carriers",
           "url": "https://updownsignal.com/en-gb/industries/mobile-carriers/",
-          "status": "ISSUE_SIGNAL",
-          "sourceRow": "Vodafone UK | Partial Outage | Data connectivity issues in South East England | 2026-11-13 22:18 | 2026-11-14 03:18",
-          "evidenceClass": "independent_traffic_and_reports"
+          "status": "NO_ISSUE_SIGNAL",
+          "rawIndicator": "Operational",
+          "summary": "",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14 04:19:36",
+          "checkedAt": "2026-11-14T12:19:35Z",
+          "evidenceClass": "independent_traffic_and_reports",
+          "via": "independent_status_indicator",
+          "stale": true
+        }
+      ]
+    },
+    {
+      "provider": "Vodafone",
+      "status": "STALE_OR_UNKNOWN",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 0,
+      "observations": [
+        {
+          "sourceId": "updownsignal-mobile",
+          "source": "UpDownSignal UK mobile carriers",
+          "url": "https://updownsignal.com/en-gb/industries/mobile-carriers/",
+          "status": "NO_ISSUE_SIGNAL",
+          "rawIndicator": "Operational",
+          "summary": "",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14 04:19:36",
+          "checkedAt": "2026-11-14T12:19:35Z",
+          "evidenceClass": "independent_traffic_and_reports",
+          "via": "independent_status_indicator",
+          "stale": true
         }
       ]
     }
@@ -142,9 +272,11 @@
   ],
   "limitations": [
     "This is a five-minute best-effort collector, not a carrier-operated monitoring feed.",
+    "StatusPages aggregates provider status pages and user reports; user reports are unverified.",
     "Independent traffic and community reports can indicate an emerging problem but do not prove an outage.",
+    "Old source data is labelled stale and is not presented as a current fault.",
     "No recognised signal does not prove that a network is working.",
-    "The monitored public pages do not provide reliable postcode-level confirmation for Ballyclare.",
+    "The monitored public sources do not guarantee postcode-level confirmation for Ballyclare.",
     "Operator account and postcode checkers remain the authoritative route for an individual line or mobile connection."
   ]
 }
