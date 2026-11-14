@@ -226,6 +226,7 @@ function validDate(a){const d=new Date(stamp(a));return stamp(a)&&!Number.isNaN(
 function recordKey(a){return safeUrl(a.url)||[String(a.title||"").toLowerCase(),String(stamp(a)||""),String(a.sourceId||a.source||"")].join("|");}
 function recordCategory(a){return isTraffic(a)?"TRAFFIC":category(a);}
 let archive=[],historyArchive=[],records=[],townGroups=[],map=null,markerLayer=null,densityLayer=null,activeTown="",searchTerm="",ageDays=30,showAll=false,ballyclareWatch=false,categoryFilter="",selectedRecordKey="";
+let pendingRecordKey=new URLSearchParams(location.search).get("record")||"",pendingRecordHandled=false;
 function initMap(){
  if(window.L&&typeof L.map==="function"){
   try{
@@ -359,6 +360,18 @@ function render(){
  $("map-articles").querySelectorAll("[data-focus-town]").forEach(btn=>btn.addEventListener("click",()=>{selectTown(btn.dataset.focusTown);$("map-town-details").scrollIntoView({behavior:"smooth",block:"nearest"});}));
  $("map-articles").querySelectorAll("[data-inspect-index]").forEach(btn=>btn.addEventListener("click",()=>{const item=records[Number(btn.dataset.inspectIndex)];if(item){openRecord(item);$("map-town-details").scrollIntoView({behavior:"smooth",block:"nearest"});}}));
  $("map-articles").querySelectorAll("details[data-record-key]").forEach(row=>row.addEventListener("toggle",()=>{if(row.open){const item=records.find(a=>recordKey(a)===row.dataset.recordKey);if(item)openRecord(item);}}));
+ // Deep links from Feed can open the exact source record, not just a broad search.
+ if(pendingRecordKey&&!pendingRecordHandled){
+  const match=records.find(a=>recordKey(a)===pendingRecordKey);
+  if(match){
+   pendingRecordHandled=true;
+   openRecord(match);
+   const row=[...$("map-articles").querySelectorAll("details[data-record-key]")].find(node=>node.dataset.recordKey===recordKey(match));
+   if(row){row.open=true;row.scrollIntoView({behavior:"smooth",block:"center"});}
+   const town=locate(match);
+   if(town&&map)map.setView([town.lat,town.lon],10);
+  }
+ }
  $("map-list-status").textContent=(ballyclareWatch?"BALLYCLARE AREA WATCH · ":"")+records.length+" matching archive records · "+records.filter(locate).length+" with approximate town matches · "+records.filter(a=>isTraffic(a)&&trafficKind(a)==="incident").length+" incidents · "+records.filter(a=>isTraffic(a)&&trafficKind(a)==="roadworks").length+" roadworks · "+records.filter(a=>isTraffic(a)&&trafficKind(a)==="event").length+" planned events · "+records.filter(a=>isTraffic(a)&&trafficKind(a)==="news").length+" travel news · "+records.filter(isPower).length+" NIE power faults · "+records.filter(isWater).length+" NI Water service updates · "+records.filter(isFlood).length+" river gauge readings · showing up to 100 source-linked reports. Power markers are approximate postcode matches; NI Water notices are mapped only where the notice identifies a recognised town; river gauge markers use verified station coordinates when available.";
  if(activeTown){const g=townGroups.find(x=>x.town.name===activeTown);renderDetail(g);}else renderDetail(null);
  $("map-status").textContent=(ballyclareWatch?"BALLYCLARE AREA WATCH // ":"")+(map?"OPENSTREETMAP":"OFFLINE SCHEMATIC")+" // "+records.length+" FILTERED REPORTS // "+townGroups.length+" TOWN LOCATIONS // "+(records.length-records.filter(locate).length)+" WITHOUT TOWN MATCH";
