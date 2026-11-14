@@ -318,7 +318,8 @@ function renderMarkers(){
 function renderBallyclareHistory(){
  const node=$("history-window");if(!node)return;
  const days=Number(node.value)||0,cutoff=days?Date.now()-days*86400000:0;
- const historySource=historyArchive.length?historyArchive:archive;\n const matches=historySource.filter(a=>matchesBallyclareWatch(a)&&["incident","roadworks"].includes(trafficKind(a))).filter(a=>{const d=validDate(a);return d&&(!cutoff||d.getTime()>=cutoff);}).sort((a,b)=>(validDate(b)?.getTime()||0)-(validDate(a)?.getTime()||0));
+ const historySource=historyArchive.length?historyArchive:archive;
+ const matches=historySource.filter(a=>matchesBallyclareWatch(a)&&["incident","roadworks"].includes(trafficKind(a))).filter(a=>{const d=validDate(a);return d&&(!cutoff||d.getTime()>=cutoff);}).sort((a,b)=>(validDate(b)?.getTime()||0)-(validDate(a)?.getTime()||0));
  const incidents=matches.filter(a=>trafficKind(a)==="incident"),works=matches.filter(a=>trafficKind(a)==="roadworks");
  $("history-incidents").textContent=incidents.length.toLocaleString("en-GB");
  $("history-roadworks").textContent=works.length.toLocaleString("en-GB");
