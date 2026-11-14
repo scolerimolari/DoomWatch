@@ -182,6 +182,7 @@ footer {
   <button data-page="intelligence">INTELLIGENCE</button>
   <button data-page="sections">11 SECTORS</button>
   <button data-page="preparedness">PREPAREDNESS</button>
+  <button data-page="meshcore">MESHCORE</button>
   <button data-page="sources">SOURCES</button>
 </nav>
 
@@ -401,6 +402,79 @@ footer {
     <textarea id="rumour-evidence" placeholder="Evidence / verification notes"></textarea>
     <button class="action-button" id="save-rumour">RECORD CLAIM</button>
     <div id="rumour-list"></div>
+  </div>
+</section>
+
+<section class="page" id="meshcore">
+  <h2>08 // MESHCORE FIELD COMMUNICATIONS</h2>
+  <div class="warning"><strong>PRE-DEPLOYMENT MODE</strong><br>MeshCore M9 has not yet arrived. This page is an offline-ready planning and field-log workspace. It does not display live nodes, messages, coverage, GPS positions or radio telemetry.</div>
+  <div class="grid" style="margin-top:12px">
+    <div class="panel"><div class="panel-title">RADIO STATUS</div><div class="big-status yellow">AWAITING DEPLOYMENT</div><div class="muted">M9 hardware not yet connected</div></div>
+    <div class="panel"><div class="panel-title">NETWORK STATUS</div><div class="big-status yellow">NOT CONNECTED</div><div class="muted">No live mesh data available</div></div>
+    <div class="panel"><div class="panel-title">NODE REGISTER</div><div class="big-status" id="mesh-node-count">0</div><div class="muted">Manually recorded nodes</div></div>
+    <div class="panel"><div class="panel-title">FIELD LOG</div><div class="big-status" id="mesh-log-count">0</div><div class="muted">Locally saved observations</div></div>
+  </div>
+  <h3>01 // DEPLOYMENT PROFILE</h3>
+  <div class="panel">
+    <div class="grid">
+      <div><label for="mesh-device">DEVICE</label><input id="mesh-device" value="MeshCore M9" readonly></div>
+      <div><label for="mesh-device-status">DEPLOYMENT STATE</label><select id="mesh-device-status"><option>AWAITING ARRIVAL</option><option>RECEIVED — NOT CONFIGURED</option><option>CONFIGURED — NOT FIELD TESTED</option><option>FIELD TESTED</option></select></div>
+      <div><label for="mesh-node-name">PLANNED NODE NAME</label><input id="mesh-node-name" placeholder="e.g. DW-BASE"></div>
+      <div><label for="mesh-location">PLANNED OPERATING AREA</label><input id="mesh-location" placeholder="e.g. Ballyclare area"></div>
+    </div>
+    <label for="mesh-deployment-notes">DEPLOYMENT / CONFIGURATION NOTES</label><textarea id="mesh-deployment-notes" placeholder="Record intended setup, antenna, power and configuration details."></textarea>
+    <button class="action-button" id="mesh-save-profile">SAVE DEVICE PROFILE</button>
+    <span class="meta" id="mesh-profile-status" aria-live="polite">Profile stored on this device only.</span>
+  </div>
+  <h3>02 // NODE REGISTER</h3>
+  <div class="panel">
+    <div class="muted">Record nodes only when personally observed or supported by a reliable source. Unknown positions and links remain unknown.</div>
+    <div class="grid">
+      <div><label for="mesh-node-id">NODE ID / NAME</label><input id="mesh-node-id" placeholder="Node identifier"></div>
+      <div><label for="mesh-node-type">NODE TYPE</label><select id="mesh-node-type"><option>Companion</option><option>Repeater</option><option>Room server / gateway</option><option>Unknown</option></select></div>
+      <div><label for="mesh-node-area">LOCATION / AREA</label><input id="mesh-node-area" placeholder="Approximate area, if known"></div>
+      <div><label for="mesh-node-evidence">BASIS</label><select id="mesh-node-evidence"><option>Personally observed</option><option>Owner confirmed</option><option>Publicly listed</option><option>Unverified report</option></select></div>
+    </div>
+    <button class="action-button" id="mesh-add-node">ADD NODE RECORD</button>
+    <div id="mesh-node-list" style="margin-top:12px"></div>
+  </div>
+  <h3>03 // FIELD OBSERVATIONS & COMMS LOG</h3>
+  <div class="panel">
+    <div class="grid">
+      <div><label for="mesh-log-kind">ENTRY TYPE</label><select id="mesh-log-kind"><option>Comms check</option><option>Field observation</option><option>Infrastructure issue</option><option>Coverage test</option><option>Equipment / maintenance</option><option>Emergency exercise</option></select></div>
+      <div><label for="mesh-log-area">AREA</label><input id="mesh-log-area" placeholder="Location / area"></div>
+    </div>
+    <label for="mesh-log-text">DETAILS</label><textarea id="mesh-log-text" placeholder="What was observed? Include time, source and confidence where relevant."></textarea>
+    <button class="action-button" id="mesh-add-log">SAVE FIELD ENTRY</button>
+    <div id="mesh-log-list" style="margin-top:12px"></div>
+  </div>
+  <h3>04 // COMMS CHECK-IN CARD</h3>
+  <div class="terminal" id="mesh-checkin-template">DOOMWATCH // MESHCORE CHECK-IN
+CALLSIGN: [YOUR NODE]
+TIME: [LOCAL TIME]
+LOCATION: [AREA — APPROXIMATE]
+STATUS: [OK / NEED ASSISTANCE]
+MESSAGE: [BRIEF UPDATE]
+NEXT CHECK-IN: [TIME]
+NOTE: This is a manual message template, not a connected radio console.</div>
+  <div class="controls"><button id="mesh-copy-checkin" type="button">COPY CHECK-IN TEMPLATE</button></div>
+  <h3>05 // DEPLOYMENT CHECKLIST</h3>
+  <div class="panel" id="mesh-checklist">
+    <label class="checkline"><input type="checkbox" data-mesh-check="0"> Confirm device and antenna supplied</label>
+    <label class="checkline"><input type="checkbox" data-mesh-check="1"> Read current MeshCore setup documentation</label>
+    <label class="checkline"><input type="checkbox" data-mesh-check="2"> Configure node identity and region settings</label>
+    <label class="checkline"><input type="checkbox" data-mesh-check="3"> Test local messaging with a known node</label>
+    <label class="checkline"><input type="checkbox" data-mesh-check="4"> Record range tests with time and conditions</label>
+    <label class="checkline"><input type="checkbox" data-mesh-check="5"> Establish check-in schedule and fallback method</label>
+    <label class="checkline"><input type="checkbox" data-mesh-check="6"> Confirm emergency use follows applicable radio rules</label>
+  </div>
+  <div class="panel" style="margin-top:12px">
+    <h3>REFERENCE LINKS</h3>
+    <p><a href="https://meshcore.io/" target="_blank" rel="noopener noreferrer">MeshCore project ↗</a></p>
+    <p><a href="https://docs.meshcore.io/" target="_blank" rel="noopener noreferrer">MeshCore documentation ↗</a></p>
+    <p><a href="https://app.meshcore.nz/" target="_blank" rel="noopener noreferrer">MeshCore companion app ↗</a></p>
+    <p><a href="https://map.meshcore.io/" target="_blank" rel="noopener noreferrer">Community mesh map ↗</a></p>
+    <div class="meta">External maps and community listings may be incomplete or stale. Do not treat a plotted node as verified coverage or a guaranteed communications path.</div>
   </div>
 </section>
 
@@ -1267,6 +1341,34 @@ document.addEventListener("click",event => {
     renderRumours();
   }
 });
+
+/* MESHCORE PRE-DEPLOYMENT WORKSPACE — local-only records */
+const MESH_KEY="doomwatch-meshcore-v1";
+let meshSaved={profile:{},nodes:[],logs:[],checks:[]};
+function meshLoad(){
+ try{const raw=localStorage.getItem(MESH_KEY);if(raw){const parsed=JSON.parse(raw);if(parsed&&typeof parsed==="object")meshSaved={...meshSaved,...parsed,profile:parsed.profile||{},nodes:Array.isArray(parsed.nodes)?parsed.nodes:[],logs:Array.isArray(parsed.logs)?parsed.logs:[],checks:Array.isArray(parsed.checks)?parsed.checks:[]};}}catch(e){}
+ const p=meshSaved.profile;
+ $("mesh-device-status").value=p.status||"AWAITING ARRIVAL";
+ $("mesh-node-name").value=p.name||"";
+ $("mesh-location").value=p.location||"";
+ $("mesh-deployment-notes").value=p.notes||"";
+ document.querySelectorAll("[data-mesh-check]").forEach(el=>el.checked=!!meshSaved.checks[el.dataset.meshCheck]);
+ meshRender();
+}
+function meshSave(){try{localStorage.setItem(MESH_KEY,JSON.stringify(meshSaved));}catch(e){$("mesh-profile-status").textContent="Storage unavailable — export/record details separately.";}}
+function meshRender(){
+ $("mesh-node-count").textContent=meshSaved.nodes.length;
+ $("mesh-log-count").textContent=meshSaved.logs.length;
+ $("mesh-node-list").innerHTML=meshSaved.nodes.map((n,i)=>'<div class="section-card"><strong class="yellow">'+escapeHTML(n.id)+'</strong><div class="meta">'+escapeHTML(n.type)+' · '+escapeHTML(n.area||"Location unknown")+' · '+escapeHTML(n.evidence)+'</div><button class="action-button" data-mesh-delete-node="'+i+'">DELETE</button></div>').join("")||'<p class="muted">No node records yet.</p>';
+ $("mesh-log-list").innerHTML=meshSaved.logs.map((l,i)=>'<div class="section-card"><strong class="yellow">'+escapeHTML(l.kind)+'</strong><div class="meta">'+escapeHTML(l.date)+' · '+escapeHTML(l.area||"Area not recorded")+'</div><p>'+escapeHTML(l.text)+'</p><button class="action-button" data-mesh-delete-log="'+i+'">DELETE</button></div>').join("")||'<p class="muted">No field entries recorded.</p>';
+}
+$("mesh-save-profile").addEventListener("click",()=>{meshSaved.profile={status:$("mesh-device-status").value,name:$("mesh-node-name").value.trim(),location:$("mesh-location").value.trim(),notes:$("mesh-deployment-notes").value.trim()};meshSave();$("mesh-profile-status").textContent="Profile saved locally.";});
+$("mesh-add-node").addEventListener("click",()=>{const id=$("mesh-node-id").value.trim();if(!id)return;$("mesh-node-id").value="";meshSaved.nodes.unshift({id,type:$("mesh-node-type").value,area:$("mesh-node-area").value.trim(),evidence:$("mesh-node-evidence").value});$("mesh-node-area").value="";meshSave();meshRender();});
+$("mesh-add-log").addEventListener("click",()=>{const value=$("mesh-log-text").value.trim();if(!value)return;meshSaved.logs.unshift({kind:$("mesh-log-kind").value,area:$("mesh-log-area").value.trim(),text:value,date:new Date().toLocaleString()});$("mesh-log-text").value="";meshSave();meshRender();});
+document.addEventListener("click",event=>{if(event.target.dataset.meshDeleteNode!==undefined){meshSaved.nodes.splice(Number(event.target.dataset.meshDeleteNode),1);meshSave();meshRender();}if(event.target.dataset.meshDeleteLog!==undefined){meshSaved.logs.splice(Number(event.target.dataset.meshDeleteLog),1);meshSave();meshRender();}});
+document.querySelectorAll("[data-mesh-check]").forEach(el=>el.addEventListener("change",()=>{meshSaved.checks[el.dataset.meshCheck]=el.checked;meshSave();}));
+$("mesh-copy-checkin").addEventListener("click",()=>{const text=$("mesh-checkin-template").textContent;if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(()=>{$("mesh-copy-checkin").textContent="COPIED";}).catch(()=>{$("mesh-copy-checkin").textContent="COPY NOT AVAILABLE";});else{$("mesh-copy-checkin").textContent="COPY NOT AVAILABLE";}});
+meshLoad();
 
 /* CLOCK AND STARTUP */
 
