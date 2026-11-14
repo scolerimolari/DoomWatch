@@ -1058,7 +1058,11 @@ function renderSourceHealth(){
   const state=String(item.status||"").toUpperCase();
   const ok=state==="OK";
   const empty=state==="EMPTY";
-  const detail=(ok||empty)?(Number(item.articleCount)||0)+" records received":String(item.error||"Feed did not report success");
+  const baseDetail=(ok||empty)?(Number(item.articleCount)||0)+" records received":String(item.error||"Feed did not report success");
+  const streak=Number(item.consecutiveFailures)||0;
+  const lastSuccess=item.lastSuccessfulAt?" // last success "+dateText(item.lastSuccessfulAt):"";
+  const failureDetail=streak?" // consecutive failures: "+streak+(item.firstFailureAt?" since "+dateText(item.firstFailureAt):""):"";
+  const detail=baseDetail+failureDetail+lastSuccess;
   const diagnostics=empty&&item.responseBytes!==undefined
     ?" // "+Number(item.responseBytes)+" bytes // XML root: "+String(item.rootTag||"UNKNOWN")
     :"";
