@@ -323,6 +323,16 @@ function selectTown(name){
  if(group&&map)map.setView([group.town.lat,group.town.lon],10);
 }
 
+
+function mapImpactPathway(a){
+ const t=(String(a.sourceId||"")+" "+String(a.sourceType||"")+" "+String(a.category||"")+" "+String(a.title||"")+" "+String(a.summary||a.description||"")).toLowerCase();
+ if(/roadworks|traffic|transport|rail|bus|port|ferry|airport|logistics|road closure/.test(t))return ["TRANSPORT & ACCESS","Potential journey, delivery or access disruption. Check TrafficWatchNI or the operator's current notice before travelling."];
+ if(/electricity|power outage|power cut|grid|gas network|water service|water outage|telecom|broadband|mobile network|cyber.?attack/.test(t))return ["ESSENTIAL SERVICES","Potential interruption to an essential service. Confirm the affected area with the network operator before treating this as a local outage."];
+ if(/food supply|food shortage|food security|supermarket|grocery|fuel supply|heating oil|petrol|diesel|fertili[sz]er|supply chain|commodity/.test(t))return ["SUPPLY & HOUSEHOLD","Potential availability, delivery or price pressure. This report alone does not establish a local shortage."];
+ if(/flood|storm|weather warning|wildfire|chemical|pollution|contamination|disease|outbreak|public health|hospital|healthcare|avian influenza|bird flu/.test(t))return ["HEALTH & HAZARDS","Potential health, environmental or severe-weather relevance. Check the responsible authority's local advice and warning area."];
+ return ["GENERAL WATCH","No specific household or infrastructure pathway has been established from the available record metadata."];
+}
+
 function mapEvidenceDomain(a){try{return new URL(String(a.url||"")).hostname.toLowerCase().replace(/^www[.]/,"");}catch(e){return String(a.source||"unknown").trim().toLowerCase();}}
 function mapEvidenceClass(a){
  const trust=String(a.sourceTrust||"").toLowerCase(),type=String(a.sourceType||"").toLowerCase(),d=mapEvidenceDomain(a);
@@ -350,7 +360,8 @@ function openRecord(a){
  selectedRecordKey=recordKey(a);document.querySelectorAll("#map-articles .map-item").forEach(node=>node.classList.toggle("dw-selected",node.dataset.recordKey===selectedRecordKey));
  const town=locate(a),url=safeUrl(a.url),locationLabel=isFlood(a)?(a.stationCoordinatesVerified?"VERIFIED STATION COORDINATES // "+a.stationLatitude+", "+a.stationLongitude:"NO VERIFIED STATION COORDINATES"):(town?town.name+" // APPROXIMATE TOWN MATCH":"LOCATION NOT IDENTIFIED");
  const title=String(a.title||"Untitled report"),caseLink="./incident.html?"+(url?"url="+encodeURIComponent(url):"title="+encodeURIComponent(title)),related=mapRelatedCoverage(a),provenance=mapEvidenceClass(a);
- $("map-town-details").innerHTML='<strong>'+esc(title)+'</strong><div class="meta">'+esc(locationLabel)+' · '+esc(category(a))+' · '+esc(dateText(stamp(a)))+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">SOURCE CLASS: '+esc(provenance)+' · EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="meta">RELATED NEWSROOM COVERAGE: '+related.records+' record(s) · '+related.publishers+' other publisher domain(s). Similarity match only; not proof of independent confirmation.</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a>':"")+'<a href="'+caseLink+'">OPEN INCIDENT CASE FILE ↗</a><a href="./feed.html?q='+encodeURIComponent(title)+'">RELATED FEED ↗</a><a href="./operations.html?search='+encodeURIComponent(title)+'">OPERATIONS ROOM ↗</a>'+(town?'<button type="button" id="focus-record-town">FOCUS '+esc(town.name.toUpperCase())+'</button>':"")+'</div>';
+ const impact=mapImpactPathway(a);
+ $("map-town-details").innerHTML='<strong>'+esc(title)+'</strong><div class="meta">'+esc(locationLabel)+' · '+esc(category(a))+' · '+esc(dateText(stamp(a)))+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">SOURCE CLASS: '+esc(provenance)+' · EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="meta">RELATED NEWSROOM COVERAGE: '+related.records+' record(s) · '+related.publishers+' other publisher domain(s). Similarity match only; not proof of independent confirmation.</div><div class="section-card"><strong>OPERATIONAL IMPACT PATHWAY // '+esc(impact[0])+'</strong><p>'+esc(impact[1])+'</p><div class="meta">SCREENING GUIDANCE ONLY · NOT A CONFIRMED LOCAL IMPACT ASSESSMENT</div></div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a>':"")+'<a href="'+caseLink+'">OPEN INCIDENT CASE FILE ↗</a><a href="./feed.html?q='+encodeURIComponent(title)+'">RELATED FEED ↗</a><a href="./operations.html?search='+encodeURIComponent(title)+'">OPERATIONS ROOM ↗</a>'+(town?'<button type="button" id="focus-record-town">FOCUS '+esc(town.name.toUpperCase())+'</button>':"")+'</div>';
  const focus=$("focus-record-town");if(focus)focus.addEventListener("click",()=>selectTown(town.name));
 }
 function renderDetail(group){
