@@ -1,51 +1,51 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-13T19:37:25+00:00",
-  "generatedAt": "2026-11-13T19:37:25+00:00",
+  "updatedAt": "2026-11-14T06:14:27+00:00",
+  "generatedAt": "2026-11-14T06:14:27+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:21+00:00"
+      "checkedAt": "2026-11-14T06:14:15+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:21+00:00"
+      "checkedAt": "2026-11-14T06:14:15+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:21+00:00"
+      "checkedAt": "2026-11-14T06:14:16+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:22+00:00"
+      "checkedAt": "2026-11-14T06:14:16+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:22+00:00"
+      "checkedAt": "2026-11-14T06:14:16+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:22+00:00"
+      "checkedAt": "2026-11-14T06:14:16+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:22+00:00"
+      "checkedAt": "2026-11-14T06:14:16+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:22+00:00"
+      "checkedAt": "2026-11-14T06:14:17+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:22+00:00"
+      "checkedAt": "2026-11-14T06:14:17+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:22+00:00"
+      "checkedAt": "2026-11-14T06:14:17+00:00"
     },
     "heatingOil": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:23+00:00",
+      "checkedAt": "2026-11-14T06:14:23+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
       "observationsImported": 179,
@@ -54,7 +54,7 @@
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:24+00:00",
+      "checkedAt": "2026-11-14T06:14:24+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
       "observationsImported": 463,
@@ -63,7 +63,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:25+00:00",
+      "checkedAt": "2026-11-14T06:14:26+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -72,7 +72,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:25+00:00",
+      "checkedAt": "2026-11-14T06:14:26+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -81,7 +81,7 @@
     },
     "supermarketPriceIndex": {
       "status": "ok",
-      "checkedAt": "2026-11-13T19:37:25+00:00",
+      "checkedAt": "2026-11-14T06:14:26+00:00",
       "url": "https://data.yappman.com/shelf-price-index/",
       "datasetUrl": "https://api.apify.com/v2/datasets/AvRCWqFinCiNjx3sP/items?format=json",
       "licence": "CC BY 4.0",
@@ -93,10 +93,10 @@
   "commodities": {
     "gold": {
       "symbol": "GC=F",
-      "price": 3882.0,
-      "changePct": -7.45,
+      "price": 3886.3,
+      "changePct": -7.348,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:27:19+00:00",
+      "observedAt": "2026-11-13T21:59:59+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -1108,7 +1108,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 3882.0
+          "value": 3886.300049
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -1118,10 +1118,10 @@
     },
     "silver": {
       "symbol": "SI=F",
-      "price": 48.93,
-      "changePct": -7.808,
+      "price": 49.121,
+      "changePct": -7.448,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:27:09+00:00",
+      "observedAt": "2026-11-13T21:59:59+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -2133,7 +2133,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 48.93
+          "value": 49.030998
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -2143,10 +2143,10 @@
     },
     "brent": {
       "symbol": "BZ=F",
-      "price": 95.77,
-      "changePct": 51.992,
+      "price": 95.84,
+      "changePct": 52.103,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:27:07+00:00",
+      "observedAt": "2026-11-13T21:59:30+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -3158,7 +3158,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 95.769997
+          "value": 95.839996
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -3170,10 +3170,10 @@
   "indices": {
     "sp500": {
       "symbol": "^GSPC",
-      "price": 7551.91,
-      "changePct": 12.088,
+      "price": 7561.67,
+      "changePct": 12.233,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:20+00:00",
+      "observedAt": "2026-11-13T21:43:19+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -4185,7 +4185,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 7551.910156
+          "value": 7561.669922
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -4195,10 +4195,10 @@
     },
     "nasdaq": {
       "symbol": "^IXIC",
-      "price": 25120.092,
-      "changePct": 9.837,
+      "price": 25136.273,
+      "changePct": 9.908,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:17+00:00",
+      "observedAt": "2026-11-13T22:15:59+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -5210,7 +5210,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 25120.091797
+          "value": 25136.269531
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -6243,7 +6243,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 10902.55957
+          "value": 10902.599609
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -6255,10 +6255,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 68984.93,
-      "changePct": -30.806,
+      "price": 67218.04,
+      "changePct": -28.793,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:17+00:00",
+      "observedAt": "2026-11-14T06:14:11+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -7727,6 +7727,10 @@
         {
           "date": "2026-11-13",
           "value": 68984.929688
+        },
+        {
+          "date": "2026-11-14",
+          "value": 67218.039062
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -7738,10 +7742,10 @@
   "fx": {
     "GBPUSD": {
       "symbol": "GBPUSD=X",
-      "price": 1.3212,
-      "changePct": 0.64,
+      "price": 1.3209,
+      "changePct": 0.617,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:36:29+00:00",
+      "observedAt": "2026-11-13T22:29:33+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -8785,7 +8789,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 1.321161
+          "value": 1.323136
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -8795,10 +8799,10 @@
     },
     "GBPEUR": {
       "symbol": "GBPEUR=X",
-      "price": 1.1977,
-      "changePct": 5.767,
+      "price": 1.1981,
+      "changePct": 5.802,
       "currency": "EUR",
-      "observedAt": "2026-11-13T19:35:29+00:00",
+      "observedAt": "2026-11-13T22:29:33+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -9842,7 +9846,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 1.1977
+          "value": 1.197
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -9852,10 +9856,10 @@
     },
     "EURUSD": {
       "symbol": "EURUSD=X",
-      "price": 1.1029,
-      "changePct": -4.857,
+      "price": 1.1028,
+      "changePct": -4.865,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:36:29+00:00",
+      "observedAt": "2026-11-13T22:29:33+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -10899,7 +10903,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 1.102901
+          "value": 1.105021
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -10911,10 +10915,10 @@
   "stocks": [
     {
       "symbol": "AAPL",
-      "price": 357.875,
-      "changePct": 31.114,
+      "price": 356.27,
+      "changePct": 30.526,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:21+00:00",
+      "observedAt": "2026-11-13T21:00:01+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -11926,7 +11930,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 357.875
+          "value": 356.269989
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -11936,10 +11940,10 @@
     },
     {
       "symbol": "MSFT",
-      "price": 524.71,
-      "changePct": 4.256,
+      "price": 523.88,
+      "changePct": 4.091,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:20+00:00",
+      "observedAt": "2026-11-13T21:00:01+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -12951,7 +12955,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 524.7099
+          "value": 523.880005
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -12961,10 +12965,10 @@
     },
     {
       "symbol": "NVDA",
-      "price": 162.28,
-      "changePct": -13.154,
+      "price": 162.85,
+      "changePct": -12.849,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:20+00:00",
+      "observedAt": "2026-11-13T21:00:01+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -13976,7 +13980,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 162.279999
+          "value": 162.850006
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -13986,10 +13990,10 @@
     },
     {
       "symbol": "AMZN",
-      "price": 265.44,
-      "changePct": 11.727,
+      "price": 266.66,
+      "changePct": 12.24,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:21+00:00",
+      "observedAt": "2026-11-13T21:00:00+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -15001,7 +15005,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 265.440002
+          "value": 266.660004
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -15011,10 +15015,10 @@
     },
     {
       "symbol": "GOOGL",
-      "price": 294.895,
-      "changePct": 5.86,
+      "price": 295.77,
+      "changePct": 6.174,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:21+00:00",
+      "observedAt": "2026-11-13T21:00:01+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -16026,7 +16030,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 294.894989
+          "value": 295.769989
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -16036,10 +16040,10 @@
     },
     {
       "symbol": "META",
-      "price": 639.695,
-      "changePct": 4.887,
+      "price": 641.69,
+      "changePct": 5.214,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:20+00:00",
+      "observedAt": "2026-11-13T21:00:01+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -17051,7 +17055,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 639.695007
+          "value": 641.690002
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -17061,10 +17065,10 @@
     },
     {
       "symbol": "BRK-B",
-      "price": 591.105,
-      "changePct": 15.2,
+      "price": 592.94,
+      "changePct": 15.558,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:11+00:00",
+      "observedAt": "2026-11-13T21:00:03+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -18076,7 +18080,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 591.10498
+          "value": 592.940002
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -18086,10 +18090,10 @@
     },
     {
       "symbol": "JPM",
-      "price": 344.72,
-      "changePct": 11.387,
+      "price": 346.19,
+      "changePct": 11.862,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:19+00:00",
+      "observedAt": "2026-11-13T21:00:02+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -19101,7 +19105,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 344.720001
+          "value": 346.190002
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -19111,10 +19115,10 @@
     },
     {
       "symbol": "AVGO",
-      "price": 345.38,
-      "changePct": 1.588,
+      "price": 347.01,
+      "changePct": 2.068,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:22+00:00",
+      "observedAt": "2026-11-13T21:00:01+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -20126,7 +20130,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 345.380005
+          "value": 347.01001
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -20136,10 +20140,10 @@
     },
     {
       "symbol": "TSLA",
-      "price": 391.34,
-      "changePct": -2.649,
+      "price": 390.22,
+      "changePct": -2.928,
       "currency": "USD",
-      "observedAt": "2026-11-13T19:37:22+00:00",
+      "observedAt": "2026-11-13T21:00:00+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -21151,7 +21155,7 @@
         },
         {
           "date": "2026-11-13",
-          "value": 391.339996
+          "value": 390.220001
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -23974,7 +23978,7 @@
         ]
       }
     ],
-    "updatedAt": "2026-11-13T19:37:23+00:00",
+    "updatedAt": "2026-11-14T06:14:23+00:00",
     "source": "Consumer Council Northern Ireland",
     "sourceUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker",
     "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
@@ -28018,7 +28022,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-13T19:37:24+00:00",
+    "updatedAt": "2026-11-14T06:14:24+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
@@ -36937,7 +36941,7 @@
         "missingPackSize": null
       }
     ],
-    "supermarketIndexUpdatedAt": "2026-11-13T19:37:25+00:00",
+    "supermarketIndexUpdatedAt": "2026-11-14T06:14:26+00:00",
     "supermarketIndex": {
       "vintage": "2026-W45",
       "publishedAt": "2026-11-09T12:49:02Z",
@@ -36958,6 +36962,90 @@
     }
   },
   "news": [
+    {
+      "title": "Trump, Putin and Xi plan historic joint meeting in China next week, White House says",
+      "url": "https://www.bbc.co.uk/news/articles/ckz74jzpy18do?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-14T05:52:31+00:00"
+    },
+    {
+      "title": "What we know about the longest ground stop since 9/11",
+      "url": "https://www.bbc.co.uk/news/articles/cqx2wyvyr3zzo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-14T03:45:21+00:00"
+    },
+    {
+      "title": "'We'll get home one day' - US travellers impacted by nationwide ground stop",
+      "url": "https://www.bbc.co.uk/news/videos/c893ryz7lw33o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-14T01:47:36+00:00"
+    },
+    {
+      "title": "Jojo the gorilla has spent his life alone. Can he finally find a companion?",
+      "url": "https://www.bbc.co.uk/news/articles/cwm2mn272nqlo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-14T00:03:56+00:00"
+    },
+    {
+      "title": "Arrested generals and a threatened VP: President's son fuels Ugandan succession fever",
+      "url": "https://www.bbc.co.uk/news/articles/cmlydy0xw45wo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-14T00:03:52+00:00"
+    },
+    {
+      "title": "Setback for SpaceX Starship rocket's double-catch test",
+      "url": "https://www.bbc.co.uk/news/articles/ckregdgnl0xpo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-14T00:01:01+00:00"
+    },
+    {
+      "title": "'Miracle on Mississippi' - All passengers rescued after New Orleans cruise ship collision",
+      "url": "https://www.bbc.co.uk/news/articles/cw20xmy0m5yyo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-13T23:40:45+00:00"
+    },
+    {
+      "title": "After a summer win, India's Gen Z protesters face a winter of uncertainty",
+      "url": "https://www.bbc.co.uk/news/articles/cq99e0z4vg1eo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-13T23:11:51+00:00"
+    },
+    {
+      "title": "How the Jensen Huang scandal created a headache for business-friendly Singapore",
+      "url": "https://www.bbc.co.uk/news/articles/ck1exevgql4qo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-13T23:00:31+00:00"
+    },
+    {
+      "title": "Watch: Cruise ship seen sinking after collision with cargo ship in New Orleans",
+      "url": "https://www.bbc.co.uk/news/videos/ck4gn4y77m40o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-13T21:15:24+00:00"
+    },
+    {
+      "title": "Microsoft 'deeply sorry' for global outage as it reports broad recovery",
+      "url": "https://www.bbc.co.uk/news/articles/c6rrg51rkz09o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-13T21:14:22+00:00"
+    },
+    {
+      "title": "Bird flu (avian influenza): latest situation in England",
+      "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-13T20:44:01Z"
+    },
+    {
+      "title": "Guidance: Bird flu: designated slaughterhouses",
+      "url": "https://www.gov.uk/government/publications/bird-flu-designated-slaughterhouses",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-13T20:43:36Z"
+    },
+    {
+      "title": "Pressure grows on Trump's Commerce Secretary Lutnick in fallout from Nvidia scandal",
+      "url": "https://www.bbc.co.uk/news/articles/cqvg2d1eg7zro?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-13T19:53:57+00:00"
+    },
     {
       "title": "Democratic Senate leader Schumer set to face leadership challenge",
       "url": "https://www.bbc.co.uk/news/articles/cmy4930jq749o?at_medium=RSS&at_campaign=rss",
@@ -37007,12 +37095,6 @@
       "publishedAt": "2026-11-13T15:42:52+00:00"
     },
     {
-      "title": "Pressure grows on Trump's Commerce Secretary Lutnick in fallout from Nvidia scandal",
-      "url": "https://www.bbc.co.uk/news/articles/cqvg2d1eg7zro?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-13T15:40:08+00:00"
-    },
-    {
       "title": "Research: Avian influenza (bird flu) in Europe and the UK",
       "url": "https://www.gov.uk/government/publications/avian-influenza-bird-flu-in-europe",
       "source": "DEFRA",
@@ -37059,87 +37141,21 @@
       "url": "https://www.gov.uk/government/news/joint-statement-on-cooperation-in-agriculture-between-the-united-kingdom-and-germany",
       "source": "DEFRA",
       "publishedAt": "2026-11-13T14:13:42Z"
-    },
-    {
-      "title": "New business survey finds Brexit barriers hit profits for more than half of small and medium UK food and drink manufacturers exporting to the EU",
-      "url": "https://www.gov.uk/government/news/new-business-survey-finds-brexit-barriers-hit-profits-for-more-than-half-of-small-and-medium-uk-food-and-drink-manufacturers-exporting-to-the-eu",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T14:02:00Z"
-    },
-    {
-      "title": "UN watchdog 'increasingly concerned' over uninspected Iran nuclear site",
-      "url": "https://www.bbc.co.uk/news/articles/cm75261e3pdko?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-13T12:28:28+00:00"
-    },
-    {
-      "title": "How a sex scandal at Nvidia is putting pressure on the White House",
-      "url": "https://www.bbc.co.uk/news/articles/c67429m3vem3o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-13T12:22:30+00:00"
-    },
-    {
-      "title": "Bluetongue: latest situation",
-      "url": "https://www.gov.uk/guidance/bluetongue-latest-situation",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T12:11:33Z"
-    },
-    {
-      "title": "Watch: How a server outage took down Microsoft Teams and Outlook",
-      "url": "https://www.bbc.co.uk/news/videos/cqzjr903n01po?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-13T11:43:27+00:00"
-    },
-    {
-      "title": "Rosalía scoops historic third best album award at Latin Grammys",
-      "url": "https://www.bbc.co.uk/news/articles/cr3eg97eqde1o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-13T11:38:54+00:00"
-    },
-    {
-      "title": "Nigerian university in mourning after four students die at post-exam party",
-      "url": "https://www.bbc.co.uk/news/articles/cmvg2dvw0355o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-13T11:37:08+00:00"
-    },
-    {
-      "title": "Transparency data: List of statistics with pre-release access",
-      "url": "https://www.gov.uk/government/publications/list-of-statistics-with-pre-release-access",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T09:52:10Z"
-    },
-    {
-      "title": "Imports, exports and EU trade of animals and animal products: topical issues",
-      "url": "https://www.gov.uk/guidance/imports-exports-and-eu-trade-of-animals-and-animal-products-topical-issues",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T09:30:07Z"
-    },
-    {
-      "title": "Heat pumps: How much heat does your home really need?",
-      "url": "https://www.bbc.co.uk/news/articles/cqy43zk3kk04o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-13T09:29:25+00:00"
-    },
-    {
-      "title": "Australian cricket's sandpapergate is back - and it cuts deep in a 'nation of good sports'",
-      "url": "https://www.bbc.co.uk/news/articles/c6702z750zvyo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-13T08:20:28+00:00"
-    },
-    {
-      "title": "African Miss Universe beauty queens in limbo as US visa restrictions bite",
-      "url": "https://www.bbc.co.uk/news/articles/cklyw3neqg2wo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-13T07:01:43+00:00"
-    },
-    {
-      "title": "Politicians back focus on cost of living",
-      "url": "https://www.bbc.co.uk/news/articles/cqj9mjl8jy4no?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-13T06:23:37+00:00"
     }
   ],
   "supplyNews": [
+    {
+      "title": "Bird flu (avian influenza): latest situation in England",
+      "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-13T20:44:01Z"
+    },
+    {
+      "title": "Guidance: Bird flu: designated slaughterhouses",
+      "url": "https://www.gov.uk/government/publications/bird-flu-designated-slaughterhouses",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-13T20:43:36Z"
+    },
     {
       "title": "Guidance: Bird flu: table of key dates for when control zones are declared",
       "url": "https://www.gov.uk/government/publications/bird-flu-table-of-key-dates-for-when-control-zones-are-declared",
@@ -37201,12 +37217,6 @@
       "publishedAt": "2026-11-13T09:30:07Z"
     },
     {
-      "title": "Bird flu (avian influenza): latest situation in England",
-      "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T00:01:07Z"
-    },
-    {
       "title": "Bird flu (avian influenza): housing your birds safely",
       "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-housing-your-birds-safely",
       "source": "DEFRA",
@@ -37253,12 +37263,6 @@
       "url": "https://www.gov.uk/government/statistics/cattle-sheep-and-pig-slaughter",
       "source": "DEFRA",
       "publishedAt": "2026-11-12T09:30:15Z"
-    },
-    {
-      "title": "Accredited official statistics: Historical statistics notices on the number of cattle, sheep and pigs slaughtered in the UK, 2026",
-      "url": "https://www.gov.uk/government/statistics/historical-statistics-notices-on-the-number-of-cattle-sheep-and-pigs-slaughtered-in-the-uk-2026",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-12T09:30:13Z"
     }
   ],
   "foodInflationHistory": [
