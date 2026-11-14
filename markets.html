@@ -54,6 +54,7 @@ header h1{font-size:20px}
 main{padding:10px}
 .card .price{font-size:18px}
 }
+.chart-readout{margin-top:7px;padding:7px 9px;background:#111914;border-left:3px solid #a6d17a;color:#d7dfd0;font:11px/1.45 monospace;min-height:30px;overflow-wrap:anywhere}
 </style>
 <link rel="stylesheet" href="./doomwatch.css">
 </head>
@@ -319,6 +320,20 @@ function renderCards(id,data){
  ||'<div class="small">No data available.</div>';
 }
 
+function attachChartReadout(canvas,count,describe,left=35){
+ if(!count)return;
+ let output=canvas.nextElementSibling;
+ if(!output||!output.classList.contains("chart-readout")){
+  output=document.createElement("div");output.className="chart-readout";output.setAttribute("aria-live","polite");output.textContent="Tap, move across, or focus the chart and use the arrow keys to inspect values.";canvas.insertAdjacentElement("afterend",output);
+ }
+ canvas.setAttribute("tabindex","0");canvas.setAttribute("role","img");canvas.setAttribute("aria-label","Interactive chart. Move or tap across the chart, or use the arrow keys, to inspect dated values.");
+ let selected=0;
+ const show=i=>{selected=Math.max(0,Math.min(count-1,i));const value=describe(selected);output.textContent=value;canvas.title=value;};
+ const inspect=event=>{const rect=canvas.getBoundingClientRect(),px=Math.max(0,Math.min(rect.width,event.clientX-rect.left));show(Math.round((px-left)*Math.max(1,count-1)/Math.max(1,rect.width-left*2)));};
+ canvas.onpointermove=inspect;canvas.onpointerdown=inspect;
+ canvas.onkeydown=event=>{if(event.key!=="ArrowLeft"&&event.key!=="ArrowRight"&&event.key!=="Home"&&event.key!=="End")return;event.preventDefault();show(event.key==="Home"?0:event.key==="End"?count-1:selected+(event.key==="ArrowRight"?1:-1));};
+}
+
 // Standard single-series history chart.
 function chart(canvasId,history,unit=""){
  const canvas=$(canvasId);
@@ -376,9 +391,7 @@ function chart(canvasId,history,unit=""){
  ctx.textAlign="right";
  ctx.fillText(date(points[points.length-1].date),w-pad,h-5);
  ctx.textAlign="left";
- canvas.setAttribute("tabindex","0");canvas.setAttribute("role","img");canvas.setAttribute("aria-label","Interactive historical price chart. Move or tap across the chart to inspect dated values.");
- const inspect=event=>{const rect=canvas.getBoundingClientRect(),px=Math.max(0,Math.min(rect.width,(event.clientX||rect.left)-rect.left)),idx=Math.max(0,Math.min(points.length-1,Math.round((px-pad)*Math.max(1,points.length-1)/Math.max(1,rect.width-pad*2)))),p=points[idx];if(p)canvas.title=date(p.date)+" · "+number(p.value)+unit;};
- canvas.onpointermove=inspect;canvas.onpointerdown=inspect;
+ attachChartReadout(canvas,points.length,i=>date(points[i].date)+" · "+number(points[i].value)+unit, pad);
 }
 
 // Multi-series chart for the grocery index.
@@ -451,9 +464,7 @@ function multiChart(canvasId,series){
   lx+=Math.max(75,ctx.measureText(s.name).width+28);
   if(lx>w-90){lx=pad;ly+=13;}
  });
- canvas.setAttribute("tabindex","0");canvas.setAttribute("role","img");canvas.setAttribute("aria-label","Interactive multi-series chart. Move or tap across the chart to inspect dated values.");
- const inspect=event=>{const rect=canvas.getBoundingClientRect(),px=Math.max(0,Math.min(rect.width,(event.clientX||rect.left)-rect.left)),base=usable[0].points,idx=Math.max(0,Math.min(base.length-1,Math.round((px-pad)*Math.max(1,base.length-1)/Math.max(1,rect.width-pad*2)))),stamp=base[idx]?.week||"Observation "+(idx+1),values=usable.map(s=>s.name+": "+(s.points[idx]?.level??"n/a")).join(" · ");canvas.title=stamp+" · "+values;};
- canvas.onpointermove=inspect;canvas.onpointerdown=inspect;
+ attachChartReadout(canvas,usable[0].points.length,i=>{const stamp=usable[0].points[i]?.week||"Observation "+(i+1);return stamp+" · "+usable.map(s=>s.name+": "+(s.points[i]?.level??"n/a")).join(" · ");},pad);
 }
 
 function historyOf(item){
