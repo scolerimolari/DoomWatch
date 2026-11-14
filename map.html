@@ -655,7 +655,7 @@ function render(){
  if(activeTown){const g=townGroups.find(x=>x.town.name===activeTown);renderDetail(g);}else renderDetail(null);
  $("map-status").textContent=(ballyclareWatch?"BALLYCLARE AREA WATCH // ":"")+(map?"OPENSTREETMAP":"OFFLINE SCHEMATIC")+" // "+records.length+" FILTERED REPORTS // "+townGroups.length+" TOWN LOCATIONS // "+(records.length-records.filter(locate).length)+" WITHOUT TOWN MATCH";
 }
-const initialParams=new URLSearchParams(location.search),initialMapSearch=initialParams.get("search")||"";if(initialMapSearch){searchTerm=initialMapSearch.toLowerCase();$("map-search").value=initialMapSearch;}
+const initialParams=new URLSearchParams(location.search),initialMapSearch=initialParams.get("search")||initialParams.get("dw_area")||"";if(initialMapSearch){searchTerm=initialMapSearch.toLowerCase();$("map-search").value=initialMapSearch;}
 const initialWindow=initialParams.get("window")||"30";if(["1","3","7","30","90","all"].includes(initialWindow)){showAll=initialWindow==="all";ageDays=showAll?30:Number(initialWindow);$("date-window").value=initialWindow;$("all-time").checked=showAll;$("age-range").value=String(ageDays);$("age-range").disabled=showAll;}
 const initialCategory=initialParams.get("category")||"";if(["EMERGENCY","WATER","POWER","FLOOD","TRAFFIC","TRANSPORT","WEATHER","OTHER"].includes(initialCategory)){categoryFilter=initialCategory;$("category-filter").value=categoryFilter;}
 async function load(){
