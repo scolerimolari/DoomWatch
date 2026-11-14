@@ -30,7 +30,7 @@
 <div class="panel"><h3>NORTHERN IRELAND HOME HEATING OIL</h3><div class="small" id="oilMeta"></div><div class="grid" id="oilCards"></div><div class="grid" id="oilCharts"></div></div>
 <div class="panel"><h3>UK AVERAGE PETROL & DIESEL</h3><div class="small" id="fuelMeta"></div><div class="grid" id="fuelCards"></div><div class="grid" id="fuelCharts"></div></div>
 </section>
-<section id="sources"><h2>05 // DATA SOURCES & COVERAGE</h2><div class="warning">Figures are displayed as supplied by the named sources and collectors. Different measures have different geographic coverage and publication schedules. Missing observations are not estimated.</div><div class="panel"><div class="small" id="sources"></div></div></section>
+<section id="sources"><h2>05 // DATA SOURCES & COVERAGE</h2><div class="warning">Figures are displayed as supplied by the named sources and collectors. Different measures have different geographic coverage and publication schedules. Missing observations are not estimated.</div><div class="panel"><div class="small" id="source-list"></div></div></section>
 </main>
 <footer>DOOMWATCH // OPERATION CONTAINMENT<br>AGGREGATE HOUSEHOLD COST INTELLIGENCE // NOT AN EMERGENCY SERVICE</footer>
 <script>
@@ -93,7 +93,7 @@ function renderEnergy(d){
 }
 function renderSources(d){
  const src=d.sources||{},keys=["supermarketPriceIndex","foodInflation","overallInflation","heatingOil","roadFuel"],labels={supermarketPriceIndex:"Weekly aggregate supermarket index",foodInflation:"UK food inflation / CPIH",overallInflation:"UK overall inflation / CPIH",heatingOil:"Northern Ireland heating oil",roadFuel:"UK road fuel averages"};
- $("sources").innerHTML=keys.map(k=>{const s=src[k]||{};return '<div class="section-card"><strong>'+labels[k]+'</strong><div class="meta">STATUS: '+esc(s.status||"not reported")+' // CHECKED: '+esc(fmtDate(s.checkedAt))+' // RECORDS: '+esc(s.recordsImported??s.observationsImported??"not supplied")+'</div>'+(s.note?'<p>'+esc(s.note)+'</p>':'')+(s.url?'<a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a>':'')+'</div>';}).join("");
+ $("source-list").innerHTML=keys.map(k=>{const s=src[k]||{};return '<div class="section-card"><strong>'+labels[k]+'</strong><div class="meta">STATUS: '+esc(s.status||"not reported")+' // CHECKED: '+esc(fmtDate(s.checkedAt))+' // RECORDS: '+esc(s.recordsImported??s.observationsImported??"not supplied")+'</div>'+(s.note?'<p>'+esc(s.note)+'</p>':'')+(s.url?'<a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a>':'')+'</div>';}).join("");
 }
 let currentData=null;
 async function load(){
