@@ -121,7 +121,7 @@ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const dt=v=>{if(!v)return 0;const n=new Date(v).getTime();return Number.isFinite(n)?n:0;};
 const fmt=v=>v?new Date(v).toLocaleString("en-GB"):"DATE NOT SUPPLIED";
 const arr=v=>Array.isArray(v)?v:[];
-let articles=[],marketData={},commsData={},evidenceFilter="ALL",loadedAt=0;
+let articles=[],marketData={},commsData={},evidenceFilter="ALL",loadedAt=0,intelSnapshotAt="";
 const sectors={1:"National resilience",2:"Food and agriculture",3:"Fuel, energy and oil",4:"Chemicals, medicines and industrial inputs",5:"Electricity, gas and water",6:"Transport, ports and logistics",7:"Healthcare and public health",8:"Telecommunications, cyber and infrastructure",9:"Weather, flooding and natural hazards",10:"Civil defence and community preparedness",11:"International events with UK/NI impact"};
 function flatten(data){
  const out=[],seen=new Set();
@@ -153,8 +153,8 @@ function evidence(a){return String(a.evidenceStatus||a.status||a.verification||"
 function stamp(a){return dt(a.publishedAt||a.date||a.timestamp||a.updatedAt||a.collectedAt);}
 function linkOf(a){const u=String(a.url||a.link||a.sourceUrl||"");return /^https:\/\//i.test(u)?u:"";}
 function sectorLabels(a){const ids=arr(a.sectorIds).map(Number).filter(n=>sectors[n]);const labels=arr(a.sectorLabels);return labels.length?labels:ids.map(n=>sectors[n]);}
-function niTown(a){return String(a.locality?.name||a.area||a.location||"").trim();}
-function mapUrl(a){const q=niTown(a)||title(a);return "./map.html?search="+encodeURIComponent(q);}
+function niTown(a){return String(a.locality?.name||a.town||a.locationName||a.location||"").trim();}
+function mapUrl(a){const place=niTown(a),q=place&&!/^(ni|northern ireland|unknown)$/i.test(place)?place:title(a);return "./map.html?search="+encodeURIComponent(q);}
 function feedUrl(a){return "./feed.html?q="+encodeURIComponent(title(a).slice(0,100));}
 function explicitPriority(a){return severity(a)==="HIGH"?3:severity(a)==="MEDIUM"?2:0;}
 function rank(a){return explicitPriority(a)*100+(region(a)==="NI"?25:region(a)==="UK"?10:0)+Math.min(20,Math.floor((Date.now()-stamp(a))/86400000)*-1+20);}
@@ -210,7 +210,7 @@ function renderComms(){
  '<p class="op-muted">A lack of detected issue signals does not confirm service availability. Postcode and operator checks remain authoritative.</p>';
 }
 function renderMarkets(){
- const d=marketData||{},oil=arr(d.heatingOil?.items),fuel=arr(d.fuel?.items),brent=arr(d.commodities).find(x=>/brent/i.test(String(x.name||x.label||x.symbol||"")));
+ const d=marketData||{},oil=arr(d.heatingOil?.items),fuel=arr(d.fuel?.items),brent=d.commodities?.brent||null;
  const food=d.foodInflation||{},overall=d.overallInflation||{};
  const values=[];
  if(oil[0])values.push({v:"£"+Number(oil[0].price).toFixed(2),l:"NI heating oil · "+oil[0].volumeLitres+"L",d:oil[0].observedAt,u:oil[0].url});
@@ -236,10 +236,10 @@ async function load(){
  const status=$("op-event-status");status.textContent="REFRESHING INTELLIGENCE, MARKETS AND COMMUNICATIONS SNAPSHOTS…";
  const urls=["./data/intelligence.json","./data/markets.json","./data/communications.json"];
  const results=await Promise.allSettled(urls.map(u=>fetch(u+"?t="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error(u+" HTTP "+r.status);return r.json();})));
- if(results[0].status==="fulfilled"){articles=flatten(results[0].value);loadedAt=Date.now();}else{status.textContent="INTELLIGENCE ARCHIVE FAILED // "+results[0].reason.message;}
+ if(results[0].status==="fulfilled"){const intel=results[0].value;articles=flatten(intel);loadedAt=Date.now();intelSnapshotAt=intel.collectorLastRun||intel.updatedAt||intel.generatedAt||intel.lastUpdated||"";}else{status.textContent="INTELLIGENCE ARCHIVE FAILED // "+results[0].reason.message;}
  if(results[1].status==="fulfilled")marketData=results[1].value;
  if(results[2].status==="fulfilled")commsData=results[2].value;
- $("op-data-time").textContent="INTELLIGENCE "+(loadedAt?new Date(loadedAt).toLocaleTimeString("en-GB"):"UNAVAILABLE")+" · MARKETS "+(marketData.updatedAt?fmt(marketData.updatedAt):"UNAVAILABLE");
+ $("op-data-time").textContent="INTELLIGENCE "+(intelSnapshotAt?fmt(intelSnapshotAt):"TIMESTAMP NOT SUPPLIED")+" · MARKETS "+(marketData.updatedAt?fmt(marketData.updatedAt):"UNAVAILABLE")+" · COMMS "+(commsData.generatedAt?fmt(commsData.generatedAt):"UNAVAILABLE");
  renderPriority();renderComms();renderMarkets();renderWatchpoints();renderEvents();
 }
 ["op-search","op-region","op-window"].forEach(id=>$(id).addEventListener(id==="op-search"?"input":"change",renderEvents));
