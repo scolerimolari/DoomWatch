@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 .map-intro{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
-.map-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
+.map-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:12px 0}
 .map-kpi{background:#111914;border:1px solid #52604f;padding:10px;min-width:0}
 .map-kpi strong{display:block;color:#f0cf86;font-size:clamp(19px,3vw,27px);line-height:1.2;overflow-wrap:anywhere}
 .map-kpi span{display:block;color:#a9b1a4;font-size:10px;letter-spacing:.7px;margin-top:4px}
@@ -30,7 +30,7 @@
 .map-key span{border:1px solid #596653;padding:5px 8px;font-size:10px;color:#d9c69e}
 .map-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:9px}
 .map-item{padding:11px;background:linear-gradient(145deg,#222b25,#151c17);border:1px solid #4b574e;border-left:4px solid #8b9b78;overflow-wrap:anywhere;min-width:0}
-.map-item.transport{border-left-color:#d6b574}.map-item.weather{border-left-color:#79bde0}.map-item.emergency{border-left-color:#ed5146}.map-item.other{border-left-color:#a8d58b}
+.map-item.transport{border-left-color:#d6b574}.map-item.traffic{border-left-color:#f29b38}.map-item.weather{border-left-color:#79bde0}.map-item.emergency{border-left-color:#ed5146}.map-item.other{border-left-color:#a8d58b}
 .map-item summary{cursor:pointer;list-style:none;line-height:1.45}.map-item summary::-webkit-details-marker{display:none}
 .map-item summary:after{content:"OPEN +";display:block;color:#b9dc9a;font-size:10px;margin-top:5px}.map-item[open] summary:after{content:"CLOSE −"}
 .map-item strong{display:block;color:#f0d28e;margin-bottom:5px}.map-item .meta{margin:5px 0;line-height:1.45}
@@ -51,13 +51,14 @@
 <body>
 <header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">GEOINT // NORTHERN IRELAND EVENT PLOT</div></div><div class="classification">MAP OPERATIONS</div></div></header>
 <main>
-<div class="map-intro"><div><h2>MAP // OPERATIONAL GEOGRAPHIC INTELLIGENCE</h2><div class="muted">Northern Ireland reports plotted by town-level location, with source-linked incident records.</div></div><button type="button" class="action-button" id="map-refresh">↻ REFRESH ARCHIVE</button></div>
+<div class="map-intro"><div><h2>MAP // OPERATIONAL GEOGRAPHIC INTELLIGENCE</h2><div class="muted">Northern Ireland reports plotted by town-level location, with source-linked incident records.</div></div><div class="map-actions"><a class="action-button" href="https://www.trafficwatchni.com/twni/" target="_blank" rel="noopener noreferrer">LIVE TRAFFICWATCH NI ↗</a><button type="button" class="action-button" id="map-refresh">↻ REFRESH ARCHIVE</button></div></div>
 <div class="terminal" id="map-status" role="status" aria-live="polite">CONNECTING TO INTELLIGENCE ARCHIVE…</div>
 <div class="map-kpis">
  <div class="map-kpi"><strong id="kpi-total">—</strong><span>MATCHING REPORTS</span></div>
  <div class="map-kpi"><strong id="kpi-located">—</strong><span>TOWN-LOCATED</span></div>
  <div class="map-kpi"><strong id="kpi-towns">—</strong><span>LOCATIONS WITH REPORTS</span></div>
  <div class="map-kpi"><strong id="kpi-sources">—</strong><span>UNIQUE SOURCES</span></div>
+ <div class="map-kpi"><strong id="kpi-traffic">—</strong><span>TRAFFIC UPDATES</span></div>
 </div>
 <div class="map-workspace">
  <div class="panel" style="padding:8px">
@@ -69,7 +70,8 @@
   <section class="map-box">
    <h3>MAP LAYERS // TOGGLE</h3>
    <label class="layer-row"><input type="checkbox" data-layer="EMERGENCY" checked><i class="layer-dot" style="background:#ed5146"></i> Emergency / public safety</label>
-   <label class="layer-row"><input type="checkbox" data-layer="TRANSPORT" checked><i class="layer-dot" style="background:#d6b574"></i> Transport / infrastructure</label>
+   <label class="layer-row"><input type="checkbox" data-layer="TRAFFIC" checked><i class="layer-dot" style="background:#f29b38"></i> TrafficWatchNI incidents & roadworks</label>
+   <label class="layer-row"><input type="checkbox" data-layer="TRANSPORT" checked><i class="layer-dot" style="background:#d6b574"></i> Other transport / infrastructure</label>
    <label class="layer-row"><input type="checkbox" data-layer="WEATHER" checked><i class="layer-dot" style="background:#79bde0"></i> Weather / environment</label>
    <label class="layer-row"><input type="checkbox" data-layer="OTHER" checked><i class="layer-dot" style="background:#a8d58b"></i> Other local reports</label>
    <label class="layer-row"><input type="checkbox" id="density-toggle"><i class="layer-dot" style="background:#e6d08a;opacity:.5"></i> Activity density overlay</label>
@@ -135,7 +137,7 @@ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const safeUrl=v=>/^https?:\/\//i.test(String(v||""))?String(v):"";
 const stamp=a=>a.publishedAt||a.date||a.collectedAt||"";
 const dateText=v=>{if(!v)return "DATE NOT SUPPLIED";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB");};
-const allText=a=>[a.title,a.description,a.summary,a.source,a.region,a.category,a.locality?.name].map(v=>String(v||"")).join(" ").toLowerCase();
+const allText=a=>[a.title,a.description,a.summary,a.source,a.sourceType,a.sourceId,a.region,a.category,a.locality?.name].map(v=>String(v||"")).join(" ").toLowerCase();
 const hasTerm=(text,term)=>new RegExp("(^|[^a-z0-9])"+term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"([^a-z0-9]|$)","i").test(text);
 const isNI=a=>/northern ireland/i.test(String(a.region||""))||/(^|[;,/])\s*ni\s*($|[;,/])/i.test(String(a.region||""))||!!a.locality||TOWNS.some(t=>t.terms.some(term=>hasTerm(allText(a),term)));
 function locate(a){
@@ -143,6 +145,7 @@ function locate(a){
  if(locality){const exact=TOWNS.find(t=>t.name.toLowerCase()===locality.toLowerCase());if(exact)return exact;const partial=TOWNS.find(t=>t.terms.some(term=>locality.toLowerCase().includes(term)));if(partial)return partial;}
  const txt=allText(a);for(const town of TOWNS){if(town.terms.some(term=>hasTerm(txt,term)))return town;}return null;
 }
+function isTraffic(a){const id=String(a.sourceId||"").toLowerCase(),type=String(a.sourceType||"").toLowerCase();return id.startsWith("trafficwatch-")||type.startsWith("transport_")||type.startsWith("traffic_");}
 function category(a){
  const t=allText(a),s=String(a.sourceType||"").toLowerCase(),v=t+" "+s;
  if(/traffic|roadwork|transport|rail|airport|port|ferry|bridge|closure|freight|logistics/.test(v))return "TRANSPORT";
@@ -185,6 +188,7 @@ function getFiltered(){
  return archive.filter(a=>{
   if(!showAll){const d=validDate(a);if(d&&d.getTime()<cutoff)return false;}
   const c=category(a);if(!layerEnabled(c))return false;
+  if(isTraffic(a)&&!layerEnabled("TRAFFIC"))return false;
   if(activeTown&&locate(a)?.name!==activeTown)return false;
   if(searchTerm&&!allText(a).includes(searchTerm))return false;
   return true;
@@ -236,13 +240,14 @@ function render(){
  $("kpi-located").textContent=records.filter(locate).length.toLocaleString("en-GB");
  $("kpi-towns").textContent=townGroups.length.toLocaleString("en-GB");
  $("kpi-sources").textContent=uniqueSources(records).toLocaleString("en-GB");
+ $("kpi-traffic").textContent=records.filter(isTraffic).length.toLocaleString("en-GB");
  $("town-select").innerHTML='<option value="">ALL LOCATIONS</option>'+TOWNS.filter(t=>townGroups.some(g=>g.town.name===t.name)).map(t=>'<option value="'+esc(t.name)+'">'+esc(t.name)+'</option>').join("");
  $("town-select").value=activeTown;
  if(map)renderMarkers();else renderFallback(townGroups);
  const list=records.slice(0,100);
- $("map-articles").innerHTML=list.map((a,i)=>{const town=locate(a),c=category(a),url=safeUrl(a.url),d=validDate(a);return '<details class="map-item '+c.toLowerCase()+'"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED")+' · '+esc(c)+' · '+esc(d?dateText(d):"DATE NOT SUPPLIED")+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':"<span class='muted'>No valid article URL supplied</span>")+(town?'<button type="button" data-focus-town="'+esc(town.name)+'">SHOW ON MAP</button>':"")+'</div></details>';}).join("")||'<div class="panel muted">No reports match the current filters. Try a longer time window or clear the search.</div>';
+ $("map-articles").innerHTML=list.map((a,i)=>{const town=locate(a),c=category(a),traffic=isTraffic(a),url=safeUrl(a.url),d=validDate(a);return '<details class="map-item '+c.toLowerCase()+(traffic?' traffic':'')+'"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED")+' · '+(traffic?'<strong>TRAFFIC</strong> · ':'')+esc(c)+' · '+esc(d?dateText(d):"DATE NOT SUPPLIED")+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':"<span class='muted'>No valid article URL supplied</span>")+(town?'<button type="button" data-focus-town="'+esc(town.name)+'">SHOW ON MAP</button>':"")+'</div></details>';}).join("")||'<div class="panel muted">No reports match the current filters. Try a longer time window or clear the search.</div>';
  $("map-articles").querySelectorAll("[data-focus-town]").forEach(btn=>btn.addEventListener("click",()=>{selectTown(btn.dataset.focusTown);$("map-town-details").scrollIntoView({behavior:"smooth",block:"nearest"});}));
- $("map-list-status").textContent=records.length+" matching archive records · "+records.filter(locate).length+" with approximate town matches · showing up to 100 source-linked reports.";
+ $("map-list-status").textContent=records.length+" matching archive records · "+records.filter(locate).length+" with approximate town matches · "+records.filter(isTraffic).length+" traffic updates · showing up to 100 source-linked reports. Traffic locations are approximate town matches, not GPS pins.";
  if(activeTown){const g=townGroups.find(x=>x.town.name===activeTown);renderDetail(g);}else renderDetail(null);
  $("map-status").textContent=(map?"OPENSTREETMAP":"OFFLINE SCHEMATIC")+" // "+records.length+" FILTERED REPORTS // "+townGroups.length+" TOWN LOCATIONS // "+(records.length-records.filter(locate).length)+" WITHOUT TOWN MATCH";
 }
