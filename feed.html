@@ -175,8 +175,10 @@ function render(){
    const socialPost=social(a),matched=Object.keys(topics).filter(k=>hits(a,k));
    const status=socialPost?"UNVERIFIED SOCIAL POST":String(a.evidenceStatus||"UNASSESSED").replace(/_/g," ");
    const link=a.url&&/^https?:\/\//i.test(a.url)?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT / POST ↗</a>':'<span class="muted">No valid source link</span>';
+   const place=String(a.locality?.name||a.area||a.location||"").trim();
+   const mapLink=place?'<a class="action-button" href="./map.html?search='+encodeURIComponent(place)+'">VIEW LOCATION ON MAP ↗</a>':"";
    const globalIndex=list.indexOf(a);
-   return '<div class="cluster-source"><strong>'+esc(a.source||"Source not supplied")+'</strong> · '+esc(date(a.publishedAt||a.collectedAt))+'<p>'+esc(a.title||"Untitled report")+'</p><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+'<div style="margin-top:8px"><button type="button" class="action-button" data-flag="'+globalIndex+'">SAVE TO RUMOUR MONITOR</button></div></div>';
+   return '<div class="cluster-source"><strong>'+esc(a.source||"Source not supplied")+'</strong> · '+esc(date(a.publishedAt||a.collectedAt))+'<p>'+esc(a.title||"Untitled report")+'</p><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+' '+mapLink+'<div style="margin-top:8px"><button type="button" class="action-button" data-flag="'+globalIndex+'">SAVE TO RUMOUR MONITOR</button></div></div>';
   }).join("");
   return '<details class="cluster"><summary><h3>'+esc(lead.title||"Untitled story")+'</h3><div class="cluster-meta">'+esc(cluster.bucket)+' · '+items.length+' related report(s) · '+sources+' publisher(s) · latest '+esc(date(cluster.latest))+'</div></summary><div class="cluster-note">AUTOMATED HEADLINE GROUPING // NOT A CLAIM OF CORROBORATION</div><div class="cluster-sources">'+sourcesHtml+'</div></details>';
  }).join("")||'<div class="panel muted">No records match this filter and search. Try another topic or clear the search.</div>';
@@ -220,6 +222,7 @@ async function load(){
   $("feed-status").textContent="ARCHIVE CONNECTED // "+articles.length+" RECORDS // AUTO-CHECK EVERY 5 MINUTES WHILE OPEN";
  }catch(e){$("feed-status").textContent="SIGNAL ARCHIVE FAILED // "+e.message;}
 }
+const initialFeedQuery=new URLSearchParams(location.search).get("q")||"";if(initialFeedQuery)$("feed-search").value=initialFeedQuery;
 $("feed-items").addEventListener("click",event=>{
  const button=event.target.closest("[data-flag]");
  if(!button)return;
