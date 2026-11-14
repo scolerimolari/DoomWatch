@@ -3,11 +3,11 @@ if(window.__doomwatchUiReady)return;window.__doomwatchUiReady=true;
 const body=document.body,oldHeader=body.querySelector(":scope > header"),oldNav=body.querySelector(":scope > nav");
 const path=location.pathname.toLowerCase(),hash=decodeURIComponent(location.hash.slice(1)).toLowerCase();
 const routes=[
- ["command","index.html#overview","COMMAND"],["operations","operations.html","OPS ROOM"],
+ ["command","index.html#overview","COMMAND"],["operations","operations.html","OPS ROOM"],["map","map.html","MAP"],
  ["intelligence","index.html#intelligence","INTEL"],["sectors","index.html#sections","11 SECTORS"],
  ["preparedness","index.html#preparedness","PREP"],["meshcore","index.html#meshcore","MESHCORE"],["markets","markets.html","MARKETS"],
  ["household","household.html","HOUSEHOLD"],["feed","feed.html","FEED"],
- ["map","map.html","MAP"],["communications","communications.html","COMMS"],
+ ["communications","communications.html","COMMS"],
  ["incident","incident.html","CASE FILE"],["backup","index.html#backup-centre","BACKUP"],["sources","index.html#sources","SOURCES"]
 ];
 const active=path.endsWith("/operations.html")?"operations":path.endsWith("/markets.html")?"markets":path.endsWith("/household.html")?"household":path.endsWith("/feed.html")?"feed":path.endsWith("/map.html")?"map":path.endsWith("/communications.html")?"communications":path.endsWith("/incident.html")?"incident":({intelligence:"intelligence",sections:"sectors",preparedness:"preparedness",meshcore:"meshcore",sources:"sources","backup":"backup"})[hash]||"command";
