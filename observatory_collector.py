@@ -161,7 +161,8 @@ def flow_match(article, flow):
    return True
   return False
  if flow=="independent":
-  if source_trust in ("independent_investigative","independent_media","established_media") and any(x in text for x in ("investigation","exclusive","belfast","northern ireland","declassified","opendemocracy","crisis group","ferret","byline","the detail")):
+  named_independent=any(x in text for x in ("the detail","the ferret","byline times","opendemocracy","declassified uk","bellingcat","international crisis group","responsible statecraft"))
+  if (source_trust in ("independent_investigative","independent_media","independent_research") and any(x in text for x in ("investigation","exclusive","belfast","northern ireland","declassified","opendemocracy","crisis group","ferret","byline","the detail"))) or named_independent:
    return True
   return False
  if flow=="digital" and any(x in text for x in FLOW_DEFS[flow]["terms"]):
