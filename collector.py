@@ -768,14 +768,44 @@ def fetch_niwater_service_updates(source):
 
 def fetch_nie_network_outages(source):
     """Collect official live NIE Networks faults from its open-data API."""
-    request = urllib.request.Request(source["url"], headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
-    with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
-        content_type = response.headers.get("Content-Type", "")
-        body = response.read(MAX_FEED_SIZE)
+    endpoints = [
+        source["url"],
+        "https://nienetworks.huwise.com/api/explore/v2.1/catalog/datasets/nie-networks-network-faults/records?limit=100",
+        "https://nienetworks.opendatasoft.com/api/records/1.0/search/?dataset=nie-networks-network-faults&rows=100"
+    ]
+    body = None
+    content_type = ""
+    last_error = None
+    for endpoint in endpoints:
+        request = urllib.request.Request(
+            endpoint,
+            headers={
+                "User-Agent": "Mozilla/5.0 (compatible; DoomWatch/1.0; +https://scolerimolari.github.io/DoomWatch/)",
+                "Accept": "application/json,text/csv,*/*",
+                "Referer": source.get("articleUrl", "https://nienetworks.opendatasoft.com/")
+            }
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+                content_type = response.headers.get("Content-Type", "")
+                body = response.read(MAX_FEED_SIZE)
+            if body:
+                break
+        except Exception as error:
+            last_error = error
     if not body:
-        raise ValueError("NIE Networks outage API returned an empty response")
-    payload = json.loads(body.decode("utf-8-sig", errors="replace"))
-    rows = payload.get("results") or payload.get("records") or []
+        raise ValueError("NIE Networks outage API unavailable on all public endpoints: " + str(last_error))
+    if "csv" in content_type.lower() or body[:100].count(b",") > 3 and not body.lstrip().startswith(b"{"):
+        import csv
+        import io
+        rows = list(csv.DictReader(io.StringIO(body.decode("utf-8-sig", errors="replace"))))
+        payload = {}
+    else:
+        payload = json.loads(body.decode("utf-8-sig", errors="replace"))
+        rows = payload.get("results") or payload.get("records") or []
+        if not rows and isinstance(payload.get("records"), list):
+            rows = payload["records"]
+    
     articles, seen = [], set()
     for row in rows:
         fields = row.get("fields", row) if isinstance(row, dict) else {}
