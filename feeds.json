@@ -303,6 +303,18 @@
       "sourceType": "electricity_network_outage",
       "method": "nie_network_outages",
       "liveUrl": "https://powercheck.nienetworks.co.uk/TabularFaults.html"
+    },
+    {
+      "id": "dfi-river-levels",
+      "name": "DfI Rivers — NI live river gauge readings",
+      "url": "https://conditionsview.com/en/water/country/gb-nir",
+      "domain": 9,
+      "region": "Northern Ireland",
+      "priority": "high",
+      "tier": 1,
+      "trust": "third_party_aggregator",
+      "sourceType": "river_level_observation",
+      "method": "dfi_river_levels"
     }
   ]
 }
