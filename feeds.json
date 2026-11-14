@@ -381,6 +381,30 @@
       "tier": 2,
       "trust": "independent_media",
       "sourceType": "national_newsroom"
+    },
+    {
+      "id": "ons-release-calendar",
+      "name": "ONS release calendar — published statistics",
+      "url": "https://www.ons.gov.uk/releasecalendar?highlight=true&limit=10&page=1&release-type=type-published&rss=&sort=date-newest",
+      "domain": null,
+      "region": "UK",
+      "priority": "high",
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "economic_statistics"
+    },
+    {
+      "id": "nisra-upcoming-releases",
+      "name": "NISRA — upcoming official statistics",
+      "url": "https://www.nisra.gov.uk/upcoming-releases",
+      "domain": null,
+      "region": "Northern Ireland",
+      "priority": "high",
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "economic_statistics",
+      "method": "html_listing",
+      "maxItems": 60
     }
   ]
 }
