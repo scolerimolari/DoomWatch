@@ -725,6 +725,7 @@ document.addEventListener("click",e=>{const link=e.target.closest(".dw-town-open
   if(!immersive)return;immersive=false;document.body.classList.remove("dw-map-immersive","dw-map-console-closed");placeholder.parentNode.insertBefore(detail,placeholder.nextSibling);drawer.classList.remove("is-open");manualClose=false;resizeMap();
  }
  launch.addEventListener("click",enter);
+ if(location.pathname.toLowerCase().endsWith("/map.html"))enter();
  document.getElementById("dw-map-exit").addEventListener("click",exit);
  document.getElementById("dw-map-console-toggle").addEventListener("click",()=>{
   const closed=document.body.classList.toggle("dw-map-console-closed");
