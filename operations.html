@@ -328,6 +328,16 @@ function ledgerCommsCards(){
   return '<article class="op-ledger-card comms"><h3>'+esc(p.provider||"Provider not supplied")+'</h3><div class="op-ledger-meta">PROVIDER STATUS · '+esc(status)+'</div><div><span class="op-ledger-tag">'+esc(obs.evidenceClass||"CLASS NOT SUPPLIED")+'</span><span class="op-ledger-tag">'+(obs.stale?"STALE OBSERVATION":"CHECK SOURCE AGE")+'</span></div><p>'+esc(obs.summary||"No summary supplied")+'</p><div class="op-ledger-meta">Source: '+esc(obs.source||obs.sourceId||"Not supplied")+' · Updated: '+esc(obs.sourceUpdatedAt?fmt(obs.sourceUpdatedAt):"Not supplied")+' · Checked: '+esc(obs.checkedAt?fmt(obs.checkedAt):"Not supplied")+'</div>'+(reported.length?'<p>Reported areas: '+esc(reported.join(", "))+'</p>':'<p class="op-ledger-meta">No reported area supplied; do not infer a local outage.</p>')+(obs.url?'<a href="'+esc(obs.url)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"")+'</article>';
  }).join("");
 }
+function ledgerExplicitLocality(a){
+ const value=String(a.locality?.name||a.town||a.locationName||a.localityName||"").trim();
+ return value&&!/^(ni|northern ireland|uk|united kingdom|unknown|international|england|scotland|wales)$/i.test(value)?value:"";
+}
+function ledgerGeography(hits){
+ const groups=new Map();
+ hits.forEach(a=>{const name=ledgerExplicitLocality(a);if(!name)return;const key=name.toLowerCase();if(!groups.has(key))groups.set(key,{name,items:[]});groups.get(key).items.push(a);});
+ const rows=[...groups.values()].sort((a,b)=>b.items.length-a.items.length||a.name.localeCompare(b.name)).slice(0,8);
+ return '<div class="op-ledger-card"><h3>GEOGRAPHIC RECORDS // EXPLICIT LOCALITY TEXT</h3>'+(rows.length?rows.map(g=>'<p><strong>'+esc(g.name)+'</strong> · '+g.items.length+' report(s) <a href="./map.html?search='+encodeURIComponent(g.name)+'">SEARCH MAP ↗</a></p>').join(""):'<p>No explicit town/locality names in matching records.</p>')+'<div class="op-ledger-meta">Names are taken from source records; no geocoding, service boundary or affected-population estimate is inferred.</div></div>';
+}
 function renderEvidenceLedger(){
  const target=$("op-ledger-results"),status=$("op-ledger-status");if(!target||!status)return;
  const pathways=evidencePathway==="ALL"?CROSS_DOMAIN_PATHWAYS:CROSS_DOMAIN_PATHWAYS.filter(x=>x.id===evidencePathway);
@@ -339,6 +349,7 @@ function renderEvidenceLedger(){
   cards.push('<div class="op-ledger-card"><h3>'+esc(path.label)+'</h3><p>'+esc(path.note)+'</p><div class="op-ledger-meta">'+hits.length+' matching archive report(s) shown · keyword screening, not event linkage</div></div>');
   if(hits.length)cards.push(...hits.map(ledgerRecordCard));
   else cards.push('<div class="op-ledger-note">No matching archive report in the current intelligence snapshot. This is not evidence that the sector is unaffected.</div>');
+  cards.push(ledgerGeography(hits));
   if(path.comms){
    const providers=arr(commsData?.providers);
    commsCount=providers.length;
