@@ -126,9 +126,14 @@ const sectors={1:"National resilience",2:"Food and agriculture",3:"Fuel, energy 
 function flatten(data){
  const out=[],seen=new Set();
  const add=item=>{if(!item||typeof item!=="object")return;const id=String(item.id||item.url||item.link||item.title||"");if(id&&seen.has(id))return;if(id)seen.add(id);out.push(item);};
- const walk=v=>{if(Array.isArray(v)){v.forEach(x=>{if(x&&typeof x==="object")add(x);});}else if(v&&typeof v==="object"){Object.values(v).forEach(x=>{if(Array.isArray(x))walk(x);});}};
+ const walk=v=>{
+  if(!v)return;
+  if(Array.isArray(v)){v.forEach(x=>{if(x&&typeof x==="object")add(x);});}
+  else if(typeof v==="object"){Object.values(v).forEach(x=>{if(Array.isArray(x))walk(x);else if(x&&typeof x==="object")add(x);});}
+ };
  walk(data.articles);walk(data.items);walk(data.alerts);
- if(Array.isArray(data.sections))data.sections.forEach(s=>{if(!s||typeof s!=="object")return;["articles","items","stories","updates"].forEach(k=>walk(s[k]));});
+ if(Array.isArray(data.sections))data.sections.forEach(section=>{if(!section||typeof section!=="object")return;["articles","items","stories","updates"].forEach(k=>walk(section[k]));});
+ else if(data.sections&&typeof data.sections==="object")Object.values(data.sections).forEach(section=>{if(Array.isArray(section))walk(section);else if(section&&typeof section==="object")["articles","items","stories","updates"].forEach(k=>walk(section[k]));});
  return out;
 }
 function title(a){return String(a.title||a.headline||a.name||a.claim||"Untitled intelligence record");}
