@@ -42,6 +42,20 @@ const fmtMoney=v=>{const n=Number(v);return Number.isFinite(n)?new Intl.NumberFo
 const fmtPct=v=>{const n=Number(v);return Number.isFinite(n)?(n>0?"+":"")+n.toFixed(2)+"%":"—";};
 const RETAILERS={tesco:"Tesco",sainsburys:"Sainsbury's",asda:"Asda",aldi:"Aldi"};
 const CLASSES={"bread-cereals":"Bread & cereals",meat:"Meat",fish:"Fish","dairy-eggs":"Dairy & eggs","oils-fats":"Oils & fats",fruit:"Fruit",vegetables:"Vegetables","sugar-confectionery":"Sugar & confectionery","food-other":"Other food","soft-drinks":"Soft drinks"};
+function attachChartReadout(canvas,count,describe,left=35){
+ if(!count)return;
+ let output=canvas.nextElementSibling;
+ if(!output||!output.classList.contains("chart-readout")){
+  output=document.createElement("div");output.className="chart-readout";output.setAttribute("aria-live","polite");output.textContent="Tap, move across, or focus the chart and use the arrow keys to inspect values.";canvas.insertAdjacentElement("afterend",output);
+ }
+ canvas.setAttribute("tabindex","0");canvas.setAttribute("role","img");canvas.setAttribute("aria-label","Interactive chart. Move or tap across the chart, or use the arrow keys, to inspect dated values.");
+ let selected=0;
+ const show=i=>{selected=Math.max(0,Math.min(count-1,i));const value=describe(selected);output.textContent=value;canvas.title=value;};
+ const inspect=event=>{const rect=canvas.getBoundingClientRect(),px=Math.max(0,Math.min(rect.width,event.clientX-rect.left));show(Math.round((px-left)*Math.max(1,count-1)/Math.max(1,rect.width-left*2)));};
+ canvas.onpointermove=inspect;canvas.onpointerdown=inspect;
+ canvas.onkeydown=event=>{if(event.key!=="ArrowLeft"&&event.key!=="ArrowRight"&&event.key!=="Home"&&event.key!=="End")return;event.preventDefault();show(event.key==="Home"?0:event.key==="End"?count-1:selected+(event.key==="ArrowRight"?1:-1));};
+}
+
 function draw(id,series,unit){
  const c=$(id);if(!c)return;const w=Math.max(280,c.clientWidth||300),h=240,dpr=window.devicePixelRatio||1;c.width=w*dpr;c.height=h*dpr;c.style.height=h+"px";
  const xctx=c.getContext("2d");xctx.setTransform(dpr,0,0,dpr,0,0);xctx.clearRect(0,0,w,h);
@@ -54,9 +68,7 @@ function draw(id,series,unit){
  const colours=["#e34a3e","#d6b574","#a8d58b","#83b9d5","#c39be8","#e29c65"];
  ss.forEach((s,j)=>{xctx.strokeStyle=colours[j%colours.length];xctx.lineWidth=2;xctx.beginPath();s.points.forEach((p,i)=>{const xx=x(i,s.points.length),yy=y(Number(p.value));if(!i)xctx.moveTo(xx,yy);else xctx.lineTo(xx,yy);});xctx.stroke();xctx.fillStyle=colours[j%colours.length];xctx.fillRect(pad.l+j*94,pad.t-14,8,8);xctx.fillStyle="#c5c7bd";xctx.fillText(s.name,pad.l+j*94+12,pad.t-6);});
  const first=ss[0].points[0],last=ss[0].points.at(-1);xctx.fillStyle="#a0a69c";xctx.fillText(String(first.label||first.date||""),pad.l,h-8);xctx.textAlign="right";xctx.fillText(String(last.label||last.date||""),w-pad.r,h-8);xctx.textAlign="left";
- c.setAttribute("tabindex","0");c.setAttribute("role","img");c.setAttribute("aria-label","Interactive household trend chart. Move or tap across the chart to inspect dated values.");
- const inspect=event=>{const rect=c.getBoundingClientRect(),px=Math.max(0,Math.min(rect.width,(event.clientX||rect.left)-rect.left)),base=ss[0].points,idx=Math.max(0,Math.min(base.length-1,Math.round((px-pad.l)*Math.max(1,base.length-1)/Math.max(1,rect.width-pad.l-pad.r)))),p=base[idx];if(p)c.title=String(p.label||p.date||"Observation")+" · "+p.value+(unit||"");};
- c.onpointermove=inspect;c.onpointerdown=inspect;
+ attachChartReadout(c,ss[0].points.length,i=>{const p=ss[0].points[i];return String(p.label||p.date||"Observation")+" · "+ss.map(s=>s.name+": "+(s.points[i]?.value??"n/a")+(unit||"")).join(" · ");},pad.l);
 }
 function points(rows,valueKey,dateKey){return (rows||[]).map(r=>({date:r[dateKey],label:r[dateKey],value:Number(r[valueKey])})).filter(p=>p.date&&Number.isFinite(p.value));}
 function renderInflation(d){
