@@ -10,14 +10,16 @@ const path = location.pathname.toLowerCase();
 const active = path.endsWith("/markets.html") ? "markets"
   : path.endsWith("/household.html") ? "household"
   : path.endsWith("/feed.html") ? "feed"
-  : path.endsWith("/map.html") ? "map" : "command";
+  : path.endsWith("/map.html") ? "map"
+  : path.endsWith("/communications.html") ? "communications" : "command";
 
 const destinations = [
   ["command", "index.html", "COMMAND"],
   ["markets", "markets.html", "MARKETS"],
   ["household", "household.html", "HOUSEHOLD"],
   ["feed", "feed.html", "FEED"],
-  ["map", "map.html", "MAP"]
+  ["map", "map.html", "MAP"],
+  ["communications", "communications.html", "LIVE COMMS"]
 ];
 
 const mast = document.createElement("header");
