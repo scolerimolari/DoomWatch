@@ -120,4 +120,5 @@ async function load(){
  }catch(e){$("status").textContent="DATA LINK FAILED // "+e.message;}
 }
 load();let resizeTimer;window.addEventListener("resize",()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(!currentData)return;renderInflation(currentData);renderSupermarkets(currentData);renderEnergy(currentData);},180);});
-</script><script src="./doomwatch-ui.js"></script></body></html>
+</script><script src="./doomwatch-ui.js"></script>
+<script src="./doomwatch-watch.js"></script></body></html>
