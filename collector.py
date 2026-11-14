@@ -1,13 +1,14 @@
 import json
 import re
 import urllib.request
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urljoin, urlparse
 import xml.etree.ElementTree as ET
 
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from email.utils import parsedate_to_datetime
 from html import unescape
+from html.parser import HTMLParser
 from urllib.error import HTTPError
 
 ROOT = Path(__file__).resolve().parent
@@ -486,7 +487,119 @@ def fetch_gdacs_api(source):
     return articles, content_type, len(body), "GeoJSON FeatureCollection"
 
 
+
+class ListingLinkParser(HTMLParser):
+    """Collect linked text from an official HTML publication listing."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.links = []
+        self.current = None
+
+    def handle_starttag(self, tag, attrs):
+        if tag.lower() == "a":
+            href = dict(attrs).get("href")
+            if href:
+                self.current = {"href": href, "text": []}
+
+    def handle_data(self, data):
+        if self.current is not None:
+            self.current["text"].append(data)
+
+    def handle_endtag(self, tag):
+        if tag.lower() == "a" and self.current is not None:
+            self.current["text"] = clean(" ".join(self.current["text"]))
+            self.links.append(self.current)
+            self.current = None
+
+
+def fetch_html_listing(source):
+    """Fetch a public official publication listing and extract article links."""
+    request = urllib.request.Request(
+        source["url"],
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml"
+        }
+    )
+    with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+        content_type = response.headers.get("Content-Type", "")
+        body = response.read(MAX_FEED_SIZE)
+
+    if not body:
+        raise ValueError("Official listing returned an empty response")
+
+    parser = ListingLinkParser()
+    parser.feed(body.decode("utf-8-sig", errors="replace"))
+    articles = []
+    seen = set()
+    allowed_host = urlparse(source["url"]).hostname or ""
+
+    for item in parser.links:
+        href = urljoin(source["url"], item["href"])
+        parsed = urlparse(href)
+        host = parsed.hostname or ""
+        title_text = clean(item["text"])
+        if not title_text or len(title_text) < 24:
+            continue
+        if parsed.scheme != "https" or not (host == allowed_host or host.endswith(".gov.uk") or host.endswith(".ni.gov.uk")):
+            continue
+        if href in seen or parsed.path.rstrip("/") in ("", "/press-releases"):
+            continue
+        lower = title_text.lower()
+        if lower in ("next", "last", "home", "translate this page"):
+            continue
+        seen.add(href)
+
+        published = ""
+        match = re.search(
+            r"Published\\s+(\\d{1,2}\\s+[A-Za-z]+\\s+\\d{4})",
+            title_text,
+            flags=re.IGNORECASE
+        )
+        if match:
+            try:
+                published = datetime.strptime(match.group(1), "%d %B %Y").replace(tzinfo=timezone.utc).isoformat().replace("+00:00", "Z")
+            except ValueError:
+                published = ""
+
+        title = re.split(r"\\s+Published\\s+\\d{1,2}\\s+[A-Za-z]+\\s+\\d{4}", title_text, maxsplit=1, flags=re.IGNORECASE)[0].strip()
+        title = title[:300]
+        if len(title) > 240:
+            sentence = re.split(r"(?<=[.!?])\\s+", title, maxsplit=1)
+            if sentence and len(sentence[0]) >= 20:
+                title = sentence[0][:300]
+
+        articles.append({
+            "id": source["id"] + ":" + href,
+            "sourceId": source["id"],
+            "source": source["name"],
+            "title": title,
+            "url": href,
+            "publishedAt": published,
+            "collectedAt": iso(),
+            "description": title_text[:1200],
+            "domain": source.get("domain"),
+            "region": source.get("region", "Northern Ireland"),
+            "priority": source.get("priority", "medium"),
+            "sourceTrust": source.get("trust", "official_primary_source"),
+            "sourceType": source.get("sourceType", "devolved_government"),
+            "evidenceStatus": "UNASSESSED",
+            "confidence": "UNASSESSED"
+        })
+        if len(articles) >= int(source.get("maxItems", 50)):
+            break
+
+    if not articles:
+        raise ValueError("No eligible official article links found; listing structure may have changed")
+
+    return articles, content_type, len(body), "HTML_LISTING"
+
+
+
 def fetch_feed(source):
+    if source.get("method") == "html_listing":
+        return fetch_html_listing(source)
+
     if source.get("id") == "gdacs-global":
         return fetch_gdacs_api(source)
 
