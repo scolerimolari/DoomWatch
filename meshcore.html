@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111714">
+<meta name="description" content="DoomWatch MeshCore field communications and mesh network readiness.">
+<title>DOOMWATCH // MESHCORE FIELD COMMS</title>
+<link rel="stylesheet" href="./doomwatch.css">
+<style>
+.mesh-hero{padding:15px;background:linear-gradient(125deg,#283329,#101611);border:1px solid #68755c;border-top:4px solid #b93c35;box-shadow:inset 0 1px #ffffff14}
+.mesh-kicker{color:#e7c45a;font-size:10px;letter-spacing:2px}
+.mesh-hero h1{font-size:clamp(22px,5vw,34px);letter-spacing:2px;color:#f2d56e;margin:7px 0}
+.mesh-hero p{max-width:850px;color:#c0c9b9;line-height:1.5;font-size:12px}
+.mesh-status{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid #8a754e;background:#151d18;color:#f1d99c;font-size:11px}
+.mesh-lamp{width:9px;height:9px;border-radius:50%;background:#d39c3e;box-shadow:0 0 9px #d39c3e}
+.mesh-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:10px;margin:12px 0}
+.mesh-panel{background:linear-gradient(145deg,#202b23,#121914);border:1px solid #4d5b4e;padding:13px;min-width:0;box-shadow:inset 0 0 16px #0005}
+.mesh-panel h2,.mesh-panel h3{margin:0 0 10px;color:#e7c987;font-size:13px;letter-spacing:1px}
+.mesh-value{font-size:21px;color:#f2d56e;font-weight:bold;margin:6px 0;overflow-wrap:anywhere}
+.mesh-muted{font-size:11px;color:#aeb8aa;line-height:1.55}
+.mesh-callout{border-left:4px solid #c84d40;background:#291b18;padding:11px;color:#e9d8c4;font-size:12px;line-height:1.55}
+.mesh-green{color:#a8d58b}.mesh-amber{color:#e7c45a}.mesh-red{color:#e97868}
+.mesh-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.mesh-actions a,.mesh-actions button{display:inline-block;padding:9px 11px;font-size:10px}
+.mesh-field{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mesh-field label{display:block;color:#d7c79f;font-size:10px;letter-spacing:.7px}
+.mesh-field .wide{grid-column:1/-1}
+.mesh-field input,.mesh-field select,.mesh-field textarea{width:100%;margin:5px 0 9px;padding:9px;background:#0b110d;color:#eee;border:1px solid #65745e;border-radius:2px}
+.mesh-field textarea{min-height:85px}
+.mesh-log{display:grid;gap:8px}
+.mesh-log-item{padding:10px;border:1px solid #465347;border-left:3px solid #b98e4d;background:#121a15}
+.mesh-log-item strong{color:#f0d28e}
+.mesh-log-item p{margin:6px 0;color:#d4dbcf;line-height:1.5;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.mesh-log-item small{color:#a4ad9f;font-size:10px}
+.mesh-check{display:flex;gap:9px;align-items:flex-start;padding:8px 2px;border-bottom:1px solid #39453b;color:#d8dfd3;font-size:11px}
+.mesh-check input{margin:2px 0 0;accent-color:#b9dc9a}
+.mesh-protocol{font-size:11px;color:#d4dbcf;line-height:1.6;padding-left:18px}
+.mesh-protocol li{margin:5px 0}
+.mesh-empty{padding:12px;border:1px dashed #596653;color:#aeb8aa;font-size:11px}
+@media(max-width:560px){.mesh-field{grid-template-columns:1fr}.mesh-field .wide{grid-column:auto}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">MESHCORE // FIELD COMMUNICATIONS</div></div><div class="classification">RADIO MODULE</div></div></header>
+<main>
+<section class="mesh-hero">
+ <div class="mesh-kicker">FIELD COMMS // MODULE 12</div>
+ <h1>MESHCORE NETWORK OPERATIONS</h1>
+ <p>Offline-first workspace for field communications, node deployment and observations. This module is being prepared ahead of the M9 radio arriving. It does not display invented network activity or pretend to be connected.</p>
+ <div class="mesh-status"><i class="mesh-lamp"></i><strong id="radio-state">M9 AWAITING DEPLOYMENT</strong></div>
+</section>
+
+<div class="mesh-grid">
+ <section class="mesh-panel"><h3>RADIO STATUS</h3><div class="mesh-value" id="device-status">NOT DEPLOYED</div><div class="mesh-muted">No radio connected. Live device data will only appear after a verified connection.</div></section>
+ <section class="mesh-panel"><h3>KNOWN NODES</h3><div class="mesh-value" id="node-count">0</div><div class="mesh-muted">Nodes recorded locally in this workspace. Not a live network count.</div></section>
+ <section class="mesh-panel"><h3>FIELD OBSERVATIONS</h3><div class="mesh-value" id="observation-count">0</div><div class="mesh-muted">User-entered notes stored on this device.</div></section>
+ <section class="mesh-panel"><h3>LAST LOCAL ENTRY</h3><div class="mesh-value" id="last-entry" style="font-size:14px">NONE</div><div class="mesh-muted">Timestamp of latest saved note.</div></section>
+</div>
+
+<div class="mesh-callout"><strong>IMPORTANT // NO LIVE RADIO DATA YET</strong><br>The M9 has not arrived. Node counts, battery, signal quality, message traffic and coverage are therefore intentionally blank/zero. Nothing in this page is simulated as real telemetry.</div>
+
+<div class="mesh-grid">
+ <section class="mesh-panel">
+  <h2>01 // M9 DEPLOYMENT PROFILE</h2>
+  <div class="mesh-value">AWAITING ARRIVAL</div>
+  <div class="mesh-muted">Planned companion radio. Profile details can be completed when the unit is physically available.</div>
+  <p class="mesh-muted"><strong>Connection target:</strong> Bluetooth Low Energy (BLE), subject to the exact M9 firmware and companion-radio support.</p>
+  <p class="mesh-muted"><strong>First checks:</strong> confirm model and firmware, charge the unit, install/verify the official companion app, then test discovery and connection before attempting DoomWatch integration.</p>
+  <div class="mesh-actions"><a class="action-button" href="https://meshcore.io/" target="_blank" rel="noopener noreferrer">MESHCORE PROJECT ↗</a><a class="action-button" href="https://docs.meshcore.io/companion_protocol/" target="_blank" rel="noopener noreferrer">COMPANION PROTOCOL ↗</a></div>
+ </section>
+ <section class="mesh-panel">
+  <h2>02 // NETWORK PICTURE</h2>
+  <div class="mesh-empty">NO RADIO / NODE DATA AVAILABLE</div>
+  <p class="mesh-muted">When connected, this area is intended to show contacts, node identity, last-heard information and available telemetry. Map positions and paths will only be plotted when the radio actually supplies reliable coordinates or route data.</p>
+  <div class="mesh-actions"><a class="action-button" href="./map.html">OPEN DOOMWATCH MAP ↗</a><a class="action-button" href="https://map.meshcore.io/" target="_blank" rel="noopener noreferrer">PUBLIC MESHCORE MAP ↗</a></div>
+ </section>
+</div>
+
+<div class="mesh-grid">
+ <section class="mesh-panel">
+  <h2>03 // FIELD OBSERVATION LOG</h2>
+  <div class="mesh-muted">Record what an operator sees or hears. Keep observation separate from interpretation. Entries stay in this browser until exported.</div>
+  <div class="mesh-field" style="margin-top:10px">
+   <div><label for="obs-type">OBSERVATION TYPE</label><select id="obs-type"><option>COMMUNICATIONS</option><option>INFRASTRUCTURE</option><option>POWER / WATER</option><option>ROAD / ACCESS</option><option>WEATHER</option><option>SAFETY / INCIDENT</option><option>OTHER</option></select></div>
+   <div><label for="obs-location">LOCATION / AREA</label><input id="obs-location" placeholder="Town, road or grid reference"></div>
+   <div class="wide"><label for="obs-fact">OBSERVED FACTS</label><textarea id="obs-fact" placeholder="What was directly observed? Include time and source where possible."></textarea></div>
+   <div class="wide"><label for="obs-assessment">ASSESSMENT / FOLLOW-UP (OPTIONAL)</label><textarea id="obs-assessment" placeholder="Keep assumptions separate from observed facts."></textarea></div>
+  </div>
+  <div class="mesh-actions"><button class="action-button" id="save-observation" type="button">SAVE FIELD ENTRY</button><button class="action-button" id="export-log" type="button">EXPORT LOCAL LOG</button></div>
+  <div id="save-feedback" class="mesh-muted" role="status" aria-live="polite" style="margin-top:8px"></div>
+ </section>
+ <section class="mesh-panel">
+  <h2>04 // OPERATOR COMMS CHECK</h2>
+  <div class="mesh-muted">A simple paper-style procedure to use when radios are deployed. No automated messages are sent by this checklist.</div>
+  <label class="mesh-check"><input type="checkbox" data-procedure="1"> Confirm radio charged and switched on</label>
+  <label class="mesh-check"><input type="checkbox" data-procedure="2"> Confirm correct channel / group with team</label>
+  <label class="mesh-check"><input type="checkbox" data-procedure="3"> Send routine check-in and confirm receipt</label>
+  <label class="mesh-check"><input type="checkbox" data-procedure="4"> Agree next check-in time and fallback method</label>
+  <label class="mesh-check"><input type="checkbox" data-procedure="5"> Record any failed contact attempt and time</label>
+  <div class="mesh-actions"><button class="action-button" id="reset-procedure" type="button">RESET CHECKLIST</button></div>
+ </section>
+</div>
+
+<div class="mesh-grid">
+ <section class="mesh-panel">
+  <h2>05 // MESSAGE TEMPLATES</h2>
+  <p class="mesh-muted">Copy-ready text only. These are not connected to a radio and will not transmit.</p>
+  <div class="mesh-actions"><button class="action-button" data-copy="CHECK-IN: [CALLSIGN] at [LOCATION]. Status [OK / ISSUE]. Next check-in [TIME].">COPY ROUTINE CHECK-IN</button><button class="action-button" data-copy="URGENT: [CALLSIGN] at [LOCATION]. Nature of issue: [DETAIL]. Assistance required: [DETAIL]. Time observed: [TIME].">COPY URGENT MESSAGE</button><button class="action-button" data-copy="COMMS CHECK: [CALLSIGN] testing from [LOCATION] at [TIME]. Please acknowledge.">COPY COMMS TEST</button></div>
+  <div id="copy-feedback" class="mesh-muted" role="status" aria-live="polite" style="margin-top:8px"></div>
+ </section>
+ <section class="mesh-panel">
+  <h2>06 // INTEGRATION ROADMAP</h2>
+  <ol class="mesh-protocol">
+   <li><strong class="mesh-green">NOW:</strong> local field log, operator procedures, deployment profile and external references.</li>
+   <li><strong class="mesh-amber">WHEN M9 ARRIVES:</strong> verify firmware, BLE discovery and official companion-app behaviour.</li>
+   <li><strong class="mesh-amber">AFTER DEVICE TEST:</strong> implement read-only device identity, contacts, messages and supported telemetry.</li>
+   <li><strong class="mesh-amber">THEN:</strong> connect selected field reports to DoomWatch incidents and map layers with clear provenance.</li>
+  </ol>
+  <p class="mesh-muted">BLE access from a browser depends on Android browser support, secure-context permissions and the radio firmware. We will test the actual device before promising direct browser control.</p>
+ </section>
+</div>
+
+<section class="mesh-panel" style="margin-top:12px">
+ <h2>07 // LOCAL FIELD LOG</h2>
+ <div id="field-log" class="mesh-log"><div class="mesh-empty">No local entries saved.</div></div>
+</section>
+</main>
+<footer>DOOMWATCH // OPERATION CONTAINMENT // MESHCORE FIELD COMMS</footer>
+<script>
+(()=>{"use strict";
+const KEY="doomwatch-meshcore-v1";
+const $=id=>document.getElementById(id);
+let state={version:1,observations:[],procedure:{}};
+function read(){try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(v&&v.version===1){state={...state,...v};if(!Array.isArray(state.observations))state.observations=[];}}catch(e){}}
+function write(){try{localStorage.setItem(KEY,JSON.stringify(state));return true;}catch(e){return false;}}
+function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function render(){
+ $("node-count").textContent="0";
+ $("observation-count").textContent=String(state.observations.length);
+ $("last-entry").textContent=state.observations.length?new Date(state.observations[0].time).toLocaleString():"NONE";
+ $("field-log").innerHTML=state.observations.length?state.observations.map((o,i)=>'<article class="mesh-log-item"><strong>'+esc(o.type)+' // '+esc(o.location||"LOCATION NOT RECORDED")+'</strong><p>'+esc(o.fact)+'</p>'+(o.assessment?'<p><span class="mesh-amber">ASSESSMENT:</span> '+esc(o.assessment)+'</p>':"")+'<small>'+esc(new Date(o.time).toLocaleString())+'</small> <button type="button" class="action-button" data-delete="'+i+'">DELETE</button></article>').join(""):'<div class="mesh-empty">No local entries saved.</div>';
+ document.querySelectorAll("[data-procedure]").forEach(x=>x.checked=!!state.procedure[x.dataset.procedure]);
+}
+$("save-observation").addEventListener("click",()=>{
+ const fact=$("obs-fact").value.trim();if(!fact){$("save-feedback").textContent="Add the observed facts before saving.";return;}
+ state.observations.unshift({type:$("obs-type").value,location:$("obs-location").value.trim(),fact,assessment:$("obs-assessment").value.trim(),time:new Date().toISOString()});
+ if(!write()){$("save-feedback").textContent="Browser storage unavailable. Export or check browser permissions.";return;}
+ $("obs-location").value="";$("obs-fact").value="";$("obs-assessment").value="";
+ $("save-feedback").textContent="FIELD ENTRY SAVED LOCALLY.";render();
+});
+$("field-log").addEventListener("click",e=>{const b=e.target.closest("[data-delete]");if(!b)return;state.observations.splice(Number(b.dataset.delete),1);write();render();});
+document.querySelectorAll("[data-procedure]").forEach(x=>x.addEventListener("change",()=>{state.procedure[x.dataset.procedure]=x.checked;write();}));
+$("reset-procedure").addEventListener("click",()=>{state.procedure={};write();render();});
+$("export-log").addEventListener("click",()=>{
+ const blob=new Blob([JSON.stringify({application:"DoomWatch MeshCore Field Log",exportedAt:new Date().toISOString(),...state},null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="doomwatch-meshcore-field-log.json";a.click();URL.revokeObjectURL(url);
+ $("save-feedback").textContent="LOCAL LOG EXPORT REQUESTED.";
+});
+document.querySelectorAll("[data-copy]").forEach(b=>b.addEventListener("click",async()=>{
+ const value=b.dataset.copy;
+ try{await navigator.clipboard.writeText(value);$("copy-feedback").textContent="TEMPLATE COPIED.";}
+ catch(e){$("copy-feedback").textContent=value;}
+}));
+read();render();
+})();
+</script>
+<script src="./doomwatch-ui.js"></script>
+<script src="./doomwatch-watch.js"></script>
+</body>
+</html>
