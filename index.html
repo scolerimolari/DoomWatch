@@ -341,6 +341,18 @@ footer {
 
   <input id="search" type="search" placeholder="Search intelligence records...">
   <div class="panel muted" id="intel-region-summary" aria-live="polite">REGIONAL COVERAGE // AWAITING DATA</div>
+  <section class="panel" id="incident-correlation-panel" style="margin:12px 0;border-color:var(--yellow)">
+    <div class="panel-title">INCIDENT CORRELATION // CROSS-SOURCE SIGNAL DETECTION</div>
+    <p class="muted">Potentially related reports are grouped by shared subject terms, geography and publication time. This is an investigative lead, not proof of a single incident or causal connection.</p>
+    <div class="grid" style="margin:10px 0">
+      <div class="section-card"><div class="meta">POTENTIAL CLUSTERS</div><div class="big-status" id="dw-correlation-count">—</div></div>
+      <div class="section-card"><div class="meta">RECORDS REVIEWED</div><div class="big-status" id="dw-correlation-reviewed">—</div></div>
+      <div class="section-card"><div class="meta">TIME WINDOW</div><div class="big-status">48 HOURS</div></div>
+    </div>
+    <div class="controls"><button type="button" class="action-button" id="dw-correlation-refresh">RE-RUN CORRELATION</button><span class="meta" id="dw-correlation-updated">AWAITING INTELLIGENCE DATA</span></div>
+    <div id="dw-correlation-results" aria-live="polite"><p class="muted">Waiting for the intelligence collector.</p></div>
+    <div class="meta">METHOD: at least two distinct publisher domains, a shared NI/UK geography, close publication times and overlapping subject terms. Social/unverified records cannot corroborate a cluster on their own. Syndicated or republished items are excluded from the independent-source count. Results depend on the current collector snapshot and its metadata.</div>
+  </section>
 
   <div class="panel">
     <div class="panel-title">LIVE INTELLIGENCE STREAM // SCROLL INDEPENDENTLY</div>
@@ -1143,6 +1155,7 @@ async function runSystemDiagnostics(){
  button.disabled=false;button.textContent="RUN SYSTEM CHECKS";
 }
 $("dw-run-diagnostics")?.addEventListener("click",runSystemDiagnostics);
+$("dw-correlation-refresh")?.addEventListener("click",renderIncidentCorrelations);
 
 function renderDailyBrief() {
   const brief = intelligence.dailyBrief;
@@ -1248,6 +1261,29 @@ function operationalImplication(theme){
  };
  return map[theme]||["Potential operational relevance","Check the original source for confirmed local details."];
 }
+function renderIncidentCorrelations(){
+ const target=$("dw-correlation-results");if(!target)return;
+ const reviewed=articles.filter(a=>{const t=new Date(a.date||0).getTime();return ["NI","UK"].includes(a.area)&&Number.isFinite(t)&&t>0&&t<=Date.now()+6*3600000&&Date.now()-t<=48*3600000;}).slice(0,500);
+ $("dw-correlation-reviewed").textContent=String(reviewed.length);
+ const eligible=reviewed.filter(a=>!["SOCIAL / UNVERIFIED","AGGREGATED / SYNDICATED"].includes(evidenceClass(a)));
+ const groups=[];
+ eligible.forEach(item=>{
+  const tokens=evidenceTokens(item);if(tokens.size<2)return;
+  const time=new Date(item.date).getTime();let match=null;
+  for(const group of groups){if(group.area!==item.area||Math.abs(time-group.anchorTime)>48*3600000)continue;const overlap=[...tokens].filter(token=>group.tokens.has(token)).length,den=Math.max(1,Math.min(tokens.size,group.tokens.size));if(overlap>=2&&overlap/den>=0.45){match=group;break;}}
+  if(match){match.items.push(item);tokens.forEach(token=>match.tokens.add(token));}else groups.push({area:item.area,anchorTime:time,items:[item],tokens});
+ });
+ const candidates=groups.map(group=>({...group,domains:new Set(group.items.map(evidenceDomain))})).filter(g=>g.domains.size>=2&&g.items.length>=2).sort((a,b)=>b.domains.size-a.domains.size||b.items.length-a.items.length).slice(0,8);
+ $("dw-correlation-count").textContent=String(candidates.length);
+ $("dw-correlation-updated").textContent="ASSESSED "+new Date().toLocaleTimeString()+" // CURRENT SNAPSHOT ONLY";
+ target.innerHTML=candidates.length?candidates.map((g,i)=>{
+  const sorted=g.items.slice().sort((a,b)=>new Date(b.date)-new Date(a.date)),lead=sorted[0],theme=operationalTheme(lead)||"CROSS-SECTOR";
+  const sources=sorted.map(a=>'<div class="meta">'+escapeHTML(a.source||"Unknown publisher")+' · '+escapeHTML(evidenceClass(a))+' · '+escapeHTML(dateText(a.date))+'</div>').join("");
+  const links=sorted.map(a=>a.url?'<a href="'+escapeHTML(a.url)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"").filter(Boolean).join(" · ");
+  return '<article class="section-card" style="margin:8px 0"><strong class="yellow">POTENTIAL SIGNAL '+(i+1)+' // '+escapeHTML(g.area)+' · '+escapeHTML(theme)+'</strong><h3>'+escapeHTML(lead.title||"Related reports")+'</h3><div class="meta">'+g.domains.size+' distinct publisher domains · '+g.items.length+' records</div><p>Shared terms: '+escapeHTML([...g.tokens].slice(0,12).join(", "))+'</p>'+sources+'<div class="controls">'+links+' · <a href="./map.html?search='+encodeURIComponent(lead.title||"")+'">CHECK MAP ↗</a></div><p class="meta">ASSESSMENT: possible related reporting only. Shared terms and timing do not establish a single event or causation.</p></article>';
+ }).join(""):'<div class="section-card muted">No qualifying multi-source NI/UK clusters detected in the last 48 hours. This is not evidence that no incident is occurring; coverage or metadata may be insufficient.</div>';
+}
+
 function renderOperationalFusion(){
  const filter=$("fusion-filter")?.value||"ALL";
  const matched=articles.map(item=>({item,theme:operationalTheme(item)})).filter(x=>x.theme&&["NI","UK"].includes(x.item.area));
@@ -1539,6 +1575,7 @@ async function loadIntelligence() {
     renderAlerts();
     renderInfrastructureWatch();
     renderOperationalFusion();
+    renderIncidentCorrelations();
     renderFeed();
     renderSections();
 
