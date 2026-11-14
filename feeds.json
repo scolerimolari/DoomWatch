@@ -253,6 +253,19 @@
       "tier": 1,
       "trust": "official_primary_source",
       "sourceType": "traffic_incident_feed"
+    },
+    {
+      "id": "ni-executive",
+      "name": "Northern Ireland Executive - departmental press releases",
+      "url": "https://www.northernireland.gov.uk/press-releases",
+      "domain": null,
+      "region": "Northern Ireland",
+      "priority": "high",
+      "tier": 1,
+      "trust": "official_primary_source",
+      "sourceType": "devolved_government",
+      "method": "html_listing",
+      "maxItems": 50
     }
   ]
 }
