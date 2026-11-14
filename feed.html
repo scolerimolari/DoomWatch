@@ -176,7 +176,11 @@ function render(){
    const status=socialPost?"UNVERIFIED SOCIAL POST":String(a.evidenceStatus||"UNASSESSED").replace(/_/g," ");
    const link=a.url&&/^https?:\/\//i.test(a.url)?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT / POST ↗</a>':'<span class="muted">No valid source link</span>';
    const place=String(a.locality?.name||a.area||a.location||"").trim();
-   const mapLink=place?'<a class="action-button" href="./map.html?search='+encodeURIComponent(place)+'">VIEW LOCATION ON MAP ↗</a>':"";
+   const mapSearch=place||String(a.title||"").trim();
+   const mapParams=new URLSearchParams();
+   if(mapSearch)mapParams.set("search",mapSearch);
+   if(a.url&&/^https?:\/\//i.test(a.url))mapParams.set("record",a.url);
+   const mapLink=mapSearch?'<a class="action-button" href="./map.html?'+mapParams.toString()+'">FIND ON MAP ↗</a>':"";
    const caseLink='<a class="action-button" href="./incident.html?'+(a.url?'url='+encodeURIComponent(a.url):'title='+encodeURIComponent(a.title||""))+'">OPEN INCIDENT CASE FILE ↗</a>';
    const globalIndex=list.indexOf(a);
    return '<div class="cluster-source"><strong>'+esc(a.source||"Source not supplied")+'</strong> · '+esc(date(a.publishedAt||a.collectedAt))+'<p>'+esc(a.title||"Untitled report")+'</p><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+' '+mapLink+' '+caseLink+'<div style="margin-top:8px"><button type="button" class="action-button" data-flag="'+globalIndex+'">SAVE TO RUMOUR MONITOR</button></div></div>';
