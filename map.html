@@ -60,17 +60,19 @@
  <div class="map-kpi"><strong id="kpi-sources">—</strong><span>UNIQUE SOURCES</span></div>
  <div class="map-kpi"><strong id="kpi-traffic">—</strong><span>TRAFFIC UPDATES</span></div>
  <div class="map-kpi"><strong id="kpi-power">—</strong><span>POWER FAULTS</span></div>
+  <div class="map-kpi"><strong id="kpi-flood">—</strong><span>RIVER GAUGES</span></div>
 </div>
 <div class="map-workspace">
  <div class="panel" style="padding:8px">
   <div id="event-map" role="application" aria-label="Interactive map of Northern Ireland report locations"></div>
-  <div class="map-key"><span>● Emergency / safety</span><span>● Transport / infrastructure</span><span>● Weather / environment</span><span>● Other reports</span></div>
-  <div class="map-note">Map pins indicate approximate town-centre matches, not exact incident coordinates. NIE power faults are grouped using outward postcode district only; the marker is not the fault location.</div>
+  <div class="map-key"><span>● Emergency / safety</span><span>● Transport / infrastructure</span><span>● Weather / environment</span><span>● River gauges</span><span>● Other reports</span></div>
+  <div class="map-note">Map pins indicate approximate town-centre matches, not exact incident or gauge coordinates. NIE power faults are grouped by outward postcode district. River gauge pins are approximate town-centre plots, not the physical station locations.</div>
  </div>
  <aside class="map-side">
   <section class="map-box">
    <h3>MAP LAYERS // TOGGLE</h3>
    <label class="layer-row"><input type="checkbox" data-layer="POWER" checked><i class="layer-dot" style="background:#f05a50"></i> NIE Networks power faults</label>
+    <label class="layer-row"><input type="checkbox" data-layer="FLOOD" checked><i class="layer-dot" style="background:#49c6c2"></i> DfI river gauge readings</label>
    <label class="layer-row"><input type="checkbox" data-layer="EMERGENCY" checked><i class="layer-dot" style="background:#ed5146"></i> Emergency / public safety</label>
    <label class="layer-row"><input type="checkbox" data-layer="TRAFFIC" checked><i class="layer-dot" style="background:#f29b38"></i> TrafficWatchNI incidents & roadworks</label>
    <label class="layer-row"><input type="checkbox" data-layer="TRANSPORT" checked><i class="layer-dot" style="background:#d6b574"></i> Other transport / infrastructure</label>
@@ -78,6 +80,14 @@
    <label class="layer-row"><input type="checkbox" data-layer="OTHER" checked><i class="layer-dot" style="background:#a8d58b"></i> Other local reports</label>
    <label class="layer-row"><input type="checkbox" id="density-toggle"><i class="layer-dot" style="background:#e6d08a;opacity:.5"></i> Activity density overlay</label>
    <label class="layer-row"><input type="checkbox" id="labels-toggle" checked> Show town labels</label>
+  </section>
+  <section class="map-box">
+   <h3>FLOOD & WATER // LIVE SOURCES</h3>
+   <p class="map-note">DfI monitors around 130 NI stations. The readings shown in the archive are relayed by an independent aggregator and remain provisional. Gauge levels are not warnings.</p>
+   <div class="map-actions"><a class="action-button" href="https://www.hydrometcloud.de/Rivers_Agency/index.jsp?menu=index" target="_blank" rel="noopener noreferrer">OFFICIAL DFI GAUGE VIEWER ↗</a></div>
+   <div class="map-actions"><a class="action-button" href="https://dfi-ni.maps.arcgis.com/apps/webappviewer/index.html?id=fd6c0a01b07840269a50a2f596b3daf6" target="_blank" rel="noopener noreferrer">FLOOD MAPS NI ↗</a></div>
+   <div class="map-actions"><a class="action-button" href="https://environment.data.gov.uk/flood-monitoring/tidegauge/index.html" target="_blank" rel="noopener noreferrer">UK TIDE GAUGES ↗</a></div>
+   <div class="map-actions"><a class="action-button" href="https://conditionsview.com/en/water/country/gb-nir" target="_blank" rel="noopener noreferrer">CONSOLIDATED NI RIVER READINGS ↗</a></div>
   </section>
   <section class="map-box">
    <h3>TIME WINDOW</h3>
@@ -133,7 +143,7 @@ const TOWNS=[
 {name:"Derry/Londonderry",lat:54.9970,lon:-7.3090,terms:["derry","londonderry","waterside"]},
 {name:"Ballycastle",lat:55.2044,lon:-6.2540,terms:["ballycastle","bushmills","cushendall","causeway coast"]}
 ];
-const COLORS={POWER:"#f05a50",EMERGENCY:"#ed5146",TRANSPORT:"#d6b574",WEATHER:"#79bde0",OTHER:"#a8d58b"};
+const COLORS={POWER:"#f05a50",FLOOD:"#49c6c2",EMERGENCY:"#ed5146",TRANSPORT:"#d6b574",WEATHER:"#79bde0",OTHER:"#a8d58b"};
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const safeUrl=v=>/^https?:\/\//i.test(String(v||""))?String(v):"";
@@ -150,10 +160,12 @@ function locate(a){
 }
 function isTraffic(a){const id=String(a.sourceId||"").toLowerCase(),type=String(a.sourceType||"").toLowerCase();return id.startsWith("trafficwatch-")||type.startsWith("transport_")||type.startsWith("traffic_");}
 function isPower(a){return String(a.sourceId||"").toLowerCase()==="nie-network-outages"||String(a.sourceType||"").toLowerCase()==="electricity_network_outage";}
+function isFlood(a){return String(a.sourceId||"").toLowerCase()==="dfi-river-levels"||String(a.sourceType||"").toLowerCase()==="river_level_observation";}
 const POWER_POSTCODE_TOWNS={1:"Belfast",2:"Belfast",3:"Belfast",4:"Belfast",5:"Belfast",6:"Belfast",7:"Belfast",8:"Belfast",9:"Belfast",10:"Belfast",11:"Belfast",12:"Belfast",13:"Belfast",14:"Belfast",15:"Belfast",16:"Belfast",17:"Belfast",18:"Bangor",19:"Bangor",20:"Bangor",21:"Newtownards",22:"Newtownards",23:"Newtownards",24:"Downpatrick",25:"Lisburn",26:"Lisburn",27:"Lisburn",28:"Lisburn",29:"Antrim",30:"Downpatrick",31:"Downpatrick",32:"Newry",33:"Downpatrick",34:"Newry",35:"Newry",36:"Newtownabbey",37:"Newtownabbey",38:"Carrickfergus",39:"Ballyclare",40:"Larne",41:"Antrim",42:"Ballymena",43:"Ballymena",44:"Ballymena",45:"Cookstown",46:"Cookstown",47:"Derry/Londonderry",48:"Derry/Londonderry",49:"Limavady",51:"Coleraine",52:"Coleraine",53:"Coleraine",54:"Ballycastle",55:"Coleraine",56:"Coleraine",57:"Ballycastle",60:"Armagh",61:"Armagh",62:"Portadown",63:"Portadown",64:"Portadown",65:"Portadown",66:"Portadown",67:"Portadown",68:"Dungannon",69:"Dungannon",70:"Dungannon",71:"Dungannon",74:"Enniskillen",75:"Dungannon",76:"Dungannon",77:"Dungannon",78:"Omagh",79:"Omagh",80:"Cookstown",81:"Omagh",82:"Omagh",92:"Enniskillen",93:"Enniskillen",94:"Enniskillen"};
 function category(a){
  const t=allText(a),s=String(a.sourceType||"").toLowerCase(),v=t+" "+s;
  if(isPower(a))return "POWER";
+ if(isFlood(a))return "FLOOD";
  if(/traffic|roadwork|transport|rail|airport|port|ferry|bridge|closure|freight|logistics/.test(v))return "TRANSPORT";
  if(/police|fire|emergency|incident|crash|collision|evacuat|rescue|ambulance|explosion|outage|crime|missing person/.test(v))return "EMERGENCY";
  if(/weather|flood|storm|wind|snow|ice|environment|rainfall|met office|coastal erosion/.test(v))return "WEATHER";
@@ -249,13 +261,14 @@ function render(){
  $("kpi-sources").textContent=uniqueSources(records).toLocaleString("en-GB");
  $("kpi-traffic").textContent=records.filter(isTraffic).length.toLocaleString("en-GB");
  $("kpi-power").textContent=records.filter(isPower).length.toLocaleString("en-GB");
+ $("kpi-flood").textContent=records.filter(isFlood).length.toLocaleString("en-GB");
  $("town-select").innerHTML='<option value="">ALL LOCATIONS</option>'+TOWNS.filter(t=>townGroups.some(g=>g.town.name===t.name)).map(t=>'<option value="'+esc(t.name)+'">'+esc(t.name)+'</option>').join("");
  $("town-select").value=activeTown;
  if(map)renderMarkers();else renderFallback(townGroups);
  const list=records.slice(0,100);
- $("map-articles").innerHTML=list.map((a,i)=>{const town=locate(a),c=category(a),traffic=isTraffic(a),url=safeUrl(a.url),d=validDate(a);return '<details class="map-item '+c.toLowerCase()+(traffic?' traffic':'')+'"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED")+' · '+(isPower(a)?'<strong>POWER</strong> · ':traffic?'<strong>TRAFFIC</strong> · ':'')+esc(c)+' · '+esc(d?dateText(d):"DATE NOT SUPPLIED")+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':"<span class='muted'>No valid article URL supplied</span>")+(town?'<button type="button" data-focus-town="'+esc(town.name)+'">SHOW ON MAP</button>':"")+'</div></details>';}).join("")||'<div class="panel muted">No reports match the current filters. Try a longer time window or clear the search.</div>';
+ $("map-articles").innerHTML=list.map((a,i)=>{const town=locate(a),c=category(a),traffic=isTraffic(a),url=safeUrl(a.url),d=validDate(a);return '<details class="map-item '+c.toLowerCase()+(traffic?' traffic':'')+'"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED")+' · '+(isPower(a)?'<strong>POWER</strong> · ':isFlood(a)?'<strong>RIVER GAUGE</strong> · ':traffic?'<strong>TRAFFIC</strong> · ':'')+esc(c)+' · '+esc(d?dateText(d):"DATE NOT SUPPLIED")+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':"<span class='muted'>No valid article URL supplied</span>")+(town?'<button type="button" data-focus-town="'+esc(town.name)+'">SHOW ON MAP</button>':"")+'</div></details>';}).join("")||'<div class="panel muted">No reports match the current filters. Try a longer time window or clear the search.</div>';
  $("map-articles").querySelectorAll("[data-focus-town]").forEach(btn=>btn.addEventListener("click",()=>{selectTown(btn.dataset.focusTown);$("map-town-details").scrollIntoView({behavior:"smooth",block:"nearest"});}));
- $("map-list-status").textContent=records.length+" matching archive records · "+records.filter(locate).length+" with approximate town matches · "+records.filter(isTraffic).length+" traffic updates · "+records.filter(isPower).length+" NIE power faults · showing up to 100 source-linked reports. Power records show affected postcodes; markers are not exact outage coordinates.";
+ $("map-list-status").textContent=records.length+" matching archive records · "+records.filter(locate).length+" with approximate town matches · "+records.filter(isTraffic).length+" traffic updates · "+records.filter(isPower).length+" NIE power faults · "+records.filter(isFlood).length+" river gauge readings · showing up to 100 source-linked reports. Power markers are approximate postcode matches; river gauge markers are approximate town plots, not station coordinates.";
  if(activeTown){const g=townGroups.find(x=>x.town.name===activeTown);renderDetail(g);}else renderDetail(null);
  $("map-status").textContent=(map?"OPENSTREETMAP":"OFFLINE SCHEMATIC")+" // "+records.length+" FILTERED REPORTS // "+townGroups.length+" TOWN LOCATIONS // "+(records.length-records.filter(locate).length)+" WITHOUT TOWN MATCH";
 }
