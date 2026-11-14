@@ -406,77 +406,91 @@ footer {
 </section>
 
 <section class="page" id="meshcore">
-  <h2>08 // MESHCORE FIELD COMMUNICATIONS</h2>
-  <div class="warning"><strong>PRE-DEPLOYMENT MODE</strong><br>MeshCore M9 has not yet arrived. This page is an offline-ready planning and field-log workspace. It does not display live nodes, messages, coverage, GPS positions or radio telemetry.</div>
+  <h2>08 // MESH INTELLIGENCE FEED</h2>
+  <div class="warning"><strong>RADIO ACCESS: NOT CONNECTED</strong><br>DoomWatch cannot independently receive MeshCore radio traffic from this browser. Public channels are not a central internet chat service; private channels and direct messages are encrypted. This page combines a verified public community directory with a local archive for messages you deliberately copy in from public rooms. Nothing here is represented as live radio traffic.</div>
   <div class="grid" style="margin-top:12px">
-    <div class="panel"><div class="panel-title">RADIO STATUS</div><div class="big-status yellow">AWAITING DEPLOYMENT</div><div class="muted">M9 hardware not yet connected</div></div>
-    <div class="panel"><div class="panel-title">NETWORK STATUS</div><div class="big-status yellow">NOT CONNECTED</div><div class="muted">No live mesh data available</div></div>
-    <div class="panel"><div class="panel-title">NODE REGISTER</div><div class="big-status" id="mesh-node-count">0</div><div class="muted">Manually recorded nodes</div></div>
-    <div class="panel"><div class="panel-title">FIELD LOG</div><div class="big-status" id="mesh-log-count">0</div><div class="muted">Locally saved observations</div></div>
+    <div class="panel"><div class="panel-title">FEED CONNECTION</div><div class="big-status yellow">DIRECT RADIO: OFFLINE</div><div class="muted">No M9 / companion connection</div></div>
+    <div class="panel"><div class="panel-title">PUBLIC REGIONS</div><div class="big-status" id="mesh-region-count">8</div><div class="muted">Known region scopes / channels</div></div>
+    <div class="panel"><div class="panel-title">LOCAL FEED ARCHIVE</div><div class="big-status" id="mesh-feed-count">0</div><div class="muted">Messages manually imported</div></div>
+    <div class="panel"><div class="panel-title">MAPPED NODES</div><div class="big-status" id="mesh-node-count">0</div><div class="muted">Manually recorded node locations</div></div>
   </div>
-  <h3>01 // DEPLOYMENT PROFILE</h3>
+
+  <h3>01 // REGIONAL PUBLIC MESH DIRECTORY</h3>
+  <div class="panel">
+    <div class="controls" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button type="button" class="action-button mesh-region-filter" data-region="all">ALL REGIONS</button>
+      <button type="button" class="action-button mesh-region-filter" data-region="ioi">ISLAND OF IRELAND</button>
+      <button type="button" class="action-button mesh-region-filter" data-region="uk">UK WIDE</button>
+      <button type="button" class="action-button mesh-region-filter" data-region="sco">SCOTLAND</button>
+      <button type="button" class="action-button mesh-region-filter" data-region="iom">ISLE OF MAN</button>
+    </div>
+    <div id="mesh-region-directory" class="grid" style="margin-top:10px"></div>
+    <div class="meta">Region scopes are routing boundaries, not guarantees that every node can reach every other node. Island of Ireland uses ioi, with bhd / dub / noc / snn sub-regions. Cross-region delivery depends on repeater configuration and radio paths.</div>
+  </div>
+
+  <h3>02 // PUBLIC ROOM & AUTOMATED SIGNALS</h3>
+  <div class="grid">
+    <div class="panel">
+      <div class="panel-title">BELFAST PUBLIC ROOM</div>
+      <div class="big-status green">PUBLIC ROOM LISTED</div>
+      <p class="muted">Belfast city centre room server. Accepts bhd, ioi, sco, iom and * scopes. Public room access is through a MeshCore client; this website cannot read its message queue.</p>
+      <a class="action-button" href="meshcore://contact/add?name=Belfast&public_key=b1fa57b4598dc4591e677c2cd54a6bb8e8e76e4b48405fa797d68a3209121051&type=3">ADD BELFAST ROOM IN MESHCORE ↗</a>
+      <p><a href="https://belfast.chat/" target="_blank" rel="noopener noreferrer">Room details and coverage ↗</a></p>
+    </div>
+    <div class="panel">
+      <div class="panel-title">BELFAST PUBLIC BOT CONTACTS</div>
+      <p class="muted">Optional contacts advertised by the Belfast room operator. They post occasional local alerts; add them in the MeshCore app to receive them over the mesh.</p>
+      <p><a href="meshcore://contact/add?name=Traffic%20%7C%20TrafficWatchNI&public_key=67e47c94d956d378076ff1f5f1beb591303d33e02d15b5a7a4fa610e9f14f4c5&type=1">ADD TRAFFICWATCHNI BOT ↗</a></p>
+      <p><a href="meshcore://contact/add?name=Weather%20%7C%20MetOffice&public_key=b6e6a5f5a414a95854a4eb074a62119d082c32032d3ddf0430ca6454e0ee7008&type=1">ADD MET OFFICE BOT ↗</a></p>
+      <p><a href="meshcore://contact/add?name=Parades%20%7C%20OpenDataNI&public_key=42124e8dd6613d1995f95e4afbbb5d4c3ae4ac75ddefb45154d74d0744c76cdb&type=1">ADD OPENDATANI PARADES BOT ↗</a></p>
+    </div>
+  </div>
+
+  <h3>03 // MESH MESSAGE FEED</h3>
   <div class="panel">
     <div class="grid">
-      <div><label for="mesh-device">DEVICE</label><input id="mesh-device" value="MeshCore M9" readonly></div>
-      <div><label for="mesh-device-status">DEPLOYMENT STATE</label><select id="mesh-device-status"><option>AWAITING ARRIVAL</option><option>RECEIVED — NOT CONFIGURED</option><option>CONFIGURED — NOT FIELD TESTED</option><option>FIELD TESTED</option></select></div>
-      <div><label for="mesh-node-name">PLANNED NODE NAME</label><input id="mesh-node-name" placeholder="e.g. DW-BASE"></div>
-      <div><label for="mesh-location">PLANNED OPERATING AREA</label><input id="mesh-location" placeholder="e.g. Ballyclare area"></div>
+      <div><label for="mesh-feed-region">REGION</label><select id="mesh-feed-region"><option value="ioi">Island of Ireland (ioi)</option><option value="bhd">Ulster / Northern Ireland (bhd)</option><option value="dub">Leinster (dub)</option><option value="noc">Connacht (noc)</option><option value="snn">Munster (snn)</option><option value="sco">Scotland (sco)</option><option value="iom">Isle of Man (iom)</option><option value="uk">UK-wide / cross-region</option></select></div>
+      <div><label for="mesh-feed-channel">CHANNEL / ROOM</label><input id="mesh-feed-channel" placeholder="e.g. #ireland, Belfast room"></div>
+      <div><label for="mesh-feed-author">CALLSIGN / SOURCE</label><input id="mesh-feed-author" placeholder="Optional sender or bot name"></div>
     </div>
-    <label for="mesh-deployment-notes">DEPLOYMENT / CONFIGURATION NOTES</label><textarea id="mesh-deployment-notes" placeholder="Record intended setup, antenna, power and configuration details."></textarea>
-    <button class="action-button" id="mesh-save-profile">SAVE DEVICE PROFILE</button>
-    <span class="meta" id="mesh-profile-status" aria-live="polite">Profile stored on this device only.</span>
+    <label for="mesh-feed-message">PUBLIC MESSAGE TEXT</label>
+    <textarea id="mesh-feed-message" placeholder="Paste a message you have received from a public MeshCore channel or room. Do not paste private DMs or personal information."></textarea>
+    <div class="controls"><button type="button" class="action-button" id="mesh-feed-add">IMPORT TO LOCAL FEED</button></div>
+    <div class="meta">Imported entries are marked as manually captured. They are stored only in this browser and are not independently verified by DoomWatch.</div>
   </div>
-  <h3>02 // NODE REGISTER</h3>
+  <div class="grid" style="margin-top:10px">
+    <div class="panel">
+      <div class="panel-title">FEED FILTER</div>
+      <label for="mesh-feed-filter">SHOW REGION</label>
+      <select id="mesh-feed-filter"><option value="all">ALL REGIONS</option><option value="ioi">Island of Ireland</option><option value="bhd">Ulster / Northern Ireland</option><option value="dub">Leinster</option><option value="noc">Connacht</option><option value="snn">Munster</option><option value="sco">Scotland</option><option value="iom">Isle of Man</option><option value="uk">UK-wide</option></select>
+      <div id="mesh-feed-list" style="margin-top:10px"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">NETWORK / MAP NODE REGISTER</div>
+      <div class="muted">Optional manually recorded public nodes. Exact recognised town names can be shown as approximate markers on the existing GEOINT map. No inferred positions or coverage.</div>
+      <div class="grid">
+        <div><label for="mesh-node-id">NODE NAME / ID</label><input id="mesh-node-id" placeholder="Node identifier"></div>
+        <div><label for="mesh-node-area">TOWN / AREA</label><input id="mesh-node-area" placeholder="e.g. Ballyclare"></div>
+      </div>
+      <div class="grid">
+        <div><label for="mesh-node-type">TYPE</label><select id="mesh-node-type"><option>Repeater</option><option>Room server</option><option>Companion</option><option>Unknown</option></select></div>
+        <div><label for="mesh-node-evidence">EVIDENCE</label><select id="mesh-node-evidence"><option>Owner confirmed</option><option>Personally observed</option><option>Publicly listed</option><option>Unverified report</option></select></div>
+      </div>
+      <button type="button" class="action-button" id="mesh-add-node">ADD NODE</button>
+      <div id="mesh-node-list" style="margin-top:9px"></div>
+      <p><a href="./map.html">OPEN NORMAL GEOINT MAP ↗</a></p>
+    </div>
+  </div>
+
+  <h3>04 // REGIONAL NETWORK REFERENCES</h3>
   <div class="panel">
-    <div class="muted">Record nodes only when personally observed or supported by a reliable source. Unknown positions and links remain unknown.</div>
-    <div class="grid">
-      <div><label for="mesh-node-id">NODE ID / NAME</label><input id="mesh-node-id" placeholder="Node identifier"></div>
-      <div><label for="mesh-node-type">NODE TYPE</label><select id="mesh-node-type"><option>Companion</option><option>Repeater</option><option>Room server / gateway</option><option>Unknown</option></select></div>
-      <div><label for="mesh-node-area">LOCATION / AREA</label><input id="mesh-node-area" placeholder="Exact town name for map plotting, e.g. Ballyclare"></div>
-      <div><label for="mesh-node-evidence">BASIS</label><select id="mesh-node-evidence"><option>Personally observed</option><option>Owner confirmed</option><option>Publicly listed</option><option>Unverified report</option></select></div>
-    </div>
-    <div class="meta">MAP LINK: enter an exact recognised town name (for example Ballyclare, Antrim or Belfast) to plot an approximate town-centre marker. Other area descriptions remain in your register but are not guessed onto the map.</div>
-    <button class="action-button" id="mesh-add-node">ADD NODE RECORD</button>
-    <div id="mesh-node-list" style="margin-top:12px"></div>
-  </div>
-  <h3>03 // FIELD OBSERVATIONS & COMMS LOG</h3>
-  <div class="panel">
-    <div class="grid">
-      <div><label for="mesh-log-kind">ENTRY TYPE</label><select id="mesh-log-kind"><option>Comms check</option><option>Field observation</option><option>Infrastructure issue</option><option>Coverage test</option><option>Equipment / maintenance</option><option>Emergency exercise</option></select></div>
-      <div><label for="mesh-log-area">AREA</label><input id="mesh-log-area" placeholder="Location / area"></div>
-    </div>
-    <label for="mesh-log-text">DETAILS</label><textarea id="mesh-log-text" placeholder="What was observed? Include time, source and confidence where relevant."></textarea>
-    <button class="action-button" id="mesh-add-log">SAVE FIELD ENTRY</button>
-    <div id="mesh-log-list" style="margin-top:12px"></div>
-  </div>
-  <h3>04 // COMMS CHECK-IN CARD</h3>
-  <div class="terminal" id="mesh-checkin-template">DOOMWATCH // MESHCORE CHECK-IN
-CALLSIGN: [YOUR NODE]
-TIME: [LOCAL TIME]
-LOCATION: [AREA — APPROXIMATE]
-STATUS: [OK / NEED ASSISTANCE]
-MESSAGE: [BRIEF UPDATE]
-NEXT CHECK-IN: [TIME]
-NOTE: This is a manual message template, not a connected radio console.</div>
-  <div class="controls"><button id="mesh-copy-checkin" type="button">COPY CHECK-IN TEMPLATE</button></div>
-  <h3>05 // DEPLOYMENT CHECKLIST</h3>
-  <div class="panel" id="mesh-checklist">
-    <label class="checkline"><input type="checkbox" data-mesh-check="0"> Confirm device and antenna supplied</label>
-    <label class="checkline"><input type="checkbox" data-mesh-check="1"> Read current MeshCore setup documentation</label>
-    <label class="checkline"><input type="checkbox" data-mesh-check="2"> Configure node identity and region settings</label>
-    <label class="checkline"><input type="checkbox" data-mesh-check="3"> Test local messaging with a known node</label>
-    <label class="checkline"><input type="checkbox" data-mesh-check="4"> Record range tests with time and conditions</label>
-    <label class="checkline"><input type="checkbox" data-mesh-check="5"> Establish check-in schedule and fallback method</label>
-    <label class="checkline"><input type="checkbox" data-mesh-check="6"> Confirm emergency use follows applicable radio rules</label>
-  </div>
-  <div class="panel" style="margin-top:12px">
-    <h3>REFERENCE LINKS</h3>
-    <p><a href="https://meshcore.io/" target="_blank" rel="noopener noreferrer">MeshCore project ↗</a></p>
-    <p><a href="https://docs.meshcore.io/" target="_blank" rel="noopener noreferrer">MeshCore documentation ↗</a></p>
-    <p><a href="https://app.meshcore.nz/" target="_blank" rel="noopener noreferrer">MeshCore companion app ↗</a></p>
-    <p><a href="https://map.meshcore.io/" target="_blank" rel="noopener noreferrer">Community mesh map ↗</a></p>
-    <p><a href="./map.html">OPEN DOOMWATCH GEOINT MAP // MESHCORE LAYER ↗</a></p>
-    <div class="meta">External maps and community listings may be incomplete or stale. Do not treat a plotted node as verified coverage or a guaranteed communications path.</div>
+    <p><a href="https://loraproject.ie/regions/" target="_blank" rel="noopener noreferrer">Island of Ireland MeshCore region scopes and routing guidance ↗</a></p>
+    <p><a href="https://ioi.meshmapper.net/" target="_blank" rel="noopener noreferrer">Island of Ireland MeshMapper ↗</a></p>
+    <p><a href="https://meshcoreeurope.org/en/community/" target="_blank" rel="noopener noreferrer">MeshCore Europe public community directory ↗</a></p>
+    <p><a href="https://meshcoreyorkshire.co.uk/" target="_blank" rel="noopener noreferrer">MeshCore Yorkshire public channel ↗</a></p>
+    <p><a href="https://discord.gg/qvhjgyjybs" target="_blank" rel="noopener noreferrer">Mesh Radio Ireland (North & South) community ↗</a></p>
+    <p><a href="https://meshcore.gg/" target="_blank" rel="noopener noreferrer">MeshCore community ↗</a></p>
+    <div class="meta">The directory is a starting point, not a complete census of UK mesh activity. A region or channel listing does not mean DoomWatch can read its traffic.</div>
   </div>
 </section>
 
@@ -1344,32 +1358,59 @@ document.addEventListener("click",event => {
   }
 });
 
-/* MESHCORE PRE-DEPLOYMENT WORKSPACE — local-only records */
+/* MESH FEED — public directory + manually imported local archive */
 const MESH_KEY="doomwatch-meshcore-v1";
-let meshSaved={profile:{},nodes:[],logs:[],checks:[]};
+const MESH_FEED_KEY="doomwatch-mesh-feed-v1";
+let meshSaved={nodes:[]},meshFeed=[],meshRegionFilter="all";
+const meshRegions=[
+ {id:"ioi",group:"ioi",name:"Island of Ireland",scope:"ioi",channel:"#ireland",detail:"Cross-island public regional scope; sub-regions include bhd, dub, noc and snn.",url:"https://loraproject.ie/regions/",state:"REGIONAL SCOPE"},
+ {id:"bhd",group:"ioi",name:"Ulster / Northern Ireland",scope:"bhd",channel:"#norniron",detail:"Ulster sub-region. Belfast public room is listed and accepts bhd / ioi.",url:"https://belfast.chat/",state:"BELFAST ROOM LISTED"},
+ {id:"dub",group:"ioi",name:"Leinster",scope:"dub",channel:"#ireland",detail:"Leinster sub-region of the Island of Ireland mesh.",url:"https://loraproject.ie/regions/",state:"REGION SCOPE"},
+ {id:"noc",group:"ioi",name:"Connacht",scope:"noc",channel:"#ireland",detail:"Connacht sub-region of the Island of Ireland mesh.",url:"https://loraproject.ie/regions/",state:"REGION SCOPE"},
+ {id:"snn",group:"ioi",name:"Munster",scope:"snn",channel:"#ireland",detail:"Munster sub-region of the Island of Ireland mesh.",url:"https://loraproject.ie/regions/",state:"REGION SCOPE"},
+ {id:"sco",group:"sco",name:"Scotland",scope:"sco",channel:"#scotland",detail:"Scotland region scope; consult the Scottish mesh community for current local channels.",url:"https://wiki.scotmesh.uk/",state:"REGION SCOPE"},
+ {id:"iom",group:"iom",name:"Isle of Man",scope:"iom",channel:"#manx",detail:"Isle of Man region scope.",url:"https://loraproject.ie/regions/",state:"REGION SCOPE"},
+ {id:"uk",group:"uk",name:"UK-wide",scope:"eu / community",channel:"#meshcore-uk",detail:"A UK-wide community channel is listed in the public MeshCore Europe directory. Cross-region radio delivery is not guaranteed.",url:"https://meshcoreeurope.org/en/community/",state:"PUBLIC LISTING"}
+];
 function meshLoad(){
- try{const raw=localStorage.getItem(MESH_KEY);if(raw){const parsed=JSON.parse(raw);if(parsed&&typeof parsed==="object")meshSaved={...meshSaved,...parsed,profile:parsed.profile||{},nodes:Array.isArray(parsed.nodes)?parsed.nodes:[],logs:Array.isArray(parsed.logs)?parsed.logs:[],checks:Array.isArray(parsed.checks)?parsed.checks:[]};}}catch(e){}
- const p=meshSaved.profile;
- $("mesh-device-status").value=p.status||"AWAITING ARRIVAL";
- $("mesh-node-name").value=p.name||"";
- $("mesh-location").value=p.location||"";
- $("mesh-deployment-notes").value=p.notes||"";
- document.querySelectorAll("[data-mesh-check]").forEach(el=>el.checked=!!meshSaved.checks[el.dataset.meshCheck]);
+ try{const raw=localStorage.getItem(MESH_KEY);if(raw){const parsed=JSON.parse(raw);if(parsed&&typeof parsed==="object")meshSaved={...meshSaved,...parsed,nodes:Array.isArray(parsed.nodes)?parsed.nodes:[]};}}catch(e){}
+ try{const raw=localStorage.getItem(MESH_FEED_KEY);if(raw){const parsed=JSON.parse(raw);if(Array.isArray(parsed))meshFeed=parsed;}}catch(e){}
  meshRender();
 }
-function meshSave(){try{localStorage.setItem(MESH_KEY,JSON.stringify(meshSaved));}catch(e){$("mesh-profile-status").textContent="Storage unavailable — export/record details separately.";}}
-function meshRender(){
- $("mesh-node-count").textContent=meshSaved.nodes.length;
- $("mesh-log-count").textContent=meshSaved.logs.length;
- $("mesh-node-list").innerHTML=meshSaved.nodes.map((n,i)=>'<div class="section-card"><strong class="yellow">'+escapeHTML(n.id)+'</strong><div class="meta">'+escapeHTML(n.type)+' · '+escapeHTML(n.area||"Location unknown")+' · '+escapeHTML(n.evidence)+'</div><button class="action-button" data-mesh-delete-node="'+i+'">DELETE</button></div>').join("")||'<p class="muted">No node records yet.</p>';
- $("mesh-log-list").innerHTML=meshSaved.logs.map((l,i)=>'<div class="section-card"><strong class="yellow">'+escapeHTML(l.kind)+'</strong><div class="meta">'+escapeHTML(l.date)+' · '+escapeHTML(l.area||"Area not recorded")+'</div><p>'+escapeHTML(l.text)+'</p><button class="action-button" data-mesh-delete-log="'+i+'">DELETE</button></div>').join("")||'<p class="muted">No field entries recorded.</p>';
+function meshEscape(value){return escapeHTML(String(value??""));}
+function meshSaveNodes(){try{localStorage.setItem(MESH_KEY,JSON.stringify(meshSaved));}catch(e){}}
+function meshSaveFeed(){try{localStorage.setItem(MESH_FEED_KEY,JSON.stringify(meshFeed));}catch(e){}}
+function meshRenderDirectory(){
+ const list=meshRegions.filter(r=>meshRegionFilter==="all"||(meshRegionFilter==="ioi"?r.group==="ioi":r.group===meshRegionFilter));
+ $("mesh-region-directory").innerHTML=list.map(r=>'<div class="section-card"><div class="panel-title">'+meshEscape(r.name)+'</div><div class="big-status yellow" style="font-size:13px">'+meshEscape(r.state)+'</div><div class="meta">SCOPE: '+meshEscape(r.scope)+' · CHANNEL: '+meshEscape(r.channel)+'</div><p>'+meshEscape(r.detail)+'</p><a href="'+meshEscape(r.url)+'" target="_blank" rel="noopener noreferrer">REGION INFORMATION ↗</a></div>').join("");
 }
-$("mesh-save-profile").addEventListener("click",()=>{meshSaved.profile={status:$("mesh-device-status").value,name:$("mesh-node-name").value.trim(),location:$("mesh-location").value.trim(),notes:$("mesh-deployment-notes").value.trim()};meshSave();$("mesh-profile-status").textContent="Profile saved locally.";});
-$("mesh-add-node").addEventListener("click",()=>{const id=$("mesh-node-id").value.trim();if(!id)return;$("mesh-node-id").value="";meshSaved.nodes.unshift({id,type:$("mesh-node-type").value,area:$("mesh-node-area").value.trim(),evidence:$("mesh-node-evidence").value});$("mesh-node-area").value="";meshSave();meshRender();});
-$("mesh-add-log").addEventListener("click",()=>{const value=$("mesh-log-text").value.trim();if(!value)return;meshSaved.logs.unshift({kind:$("mesh-log-kind").value,area:$("mesh-log-area").value.trim(),text:value,date:new Date().toLocaleString()});$("mesh-log-text").value="";meshSave();meshRender();});
-document.addEventListener("click",event=>{if(event.target.dataset.meshDeleteNode!==undefined){meshSaved.nodes.splice(Number(event.target.dataset.meshDeleteNode),1);meshSave();meshRender();}if(event.target.dataset.meshDeleteLog!==undefined){meshSaved.logs.splice(Number(event.target.dataset.meshDeleteLog),1);meshSave();meshRender();}});
-document.querySelectorAll("[data-mesh-check]").forEach(el=>el.addEventListener("change",()=>{meshSaved.checks[el.dataset.meshCheck]=el.checked;meshSave();}));
-$("mesh-copy-checkin").addEventListener("click",()=>{const text=$("mesh-checkin-template").textContent;if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(()=>{$("mesh-copy-checkin").textContent="COPIED";}).catch(()=>{$("mesh-copy-checkin").textContent="COPY NOT AVAILABLE";});else{$("mesh-copy-checkin").textContent="COPY NOT AVAILABLE";}});
+function meshRenderFeed(){
+ const filter=$("mesh-feed-filter").value;
+ const items=meshFeed.filter(x=>filter==="all"||x.region===filter);
+ $("mesh-feed-list").innerHTML=items.length?items.map((x,i)=>'<article class="section-card"><div class="meta">'+meshEscape(x.region.toUpperCase())+' · '+meshEscape(x.channel||"PUBLIC CHANNEL")+' · '+meshEscape(x.time)+'</div><strong class="yellow">'+meshEscape(x.author||"UNATTRIBUTED SOURCE")+'</strong><p style="white-space:pre-wrap">'+meshEscape(x.message)+'</p><div class="meta">MANUALLY IMPORTED · NOT LIVE-VERIFIED</div><button type="button" class="action-button" data-mesh-feed-delete="'+meshFeed.indexOf(x)+'">DELETE ENTRY</button></article>').join(""):'<p class="muted">No messages imported for this region. Connect through the MeshCore app, then copy relevant public messages into the importer above.</p>';
+ $("mesh-feed-count").textContent=meshFeed.length;
+}
+function meshRenderNodes(){
+ $("mesh-node-count").textContent=meshSaved.nodes.length;
+ $("mesh-node-list").innerHTML=meshSaved.nodes.map((n,i)=>'<div class="section-card"><strong class="yellow">'+meshEscape(n.id)+'</strong><div class="meta">'+meshEscape(n.area||"Location unknown")+' · '+meshEscape(n.type||"Unknown")+' · '+meshEscape(n.evidence||"Unspecified")+'</div><button type="button" class="action-button" data-mesh-delete-node="'+i+'">DELETE</button></div>').join("")||'<p class="muted">No nodes recorded.</p>';
+}
+function meshRender(){meshRenderDirectory();meshRenderFeed();meshRenderNodes();}
+document.querySelectorAll(".mesh-region-filter").forEach(btn=>btn.addEventListener("click",()=>{meshRegionFilter=btn.dataset.region;meshRenderDirectory();}));
+$("mesh-feed-filter").addEventListener("change",meshRenderFeed);
+$("mesh-feed-add").addEventListener("click",()=>{
+ const message=$("mesh-feed-message").value.trim();if(!message)return;
+ meshFeed.unshift({region:$("mesh-feed-region").value,channel:$("mesh-feed-channel").value.trim(),author:$("mesh-feed-author").value.trim(),message,time:new Date().toLocaleString()});
+ meshSaveFeed();$("mesh-feed-message").value="";meshRenderFeed();
+});
+$("mesh-add-node").addEventListener("click",()=>{
+ const id=$("mesh-node-id").value.trim();if(!id)return;
+ meshSaved.nodes.unshift({id,area:$("mesh-node-area").value.trim(),type:$("mesh-node-type").value,evidence:$("mesh-node-evidence").value});
+ meshSaveNodes();$("mesh-node-id").value="";$("mesh-node-area").value="";meshRenderNodes();
+});
+document.addEventListener("click",event=>{
+ if(event.target.dataset.meshFeedDelete!==undefined){meshFeed.splice(Number(event.target.dataset.meshFeedDelete),1);meshSaveFeed();meshRenderFeed();}
+ if(event.target.dataset.meshDeleteNode!==undefined){meshSaved.nodes.splice(Number(event.target.dataset.meshDeleteNode),1);meshSaveNodes();meshRenderNodes();}
+});
 meshLoad();
 
 /* CLOCK AND STARTUP */
