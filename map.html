@@ -65,7 +65,7 @@
  <div class="panel" style="padding:8px">
   <div id="event-map" role="application" aria-label="Interactive map of Northern Ireland report locations"></div>
   <div class="map-key"><span>● Emergency / safety</span><span>● Transport / infrastructure</span><span>● Weather / environment</span><span>● Other reports</span></div>
-  <div class="map-note">Map pins indicate approximate town-centre matches, not exact incident coordinates. A report mentioning a town does not establish that an incident occurred at the marker.</div>
+  <div class="map-note">Map pins indicate approximate town-centre matches, not exact incident coordinates. NIE power faults are grouped using outward postcode district only; the marker is not the fault location.</div>
  </div>
  <aside class="map-side">
   <section class="map-box">
@@ -145,10 +145,12 @@ const isNI=a=>/northern ireland/i.test(String(a.region||""))||/(^|[;,/])\s*ni\s*
 function locate(a){
  const locality=a.locality&&typeof a.locality==="object"?String(a.locality.name||""):"";
  if(locality){const exact=TOWNS.find(t=>t.name.toLowerCase()===locality.toLowerCase());if(exact)return exact;const partial=TOWNS.find(t=>t.terms.some(term=>locality.toLowerCase().includes(term)));if(partial)return partial;}
+ if(isPower(a)){const match=String(a.affectedPostcodes||"").match(/\bBT\s?(\d{1,2})\b/i);if(match){const townName=POWER_POSTCODE_TOWNS[Number(match[1])];const postcodeTown=TOWNS.find(t=>t.name===townName);if(postcodeTown)return postcodeTown;}}
  const txt=allText(a);for(const town of TOWNS){if(town.terms.some(term=>hasTerm(txt,term)))return town;}return null;
 }
 function isTraffic(a){const id=String(a.sourceId||"").toLowerCase(),type=String(a.sourceType||"").toLowerCase();return id.startsWith("trafficwatch-")||type.startsWith("transport_")||type.startsWith("traffic_");}
 function isPower(a){return String(a.sourceId||"").toLowerCase()==="nie-network-outages"||String(a.sourceType||"").toLowerCase()==="electricity_network_outage";}
+const POWER_POSTCODE_TOWNS={1:"Belfast",2:"Belfast",3:"Belfast",4:"Belfast",5:"Belfast",6:"Belfast",7:"Belfast",8:"Belfast",9:"Belfast",10:"Belfast",11:"Belfast",12:"Belfast",13:"Belfast",14:"Belfast",15:"Belfast",16:"Belfast",17:"Belfast",18:"Bangor",19:"Bangor",20:"Bangor",21:"Newtownards",22:"Newtownards",23:"Newtownards",24:"Downpatrick",25:"Lisburn",26:"Lisburn",27:"Lisburn",28:"Lisburn",29:"Antrim",30:"Downpatrick",31:"Downpatrick",32:"Newry",33:"Downpatrick",34:"Newry",35:"Newry",36:"Newtownabbey",37:"Newtownabbey",38:"Carrickfergus",39:"Ballyclare",40:"Larne",41:"Antrim",42:"Ballymena",43:"Ballymena",44:"Ballymena",45:"Cookstown",46:"Cookstown",47:"Derry/Londonderry",48:"Derry/Londonderry",49:"Limavady",51:"Coleraine",52:"Coleraine",53:"Coleraine",54:"Ballycastle",55:"Coleraine",56:"Coleraine",57:"Ballycastle",60:"Armagh",61:"Armagh",62:"Portadown",63:"Portadown",64:"Portadown",65:"Portadown",66:"Portadown",67:"Portadown",68:"Dungannon",69:"Dungannon",70:"Dungannon",71:"Dungannon",74:"Enniskillen",75:"Dungannon",76:"Dungannon",77:"Dungannon",78:"Omagh",79:"Omagh",80:"Cookstown",81:"Omagh",82:"Omagh",92:"Enniskillen",93:"Enniskillen",94:"Enniskillen"};
 function category(a){
  const t=allText(a),s=String(a.sourceType||"").toLowerCase(),v=t+" "+s;
  if(isPower(a))return "POWER";
