@@ -709,7 +709,7 @@ document.addEventListener("click",e=>{const link=e.target.closest(".dw-town-open
  drawerHead.innerHTML='<span>SELECTED INTELLIGENCE // DETAIL DRAWER</span><button type="button" id="dw-map-close-detail" aria-label="Close detail drawer">CLOSE ×</button>';
  drawer.appendChild(drawerHead);document.body.appendChild(drawer);
  const toolbar=document.createElement("div");toolbar.className="dw-map-toolbar";toolbar.setAttribute("aria-label","Immersive map controls");
- toolbar.innerHTML='<button type="button" id="dw-map-console-toggle" aria-expanded="true">CONSOLE −</button><select id="dw-map-preset" aria-label="Operational map preset"><option value="">QUICK VIEWS</option><option value="ni">NI WIDE</option><option value="ballyclare">BALLYCLARE</option><option value="infrastructure">INFRASTRUCTURE</option><option value="transport">TRANSPORT</option><option value="utilities">WATER + POWER</option></select><select id="dw-map-saved" aria-label="Saved map views"><option value="">SAVED VIEWS</option></select><button type="button" id="dw-map-save">SAVE VIEW +</button><button type="button" id="dw-map-fit">FIT NI ↗</button><button type="button" id="dw-map-exit">EXIT ×</button><span id="dw-map-coordinates" role="status">MAP COORDINATES // TAP MAP</span><button type="button" id="dw-map-copy-coords" disabled>COPY COORDS</button>';
+ toolbar.innerHTML='<button type="button" id="dw-map-console-toggle" aria-expanded="true">CONSOLE −</button><select id="dw-map-preset" aria-label="Operational map preset"><option value="">QUICK VIEWS</option><option value="ni">NI WIDE</option><option value="ballyclare">BALLYCLARE</option><option value="infrastructure">INFRASTRUCTURE</option><option value="transport">TRANSPORT</option><option value="utilities">WATER + POWER</option></select><select id="dw-map-saved" aria-label="Saved map views"><option value="">SAVED VIEWS</option></select><button type="button" id="dw-map-save">SAVE VIEW +</button><button type="button" id="dw-map-fit">FIT NI ↗</button><button type="button" id="dw-map-exit">EXIT ×</button><span id="dw-map-coordinates" role="status">MAP COORDINATES // TAP MAP</span><button type="button" id="dw-map-copy-coords" disabled>COPY COORDS</button><button type="button" id="dw-map-measure" aria-pressed="false">MEASURE DISTANCE</button><button type="button" id="dw-map-clear-measure" disabled>CLEAR LINE</button>';
  document.body.appendChild(toolbar);
  const launch=document.createElement("button");launch.type="button";launch.className="action-button";launch.id="dw-map-launch";launch.textContent="⛶ IMMERSIVE MAP";
  intro.querySelector(".map-actions")?.prepend(launch);
@@ -775,7 +775,17 @@ document.addEventListener("click",e=>{const link=e.target.closest(".dw-town-open
  refreshSaved();
  if(typeof map!=="undefined"&&map){
   const coord=document.getElementById("dw-map-coordinates"),copy=document.getElementById("dw-map-copy-coords");let lastCoords="";
-  map.on("click",e=>{lastCoords=e.latlng.lat.toFixed(5)+", "+e.latlng.lng.toFixed(5);coord.textContent="COORDINATES // "+lastCoords;copy.disabled=false;});
+  let measuring=false,measurePoints=[],measureLine=null,measurePins=[];
+  const measureButton=document.getElementById("dw-map-measure"),clearMeasure=document.getElementById("dw-map-clear-measure");
+  function resetMeasure(){measurePoints=[];if(measureLine){map.removeLayer(measureLine);measureLine=null;}measurePins.forEach(p=>map.removeLayer(p));measurePins=[];clearMeasure.disabled=true;coord.textContent=lastCoords?"COORDINATES // "+lastCoords:"MAP COORDINATES // TAP MAP";}
+  measureButton.addEventListener("click",()=>{measuring=!measuring;measureButton.setAttribute("aria-pressed",String(measuring));measureButton.textContent=measuring?"MEASURING // TAP TWO POINTS":"MEASURE DISTANCE";map.getContainer().style.cursor=measuring?"crosshair":"";if(measuring){resetMeasure();coord.textContent="DISTANCE TOOL // SELECT START POINT";}});
+  clearMeasure.addEventListener("click",resetMeasure);
+  map.on("click",e=>{lastCoords=e.latlng.lat.toFixed(5)+", "+e.latlng.lng.toFixed(5);copy.disabled=false;
+   if(measuring){measurePoints.push(e.latlng);measurePins.push(L.circleMarker(e.latlng,{radius:6,color:"#f0d17c",weight:2,fillColor:"#17251a",fillOpacity:1}).addTo(map));clearMeasure.disabled=false;
+    if(measurePoints.length===1)coord.textContent="DISTANCE TOOL // SELECT END POINT";
+    if(measurePoints.length===2){const km=map.distance(measurePoints[0],measurePoints[1])/1000;measureLine=L.polyline(measurePoints,{color:"#f0d17c",weight:4,dashArray:"8 6"}).addTo(map);coord.textContent="STRAIGHT-LINE DISTANCE // "+(km<1?(km*1000).toFixed(0)+" m":km.toFixed(2)+" km");measureButton.textContent="MEASURE AGAIN";measuring=false;measureButton.setAttribute("aria-pressed","false");map.getContainer().style.cursor="";}}
+   else coord.textContent="COORDINATES // "+lastCoords;
+  });
   copy.addEventListener("click",async()=>{if(!lastCoords)return;try{await navigator.clipboard.writeText(lastCoords);}catch(e){const t=document.createElement("textarea");t.value=lastCoords;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove();}copy.textContent="COPIED ✓";setTimeout(()=>copy.textContent="COPY COORDS",1300);});
  }
 
