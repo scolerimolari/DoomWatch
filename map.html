@@ -671,6 +671,13 @@ async function load(){
 
   $("map-status").textContent="ARCHIVE LINK ACTIVE // "+archive.length+" NORTHERN IRELAND / LOCAL RECORDS AVAILABLE";
   render();renderBallyclareHistory();
+  if(pendingRecordKey&&!pendingRecordHandled){
+   pendingRecordHandled=true;
+   const wanted=String(pendingRecordKey);
+   const match=archive.find(a=>{const u=safeUrl(a.url);return u===wanted;});
+   if(match){openRecord(match);const town=locate(match);if(map&&town&&Number.isFinite(town.lat)&&Number.isFinite(town.lon))map.setView([town.lat,town.lon],11);$("map-status").textContent="CROSS-WORKSPACE RECORD OPENED // SOURCE-LINK MATCH // "+(town?town.name.toUpperCase():"LOCATION UNRESOLVED");}
+   else $("map-status").textContent="CROSS-WORKSPACE RECORD NOT FOUND IN CURRENT NI ARCHIVE // SEARCH FILTER RETAINED";
+  }
  }catch(error){
   $("map-status").textContent="INTELLIGENCE LINK FAILED // "+error.message;
   $("map-list-status").textContent="The shared intelligence archive could not be loaded. Check the connection and refresh. No sample incidents have been invented.";
