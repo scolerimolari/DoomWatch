@@ -871,7 +871,8 @@
       "status": "active",
       "refreshFrequency": "Approximately 30 minutes",
       "licence": "CC BY 4.0",
-      "notes": "Official live network fault records with outage ID, type, start time, estimated restoration, postcode, affected customer count, operator status and last update. Locations are not plotted as exact GPS points."
+      "notes": "Primary collector uses the public NIE open-data API, with a fallback to NIE Networks' own Powercheck live outage table. Captures active and planned interruptions, postcodes, start times and estimated restoration where published. CC BY 4.0 applies to the open-data dataset.",
+      "liveUrl": "https://powercheck.nienetworks.co.uk/TabularFaults.html"
     }
   ]
 }
