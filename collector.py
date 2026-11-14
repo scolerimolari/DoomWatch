@@ -677,7 +677,7 @@ def fetch_niwater_service_updates(source):
             detail, flags=re.IGNORECASE
         ))
         planned = bool(re.search(
-            r"\b(planned maintenance|planned restriction|estimated start time)\b",
+            r"\b(planned maintenance|planned restriction|planned restrictions)\b",
             detail, flags=re.IGNORECASE
         ))
         status = "RESTORED" if restored else ("PLANNED" if planned else "ACTIVE")
