@@ -955,6 +955,43 @@
       "trust": "official_primary_source",
       "status": "active",
       "notes": "DfI Traffic Information and Control Centre national traffic and travel news RSS. News reports are not a substitute for live road status."
+    },
+    {
+      "id": "crisis-group-rss",
+      "name": "International Crisis Group",
+      "platform": "website",
+      "type": "independent_research",
+      "url": "https://www.crisisgroup.org/",
+      "endpoint": "https://www.crisisgroup.org/rss.xml",
+      "method": "rss",
+      "region": "International",
+      "sectors": [
+        1,
+        6,
+        11
+      ],
+      "trust": "independent_research",
+      "status": "candidate",
+      "notes": "Conflict prevention and geopolitical analysis. Use as specialist research; not an operational warning service."
+    },
+    {
+      "id": "responsible-statecraft",
+      "name": "Responsible Statecraft",
+      "platform": "website",
+      "type": "independent_commentary",
+      "url": "https://responsiblestatecraft.org/",
+      "endpoint": "https://responsiblestatecraft.org/feed/",
+      "method": "rss",
+      "region": "International",
+      "sectors": [
+        1,
+        6,
+        8,
+        11
+      ],
+      "trust": "independent_commentary",
+      "status": "candidate",
+      "notes": "Foreign-policy and military-strategy analysis. Commentary and analysis must be distinguished from independently verified reporting."
     }
   ]
 }
