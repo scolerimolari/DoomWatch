@@ -785,7 +785,7 @@ function renderStatus() {
 }
 
 
-function evidenceDomain(item){try{return new URL(String(item.url||"")).hostname.toLowerCase().replace(/^www\\./,"");}catch(e){return String(item.source||"unknown").trim().toLowerCase();}}
+function evidenceDomain(item){try{return new URL(String(item.url||"")).hostname.toLowerCase().replace(/^www[.]/,"");}catch(e){return String(item.source||"unknown").trim().toLowerCase();}}
 function evidenceClass(item){
  const trust=String(item.sourceTrust||"").toLowerCase(),type=String(item.sourceType||"").toLowerCase(),domain=evidenceDomain(item);
  if(/social|bluesky|unverified_social/.test(trust+" "+type))return "SOCIAL / UNVERIFIED";
