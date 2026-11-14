@@ -935,7 +935,143 @@ def fetch_nie_network_outages(source):
     return articles, content_type, len(body), "NIE_NETWORK_OUTAGES"
 
 
+
+class ConditionsViewRiverParser(HTMLParser):
+    """Read station cards from ConditionsView's consolidated DfI station table."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.items = []
+        self.current = None
+        self.in_anchor = False
+
+    def _finish(self):
+        if self.current:
+            self.current["name"] = clean(" ".join(self.current["name"]))
+            self.current["context"] = clean(" ".join(self.current["context"]))
+            if self.current["name"] and self.current["href"]:
+                self.items.append(self.current)
+        self.current = None
+        self.in_anchor = False
+
+    def handle_starttag(self, tag, attrs):
+        if tag.lower() == "a":
+            href = dict(attrs).get("href", "")
+            if "/en/water/" in href and "/country/" not in href:
+                self._finish()
+                self.current = {"href": href, "name": [], "context": []}
+                self.in_anchor = True
+            elif self.current:
+                self.in_anchor = False
+        elif self.current and not self.in_anchor and tag.lower() in ("br", "p", "div", "li", "span"):
+            self.current["context"].append(" ")
+
+    def handle_endtag(self, tag):
+        if tag.lower() == "a" and self.in_anchor:
+            self.in_anchor = False
+
+    def handle_data(self, data):
+        if self.current:
+            (self.current["name"] if self.in_anchor else self.current["context"]).append(data)
+
+    def close(self):
+        super().close()
+        self._finish()
+
+
+RIVER_STATION_TOWNS = {
+    "203012": "Cookstown", "203010": "Dungannon", "235006": "Armagh",
+    "203027": "Ballymena", "201007": "Derry/Londonderry",
+    "236005": "Enniskillen", "234039": "Omagh", "202002": "Derry/Londonderry",
+    "205004": "Lisburn", "203040": "Coleraine", "203011": "Antrim",
+    "201010": "Omagh", "203020": "Cookstown", "202001": "Limavady",
+    "236007": "Enniskillen", "203018": "Antrim", "203017": "Portadown",
+    "203033": "Portadown"
+}
+
+
+def fetch_dfi_river_levels(source):
+    """Collect provisional DfI readings republished in a consolidated station table."""
+    request = urllib.request.Request(
+        source["url"],
+        headers={"User-Agent": USER_AGENT, "Accept": "text/html,application/xhtml+xml"}
+    )
+    with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+        content_type = response.headers.get("Content-Type", "")
+        body = response.read(MAX_FEED_SIZE)
+    if not body:
+        raise ValueError("Northern Ireland river-level page returned an empty response")
+
+    parser = ConditionsViewRiverParser()
+    parser.feed(body.decode("utf-8-sig", errors="replace"))
+    parser.close()
+
+    articles = []
+    seen = set()
+    for item in parser.items:
+        href = urljoin(source["url"], item["href"])
+        if href in seen:
+            continue
+        seen.add(href)
+        name = clean(item["name"])
+        context = clean(item["context"])
+        level_match = re.search(r"(-?\\d+(?:\\.\\d+)?)\\s*m\\b", context, re.IGNORECASE)
+        if not level_match:
+            continue
+        level = level_match.group(1)
+        code_match = re.search(r"\\b(\\d{6})\\b", context)
+        station_code = code_match.group(1) if code_match else ""
+        trend_match = re.search(r"(▲|▼|→)", context)
+        trend = {"▲": "RISING", "▼": "FALLING", "→": "STEADY"}.get(trend_match.group(1) if trend_match else "", "NOT REPORTED")
+        age_match = re.search(r"\\b(\\d+\\s*(?:min|mins|minutes|h|hr|hrs|hour|hours)\\s+ago|just now)\\b", context, re.IGNORECASE)
+        reading_age = age_match.group(1) if age_match else "age not supplied"
+        town = RIVER_STATION_TOWNS.get(station_code, "")
+        if not town:
+            lower = name.lower()
+            town = next((t for t in ("Antrim", "Ballymena", "Belfast", "Coleraine", "Cookstown", "Derry/Londonderry", "Dungannon", "Enniskillen", "Limavady", "Lisburn", "Omagh", "Portadown") if t.lower() in lower), "")
+        town_text = (" // nearest town " + town) if town else ""
+        stable_key = station_code or hashlib.sha1(href.encode("utf-8")).hexdigest()[:12]
+        title = "RIVER GAUGE // " + name + " — " + level + " m" + town_text
+        description = (
+            "DfI Rivers water-level observation relayed by ConditionsView. "
+            + "Latest published level: " + level + " m. Trend: " + trend + ". "
+            + "Provider reports this reading was updated " + reading_age + ". "
+            + "Nearest town used for map plotting: " + (town or "not assigned") + ". "
+            + "Each gauge has its own reference zero; do not compare levels between stations. "
+            + "This is a provisional measurement, not a flood warning or a prediction."
+        )
+        articles.append({
+            "id": source["id"] + ":" + stable_key,
+            "sourceId": source["id"],
+            "source": source["name"],
+            "title": title,
+            "url": href,
+            "publishedAt": iso(),
+            "collectedAt": iso(),
+            "description": description,
+            "domain": source.get("domain", 9),
+            "region": "Northern Ireland",
+            "priority": "high",
+            "sourceTrust": "third_party_aggregator",
+            "sourceType": "river_level_observation",
+            "stationName": name,
+            "stationCode": station_code,
+            "readingLevelMetres": level,
+            "readingTrend": trend,
+            "readingAge": reading_age,
+            "mapTownApproximation": town,
+            "evidenceStatus": "PROVISIONAL_DFI_READING_VIA_AGGREGATOR",
+            "confidence": "PROVISIONAL"
+        })
+
+    if not articles:
+        raise ValueError("No DfI river gauge readings parsed; upstream page structure may have changed")
+    return articles, content_type, len(body), "CONDITIONSVIEW_DFI_RIVER_TABLE"
+
+
 def fetch_feed(source):
+    if source.get("method") == "dfi_river_levels":
+        return fetch_dfi_river_levels(source)
+
     if source.get("method") == "html_listing":
         return fetch_html_listing(source)
 
