@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-14T12:18:22.805Z",
+  "collectionIntervalMinutes": 5,
+  "displayRefreshSeconds": 60,
+  "overallStatus": "AWAITING_FIRST_POLL",
+  "sources": [
+    {
+      "id": "signalchecker-mobile",
+      "name": "Signalchecker UK mobile network status",
+      "url": "https://www.signalchecker.co.uk/network-status",
+      "kind": "independent_traffic_signal",
+      "scope": "UK-wide network indicators",
+      "status": "PENDING_FIRST_POLL",
+      "checkedAt": null,
+      "providerSignals": [],
+      "note": "Waiting for the first scheduled collector run."
+    },
+    {
+      "id": "status-pages-mobile",
+      "name": "StatusPages UK mobile networks",
+      "url": "https://status-pages.com/mobile",
+      "kind": "community_reports",
+      "scope": "UK-wide reports and area groupings",
+      "status": "PENDING_FIRST_POLL",
+      "checkedAt": null,
+      "providerSignals": [],
+      "note": "Waiting for the first scheduled collector run."
+    },
+    {
+      "id": "updownsignal-mobile",
+      "name": "UpDownSignal UK mobile carriers",
+      "url": "https://updownsignal.com/en-gb/industries/mobile-carriers/",
+      "kind": "independent_traffic_and_reports",
+      "scope": "UK-wide carrier indicators",
+      "status": "PENDING_FIRST_POLL",
+      "checkedAt": null,
+      "providerSignals": [],
+      "note": "Waiting for the first scheduled collector run."
+    },
+    {
+      "id": "updownsignal-openreach",
+      "name": "UpDownSignal Openreach",
+      "url": "https://updownsignal.com/en-gb/industries/internet-providers/openreach/",
+      "kind": "community_reports",
+      "scope": "UK-wide fixed broadband infrastructure reports",
+      "status": "PENDING_FIRST_POLL",
+      "checkedAt": null,
+      "providerSignals": [],
+      "note": "Waiting for the first scheduled collector run."
+    }
+  ],
+  "providers": [],
+  "officialCheckers": [
+    {
+      "name": "EE service status",
+      "url": "https://ee.co.uk/help/service-status/broadband/confirm-mobile-number"
+    },
+    {
+      "name": "Vodafone network status",
+      "url": "https://www.vodafone.co.uk/network/status-checker"
+    },
+    {
+      "name": "Ofcom coverage and broadband information",
+      "url": "https://www.ofcom.org.uk/phones-and-broadband/coverage-and-speeds/"
+    },
+    {
+      "name": "Openreach service support",
+      "url": "https://www.openreach.com/help-and-support/service-stopped-working"
+    }
+  ],
+  "limitations": [
+    "This is a five-minute best-effort collector, not a carrier-operated monitoring feed.",
+    "Independent traffic and community reports can indicate an emerging problem but do not prove an outage.",
+    "No recognised signal does not prove that a network is working.",
+    "The monitored public pages do not provide reliable postcode-level confirmation for Ballyclare.",
+    "Operator account and postcode checkers remain the authoritative route for an individual line or mobile connection."
+  ]
+}
