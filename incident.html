@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111714">
+<meta name="description" content="DoomWatch source-linked incident case file.">
+<title>DOOMWATCH // INCIDENT CASE FILE</title>
+<link rel="stylesheet" href="./doomwatch.css">
+<style>
+.case-wrap{max-width:1050px;margin:0 auto;padding:14px}
+.case-panel{background:#151d18;border:1px solid #52604f;padding:14px;margin:12px 0;min-width:0}
+.case-kicker{font:700 10px monospace;letter-spacing:1.5px;color:#d6b574}
+.case-title{font-size:clamp(19px,4vw,29px);line-height:1.2;color:#f0d28e;margin:8px 0}
+.case-meta{font:11px/1.6 monospace;color:#aeb9a8;overflow-wrap:anywhere}
+.case-body{line-height:1.65;color:#e1e7da;white-space:pre-wrap}
+.case-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.case-links a,.case-links button{display:inline-block;padding:9px 11px;background:#273329;border:1px solid #69775e;color:#e6ebdf;text-decoration:none;font:700 10px monospace}
+.case-source{border-top:1px solid #435040;padding:10px 0}
+.case-status{padding:10px;background:#202a21;border-left:3px solid #bd9b55;color:#d5dfcf;font:11px/1.5 monospace}
+@media(max-width:650px){.case-wrap{padding:8px}.case-panel{padding:10px}}
+</style>
+</head>
+<body>
+<main class="case-wrap">
+ <section class="case-panel">
+  <div class="case-kicker">DOOMWATCH // UNIFIED EVENT RECORD</div>
+  <h1 class="case-title" id="case-title">Loading case file…</h1>
+  <div class="case-meta" id="case-meta">CONNECTING TO SHARED INTELLIGENCE ARCHIVE</div>
+  <div class="case-links" id="case-actions"></div>
+ </section>
+ <section class="case-panel">
+  <h2>ASSESSMENT & SOURCE RECORD</h2>
+  <div class="case-status" id="case-status">Evidence and source status are taken from the underlying record. DoomWatch does not independently verify every report.</div>
+  <p class="case-body" id="case-body"></p>
+  <div id="case-details"></div>
+ </section>
+ <section class="case-panel">
+  <h2>RELATED NAVIGATION</h2>
+  <p class="case-meta">Use the same headline or locality to find associated coverage. Related reports may repeat the same original information and should not automatically be treated as corroboration.</p>
+  <div class="case-links" id="case-related"></div>
+ </section>
+</main>
+<footer>DOOMWATCH // CASE FILE // SOURCE-LINKED OPEN INFORMATION // NOT AN EMERGENCY SERVICE</footer>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const params=new URLSearchParams(location.search),wantedUrl=params.get("url")||"",wantedTitle=params.get("title")||"";
+const stamp=a=>a.publishedAt||a.date||a.timestamp||a.updatedAt||a.collectedAt||"";
+const fmt=v=>{if(!v)return"DATE NOT SUPPLIED";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB");};
+const title=a=>String(a.title||a.headline||a.name||a.claim||"Untitled intelligence record");
+const body=a=>String(a.description||a.summary||a.content||a.text||a.snippet||"");
+const region=a=>String(a.region||a.area||a.location||"UNSPECIFIED");
+const url=a=>{const u=String(a.url||a.link||a.sourceUrl||"");return /^https?:\/\//i.test(u)?u:"";};
+function flatten(data){
+ const out=[],seen=new Set(),add=a=>{if(!a||typeof a!=="object")return;const k=String(a.id||a.url||a.link||a.title||"");if(k&&seen.has(k))return;if(k)seen.add(k);out.push(a);};
+ const walk=v=>{if(!v)return;if(Array.isArray(v))v.forEach(x=>{if(x&&typeof x==="object")add(x);});else if(typeof v==="object")Object.values(v).forEach(x=>{if(Array.isArray(x))walk(x);else if(x&&typeof x==="object")add(x);});};
+ walk(data.articles);walk(data.items);walk(data.alerts);
+ if(Array.isArray(data.sections))data.sections.forEach(s=>{if(s&&typeof s==="object")["articles","items","stories","updates"].forEach(k=>walk(s[k]));});
+ else if(data.sections&&typeof data.sections==="object")Object.values(data.sections).forEach(s=>{if(Array.isArray(s))walk(s);else if(s&&typeof s==="object")["articles","items","stories","updates"].forEach(k=>walk(s[k]));});
+ return out;
+}
+function regionIsNI(a){const r=region(a).toLowerCase(),t=(title(a)+" "+body(a)).toLowerCase();return /northern ireland|\bni\b/.test(r)||/belfast|derry|londonderry|ballyclare|antrim|newtownabbey|ballymena|coleraine|armagh|omagh|newry|larne|lisburn|carrickfergus/.test(t);}
+function render(a,all){
+ const t=title(a),u=url(a),place=String(a.locality?.name||a.town||a.locationName||a.location||a.area||"").trim();
+ $("case-title").textContent=t;
+ $("case-meta").textContent=[a.source||a.publisher||"SOURCE NOT SUPPLIED",region(a),fmt(stamp(a)),a.sourceTrust||a.sourceType||"SOURCE CLASS NOT SUPPLIED"].join(" · ");
+ $("case-status").textContent="EVIDENCE: "+String(a.evidenceStatus||a.status||"UNASSESSED").toUpperCase()+" · CONFIDENCE: "+String(a.confidence||"NOT SUPPLIED")+" · SEVERITY: "+String(a.incidentSeverity||a.severity||"NOT ASSESSED")+" (ONLY WHERE THE SOURCE PROVIDES A LABEL)";
+ $("case-body").textContent=body(a)||"No additional description supplied in the archive record.";
+ $("case-details").innerHTML='<div class="case-source"><strong>SOURCE:</strong> '+esc(a.source||a.publisher||"Not supplied")+'</div><div class="case-source"><strong>COLLECTED:</strong> '+esc(fmt(a.collectedAt||a.ingestedAt))+'</div><div class="case-source"><strong>LOCATION:</strong> '+esc(place||"Not identified")+(a.stationCoordinatesVerified?" · verified station coordinates":"")+'</div><div class="case-source"><strong>RECORD ID:</strong> '+esc(a.id||"Not supplied")+'</div>';
+ $("case-actions").innerHTML=(u?'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL SOURCE ↗</a>':'')+(regionIsNI(a)?'<a href="./map.html?search='+encodeURIComponent(place||t)+'">FIND ON MAP ↗</a>':'')+'<a href="./feed.html?q='+encodeURIComponent(t)+'">RELATED FEED COVERAGE ↗</a><a href="./operations.html?search='+encodeURIComponent(t)+'">OPERATIONS ROOM ↗</a>';
+ const related=all.filter(x=>x!==a&&((u&&url(x)===u)||(title(x).toLowerCase()===t.toLowerCase()))).slice(0,8);
+ $("case-related").innerHTML=related.length?related.map(x=>'<div class="case-source"><strong>'+esc(x.source||"Source not supplied")+'</strong><div class="case-meta">'+esc(fmt(stamp(x)))+' · '+esc(x.evidenceStatus||"UNASSESSED")+'</div>'+(url(x)?'<a href="'+esc(url(x))+'" target="_blank" rel="noopener noreferrer">ORIGINAL REPORT ↗</a>':"")+'</div>').join(""):'<span class="case-meta">No exact-title or exact-URL duplicate records were found. Use the related Feed and Operations searches above to inspect similar reports.</span>';
+ document.title="DOOMWATCH // "+t.slice(0,65);
+}
+async function load(){
+ try{
+  const r=await fetch("./data/intelligence.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);
+  const data=await r.json(),all=flatten(data);
+  let found=wantedUrl?all.find(a=>url(a)===wantedUrl):null;
+  if(!found&&wantedTitle)found=all.find(a=>title(a).toLowerCase()===wantedTitle.toLowerCase());
+  if(!found&&wantedTitle)found=all.find(a=>title(a).toLowerCase().includes(wantedTitle.toLowerCase()));
+  if(!found){$("case-title").textContent="RECORD NOT FOUND";$("case-meta").textContent="The source record may have left the current archive snapshot."; $("case-body").textContent="Return to Feed, Map or Operations and reopen the report from the current archive. DoomWatch does not fabricate a replacement record.";return;}
+  render(found,all);
+ }catch(e){$("case-title").textContent="ARCHIVE UNAVAILABLE";$("case-meta").textContent=e.message;$("case-body").textContent="Check the connection and retry. No sample incident data has been substituted.";}
+}
+load();
+</script>
+<script src="./doomwatch-ui.js"></script>
+</body>
+</html>
