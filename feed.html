@@ -17,6 +17,19 @@
 .pill{display:inline-block;padding:3px 7px;border:1px solid #776746;color:#dfc58e;font-size:10px;margin:2px 3px 2px 0}
 .disclaimer{border-left:4px solid #d6a64b;background:#2a2418;padding:12px;color:#ead8b0}
 @media(max-width:600px){.feed-list{grid-template-columns:1fr}}
+
+.brief-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:10px}
+.brief-card{padding:13px;background:#18211b;border:1px solid #596653;border-top:3px solid #d6a64b;min-width:0}
+.brief-card h3{margin:0 0 8px;color:#f0d28e;font-size:14px;letter-spacing:.06em}
+.brief-card .brief-story{padding:9px 0;border-top:1px solid #414b40;font-size:12px;line-height:1.45}
+.brief-story a,.cluster-sources a{color:#b9dc9a}
+.cluster{grid-column:1/-1;padding:13px;background:linear-gradient(145deg,#222b25,#151c17);border:1px solid #65735c;border-left:4px solid #d6a64b;overflow-wrap:anywhere}
+.cluster h3{margin:0;color:#f0d28e;font-size:15px;line-height:1.4}
+.cluster .cluster-meta{font-size:11px;color:#bdc7b9;margin:6px 0}
+.cluster-sources{display:grid;gap:7px;margin-top:10px}
+.cluster-source{padding:9px;border:1px solid #455144;background:#121914;font-size:12px;line-height:1.45}
+.cluster-source p{margin:5px 0;color:#d5d9cf}
+.cluster-note{font-size:10px;color:#c9b98e;margin-top:8px}
 </style>
 </head>
 <body>
@@ -43,6 +56,9 @@
 <div class="signal-stat"><span class="muted">TOPIC CLUSTERS</span><strong id="topic-count">—</strong><span class="muted">Keyword-based, not AI verdicts</span></div>
 <div class="signal-stat"><span class="muted">COLLECTOR CHECK</span><strong id="feed-updated" style="font-size:14px">PENDING</strong><span class="muted">Latest collection time</span></div>
 </div>
+<h2>INTELLIGENCE BRIEFING // WHAT IS DEVELOPING?</h2>
+<div class="muted" style="margin:-3px 0 9px">Stories are grouped conservatively by headline wording and timing. Regional placement follows source metadata and keyword clues; it is not a verified impact assessment.</div>
+<div class="brief-grid" id="briefing-board"><div class="panel muted">BUILDING THE BRIEFING…</div></div>
 <h2>EMERGING TOPICS // MENTION FREQUENCY</h2>
 <div class="panel"><div class="muted">Counts are from records collected in the last 72 hours. They indicate attention, not threat level or truth.</div><div class="trend-list" id="trends" style="margin-top:10px"></div></div>
 <h2>SEARCH & FILTER</h2>
@@ -66,7 +82,8 @@
 </div>
 <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="feed-search" type="search" placeholder="Search terms, locations, sources or claims…" style="flex:1;min-width:180px"><button type="button" class="action-button" id="feed-clear">CLEAR SEARCH</button></div>
 <div class="panel muted" id="feed-status" aria-live="polite">CONNECTING TO SIGNAL ARCHIVE…</div>
-<h2>LIVE SIGNAL STREAM</h2>
+<h2>STORY STREAM // RELATED REPORTS GROUPED</h2>
+<div class="muted" style="margin:-4px 0 9px">Open a story to compare the source reports. Multiple articles or social posts do not, by themselves, constitute independent confirmation.</div>
 <div class="feed-list" id="feed-items"></div>
 </main>
 <footer>DOOMWATCH // FEED INTELLIGENCE<br>PUBLIC SOURCES ONLY // NO PRIVATE MESSAGES OR CLOSED GROUPS</footer>
@@ -96,17 +113,74 @@ function matches(a){
  if(activeSource==="NI"&&!/northern ireland|\bni\b/i.test(String(a.region||"")))return false;
  if(active==="ALL")return true;if(active==="SOCIAL")return social(a);return hits(a,active);
 }
+function regionBucket(a){
+ const t=textOf(a),r=String(a.region||"").toLowerCase();
+ if(/northern ireland|\\bni\\b/.test(r)||/belfast|derry|londonderry|ballyclare|antrim|newtownabbey|ballymena|coleraine|armagh|omagh|newry|larne|ni water|trafficwatch/.test(t))return "LOCAL";
+ if(/international|global|world/.test(r)||/ukraine|russia|iran|israel|gaza|red sea|hormuz|nato|united nations|world health organization/.test(t))return "INTERNATIONAL";
+ if(/uk|united kingdom|britain|england|scotland|wales/.test(r))return "UK";
+ return "WIDER / UNSPECIFIED";
+}
+const stopWords=new Set("about after again against also among around because been being between could first from have into more most near over said says should since some such than that their them then there these they this those through under until very what when where which while with would".split(" "));
+function storyTokens(a){
+ const raw=(String(a.title||"")+" "+String(a.description||"").slice(0,450)).toLowerCase();
+ return new Set((raw.match(/[a-z0-9]{4,}/g)||[]).filter(w=>!stopWords.has(w)));
+}
+function storyClusters(list){
+ const clusters=[];
+ const ordered=[...list].sort((a,b)=>signalTime(b)-signalTime(a));
+ for(const article of ordered){
+  const tokens=storyTokens(article),time=signalTime(article),bucket=regionBucket(article);
+  let best=null,bestScore=0;
+  for(const c of clusters){
+   if(c.bucket!==bucket||Math.abs(time-c.latest)>72*60*60*1000)continue;
+   const overlap=[...tokens].filter(t=>c.tokens.has(t));
+   const denominator=Math.max(1,Math.min(tokens.size,c.tokens.size));
+   const score=overlap.length/denominator;
+   if(overlap.length>=2&&score>=0.52&&score>bestScore){best=c;bestScore=score;}
+  }
+  if(best){best.items.push(article);for(const t of tokens)best.tokens.add(t);best.latest=Math.max(best.latest,time);}
+  else clusters.push({items:[article],tokens,bucket,latest:time});
+ }
+ return clusters.sort((a,b)=>Math.max(...b.items.map(rank))-Math.max(...a.items.map(rank))||b.latest-a.latest);
+}
+function renderBriefing(){
+ const buckets=[
+  ["LOCAL","WHAT'S HAPPENING IN NORTHERN IRELAND"],
+  ["UK","UK DEVELOPMENTS WITH POSSIBLE NI RELEVANCE"],
+  ["INTERNATIONAL","INTERNATIONAL DEVELOPMENTS TO WATCH"],
+  ["WIDER / UNSPECIFIED","OTHER / REGION NOT CLEAR"]
+ ];
+ const fresh=articles.filter(a=>signalTime(a)>=Date.now()-72*60*60*1000);
+ const clusters=storyClusters(fresh);
+ $("briefing-board").innerHTML=buckets.map(([key,label])=>{
+  const stories=clusters.filter(c=>c.bucket===key).slice(0,4);
+  return '<section class="brief-card"><h3>'+esc(label)+'</h3>'+
+   (stories.length?stories.map(c=>{
+    const lead=[...c.items].sort((a,b)=>rank(a)-rank(b)||signalTime(b)-signalTime(a))[0];
+    const sources=new Set(c.items.map(a=>a.source||"Unknown source")).size;
+    return '<div class="brief-story"><strong>'+esc(lead.title||"Untitled report")+'</strong><div class="muted">'+c.items.length+' report(s) · '+sources+' publisher(s)</div></div>';
+   }).join(""):'<div class="muted">No recent records in this group.</div>')+'</section>';
+ }).join("");
+ $("briefing-board").dataset.storyGroups=String(clusters.length);
+}
 function render(){
  const q=$("feed-search").value.trim().toLowerCase();
  const list=articles.filter(a=>matches(a)&&(!q||textOf(a).includes(q)||String(a.source||"").toLowerCase().includes(q))).sort((a,b)=>rank(a)-rank(b)||signalTime(b)-signalTime(a)).slice(0,300);
+ const clusters=storyClusters(list);
  rendered=list;
- $("feed-items").innerHTML=list.map((a,index)=>{
-  const socialPost=social(a),matched=Object.keys(topics).filter(k=>hits(a,k));
-  const status=socialPost?"UNVERIFIED SOCIAL POST":String(a.evidenceStatus||"UNASSESSED").replace(/_/g," ");
-  const link=a.url&&/^https?:\/\//i.test(a.url)?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL POST / REPORT ↗</a>':'<span class="muted">No valid source link</span>';
-  return '<details class="feed-item '+(socialPost?"social":"")+'"><summary><strong>'+esc(a.title||"Untitled signal")+'</strong><div class="meta">'+esc(a.source||"Source not supplied")+' · '+esc(date(a.publishedAt||a.collectedAt))+'</div></summary><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+'<div style="margin-top:10px"><button type="button" class="action-button" data-flag="'+index+'">SAVE TO RUMOUR MONITOR</button></div></details>';
+ $("feed-items").innerHTML=clusters.map((cluster,groupIndex)=>{
+  const items=[...cluster.items].sort((a,b)=>rank(a)-rank(b)||signalTime(b)-signalTime(a));
+  const lead=items[0],sources=new Set(items.map(a=>a.source||"Unknown source")).size;
+  const sourcesHtml=items.map((a,index)=>{
+   const socialPost=social(a),matched=Object.keys(topics).filter(k=>hits(a,k));
+   const status=socialPost?"UNVERIFIED SOCIAL POST":String(a.evidenceStatus||"UNASSESSED").replace(/_/g," ");
+   const link=a.url&&/^https?:\\/\\//i.test(a.url)?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT / POST ↗</a>':'<span class="muted">No valid source link</span>';
+   const globalIndex=list.indexOf(a);
+   return '<div class="cluster-source"><strong>'+esc(a.source||"Source not supplied")+'</strong> · '+esc(date(a.publishedAt||a.collectedAt))+'<p>'+esc(a.title||"Untitled report")+'</p><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+'<div style="margin-top:8px"><button type="button" class="action-button" data-flag="'+globalIndex+'">SAVE TO RUMOUR MONITOR</button></div></div>';
+  }).join("");
+  return '<details class="cluster"><summary><h3>'+esc(lead.title||"Untitled story")+'</h3><div class="cluster-meta">'+esc(cluster.bucket)+' · '+items.length+' related report(s) · '+sources+' publisher(s) · latest '+esc(date(cluster.latest))+'</div></summary><div class="cluster-note">AUTOMATED HEADLINE GROUPING // NOT A CLAIM OF CORROBORATION</div><div class="cluster-sources">'+sourcesHtml+'</div></details>';
  }).join("")||'<div class="panel muted">No records match this filter and search. Try another topic or clear the search.</div>';
- $("feed-status").textContent="SHOWING "+list.length+" OF "+articles.length+" RECORDS // SOURCE: "+activeSource+" // TOPIC: "+active+" // KEYWORD CLASSIFICATION IS AUTOMATED AND MAY MISS CONTEXT.";
+ $("feed-status").textContent="SHOWING "+list.length+" RECORDS IN "+clusters.length+" STORY GROUPS // SOURCE: "+activeSource+" // TOPIC: "+active+" // AUTOMATED GROUPING IS NOT VERIFICATION.";
 }
 function renderTrends(){
  const cutoff=Date.now()-72*60*60*1000,recent=articles.filter(a=>{const d=new Date(a.publishedAt||a.collectedAt||0).getTime();return Number.isFinite(d)&&d>=cutoff;});
@@ -142,7 +216,7 @@ async function load(){
   $("social-count").textContent=articles.filter(social).length;
   $("record-count").textContent=articles.length.toLocaleString("en-GB");
   $("feed-updated").textContent=date(collectorRun);
-  renderTrends();render();renderWatch();
+  renderTrends();renderBriefing();render();renderWatch();
   $("feed-status").textContent="ARCHIVE CONNECTED // "+articles.length+" RECORDS // AUTO-CHECK EVERY 5 MINUTES WHILE OPEN";
  }catch(e){$("feed-status").textContent="SIGNAL ARCHIVE FAILED // "+e.message;}
 }
