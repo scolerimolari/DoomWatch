@@ -323,7 +323,7 @@ function selectTown(name){
  if(group&&map)map.setView([group.town.lat,group.town.lon],10);
 }
 
-function mapEvidenceDomain(a){try{return new URL(String(a.url||"")).hostname.toLowerCase().replace(/^www\\./,"");}catch(e){return String(a.source||"unknown").trim().toLowerCase();}}
+function mapEvidenceDomain(a){try{return new URL(String(a.url||"")).hostname.toLowerCase().replace(/^www[.]/,"");}catch(e){return String(a.source||"unknown").trim().toLowerCase();}}
 function mapEvidenceClass(a){
  const trust=String(a.sourceTrust||"").toLowerCase(),type=String(a.sourceType||"").toLowerCase(),d=mapEvidenceDomain(a);
  if(/social|bluesky|unverified_social/.test(trust+" "+type))return "SOCIAL / UNVERIFIED";
