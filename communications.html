@@ -92,7 +92,9 @@ function render(data){
  const sources=data.sources||[],providers=data.providers||[];
  checkForNewIssues(data);
  const ok=sources.filter(s=>s.status==="OK").length;
- const issues=providers.filter(p=>p.status==="ISSUE_SIGNAL").length;\n const stale=providers.filter(p=>p.status==="STALE_ISSUE_SIGNAL"||p.status==="STALE_OR_UNKNOWN").length;\n const unconfirmed=providers.filter(p=>p.status==="UNCONFIRMED_REPORT_SIGNAL").length;
+ const issues=providers.filter(p=>p.status==="ISSUE_SIGNAL").length;
+ const stale=providers.filter(p=>p.status==="STALE_ISSUE_SIGNAL"||p.status==="STALE_OR_UNKNOWN").length;
+ const unconfirmed=providers.filter(p=>p.status==="UNCONFIRMED_REPORT_SIGNAL").length;
  $("live-state").textContent=issues?"SIGNAL DETECTED":"MONITORING";
  $("collector-time").textContent=time(data.generatedAt);
  $("provider-count").textContent=providers.length;
