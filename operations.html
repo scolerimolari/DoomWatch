@@ -164,8 +164,13 @@ function eventCard(a){
  const map=r==="NI"?'<a href="'+mapUrl(a)+'">VIEW MAP ↗</a>':'';
  const original=linkOf(a)?'<a href="'+esc(linkOf(a))+'" target="_blank" rel="noopener noreferrer">ORIGINAL SOURCE ↗</a>':"";
  const sectorsHtml=labels.slice(0,4).map(x=>'<span>'+esc(x)+'</span>').join("");
+ const text=(title(a)+" "+bodyText(a)).toLowerCase(),related=[];
+ if(/fuel|heating oil|petrol|diesel|gas|electricity|power|energy|brent/.test(text))related.push('<a href="./markets.html">MARKET SIGNALS ↗</a>');
+ if(/food|agriculture|fertili[sz]er|supermarket|crop|livestock/.test(text))related.push('<a href="./household.html">HOUSEHOLD PRESSURE ↗</a>');
+ if(/cyber|ransomware|telecom|broadband|mobile network|communications outage/.test(text))related.push('<a href="./communications.html">COMMS WATCH ↗</a>');
+ if(/water|flood|road|traffic|storm|weather warning|power outage/.test(text))related.push('<a href="./map.html">INFRASTRUCTURE MAP ↗</a>');
  const severityLabel=s==="UNASSESSED"?"SEVERITY NOT ASSESSED":s+" SEVERITY (SOURCE LABEL)";
- return '<article class="op-event '+(s==="HIGH"?"high":s==="MEDIUM"?"medium":"")+'"><h3>'+esc(title(a))+'</h3><div class="op-meta">'+esc(source)+' · '+esc(r)+' · '+esc(fmt(when))+'</div><div class="op-evidence"><span>'+esc(src)+'</span><span>'+esc(severityLabel)+'</span><span>'+esc(evidence(a))+'</span></div>'+(bodyText(a)?'<p class="op-muted">'+esc(bodyText(a).slice(0,460))+'</p>':"")+(sectorsHtml?'<div class="op-evidence">'+sectorsHtml+'</div>':"")+'<div class="op-links">'+original+map+'<a href="'+feedUrl(a)+'">RELATED FEED ↗</a></div></article>';
+ return '<article class="op-event '+(s==="HIGH"?"high":s==="MEDIUM"?"medium":"")+'"><h3>'+esc(title(a))+'</h3><div class="op-meta">'+esc(source)+' · '+esc(r)+' · '+esc(fmt(when))+'</div><div class="op-evidence"><span>'+esc(src)+'</span><span>'+esc(severityLabel)+'</span><span>'+esc(evidence(a))+'</span></div>'+(bodyText(a)?'<p class="op-muted">'+esc(bodyText(a).slice(0,460))+'</p>':"")+(sectorsHtml?'<div class="op-evidence">'+sectorsHtml+'</div>':"")+'<div class="op-links">'+original+map+'<a href="'+feedUrl(a)+'">RELATED FEED ↗</a>'+related.join("")+'</div></article>';
 }
 function filtered(){
  const q=$("op-search").value.trim().toLowerCase(),r=$("op-region").value,w=$("op-window").value;
