@@ -236,6 +236,24 @@ footer {
   <div id="priority-alerts">
     <div class="panel muted">No incidents with an explicit medium or high severity assessment are recorded.</div>
   </div>
+  <h2>04A // LOCAL INFRASTRUCTURE WATCH</h2>
+  <div class="panel">
+    <div class="muted">OFFICIAL NI SERVICE AND TRANSPORT RECORDS IN THE CURRENT COLLECTOR SNAPSHOT. COUNTS ARE RECORDS, NOT CONFIRMED ACTIVE OUTAGES.</div>
+    <div class="grid" id="infrastructure-watch" style="margin-top:12px">
+      <div class="panel"><div class="panel-title">ELECTRICITY // NIE NETWORKS</div><div class="big-status" id="infra-power">—</div><div class="muted">Network fault records</div></div>
+      <div class="panel"><div class="panel-title">WATER // NI WATER</div><div class="big-status" id="infra-water">—</div><div class="muted">Service update records</div></div>
+      <div class="panel"><div class="panel-title">ROADS // TRAFFICWATCHNI</div><div class="big-status" id="infra-roads">—</div><div class="muted">Incident records</div></div>
+      <div class="panel"><div class="panel-title">PLANNED DISRUPTION</div><div class="big-status" id="infra-planned">—</div><div class="muted">Roadworks and events</div></div>
+    </div>
+    <div id="infra-latest" class="muted" style="margin-top:10px">Waiting for collector data.</div>
+    <div class="controls">
+      <a class="action-button" href="./map.html">OPEN EVENT MAP</a>
+      <a class="action-button" href="https://powercheck.nienetworks.co.uk/TabularFaults.html" target="_blank" rel="noopener noreferrer">NIE POWER CHECK ↗</a>
+      <a class="action-button" href="https://www.niwater.com/whats-happening-in-your-area/current-service-updates/" target="_blank" rel="noopener noreferrer">NI WATER UPDATES ↗</a>
+      <a class="action-button" href="https://trafficwatchni.com/twni/traffic-news" target="_blank" rel="noopener noreferrer">TRAFFICWATCHNI ↗</a>
+    </div>
+    <div class="meta">NO TELECOMS OUTAGE FEED IS CURRENTLY CONNECTED. DO NOT INTERPRET ABSENCE OF RECORDS AS SERVICE AVAILABILITY.</div>
+  </div>
 
   <h2>04 // SYSTEM DIAGNOSTICS</h2>
   <div class="grid">
@@ -568,6 +586,7 @@ function normalizeArticle(item) {
     area:locationOf(item),
     date:valueOf(item,["date","published","publishedAt","timestamp","createdAt","collectedAt"],""),
     source:asText(valueOf(item,["source","publisher","sourceName","author"],"Source not specified")),
+    sourceId:asText(valueOf(item,["sourceId","feedId"],"")),
     sourcePriority:asText(valueOf(item,["priority"],"")),
     sourceTrust:asText(valueOf(item,["sourceTrust","trust"],"unclassified")),
     sourceType:asText(valueOf(item,["sourceType"],"")),
@@ -764,6 +783,26 @@ function renderAlerts() {
     : '<div class="panel muted">No explicit medium/high incident severity is recorded. This does not mean no risks exist.</div>';
 }
 
+function renderInfrastructureWatch() {
+  const isSource=(item,id,type)=>item.sourceId===id||item.sourceType===type;
+  const power=articles.filter(item=>isSource(item,"nie-network-outages","electricity_network_outage"));
+  const water=articles.filter(item=>isSource(item,"ni-water-service-updates","utility_service_update"));
+  const roadIncidents=articles.filter(item=>isSource(item,"trafficwatch-incidents","transport_incidents")||item.sourceId==="trafficwatch-belfast-incidents");
+  const planned=articles.filter(item=>/roadworks|events/.test(item.sourceType+" "+item.sourceId));
+  const set=(id,value)=>{const node=$(id);if(node)node.textContent=String(value);};
+  set("infra-power",power.length);
+  set("infra-water",water.length);
+  set("infra-roads",roadIncidents.length);
+  set("infra-planned",planned.length);
+  const recent=[...power,...water,...roadIncidents,...planned]
+    .sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).slice(0,5);
+  const target=$("infra-latest");
+  if(!target)return;
+  target.innerHTML=recent.length?'<strong class="tan">LATEST UTILITY / TRANSPORT RECORDS</strong>'+recent.map(item=>{
+    const url=item.url?'<a href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':'';
+    return '<div class="section-card"><strong>'+escapeHTML(item.title)+'</strong><div class="meta">'+escapeHTML(item.source)+' · '+escapeHTML(dateText(item.date))+' · EVIDENCE '+escapeHTML(item.evidenceStatus||"UNASSESSED")+'</div>'+(url?'<p>'+url+'</p>':'')+'</div>';
+  }).join(""):'No matching utility or transport records in the current snapshot. This is not confirmation that services are unaffected.';
+}
 function renderFeed() {
   const regionCounts = {NI:0,UK:0,INTERNATIONAL:0,UNKNOWN:0};
   articles.forEach(item => {
@@ -997,6 +1036,7 @@ async function loadIntelligence() {
     renderStatus();
     renderSourceHealth();
     renderAlerts();
+    renderInfrastructureWatch();
     renderFeed();
     renderSections();
 
