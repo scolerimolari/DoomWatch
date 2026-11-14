@@ -315,6 +315,72 @@
       "trust": "third_party_aggregator",
       "sourceType": "river_level_observation",
       "method": "dfi_river_levels"
+    },
+    {
+      "id": "belfastlive-ni",
+      "name": "Belfast Live — Northern Ireland newsroom",
+      "url": "https://www.belfastlive.co.uk/?service=rss",
+      "domain": null,
+      "region": "Northern Ireland",
+      "priority": "high",
+      "tier": 1,
+      "trust": "independent_media",
+      "sourceType": "regional_newsroom"
+    },
+    {
+      "id": "belfast-telegraph",
+      "name": "Belfast Telegraph — Northern Ireland",
+      "url": "https://www.belfasttelegraph.co.uk/rss",
+      "domain": null,
+      "region": "Northern Ireland",
+      "priority": "high",
+      "tier": 1,
+      "trust": "independent_media",
+      "sourceType": "regional_newsroom"
+    },
+    {
+      "id": "newsletter-ni",
+      "name": "Belfast News Letter",
+      "url": "https://www.newsletter.co.uk/rss",
+      "domain": null,
+      "region": "Northern Ireland",
+      "priority": "medium",
+      "tier": 2,
+      "trust": "independent_media",
+      "sourceType": "regional_newsroom"
+    },
+    {
+      "id": "derry-journal",
+      "name": "Derry Journal",
+      "url": "https://www.derryjournal.com/rss",
+      "domain": null,
+      "region": "Northern Ireland",
+      "priority": "medium",
+      "tier": 2,
+      "trust": "independent_media",
+      "sourceType": "regional_newsroom"
+    },
+    {
+      "id": "fourni-ni",
+      "name": "4ni — Northern Ireland news",
+      "url": "https://www.4ni.co.uk/news-rss.aspx",
+      "domain": null,
+      "region": "Northern Ireland",
+      "priority": "medium",
+      "tier": 2,
+      "trust": "independent_media",
+      "sourceType": "regional_newsroom"
+    },
+    {
+      "id": "irish-times",
+      "name": "The Irish Times — News",
+      "url": "https://www.irishtimes.com/rss/the-irish-times-news-1.1319192",
+      "domain": null,
+      "region": "Ireland",
+      "priority": "medium",
+      "tier": 2,
+      "trust": "independent_media",
+      "sourceType": "national_newsroom"
     }
   ]
 }
