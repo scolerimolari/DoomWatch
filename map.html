@@ -165,6 +165,37 @@ body:has(#event-map) #map-status{border:1px solid #9cbd8a55;border-left:3px soli
 @media(max-width:850px){body:has(#event-map) .map-workspace{grid-template-columns:1fr}body:has(#event-map) #event-map{height:66vh;min-height:430px}body:has(#event-map) .map-side{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){body:has(#event-map) .map-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}body:has(#event-map) .map-workspace{gap:10px}body:has(#event-map) .map-canvas-shell{padding:6px!important;border-radius:9px!important}body:has(#event-map) .map-canvas-shell:before{top:13px;right:13px;font-size:8px;padding:6px 7px}body:has(#event-map) #event-map{height:58vh;min-height:370px}body:has(#event-map) .map-side{grid-template-columns:1fr}body:has(#event-map) .map-intro{padding:12px;border-radius:8px}}
 @media(prefers-reduced-motion:reduce){body:has(#event-map) .map-kpi,body:has(#event-map) .map-box{backdrop-filter:none;-webkit-backdrop-filter:none}}
+
+/* IMMERSIVE GEOINT CONSOLE // MAP-FIRST OPERATING MODE */
+body.dw-map-immersive{overflow:hidden!important}
+body.dw-map-immersive .dw-masthead,body.dw-map-immersive .dw-global-nav,body.dw-map-immersive .dw-wire,body.dw-map-immersive footer,body.dw-map-immersive main> :not(.map-workspace){display:none!important}
+body.dw-map-immersive main{position:static!important;width:auto!important;max-width:none!important;margin:0!important;padding:0!important}
+body.dw-map-immersive .map-workspace{display:block!important;position:static!important}
+body.dw-map-immersive .map-canvas-shell{position:fixed!important;inset:9px!important;z-index:10000!important;padding:8px!important;border-radius:12px!important}
+body.dw-map-immersive #event-map{height:calc(100dvh - 34px)!important;min-height:0!important;width:100%!important}
+body.dw-map-immersive .map-key,body.dw-map-immersive .map-note{display:none!important}
+body.dw-map-immersive .map-side{position:fixed!important;z-index:10020!important;top:64px!important;right:12px!important;bottom:12px!important;width:min(360px,calc(100vw - 24px))!important;max-height:none!important;overflow:auto!important;display:grid!important;grid-template-columns:1fr!important;align-content:start!important;padding:10px!important;border:1px solid #b4d3a566!important;border-radius:12px!important;background:rgba(7,15,10,.82)!important;box-shadow:0 18px 50px #000b!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important;transition:transform .22s ease,opacity .22s ease}
+body.dw-map-immersive.dw-map-console-closed .map-side{transform:translateX(calc(100% + 24px));opacity:0;pointer-events:none}
+.dw-map-toolbar{position:fixed;z-index:10030;top:16px;left:16px;display:flex;gap:7px;flex-wrap:wrap;max-width:calc(100vw - 32px)}
+.dw-map-toolbar button,.dw-map-drawer-head button{border:1px solid #a7c99799;border-radius:7px;padding:9px 12px;background:rgba(9,22,14,.91);color:#e7f0dc;font:700 10px Consolas,monospace;letter-spacing:.7px;box-shadow:0 5px 18px #0008;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.dw-map-toolbar button:focus-visible,.dw-map-drawer-head button:focus-visible{outline:2px solid #f0d17c;outline-offset:2px}
+.dw-map-drawer{position:fixed;z-index:10025;left:16px;bottom:16px;width:min(440px,calc(100vw - 32px));max-height:min(42vh,390px);overflow:auto;padding:12px;border:1px solid #a9c99a88;border-radius:11px;background:rgba(9,19,13,.91);box-shadow:0 18px 48px #000b;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:#e8efe4;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .18s ease,transform .18s ease}
+.dw-map-drawer.is-open{opacity:1;transform:none;pointer-events:auto}
+.dw-map-drawer-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;color:#e8d6a2;font:700 10px Consolas,monospace;letter-spacing:1px}
+.dw-map-drawer-head button{padding:5px 8px}
+.dw-map-drawer #map-town-details{line-height:1.5}
+body.dw-map-immersive .map-canvas-shell:before{top:20px;right:20px}
+@media(max-width:600px){
+ body.dw-map-immersive .map-canvas-shell{inset:5px!important;padding:5px!important}
+ body.dw-map-immersive #event-map{height:calc(100dvh - 22px)!important}
+ .dw-map-toolbar{top:11px;left:11px;right:11px;gap:5px}
+ .dw-map-toolbar button{padding:8px 9px;font-size:9px}
+ body.dw-map-immersive .map-side{top:58px!important;right:7px!important;bottom:7px!important;width:min(340px,calc(100vw - 14px))!important}
+ .dw-map-drawer{left:8px;bottom:8px;width:calc(100vw - 16px);max-height:34vh}
+ body.dw-map-immersive .map-canvas-shell:before{top:72px;right:12px;font-size:7px}
+}
+@media(prefers-reduced-motion:reduce){body.dw-map-immersive .map-side,.dw-map-drawer{transition:none}}
+
 </style>
 </head>
 <body>
@@ -661,6 +692,43 @@ $("history-window").addEventListener("change",renderBallyclareHistory);
 $("fit-map").addEventListener("click",()=>{ballyclareWatch=false;$("ballyclare-watch").setAttribute("aria-pressed","false");$("ballyclare-watch").textContent="BALLYCLARE AREA WATCH: OFF";activeTown="";$("town-select").value="";if(map)map.setView([54.62,-6.55],8);render();});
 $("clear-filters").addEventListener("click",()=>{ballyclareWatch=false;$("ballyclare-watch").setAttribute("aria-pressed","false");$("ballyclare-watch").textContent="BALLYCLARE AREA WATCH: OFF";activeTown="";searchTerm="";showAll=false;categoryFilter="";$("category-filter").value="";$("date-window").value="30";$("map-search").value="";$("town-select").value="";$("all-time").checked=false;$("age-range").disabled=false;$("age-range").value="30";ageDays=30;document.querySelectorAll("[data-layer]").forEach(x=>x.checked=true);$("density-toggle").checked=false;$("dependency-screen-toggle").checked=false;$("labels-toggle").checked=true;updateAge();render();});
 document.addEventListener("click",e=>{const link=e.target.closest(".dw-town-open");if(link){e.preventDefault();selectTown(link.dataset.town);}});
+
+(function initImmersiveMapConsole(){
+ const shell=document.querySelector(".map-canvas-shell"),side=document.querySelector(".map-side"),detail=document.getElementById("map-town-details"),intro=document.querySelector(".map-intro");
+ if(!shell||!side||!detail||!intro)return;
+ const placeholder=document.createComment("DoomWatch location detail return point");
+ detail.parentNode.insertBefore(placeholder,detail);
+ const drawer=document.createElement("section");drawer.className="dw-map-drawer";drawer.setAttribute("aria-label","Selected incident or location details");
+ const drawerHead=document.createElement("div");drawerHead.className="dw-map-drawer-head";
+ drawerHead.innerHTML='<span>SELECTED INTELLIGENCE // DETAIL DRAWER</span><button type="button" id="dw-map-close-detail" aria-label="Close detail drawer">CLOSE ×</button>';
+ drawer.appendChild(drawerHead);document.body.appendChild(drawer);
+ const toolbar=document.createElement("div");toolbar.className="dw-map-toolbar";toolbar.setAttribute("aria-label","Immersive map controls");
+ toolbar.innerHTML='<button type="button" id="dw-map-console-toggle" aria-expanded="true">HIDE CONSOLE −</button><button type="button" id="dw-map-fit">FIT NI ↗</button><button type="button" id="dw-map-exit">EXIT MAP MODE ×</button>';
+ document.body.appendChild(toolbar);
+ const launch=document.createElement("button");launch.type="button";launch.className="action-button";launch.id="dw-map-launch";launch.textContent="⛶ IMMERSIVE MAP";
+ intro.querySelector(".map-actions")?.prepend(launch);
+ let immersive=false,manualClose=false;
+ const syncDrawer=()=>{const meaningful=detail.textContent.trim()&&!detail.textContent.includes("Select a town marker");if(meaningful&&!manualClose)drawer.classList.add("is-open");else drawer.classList.remove("is-open");};
+ const observer=new MutationObserver(syncDrawer);observer.observe(detail,{childList:true,subtree:true,characterData:true});
+ function resizeMap(){requestAnimationFrame(()=>{if(typeof map!=="undefined"&&map)map.invalidateSize({pan:false});});}
+ function enter(){
+  if(immersive)return;immersive=true;manualClose=false;document.body.classList.add("dw-map-immersive");drawer.appendChild(detail);syncDrawer();resizeMap();
+  document.getElementById("dw-map-console-toggle").setAttribute("aria-expanded","true");
+ }
+ function exit(){
+  if(!immersive)return;immersive=false;document.body.classList.remove("dw-map-immersive","dw-map-console-closed");placeholder.parentNode.insertBefore(detail,placeholder.nextSibling);drawer.classList.remove("is-open");manualClose=false;resizeMap();
+ }
+ launch.addEventListener("click",enter);
+ document.getElementById("dw-map-exit").addEventListener("click",exit);
+ document.getElementById("dw-map-console-toggle").addEventListener("click",()=>{
+  const closed=document.body.classList.toggle("dw-map-console-closed");
+  const b=document.getElementById("dw-map-console-toggle");b.textContent=closed?"SHOW CONSOLE +":"HIDE CONSOLE −";b.setAttribute("aria-expanded",String(!closed));resizeMap();
+ });
+ document.getElementById("dw-map-fit").addEventListener("click",()=>document.getElementById("fit-map")?.click());
+ document.getElementById("dw-map-close-detail").addEventListener("click",()=>{manualClose=true;drawer.classList.remove("is-open");});
+ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&immersive)exit();});
+})();
+
 initMap();updateAge();load();
 </script>
 <script src="./doomwatch-ui.js"></script>
