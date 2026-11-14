@@ -838,6 +838,22 @@
       "trust": "official_primary_source",
       "status": "manual_review",
       "notes": "Departmental health policy, service resilience, medicines, public health and health-system announcements. No RSS endpoint verified."
+    },
+    {
+      "id": "trafficwatch-belfast-events",
+      "name": "TrafficWatchNI Greater Belfast events",
+      "platform": "website",
+      "type": "traffic_incident_feed",
+      "url": "https://www.trafficwatchni.com/twni/",
+      "endpoint": "https://rss.trafficwatchni.com/trafficwatchni_events_belfast_rss.xml",
+      "method": "rss",
+      "region": "Northern Ireland",
+      "sectors": [
+        6
+      ],
+      "trust": "official_primary_source",
+      "status": "active",
+      "notes": "DfI Traffic Information and Control Centre RSS feed for Greater Belfast planned road events; feed availability and content are shown in collector diagnostics."
     }
   ]
 }
