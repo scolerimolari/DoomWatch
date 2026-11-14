@@ -36,7 +36,7 @@
  <div id="watch-items" style="margin-top:10px" aria-live="polite" class="muted">WAITING FOR THE SIGNAL ARCHIVE…</div>
  <div class="muted" style="margin-top:9px;font-size:11px">This desk updates inside DoomWatch when the archive changes. Collector schedule: approximately every three hours. It does not send external reports or background alerts. Signals are not verified threat assessments.</div>
 </section>
-<div class="disclaimer"><strong>READ THIS FIRST:</strong> Bluesky public search is the only direct social-network connection in this build. X, Telegram, Reddit and Mastodon are not connected. Social posts and alternative commentary are unverified signals, not established facts. Repetition is not corroboration. Check original sources, date, location and independent evidence before acting or sharing.</div>
+<div class="disclaimer"><strong>EDITORIAL PRIORITY:</strong> Newsroom reporting is shown first, followed by specialist analysis and official notices. Social posts are secondary leads only. “Independent reporting” means reporting produced by a newsroom rather than an official government or agency feed; it does not mean every publisher is independently owned. Social posts remain unverified and are never corroboration by repetition.</div>
 <div class="signal-grid" style="margin-top:12px">
 <div class="signal-stat"><span class="muted">PUBLIC SOCIAL POSTS</span><strong id="social-count">—</strong><span class="muted">Collected from Bluesky search</span></div>
 <div class="signal-stat"><span class="muted">ALL SIGNAL RECORDS</span><strong id="record-count">—</strong><span class="muted">Existing intelligence archive</span></div>
@@ -50,8 +50,8 @@
 <div class="controls" id="source-filters">
 <button class="active" data-source="ALL" aria-pressed="true">ALL SOURCES</button>
 <button data-source="OFFICIAL" aria-pressed="false">OFFICIAL</button>
-<button data-source="MEDIA" aria-pressed="false">NEWS / MEDIA</button>
-<button data-source="SOCIAL" aria-pressed="false">SOCIAL</button>
+<button data-source="MEDIA" aria-pressed="false">NEWSROOM REPORTING</button>
+<button data-source="SOCIAL" aria-pressed="false">SOCIAL (SECONDARY)</button>
 <button data-source="NI" aria-pressed="false">NORTHERN IRELAND</button>
 </div>
 <div class="muted" style="margin:12px 0 7px">TOPIC // WHAT IS THE SIGNAL ABOUT?</div>
@@ -87,16 +87,18 @@ SOCIETY:["protest","riot","immigration","migration","election","censorship","sur
 const labels={CYBER:"CYBER / DIGITAL",SUPPLY:"SUPPLY CHAIN",CONFLICT:"WAR / CONFLICT",LOCAL:"NI / LOCAL",SOCIETY:"CULTURE / SOCIETY"};
 let articles=[],active="ALL",activeSource="ALL",rendered=[],collectorRun="",lastSeen="",watchTimer=null;
 function hits(a,key){const t=textOf(a);return topics[key].some(w=>t.includes(w));}
+function reporting(a){return /independent_media|established_media|specialist_media/i.test(String(a.sourceTrust||""))||/regional_newsroom|mainstream_media|international_media|cybersecurity_media/i.test(String(a.sourceType||""));}
+function rank(a){if(social(a))return 5;if(reporting(a)&&/northern ireland|ireland/i.test(String(a.region||"")))return 0;if(reporting(a))return 1;if(String(a.sourceTrust||"").includes("specialist"))return 2;if(String(a.sourceTrust||"").includes("official"))return 3;return 4;}
 function matches(a){
  if(activeSource==="SOCIAL"&&!social(a))return false;
  if(activeSource==="OFFICIAL"&&String(a.sourceTrust||"").toLowerCase()!=="official_primary_source")return false;
- if(activeSource==="MEDIA"&&!/established_media|mainstream_media|international_media/i.test(String(a.sourceTrust||"")+" "+String(a.sourceType||"")))return false;
+ if(activeSource==="MEDIA"&&!reporting(a))return false;
  if(activeSource==="NI"&&!/northern ireland|\bni\b/i.test(String(a.region||"")))return false;
  if(active==="ALL")return true;if(active==="SOCIAL")return social(a);return hits(a,active);
 }
 function render(){
  const q=$("feed-search").value.trim().toLowerCase();
- const list=articles.filter(a=>matches(a)&&(!q||textOf(a).includes(q)||String(a.source||"").toLowerCase().includes(q))).slice(0,300);
+ const list=articles.filter(a=>matches(a)&&(!q||textOf(a).includes(q)||String(a.source||"").toLowerCase().includes(q))).sort((a,b)=>rank(a)-rank(b)||signalTime(b)-signalTime(a)).slice(0,300);
  rendered=list;
  $("feed-items").innerHTML=list.map((a,index)=>{
   const socialPost=social(a),matched=Object.keys(topics).filter(k=>hits(a,k));
