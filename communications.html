@@ -118,6 +118,13 @@ async function load(){
  }
 }
 $("refresh").addEventListener("click",load);
+$("enable-alerts").addEventListener("click",async()=>{
+ if(!("Notification" in window)){$("enable-alerts").textContent="NOT SUPPORTED";return;}
+ try{
+  const permission=await Notification.requestPermission();
+  $("enable-alerts").textContent=permission==="granted"?"ALERTS ENABLED":permission==="denied"?"ALERTS BLOCKED":"ALERTS NOT ENABLED";
+ }catch(_){$("enable-alerts").textContent="ALERT SETUP FAILED";}
+});
 load();
 setInterval(load,60000);
 </script>
