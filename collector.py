@@ -1562,6 +1562,104 @@ def main():
     for article in retained:
         enrich_article(article)
 
+    # Persistent source health history: preserve real status transitions across collector runs.
+    previous_health = intelligence.get("sourceHealthHistory", {})
+    if not isinstance(previous_health, dict):
+        previous_health = {}
+    latest_by_source = previous_health.get("latestBySource", {})
+    if not isinstance(latest_by_source, dict):
+        latest_by_source = {}
+    health_events = previous_health.get("events", [])
+    if not isinstance(health_events, list):
+        health_events = []
+    health_runs = previous_health.get("runs", [])
+    if not isinstance(health_runs, list):
+        health_runs = []
+
+    run_time = iso()
+    transitions_this_run = []
+    for status_item in source_status:
+        source_id = str(status_item.get("id") or "").strip()
+        if not source_id:
+            continue
+        current_state = str(status_item.get("status") or "UNKNOWN").upper()
+        checked_at = str(status_item.get("checkedAt") or run_time)
+        previous = latest_by_source.get(source_id, {})
+        if not isinstance(previous, dict):
+            previous = {}
+        previous_state = str(previous.get("status") or "").upper()
+        failure_streak = int(previous.get("consecutiveFailures") or 0)
+        if current_state == "FAILED":
+            failure_streak += 1
+        else:
+            failure_streak = 0
+
+        if previous_state and previous_state != current_state:
+            event_type = "RECOVERED" if previous_state == "FAILED" and current_state in ("OK", "EMPTY") else "STATUS_CHANGE"
+            event = {
+                "id": source_id,
+                "name": status_item.get("name") or previous.get("name") or source_id,
+                "type": event_type,
+                "from": previous_state,
+                "to": current_state,
+                "at": checked_at,
+                "failureStreakBeforeChange": int(previous.get("consecutiveFailures") or 0)
+            }
+            health_events.append(event)
+            transitions_this_run.append(event)
+        elif not previous_state:
+            health_events.append({
+                "id": source_id,
+                "name": status_item.get("name") or source_id,
+                "type": "FIRST_SEEN",
+                "from": "",
+                "to": current_state,
+                "at": checked_at,
+                "failureStreakBeforeChange": 0
+            })
+
+        last_success = previous.get("lastSuccessfulAt", "")
+        first_failure = previous.get("firstFailureAt", "")
+        if current_state in ("OK", "EMPTY"):
+            last_success = checked_at
+            first_failure = ""
+        elif current_state == "FAILED" and not first_failure:
+            first_failure = checked_at
+
+        latest_by_source[source_id] = {
+            "id": source_id,
+            "name": status_item.get("name") or previous.get("name") or source_id,
+            "status": current_state,
+            "checkedAt": checked_at,
+            "lastSuccessfulAt": last_success,
+            "firstFailureAt": first_failure,
+            "consecutiveFailures": failure_streak
+        }
+
+    health_runs.append({
+        "at": run_time,
+        "configured": len(source_status),
+        "ok": sum(1 for item in source_status if str(item.get("status", "")).upper() == "OK"),
+        "empty": sum(1 for item in source_status if str(item.get("status", "")).upper() == "EMPTY"),
+        "failed": sum(1 for item in source_status if str(item.get("status", "")).upper() == "FAILED"),
+        "transitions": len(transitions_this_run)
+    })
+    cutoff_health = now() - timedelta(days=90)
+    def within_health_retention(item):
+        try:
+            return datetime.fromisoformat(str(item.get("at", "")).replace("Z", "+00:00")) >= cutoff_health
+        except (ValueError, TypeError):
+            return False
+    health_events = [item for item in health_events if isinstance(item, dict) and within_health_retention(item)][-500:]
+    health_runs = [item for item in health_runs if isinstance(item, dict) and within_health_retention(item)][-90:]
+    intelligence["sourceHealthHistory"] = {
+        "updatedAt": run_time,
+        "retentionDays": 90,
+        "latestBySource": latest_by_source,
+        "events": health_events,
+        "runs": health_runs
+    }
+
     intelligence["articles"] = retained[:MAX_ARTICLES]
     intelligence["sourceStatus"] = source_status
 
