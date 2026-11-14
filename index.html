@@ -148,6 +148,16 @@ footer {
 .module-launch:active{transform:translateY(1px);filter:brightness(1.25)}
 .module-launch:focus-visible{outline:2px solid #f2c84b;outline-offset:3px}
 </style>
+
+<style>
+.sector-intel-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px;margin:12px 0}
+.sector-intel-summary>div{background:#10140f;border:1px solid #414738;border-top:2px solid #626b38;padding:9px;min-width:0}
+.sector-intel-summary strong{display:block;color:#f0c83e;font-size:10px;letter-spacing:1px;margin-bottom:6px}
+.sector-intel-summary span{display:block;color:#e8e8d9;font-size:12px;line-height:1.45;overflow-wrap:anywhere}
+.sector-panel>summary{padding-right:4px}
+.sector-count{display:block;color:#b69a69;font-size:10px;font-weight:normal;letter-spacing:.5px;margin-top:5px}
+</style>
+
 </head>
 
 <body>
@@ -834,6 +844,13 @@ function sectorMatch(item,index){
 function renderSections() {
  const rawSections=intelligence.sections||{};
  const dataSections=Array.isArray(rawSections)?rawSections:Object.entries(rawSections).map(([name,value])=>typeof value==="object"&&value!==null?{...value,title:value.title||name}:{title:name,summary:value});
+ const dateValue=item=>{
+  const raw=item.date||"";
+  const parsed=raw?new Date(raw):null;
+  return parsed&&!Number.isNaN(parsed.getTime())?parsed:null;
+ };
+ const sourceName=item=>String(item.source||"Source not specified").trim()||"Source not specified";
+ const evidenceName=item=>String(item.evidenceStatus||item.status||"UNASSESSED").trim().toUpperCase()||"UNASSESSED";
  $("sector-list").innerHTML=SECTORS.map((name,index)=>{
   const guide=SECTOR_GUIDES[index];
   const match=dataSections.find(section=>{
@@ -841,17 +858,34 @@ function renderSections() {
    return title&&(title.includes(name.toLowerCase())||name.toLowerCase().includes(title));
   });
   const summary=match?asText(valueOf(match,["summary","description","assessment","content","body"],"")):"";
-  const records=articles.filter(item=>sectorMatch(item,index));
+  const records=articles.filter(item=>sectorMatch(item,index)).slice().sort((a,b)=>{
+   const da=dateValue(a),db=dateValue(b);
+   return (db?db.getTime():0)-(da?da.getTime():0);
+  });
+  const distinctSources=new Set(records.map(sourceName));
+  const evidenceCounts=records.reduce((counts,item)=>{
+   const status=evidenceName(item);
+   counts[status]=(counts[status]||0)+1;
+   return counts;
+  },{});
+  const assessed=records.length-(evidenceCounts.UNASSESSED||0);
+  const latest=records.map(dateValue).filter(Boolean).sort((a,b)=>b-a)[0]||null;
   const coverage=(intelligence.sectorCoverage||[]).find(item=>Number(item.id)===index+1);
-  const coverageText=coverage?" · "+(coverage.keywordRecordCount||0)+" KEYWORD / "+(coverage.sourceTaggedRecordCount||0)+" SOURCE-ASSIGNED":"";
+  const keywordCount=coverage?Number(coverage.keywordRecordCount)||0:records.filter(item=>item.sectorKeywordIds.includes(index+1)).length;
+  const sourceCount=coverage?Number(coverage.sourceTaggedRecordCount)||0:records.filter(item=>item.sectorSourceIds.includes(index+1)).length;
+  const coverageText=coverage?"KEYWORD "+keywordCount+" / SOURCE-ASSIGNED "+sourceCount:"KEYWORD "+keywordCount+" / SOURCE-ASSIGNED "+sourceCount;
+  const evidenceText=Object.entries(evidenceCounts).sort((a,b)=>b[1]-a[1]).map(([label,count])=>label+" "+count).join(" · ")||"NO RECORDS";
   const cards=records.slice(0,18).map(item=>{
-   const link=item.url?'<a href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"";
-   return '<details class="intel-card '+item.severity+'"><summary>'+escapeHTML(item.title)+'</summary><div class="meta">'+escapeHTML(item.area)+' · '+escapeHTML(item.source)+' · '+escapeHTML(dateText(item.date))+'</div><div class="meta">SOURCE CLASS: '+escapeHTML(item.sourceTrust||"UNCLASSIFIED")+' · EVIDENCE: '+escapeHTML(item.evidenceStatus||"UNASSESSED")+' · '+(item.locality?escapeHTML(item.locality.name)+" / APPROXIMATE LOCATION":"NO TOWN LOCATION TAG")+'</div><p>'+escapeHTML(item.summary||"No additional description supplied.")+'</p>'+link+'</details>';
+   const link=item.url?'<a href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL SOURCE ↗</a>':"";
+   const published=dateValue(item);
+   const age=published?dateText(item.date):"DATE UNAVAILABLE";
+   return '<details class="intel-card '+item.severity+'"><summary>'+escapeHTML(item.title)+'</summary><div class="meta">'+escapeHTML(item.area)+' · '+escapeHTML(sourceName(item))+' · '+escapeHTML(age)+'</div><div class="meta">SOURCE CLASS: '+escapeHTML(String(item.sourceTrust||"UNCLASSIFIED").replace(/_/g," ").toUpperCase())+' · EVIDENCE: '+escapeHTML(evidenceName(item))+' · CONFIDENCE: '+escapeHTML(item.confidence||"UNASSESSED")+'</div><p>'+escapeHTML(item.summary||"No additional description supplied.")+'</p>'+(item.locality?'<div class="meta">APPROXIMATE LOCATION: '+escapeHTML(item.locality.name)+'</div>':'')+(link?'<p>'+link+'</p>':'')+'</details>';
   }).join("");
-  return '<details class="section-card"><summary>'+String(index+1).padStart(2,"0")+' // '+escapeHTML(name)+' <span class="sector-count">'+records.length+' MATCHES'+coverageText+'</span></summary><div class="section-body"><p>'+escapeHTML(guide.scope)+'</p><div class="warning"><strong>NI/UK IMPACT PATH:</strong> '+escapeHTML(SECTOR_PATHWAYS[index].path)+'</div><p><strong>WATCH INDICATORS:</strong> '+escapeHTML(SECTOR_PATHWAYS[index].indicators)+'</p>'+(summary?'<p>'+escapeHTML(summary)+'</p>':"")+'<div class="warning"><strong>READINESS ACTION:</strong> '+escapeHTML(guide.action)+'</div><div class="meta">KEYWORD AND SOURCE-ASSIGNED COUNTS CAN OVERLAP. THEY ARE DISCOVERY AIDS, NOT VERIFIED CLASSIFICATION OR RISK SCORES. UP TO 18 RECENT MATCHES SHOWN.</div>'+(cards||'<p class="muted">No matching records in the current archive. This is a coverage gap, not proof that the sector is risk-free.</p>')+'</div></details>';
+  const latestText=latest?dateText(latest.toISOString()):"NO DATED RECORDS";
+  const statusText=records.length?records.length+" MATCHES · "+distinctSources.size+" DISTINCT SOURCES · "+assessed+" WITH ASSESSMENT LABELS":"NO MATCHES";
+  return '<details class="section-card sector-panel"><summary>'+String(index+1).padStart(2,"0")+' // '+escapeHTML(name)+' <span class="sector-count">'+statusText+'</span></summary><div class="section-body"><p>'+escapeHTML(guide.scope)+'</p><div class="sector-intel-summary"><div><strong>ARCHIVE COVERAGE</strong><span>'+records.length+' matched records</span></div><div><strong>SOURCE DIVERSITY</strong><span>'+distinctSources.size+' distinct publishers</span></div><div><strong>MOST RECENT RECORD</strong><span>'+escapeHTML(latestText)+'</span></div><div><strong>EVIDENCE LABELS</strong><span>'+escapeHTML(evidenceText)+'</span></div></div><div class="meta">CLASSIFICATION COUNTS // '+escapeHTML(coverageText)+' · KEYWORD AND SOURCE-ASSIGNED COUNTS MAY OVERLAP.</div><div class="warning"><strong>NI/UK IMPACT PATH:</strong> '+escapeHTML(SECTOR_PATHWAYS[index].path)+'</div><p><strong>WATCH INDICATORS:</strong> '+escapeHTML(SECTOR_PATHWAYS[index].indicators)+'</p>'+(summary?'<p>'+escapeHTML(summary)+'</p>':"")+'<div class="warning"><strong>READINESS ACTION:</strong> '+escapeHTML(guide.action)+'</div><div class="meta">COVERAGE IS A DISCOVERY AID, NOT A MEASURE OF RISK, SEVERITY OR COMPLETENESS. SOCIAL POSTS AND UNASSESSED REPORTS ARE NOT CONFIRMED INCIDENTS. UP TO 18 MOST RECENT MATCHES SHOWN.</div>'+(cards||'<p class="muted">No matching records in the current archive. This is a coverage gap, not proof that the sector is risk-free.</p>')+'</div></details>';
  }).join("");
 }
-
 function renderSources() {
   $("source-list").innerHTML = SOURCES.map(source => `
     <div class="section-card">
