@@ -140,6 +140,7 @@ footer {
 }
 .mesh-public-network{margin:10px 0 14px}.mesh-public-kpis{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}.mesh-map-toolbar{margin:12px 0}.mesh-map-toolbar .controls{margin:7px 0}.mesh-map-toolbar button.active{background:var(--yellow);color:#111;border-color:var(--tan)}.mesh-public-map-frame{width:100%;height:clamp(360px,62vh,680px);border:1px solid var(--olive);background:#0b110d}.mesh-public-map-frame iframe{width:100%;height:100%;border:0;display:block}.mesh-map-footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:9px 2px;font-size:11px}.mesh-public-network .warning{font-size:11px;line-height:1.5}
 .mesh-history-panel{margin:10px 0 14px}.mesh-history-head,.mesh-history-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.mesh-history-kpis{grid-template-columns:repeat(auto-fit,minmax(135px,1fr));margin-top:12px}.mesh-history-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:12px 0}.mesh-history-controls select{margin:0}.mesh-history-list{max-height:560px;overflow:auto;margin-top:10px}.mesh-history-item{border:1px solid var(--line);border-left:3px solid var(--olive);background:#10140f;padding:10px;margin:7px 0;overflow-wrap:anywhere}.mesh-history-item.new{border-left-color:var(--green)}.mesh-history-item.updated,.mesh-history-item.restored{border-left-color:var(--yellow)}.mesh-history-item.missing{border-left-color:var(--red)}.mesh-history-item strong{color:var(--yellow)}.mesh-history-item .meta{line-height:1.5}.mesh-history-foot{margin-top:12px;color:var(--muted);font-size:10px}
+.mesh-resource-panel{margin:10px 0 16px}.mesh-resource-intro{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.mesh-resource-intro p{max-width:760px}.mesh-resource-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr));gap:9px;margin:14px 0}.mesh-resource-card{display:flex;flex-direction:column;gap:7px;min-height:145px;padding:12px;background:linear-gradient(145deg,#202b23,#101510);border:1px solid var(--line);border-left:3px solid var(--olive);color:var(--text)!important;text-decoration:none!important}.mesh-resource-card:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}.mesh-resource-card strong{font-size:13px;color:var(--yellow);letter-spacing:.4px}.mesh-resource-card span:not(.mesh-resource-tag){font-size:11px;line-height:1.5;color:var(--muted)}.mesh-resource-card b{margin-top:auto;font-size:10px;letter-spacing:.8px;color:var(--green)}.mesh-resource-tag{font-size:9px;letter-spacing:1.1px;color:var(--tan)}.mesh-guide{border:1px solid var(--line);background:#111711;padding:12px;margin:12px 0}.mesh-guide details{border-top:1px solid var(--line);padding:9px 2px}.mesh-guide summary{color:var(--yellow);cursor:pointer;font-size:12px;font-weight:bold;line-height:1.5}.mesh-guide .section-body{font-size:12px;line-height:1.65}.mesh-guide .section-body p{margin:7px 0}.mesh-guide .section-body li{margin:5px 0}.mesh-regulatory-note{border-left:3px solid var(--yellow);font-size:12px;line-height:1.6}.mesh-resource-footer{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:9px;color:var(--muted);letter-spacing:.7px;margin-top:12px}@media(max-width:600px){.mesh-resource-card{min-height:125px}.mesh-resource-intro .action-button{width:100%;text-align:center}}
 </style>
 <link rel="stylesheet" href="./doomwatch.css">
 <style>
@@ -477,6 +478,105 @@ footer {
     <div id="mesh-history-list" class="mesh-history-list"><p class="muted">No local history yet. Run the first directory check to establish a baseline.</p></div>
     <div class="mesh-history-foot"><span id="mesh-history-last">LAST CHECK: NEVER</span><button type="button" class="action-button" id="mesh-history-export">EXPORT HISTORY JSON</button></div>
     <div class="warning" style="margin-top:10px">EVIDENCE LIMIT: This compares snapshots of the public advertised-node directory. “Not returned” does not prove a radio is offline or removed. History is stored only in this browser on this device; it is not shared with other DoomWatch users. The first check is a baseline, not a backdated history.</div>
+  </section>
+
+  <h3>01C // MESHCORE FIELD GUIDE & RESOURCE LIBRARY</h3>
+  <section class="panel mesh-resource-panel" id="mesh-resources">
+    <div class="mesh-resource-intro">
+      <div><div class="panel-title">START HERE // PRACTICAL SETUP AND REFERENCE</div>
+      <p class="muted">A working reference for getting onto MeshCore, understanding the network, finding local activity and maintaining your radio. Official project links are separated from community-maintained guides.</p></div>
+      <a class="action-button" href="https://meshcore.io/docs" target="_blank" rel="noopener noreferrer">OFFICIAL DOCUMENTATION ↗</a>
+    </div>
+    <div class="mesh-resource-grid">
+      <a class="mesh-resource-card" href="https://play.google.com/store/apps/details?id=com.liamcottle.meshcore.android" target="_blank" rel="noopener noreferrer"><span class="mesh-resource-tag">ANDROID APP</span><strong>MeshCore Companion</strong><span>Official Android app. Connects to a supported companion radio over Bluetooth.</span><b>OPEN GOOGLE PLAY ↗</b></a>
+      <a class="mesh-resource-card" href="https://flasher.meshcore.io/" target="_blank" rel="noopener noreferrer"><span class="mesh-resource-tag">FIRMWARE</span><strong>Official Web Flasher</strong><span>Select supported hardware and the correct firmware role. Check board revision before flashing.</span><b>OPEN FLASHER ↗</b></a>
+      <a class="mesh-resource-card" href="https://map.meshcore.io/" target="_blank" rel="noopener noreferrer"><span class="mesh-resource-tag">NETWORK MAP</span><strong>Public Node Map</strong><span>Explore advertised clients, repeaters, room servers and sensors with location data.</span><b>OPEN PUBLIC MAP ↗</b></a>
+      <a class="mesh-resource-card" href="https://github.com/meshcore-dev/MeshCore" target="_blank" rel="noopener noreferrer"><span class="mesh-resource-tag">SOURCE CODE</span><strong>MeshCore Firmware</strong><span>Official firmware repository, supported targets, code and technical changes.</span><b>VIEW GITHUB ↗</b></a>
+      <a class="mesh-resource-card" href="https://app.meshcore.nz/" target="_blank" rel="noopener noreferrer"><span class="mesh-resource-tag">WEB CLIENT</span><strong>MeshCore Web Companion</strong><span>Browser-based companion client. Requires a compatible connection to your radio.</span><b>OPEN WEB APP ↗</b></a>
+      <a class="mesh-resource-card" href="https://mikecarper.github.io/MeshCore/faq/" target="_blank" rel="noopener noreferrer"><span class="mesh-resource-tag">FAQ</span><strong>Community FAQ</strong><span>Plain-language answers on hardware, firmware roles, setup and common questions.</span><b>READ FAQ ↗</b></a>
+      <a class="mesh-resource-card" href="https://meshcoreeurope.org/en/get-started/" target="_blank" rel="noopener noreferrer"><span class="mesh-resource-tag">EUROPEAN GUIDE</span><strong>Getting Started Guide</strong><span>Community-maintained walkthrough covering flashing, pairing and regional configuration.</span><b>READ GUIDE ↗</b></a>
+      <a class="mesh-resource-card" href="https://github.com/meshcore-ita/awesome-meshcore" target="_blank" rel="noopener noreferrer"><span class="mesh-resource-tag">DIRECTORY</span><strong>Awesome MeshCore</strong><span>Large community catalogue of clients, tools, maps, diagnostics and learning resources.</span><b>BROWSE DIRECTORY ↗</b></a>
+      <a class="mesh-resource-card" href="https://belfast.chat/" target="_blank" rel="noopener noreferrer"><span class="mesh-resource-tag">LOCAL // BELFAST</span><strong>Belfast MeshCore Room</strong><span>Local room information and coverage details. Check current room availability in the app.</span><b>VIEW BELFAST INFO ↗</b></a>
+      <a class="mesh-resource-card" href="https://www.ofcom.org.uk/spectrum/radio-equipment/short-range-devices" target="_blank" rel="noopener noreferrer"><span class="mesh-resource-tag">UK REGULATORY</span><strong>Ofcom Short-Range Devices</strong><span>UK licence-exempt radio information and the current IR2030 technical requirements.</span><b>CHECK UK RULES ↗</b></a>
+    </div>
+    <div class="mesh-guide">
+      <div class="panel-title">QUICK START // COMPANION RADIO + ANDROID</div>
+      <details open>
+        <summary>01 · Understand the three main network roles</summary>
+        <div class="section-body">
+          <p><strong>Companion / client:</strong> your personal radio. It connects to the MeshCore Android app and is how you send and receive messages.</p>
+          <p><strong>Repeater:</strong> a fixed relay that forwards traffic and extends coverage. It is not a substitute for your personal companion.</p>
+          <p><strong>Room server:</strong> a group messaging hub. It can retain recent channel messages for clients to collect later, subject to its configuration and limits.</p>
+          <p><strong>Sensor:</strong> a device publishing telemetry or other sensor information, where supported.</p>
+        </div>
+      </details>
+      <details>
+        <summary>02 · Prepare and identify your hardware</summary>
+        <div class="section-body">
+          <ol>
+            <li>Identify the exact board model and hardware revision from its label or manufacturer documentation.</li>
+            <li>Check that the radio is designed for the regional frequency band you intend to use.</li>
+            <li>Fit the correct antenna before powering or transmitting. Never transmit into an unconnected antenna.</li>
+            <li>Use a data-capable USB cable when a wired firmware connection is required.</li>
+          </ol>
+        </div>
+      </details>
+      <details>
+        <summary>03 · Install the correct firmware role</summary>
+        <div class="section-body">
+          <ol>
+            <li>Open the official MeshCore flasher and select the exact board and revision.</li>
+            <li>For a phone-connected personal radio, select the appropriate Companion firmware (BLE for Bluetooth or USB for a wired connection, where supported).</li>
+            <li>Only choose Repeater or Room Server firmware when deliberately building that type of fixed network node.</li>
+            <li>Read the flasher prompts carefully. Erasing or changing firmware can remove existing device configuration and keys. Back up anything important first.</li>
+          </ol>
+          <p class="warning">A browser-based flasher may require a compatible desktop Chromium browser and USB access. Do not assume firmware flashing can be completed from an Android phone. The Android app is for operating a compatible, already-flashed companion radio.</p>
+        </div>
+      </details>
+      <details>
+        <summary>04 · Pair the Android app and configure the radio</summary>
+        <div class="section-body">
+          <ol>
+            <li>Install the official MeshCore app from Google Play.</li>
+            <li>Power up the companion radio, enable Bluetooth and connect from the app.</li>
+            <li>Set a recognisable display name and review the device settings.</li>
+            <li>Select the correct regional radio preset only after checking that it matches your location and the local network.</li>
+            <li>Save the settings and reboot the radio if the app or device requests it.</li>
+            <li>Allow the device to discover nearby nodes. Discovery depends on compatible settings and actual radio coverage.</li>
+          </ol>
+        </div>
+      </details>
+      <details>
+        <summary>05 · Find people, repeaters and public rooms</summary>
+        <div class="section-body">
+          <ol>
+            <li>Use the app's discovery and contacts views to find nodes your radio can actually hear or learn about.</li>
+            <li>Use the public map as a directory lead, then check advert freshness and node details. A map marker is not proof of live reachability.</li>
+            <li>Join a room using its details or contact information from a source you trust.</li>
+            <li>Test with a short, non-sensitive message. Do not assume a public room is private.</li>
+          </ol>
+        </div>
+      </details>
+      <details>
+        <summary>06 · Improve range and reliability</summary>
+        <div class="section-body">
+          <ul>
+            <li>Height and a clear antenna position often matter more than simply increasing transmit power.</li>
+            <li>Use an antenna designed for the exact band and connector. Avoid unnecessary adapters and damaged coax.</li>
+            <li>Keep repeaters powered reliably and mounted safely, with weather protection and suitable lightning precautions.</li>
+            <li>Record node name, location, role, antenna, firmware and last verified test when documenting a local installation.</li>
+            <li>Do not publish exact private locations, personal identifiers or sensitive operational details without permission.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+    <div class="mesh-guide mesh-regulatory-note">
+      <div class="panel-title">RADIO SETTINGS // CHECK BEFORE TRANSMITTING</div>
+      <p>MeshCore presets are not automatically legal everywhere. Frequency, bandwidth, transmit power, antenna gain and duty-cycle or spectrum-access requirements depend on the jurisdiction and equipment. The UK and Republic of Ireland have separate regulatory frameworks. Do not copy a frequency or power setting from a forum post or another country.</p>
+      <p><a href="https://www.ofcom.org.uk/spectrum/radio-equipment/short-range-devices" target="_blank" rel="noopener noreferrer">UK: Ofcom short-range devices and IR2030 ↗</a> · <a href="https://eur-lex.europa.eu/eli/dec_impl/2025/105/oj/eng" target="_blank" rel="noopener noreferrer">EU: harmonised short-range device conditions ↗</a></p>
+      <p class="meta">This is a practical signpost, not legal or radio-engineering advice. Confirm the current national rules and the exact equipment limits before operating.</p>
+    </div>
+    <div class="mesh-resource-footer"><span>LINKS CHECKED: NOV 2026</span><span>OFFICIAL PROJECT LINKS LABELLED · COMMUNITY GUIDES IDENTIFIED</span></div>
   </section>
 
   <h3>02 // PUBLIC ROOM & AUTOMATED SIGNALS</h3>
