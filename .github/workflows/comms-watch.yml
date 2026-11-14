@@ -1,0 +1,65 @@
+name: DoomWatch Live Communications Watch
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Five-minute best-effort polling. Offset from the hour to reduce queue delays.
+    - cron: "2/5 * * * *"
+  push:
+    branches: [main]
+    paths:
+      - "comms_collector.py"
+      - "communications.html"
+      - ".github/workflows/comms-watch.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: doomwatch-comms-watch
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    name: Poll public communications status sources
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Validate collector
+        run: python -m py_compile comms_collector.py
+
+      - name: Collect communications signals
+        run: python comms_collector.py
+
+      - name: Publish latest snapshot
+        run: |
+          git config user.name "DoomWatch Comms Watch"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            git add data/communications.json
+            if git diff --cached --quiet; then
+              echo "No communications snapshot changes."
+              exit 0
+            fi
+            git commit -m "Update live communications status snapshot"
+            if git pull --rebase origin main && git push origin HEAD:main; then
+              echo "Communications snapshot published."
+              exit 0
+            fi
+            git rebase --abort || true
+            git fetch origin main
+            git reset --hard origin/main
+            python comms_collector.py
+          done
+          echo "Unable to publish communications snapshot after three attempts."
+          exit 1
