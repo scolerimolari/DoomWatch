@@ -77,4 +77,106 @@ if(main){
 function openHashTarget(){const id=decodeURIComponent(location.hash.slice(1));if(!id)return;const target=document.getElementById(id);const fold=target?.closest("details.dw-fold");if(fold)fold.open=true;}
 window.addEventListener("hashchange",openHashTarget);openHashTarget();
 body.classList.add("dw-ready");
+}
+
+// MESH INTELLIGENCE CORRELATION — screening aid only; never promotes a match to a verified incident.
+(function meshCorrelationModule(){
+ "use strict";
+ const feedRoot=document.getElementById("mesh-feed-list");
+ if(!feedRoot || typeof meshFeed==="undefined") return;
+ const host=feedRoot.parentElement;
+ const panel=document.createElement("section");
+ panel.id="mesh-correlation-panel";
+ panel.className="panel";
+ panel.style.cssText="margin:12px 0;border:1px solid #68755c;background:linear-gradient(145deg,#1b261f,#101611);padding:13px";
+ panel.innerHTML='<div class="panel-title">LIVE CORRELATION // MESH × DOOMWATCH INTELLIGENCE</div>'+
+ '<div class="muted" style="font-size:11px;line-height:1.5;margin-bottom:10px">Screens possible topic and regional overlaps between locally captured MeshCore messages and the latest collector snapshot. A match is a lead for human review, not proof of the same event, independent corroboration or a confirmed local impact.</div>'+
+ '<div id="mesh-corr-stats" class="grid"></div>'+
+ '<div class="controls" style="margin:10px 0"><label for="mesh-corr-filter" class="panel-title">CORRELATION VIEW</label><select id="mesh-corr-filter"><option value="all">ALL MESSAGES</option><option value="matched">POTENTIAL MATCHES</option><option value="unmatched">NO MATCH FOUND</option><option value="infrastructure">INFRASTRUCTURE</option><option value="weather">WEATHER</option><option value="transport">TRANSPORT</option></select></div>'+
+ '<div id="mesh-corr-timeline" class="intel-window" style="height:auto;max-height:430px;min-height:90px"></div>'+
+ '<div class="meta" style="margin-top:8px">METHOD: keyword + broad region + 72-hour window. Publisher names are counted as records only; syndication and copied reports can create false matches. Weather signals are not forecasts. Check original sources before acting.</div>';
+ host.insertBefore(panel,feedRoot);
+ const $c=id=>document.getElementById(id);
+ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ const terms={
+  infrastructure:["power","electric","electricity","nie networks","water","ni water","water supply","telecom","broadband","mobile network","outage","blackout","substation","burst main","service disruption"],
+  weather:["weather","rain","wind","storm","flood","flooding","snow","ice","warning","met office","yellow warning","amber warning","red warning"],
+  transport:["road","traffic","collision","crash","closure","closed","diversion","rail","train","bus","port","airport"," ferry","roadworks"]
+ };
+ function regionGroup(v){
+  const s=String(v||"").toLowerCase();
+  if(/bhd|ulster|northern ireland|belfast|antrim|derry|armagh|tyrone|down|fermanagh/.test(s))return "NI";
+  if(/ioi|ireland|roi|republic of ireland|leinster|connacht|munster|dub|noc|snn/.test(s))return "IRELAND";
+  if(/sco|scotland/.test(s))return "SCOTLAND";
+  if(/iom|isle of man|manx/.test(s))return "IOM";
+  if(/yorkshire/.test(s))return "YORKSHIRE";
+  if(/uk|united kingdom|england|wales|britain|great britain/.test(s))return "UK";
+  return "UNKNOWN";
+ }
+ function dateValue(v){const n=new Date(v||"").getTime();return Number.isFinite(n)?n:0;}
+ function messageClass(x){
+  const text=[x.category,x.channel,x.message].join(" ").toLowerCase();
+  for(const k of Object.keys(terms))if(terms[k].some(t=>text.includes(t)))return k;
+  return "general";
+ }
+ function articleClass(a){
+  const text=[a.title,a.summary,a.category,a.source].join(" ").toLowerCase();
+  for(const k of Object.keys(terms))if(terms[k].some(t=>text.includes(t)))return k;
+  return "general";
+ }
+ function matchFor(message){
+  const msgText=[message.message,message.category,message.channel].join(" ").toLowerCase();
+  const cls=messageClass(message),region=regionGroup(message.region);
+  const when=dateValue(message.capturedAt||message.time);
+  const pool=(Array.isArray(articles)?articles:[]);
+  const candidates=pool.map(a=>{
+   const aText=[a.title,a.summary,a.category,a.source].join(" ").toLowerCase();
+   const ac=articleClass(a),ar=regionGroup(a.region||a.area);
+   const topic=cls==="general" ? (msgText.split(/\W+/).filter(w=>w.length>4).some(w=>aText.includes(w))) : ac===cls;
+   const sameRegion=region==="UNKNOWN"||ar==="UNKNOWN"||region===ar||
+    (region==="NI"&&ar==="UK")||(region==="IRELAND"&&ar==="NI");
+   const at=dateValue(a.date);
+   const timely=!when||!at||Math.abs(when-at)<=72*60*60*1000;
+   const matched=topic&&sameRegion&&timely;
+   return {a,matched,topic,sameRegion,timely,at};
+  }).filter(x=>x.matched).sort((a,b)=>b.at-a.at).slice(0,4);
+  return {cls,region,candidates};
+ }
+ function render(){
+  const records=(Array.isArray(meshFeed)?meshFeed:[]);
+  const results=records.map((x,i)=>({x,i,...matchFor(x)}));
+  const matches=results.filter(x=>x.candidates.length);
+  const infra=results.filter(x=>x.cls==="infrastructure").length;
+  const weather=results.filter(x=>x.cls==="weather").length;
+  const transport=results.filter(x=>x.cls==="transport").length;
+  $c("mesh-corr-stats").innerHTML=[
+   ["CAPTURED MESSAGES",records.length],["POTENTIAL MATCHES",matches.length],
+   ["INFRASTRUCTURE LEADS",infra],["WEATHER / TRANSPORT",weather+" / "+transport]
+  ].map(([label,value])=>'<div class="panel"><div class="panel-title">'+esc(label)+'</div><div class="big-status yellow">'+esc(value)+'</div></div>').join("");
+  const filter=$c("mesh-corr-filter").value;
+  const shown=results.filter(r=>{
+   if(filter==="matched")return r.candidates.length>0;
+   if(filter==="unmatched")return r.candidates.length===0;
+   if(["infrastructure","weather","transport"].includes(filter))return r.cls===filter;
+   return true;
+  }).sort((a,b)=>dateValue(b.x.capturedAt||b.x.time)-dateValue(a.x.capturedAt||a.x.time));
+  $c("mesh-corr-timeline").innerHTML=shown.length?shown.map(r=>{
+   const x=r.x,match=r.candidates.length,sourceNames=[...new Set(r.candidates.map(c=>c.a.source).filter(Boolean))];
+   const state=match?"POTENTIAL CROSS-SOURCE LEAD":"NO MATCH IN CURRENT SNAPSHOT";
+   const cls=r.cls==="infrastructure"?"INFRASTRUCTURE":r.cls.toUpperCase();
+   const links=r.candidates.map(c=>{
+    const url=typeof safeURL==="function"?safeURL(c.a.url):"";
+    return '<div class="meta" style="margin-top:7px"><strong>'+esc(c.a.title||"Untitled intelligence record")+'</strong> // '+esc(c.a.source||"Source unspecified")+' // '+esc(c.a.date?new Date(c.a.date).toLocaleString():"Date unavailable")+(url?' // <a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">ORIGINAL SOURCE ↗</a>':"")+'</div>';
+   }).join("");
+   return '<article class="intel-card '+(match?"medium":"unassessed")+'"><h3>'+esc(cls)+' // '+esc(state)+'</h3><div class="meta">'+esc((x.region||"Region unknown").toUpperCase())+' · '+esc(x.channel||"Channel not recorded")+' · '+esc(x.author||"Unattributed")+' · '+esc(x.capturedAt?new Date(x.capturedAt).toLocaleString():x.time||"Time unavailable")+'</div><p>'+esc(x.message||"")+'</p><div class="meta">SOURCE LABEL: '+esc(x.confidence||"Unverified")+' · POSSIBLE MATCHES: '+match+' · PUBLISHER NAMES: '+esc(sourceNames.length||0)+'</div>'+(match?'<div class="meta"><strong>REVIEW THESE RECORDS — NOT VERIFIED AS THE SAME EVENT</strong></div>'+links:'<div class="meta">No matching record found in the current collector snapshot. This does not mean the report is false.</div>')+'</article>';
+  }).join(""):'<div class="mesh-empty">No messages match this view. Import a public-room message to begin correlation.</div>';
+ }
+ $c("mesh-corr-filter").addEventListener("change",render);
+ const previous=meshRenderFeed;
+ if(typeof previous==="function")meshRenderFeed=function(){previous();render();};
+ const intel=document.getElementById("intel-feed");
+ if(intel&&window.MutationObserver)new MutationObserver(()=>render()).observe(intel,{childList:true,subtree:true});
+ render();
+})();
+
 })();
