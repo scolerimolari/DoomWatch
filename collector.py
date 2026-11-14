@@ -1,5 +1,6 @@
 import json
 import re
+import hashlib
 import urllib.request
 from urllib.parse import urlencode, urljoin, urlparse
 import xml.etree.ElementTree as ET
@@ -596,9 +597,180 @@ def fetch_html_listing(source):
 
 
 
+
+
+class NIWaterUpdateParser(HTMLParser):
+    """Extract area-based service update cards from NI Water's public listing."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.cards = []
+        self.current = None
+        self.capture_heading = False
+        self.ignored = 0
+
+    def handle_starttag(self, tag, attrs):
+        tag = tag.lower()
+        if tag in ("script", "style", "noscript"):
+            self.ignored += 1
+            return
+        if self.ignored:
+            return
+        if tag in ("h2", "h3", "h4"):
+            self.current = {"heading": [], "body": []}
+            self.cards.append(self.current)
+            self.capture_heading = True
+        elif tag in ("br", "p", "li", "div", "section"):
+            if self.current is not None and self.current["body"]:
+                self.current["body"].append(" ")
+
+    def handle_endtag(self, tag):
+        tag = tag.lower()
+        if tag in ("script", "style", "noscript") and self.ignored:
+            self.ignored -= 1
+        if tag in ("h2", "h3", "h4"):
+            self.capture_heading = False
+
+    def handle_data(self, data):
+        if self.ignored:
+            return
+        if self.current is None:
+            return
+        target = self.current["heading"] if self.capture_heading else self.current["body"]
+        target.append(data)
+
+
+def fetch_niwater_service_updates(source):
+    """Collect official NI Water area-level service updates and postcode impacts."""
+    request = urllib.request.Request(
+        source["url"],
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml"
+        }
+    )
+    with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+        content_type = response.headers.get("Content-Type", "")
+        body = response.read(MAX_FEED_SIZE)
+
+    if not body:
+        raise ValueError("NI Water service update page returned an empty response")
+
+    parser = NIWaterUpdateParser()
+    parser.feed(body.decode("utf-8-sig", errors="replace"))
+    articles = []
+    seen = set()
+
+    for card in parser.cards:
+        area = clean(" ".join(card["heading"]))
+        detail = clean(" ".join(card["body"]))
+        if not area or not detail:
+            continue
+        if not re.search(r"Last updated\s*:", detail, flags=re.IGNORECASE):
+            continue
+        if not re.search(r"Postcode areas potentially affected\s*:", detail, flags=re.IGNORECASE):
+            continue
+
+        # Keep the update's own status and time fields explicit; do not infer
+        # a restoration time when the operator has not supplied one.
+        restored = bool(re.search(
+            r"\b(supply has been restored|service has been restored|restored in your area)\b",
+            detail, flags=re.IGNORECASE
+        ))
+        planned = bool(re.search(
+            r"\b(planned maintenance|planned restriction|estimated start time)\b",
+            detail, flags=re.IGNORECASE
+        ))
+        status = "RESTORED" if restored else ("PLANNED" if planned else "ACTIVE")
+
+        postcode_match = re.search(
+            r"Postcode areas potentially affected\s*:\s*(.*?)(?:$)",
+            detail, flags=re.IGNORECASE
+        )
+        postcodes = ""
+        if postcode_match:
+            postcodes = ", ".join(re.findall(
+                r"\bBT\d{1,2}\s?\d?[A-Z]{2}\b",
+                postcode_match.group(1), flags=re.IGNORECASE
+            ))
+        if not postcodes:
+            # NI Water commonly presents postcode areas without an internal space.
+            tail = detail[postcode_match.start():] if postcode_match else ""
+            postcodes = ", ".join(re.findall(r"\bBT\d{5,6}\b", tail, flags=re.IGNORECASE))
+
+        update_match = re.search(
+            r"Last updated\s*:\s*(.*?)(?=Estimated start time\s*:|Estimated restoration time\s*:|$)",
+            detail, flags=re.IGNORECASE
+        )
+        start_match = re.search(
+            r"Estimated start time\s*:\s*(.*?)(?=Estimated restoration time\s*:|$)",
+            detail, flags=re.IGNORECASE
+        )
+        restore_match = re.search(
+            r"Estimated restoration time\s*:\s*(.*?)(?=\d{1,2}\s+[A-Za-z]+\s+\d{4}\s+\d{1,2}:\d{2}|$)",
+            detail, flags=re.IGNORECASE
+        )
+
+        update_time = clean(update_match.group(1)) if update_match else ""
+        start_time = clean(start_match.group(1)) if start_match else ""
+        restoration_time = clean(restore_match.group(1)) if restore_match else ""
+
+        # Stable IDs prevent a refreshed collection timestamp creating duplicates.
+        identity = (area.lower() + "|" + re.sub(r"\s+", " ", detail.lower())[:700])
+        digest = hashlib.sha1(identity.encode("utf-8")).hexdigest()[:16]
+        article_id = source["id"] + ":" + digest
+        if article_id in seen:
+            continue
+        seen.add(article_id)
+
+        title = "NI Water service update — " + area[:180]
+        description_parts = ["Status: " + status]
+        if update_time:
+            description_parts.append("Last updated: " + update_time)
+        if start_time:
+            description_parts.append("Estimated start time: " + start_time)
+        if restoration_time:
+            description_parts.append("Estimated restoration time: " + restoration_time)
+        if postcodes:
+            description_parts.append("Postcodes potentially affected: " + postcodes)
+        description_parts.append(detail[:2400])
+
+        articles.append({
+            "id": article_id,
+            "sourceId": source["id"],
+            "source": source["name"],
+            "title": title,
+            "url": source["url"],
+            "publishedAt": update_time,
+            "collectedAt": iso(),
+            "description": " | ".join(description_parts)[:3000],
+            "domain": source.get("domain", 5),
+            "region": "Northern Ireland",
+            "priority": source.get("priority", "high"),
+            "sourceTrust": "official_primary_source",
+            "sourceType": "utility_service_update",
+            "serviceStatus": status,
+            "affectedPostcodes": postcodes,
+            "estimatedStartTime": start_time,
+            "estimatedRestorationTime": restoration_time,
+            "evidenceStatus": "OFFICIAL_OPERATOR_UPDATE",
+            "confidence": "HIGH"
+        })
+
+    if not articles:
+        raise ValueError(
+            "No NI Water service update cards found; page structure may have changed"
+        )
+
+    return articles, content_type, len(body), "NIWATER_SERVICE_UPDATES"
+
+
+
 def fetch_feed(source):
     if source.get("method") == "html_listing":
         return fetch_html_listing(source)
+
+    if source.get("method") == "niwater_service_updates":
+        return fetch_niwater_service_updates(source)
 
     if source.get("id") == "gdacs-global":
         return fetch_gdacs_api(source)
