@@ -1327,6 +1327,39 @@ def load_json(path, default):
         return json.load(file)
 
 
+def matches_ballyclare_traffic(article):
+    source_id = str(article.get("sourceId", "")).lower()
+    if not source_id.startswith("trafficwatch-"):
+        return False
+    if not any(kind in source_id for kind in ("incident", "roadwork")):
+        return False
+    text = " ".join(str(article.get(field, "") or "") for field in ("title", "description", "summary")).upper()
+    normalized = re.sub(r"\b([AB])0+(\d+)\b", r"\1\2", text)
+    place_terms = ("BALLYCLARE", "DOAGH", "PARKGATE", "BALLYNURE", "TEMPLEPATRICK", "HILLHEAD ROAD", "BALLYEASTON", "BALLYCORR", "BALLYBOLEY")
+    if any(re.search(r"(?<![A-Z0-9])" + re.escape(term) + r"(?![A-Z0-9])", normalized) for term in place_terms):
+        return True
+    if any(re.search(r"(?<![A-Z0-9])" + road + r"(?![A-Z0-9])", normalized) for road in ("A57", "A8", "B94", "B59")):
+        return True
+    return bool(re.search(r"(?<![A-Z0-9])M2(?![A-Z0-9])", normalized) and re.search(r"SANDYKNOWES|GREENCASTLE|TEMPLEPATRICK|BALLYCLARE|JUNCTION 2|JUNCTION 4|(?<![A-Z0-9])J2(?![A-Z0-9])|(?<![A-Z0-9])J4(?![A-Z0-9])", normalized))
+
+
+def update_ballyclare_history(current_records):
+    history_path = ROOT / "data" / "ballyclare-history.json"
+    history = load_json(history_path, {"records": []})
+    existing_records = history.get("records", []) if isinstance(history, dict) else []
+    combined = {}
+    for item in existing_records + current_records:
+        key = str(item.get("id") or item.get("url") or "")
+        if key:
+            combined[key] = item
+    records = sorted(combined.values(), key=lambda item: str(item.get("publishedAt") or item.get("collectedAt") or ""), reverse=True)[:10000]
+    history_path.parent.mkdir(parents=True, exist_ok=True)
+    with history_path.open("w", encoding="utf-8") as file:
+        json.dump({"updatedAt": iso(), "retention": "Persistent archive, capped at 10,000 unique source records", "recordCount": len(records), "records": records}, file, indent=2, ensure_ascii=False)
+        file.write("\n")
+    print("BALLYCLARE HISTORY RECORDS:", len(records))
+
+
 def main():
     if not FEEDS_FILE.exists():
         raise FileNotFoundError("feeds.json is missing")
@@ -1512,6 +1545,18 @@ def main():
                 "sourceType",
                 metadata.get("type", "unclassified")
             )
+
+    # Maintain a separate long-lived local traffic archive before the rolling
+    # 90-day intelligence window is written back to the main archive.
+    ballyclare_records = []
+    for article in retained:
+        if matches_ballyclare_traffic(article):
+            ballyclare_records.append({
+                field: article.get(field)
+                for field in ("id", "sourceId", "source", "title", "url", "publishedAt", "collectedAt", "description", "summary", "region", "sourceTrust", "sourceType", "evidenceStatus", "confidence")
+                if article.get(field) is not None
+            })
+    update_ballyclare_history(ballyclare_records)
 
     # Add transparent sector tags and approximate town-level map metadata.
     for article in retained:
