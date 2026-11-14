@@ -1014,15 +1014,15 @@ def fetch_dfi_river_levels(source):
         seen.add(href)
         name = clean(item["name"])
         context = clean(item["context"])
-        level_match = re.search(r"(-?\\d+(?:\\.\\d+)?)\\s*m\\b", context, re.IGNORECASE)
+        level_match = re.search(r"(-?\d+(?:\.\d+)?)\s*m\b", context, re.IGNORECASE)
         if not level_match:
             continue
         level = level_match.group(1)
-        code_match = re.search(r"\\b(\\d{6})\\b", context)
+        code_match = re.search(r"\b(\d{6})\b", context)
         station_code = code_match.group(1) if code_match else ""
         trend_match = re.search(r"(▲|▼|→)", context)
         trend = {"▲": "RISING", "▼": "FALLING", "→": "STEADY"}.get(trend_match.group(1) if trend_match else "", "NOT REPORTED")
-        age_match = re.search(r"\\b(\\d+\\s*(?:min|mins|minutes|h|hr|hrs|hour|hours)\\s+ago|just now)\\b", context, re.IGNORECASE)
+        age_match = re.search(r"\b(\d+\s*(?:min|mins|minutes|h|hr|hrs|hour|hours)\s+ago|just now)\b", context, re.IGNORECASE)
         reading_age = age_match.group(1) if age_match else "age not supplied"
         town = RIVER_STATION_TOWNS.get(station_code, "")
         if not town:
