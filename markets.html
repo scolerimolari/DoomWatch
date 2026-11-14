@@ -376,6 +376,9 @@ function chart(canvasId,history,unit=""){
  ctx.textAlign="right";
  ctx.fillText(date(points[points.length-1].date),w-pad,h-5);
  ctx.textAlign="left";
+ canvas.setAttribute("tabindex","0");canvas.setAttribute("role","img");canvas.setAttribute("aria-label","Interactive historical price chart. Move or tap across the chart to inspect dated values.");
+ const inspect=event=>{const rect=canvas.getBoundingClientRect(),px=Math.max(0,Math.min(rect.width,(event.clientX||rect.left)-rect.left)),idx=Math.max(0,Math.min(points.length-1,Math.round((px-pad)*Math.max(1,points.length-1)/Math.max(1,rect.width-pad*2)))),p=points[idx];if(p)canvas.title=date(p.date)+" · "+number(p.value)+unit;};
+ canvas.onpointermove=inspect;canvas.onpointerdown=inspect;
 }
 
 // Multi-series chart for the grocery index.
@@ -448,6 +451,9 @@ function multiChart(canvasId,series){
   lx+=Math.max(75,ctx.measureText(s.name).width+28);
   if(lx>w-90){lx=pad;ly+=13;}
  });
+ canvas.setAttribute("tabindex","0");canvas.setAttribute("role","img");canvas.setAttribute("aria-label","Interactive multi-series chart. Move or tap across the chart to inspect dated values.");
+ const inspect=event=>{const rect=canvas.getBoundingClientRect(),px=Math.max(0,Math.min(rect.width,(event.clientX||rect.left)-rect.left)),base=usable[0].points,idx=Math.max(0,Math.min(base.length-1,Math.round((px-pad)*Math.max(1,base.length-1)/Math.max(1,rect.width-pad*2)))),stamp=base[idx]?.week||"Observation "+(idx+1),values=usable.map(s=>s.name+": "+(s.points[idx]?.level??"n/a")).join(" · ");canvas.title=stamp+" · "+values;};
+ canvas.onpointermove=inspect;canvas.onpointerdown=inspect;
 }
 
 function historyOf(item){
