@@ -715,7 +715,8 @@ def fetch_niwater_service_updates(source):
         restoration_time = clean(restore_match.group(1)) if restore_match else ""
 
         # Stable IDs prevent a refreshed collection timestamp creating duplicates.
-        identity = (area.lower() + "|" + re.sub(r"\s+", " ", detail.lower())[:700])
+        # One current NI Water card per affected area; refreshed timestamps update the same record.
+        identity = area.lower()
         digest = hashlib.sha1(identity.encode("utf-8")).hexdigest()[:16]
         article_id = source["id"] + ":" + digest
         if article_id in seen:
