@@ -571,15 +571,15 @@
       "platform": "website",
       "type": "critical_infrastructure_operator",
       "url": "https://www.niwater.com/",
-      "endpoint": null,
-      "method": "manual_review",
+      "endpoint": "https://www.niwater.com/whats-happening-in-your-area/current-service-updates/",
+      "method": "niwater_service_updates",
       "region": "Northern Ireland",
       "sectors": [
         5
       ],
       "trust": "official_primary_source",
-      "status": "manual_review",
-      "notes": "Water and wastewater service updates, supply interruptions, water quality and infrastructure works. No RSS endpoint verified; follow official service updates."
+      "status": "active",
+      "notes": "Active official HTML service-update collector. Captures area-level supply interruptions, planned maintenance, restoration notices, update times and affected postcodes. Status is preserved as ACTIVE, PLANNED or RESTORED; no RSS endpoint is assumed."
     },
     {
       "id": "nie-networks",
