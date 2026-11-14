@@ -29,7 +29,7 @@
 .cluster-sources{display:grid;gap:7px;margin-top:10px}
 .cluster-source{padding:9px;border:1px solid #455144;background:#121914;font-size:12px;line-height:1.45}
 .cluster-source p{margin:5px 0;color:#d5d9cf}
-.cluster-note{font-size:10px;color:#c9b98e;margin-top:8px}
+.cluster-note{font-size:10px;color:#c9b98e;margin-top:8px;line-height:1.55}.cluster-note strong{color:#f0d28e}
 </style>
 </head>
 <body>
@@ -105,6 +105,22 @@ const labels={CYBER:"CYBER / DIGITAL",SUPPLY:"SUPPLY CHAIN",CONFLICT:"WAR / CONF
 let articles=[],active="ALL",activeSource="ALL",rendered=[],collectorRun="",lastSeen="",watchTimer=null;
 function hits(a,key){const t=textOf(a);return topics[key].some(w=>t.includes(w));}
 function reporting(a){return /independent_media|established_media|specialist_media/i.test(String(a.sourceTrust||""))||/regional_newsroom|mainstream_media|international_media|cybersecurity_media/i.test(String(a.sourceType||""));}
+function sourceDomain(a){try{return new URL(String(a.url||"")).hostname.toLowerCase().replace(/^www[.]/,"");}catch(e){return String(a.source||"Unknown source").trim().toLowerCase();}}
+function sourceClass(a){
+ const trust=String(a.sourceTrust||"").toLowerCase(),type=String(a.sourceType||"").toLowerCase(),source=String(a.source||"").toLowerCase(),domain=sourceDomain(a);
+ if(social(a))return "SOCIAL / UNVERIFIED";
+ if(/syndicat|aggregat|wire_service|press_release|republication/.test(trust+" "+type+" "+source))return "AGGREGATED / SYNDICATED";
+ if(/official|government|public_authority|agency/.test(trust+" "+type)||domain.endsWith(".gov.uk")||domain.endsWith(".police.uk")||/(nidirect|niwater|trafficwatchni|nie|metoffice|psni|hscni|daera-ni|infrastructure-ni)/.test(domain))return "OFFICIAL / PUBLIC AUTHORITY";
+ if(reporting(a))return "NEWSROOM REPORTING";
+ if(/specialist/.test(trust+" "+type))return "SPECIALIST / TRADE";
+ return "UNKNOWN / UNCLASSIFIED";
+}
+function publisherStats(items){
+ const publishers=new Map();
+ for(const a of items){const cls=sourceClass(a),key=sourceDomain(a)||String(a.source||"Unknown source").trim().toLowerCase();if(!publishers.has(key))publishers.set(key,{className:cls});else if(cls==="NEWSROOM REPORTING")publishers.get(key).className=cls;}
+ const values=[...publishers.values()];return {total:values.length,newsrooms:values.filter(x=>x.className==="NEWSROOM REPORTING").length};
+}
+function corroborationLabel(stats){return stats.newsrooms>=2?"MULTIPLE NEWSROOM PUBLISHERS — CHECK ORIGINAL REPORTS":"NO MULTI-PUBLISHER NEWSROOM CORROBORATION";}
 function rank(a){if(social(a))return 5;if(reporting(a)&&/northern ireland|ireland/i.test(String(a.region||"")))return 0;if(reporting(a))return 1;if(String(a.sourceTrust||"").includes("specialist"))return 2;if(String(a.sourceTrust||"").includes("official"))return 3;return 4;}
 function matches(a){
  if(activeSource==="SOCIAL"&&!social(a))return false;
@@ -170,10 +186,10 @@ function render(){
  rendered=list;
  $("feed-items").innerHTML=clusters.map((cluster,groupIndex)=>{
   const items=[...cluster.items].sort((a,b)=>rank(a)-rank(b)||signalTime(b)-signalTime(a));
-  const lead=items[0],sources=new Set(items.map(a=>a.source||"Unknown source")).size;
+  const lead=items[0],stats=publisherStats(items),sources=stats.total;
   const sourcesHtml=items.map((a,index)=>{
    const socialPost=social(a),matched=Object.keys(topics).filter(k=>hits(a,k));
-   const status=socialPost?"UNVERIFIED SOCIAL POST":String(a.evidenceStatus||"UNASSESSED").replace(/_/g," ");
+   const status=socialPost?"UNVERIFIED SOCIAL POST":String(a.evidenceStatus||"UNASSESSED").replace(/_/g," "),provenance=sourceClass(a);
    const link=a.url&&/^https?:\/\//i.test(a.url)?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT / POST ↗</a>':'<span class="muted">No valid source link</span>';
    const place=String(a.locality?.name||a.area||a.location||"").trim();
    const mapSearch=place||String(a.title||"").trim();
@@ -183,9 +199,9 @@ function render(){
    const mapLink=mapSearch?'<a class="action-button" href="./map.html?'+mapParams.toString()+'">FIND ON MAP ↗</a>':"";
    const caseLink='<a class="action-button" href="./incident.html?'+(a.url?'url='+encodeURIComponent(a.url):'title='+encodeURIComponent(a.title||""))+'">OPEN INCIDENT CASE FILE ↗</a>';
    const globalIndex=list.indexOf(a);
-   return '<div class="cluster-source"><strong>'+esc(a.source||"Source not supplied")+'</strong> · '+esc(date(a.publishedAt||a.collectedAt))+'<p>'+esc(a.title||"Untitled report")+'</p><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+' '+mapLink+' '+caseLink+'<div style="margin-top:8px"><button type="button" class="action-button" data-flag="'+globalIndex+'">SAVE TO RUMOUR MONITOR</button></div></div>';
+   return '<div class="cluster-source"><strong>'+esc(a.source||"Source not supplied")+'</strong> · '+esc(date(a.publishedAt||a.collectedAt))+'<p>'+esc(a.title||"Untitled report")+'</p><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(provenance)+" · "+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+' '+mapLink+' '+caseLink+'<div style="margin-top:8px"><button type="button" class="action-button" data-flag="'+globalIndex+'">SAVE TO RUMOUR MONITOR</button></div></div>';
   }).join("");
-  return '<details class="cluster"><summary><h3>'+esc(lead.title||"Untitled story")+'</h3><div class="cluster-meta">'+esc(cluster.bucket)+' · '+items.length+' related report(s) · '+sources+' publisher(s) · latest '+esc(date(cluster.latest))+'</div></summary><div class="cluster-note">AUTOMATED HEADLINE GROUPING // NOT A CLAIM OF CORROBORATION · <a href="./operations.html?search='+encodeURIComponent(lead.title||"") +'">TRACK IN OPS TIMELINE ↗</a></div><div class="cluster-sources">'+sourcesHtml+'</div></details>';
+  return '<details class="cluster"><summary><h3>'+esc(lead.title||"Untitled story")+'</h3><div class="cluster-meta">'+esc(cluster.bucket)+' · '+items.length+' report(s) · '+sources+' distinct publisher(s) · '+stats.newsrooms+' newsroom publisher(s) · latest '+esc(date(cluster.latest))+'</div></summary><div class="cluster-note"><strong>'+esc(corroborationLabel(stats))+'</strong><br>A newsroom count is not proof of independent sourcing. Syndicated copies, official releases and social reposts are excluded from newsroom counts. Open the originals and compare reporting before treating this as corroboration. · <a href="./operations.html?search='+encodeURIComponent(lead.title||"") +'">TRACK IN OPS TIMELINE ↗</a></div><div class="cluster-sources">'+sourcesHtml+'</div></details>';
  }).join("")||'<div class="panel muted">No records match this filter and search. Try another topic or clear the search.</div>';
  $("feed-status").textContent="SHOWING "+list.length+" RECORDS IN "+clusters.length+" STORY GROUPS // SOURCE: "+activeSource+" // TOPIC: "+active+" // AUTOMATED GROUPING IS NOT VERIFICATION.";
 }
