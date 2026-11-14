@@ -124,9 +124,22 @@ body:has(#event-map) .map-note{color:#b6c0b1}
    <label class="layer-row"><input type="checkbox" data-layer="WEATHER" checked><i class="layer-dot" style="background:#79bde0"></i> Weather / environment</label>
    <label class="layer-row"><input type="checkbox" data-layer="OTHER" checked><i class="layer-dot" style="background:#a8d58b"></i> Other local reports</label>
    <label class="layer-row"><input type="checkbox" id="mesh-nodes-toggle" checked><i class="layer-dot" style="background:#e84b45"></i> MeshCore field nodes <span id="mesh-node-layer-count" style="margin-left:auto">0</span></label>
+   <label class="layer-row"><input type="checkbox" id="dependency-screen-toggle"><i class="layer-dot" style="background:#74d5c4"></i> Infrastructure dependency screening</label>
    <label class="layer-row"><input type="checkbox" id="impact-screen-toggle" checked><i class="layer-dot" style="background:#f3d36b"></i> Multi-sector impact screening</label>
    <label class="layer-row"><input type="checkbox" id="density-toggle"><i class="layer-dot" style="background:#e6d08a;opacity:.5"></i> Activity density overlay</label>
    <label class="layer-row"><input type="checkbox" id="labels-toggle" checked> Show town labels</label>
+  </section>
+  <section class="map-box" id="dependency-reference">
+   <h3>INFRASTRUCTURE DEPENDENCIES // REFERENCE MODEL</h3>
+   <div class="map-note">Generic operational dependencies, not a map of verified NI assets, routes, substations, pumping stations or service boundaries.</div>
+   <div class="map-item"><strong>POWER → WATER</strong><div class="meta">Treatment, pumping, telemetry and control may depend on electricity and backup power.</div></div>
+   <div class="map-item"><strong>POWER → COMMUNICATIONS</strong><div class="meta">Mobile, fixed networks, data centres and control rooms require power and backup arrangements.</div></div>
+   <div class="map-item"><strong>POWER → TRANSPORT & FUEL</strong><div class="meta">Signals, depots, pumps, payment systems and logistics may depend on electricity.</div></div>
+   <div class="map-item"><strong>WATER + POWER + ACCESS → HEALTH & EMERGENCY RESPONSE</strong><div class="meta">Hospitals, care settings and responders depend on utilities, staff access, fuel and communications.</div></div>
+   <div class="map-item"><strong>TRANSPORT → FOOD, MEDICINES & FUEL</strong><div class="meta">Distribution relies on passable routes, drivers, depots and functioning networks.</div></div>
+   <div class="map-item"><strong>WEATHER / FLOOD → MULTIPLE SECTORS</strong><div class="meta">Severe conditions can affect roads, electricity assets, water infrastructure and access.</div></div>
+   <div class="map-note">The overlay flags co-located report categories that intersect these pathways. It does not establish an actual outage, dependency failure or downstream impact.</div>
+   <div id="dependency-screen-summary" class="map-note" aria-live="polite">Dependency screening is off.</div>
   </section>
   <section class="map-box">
    <h3>FLOOD & WATER // LIVE SOURCES</h3>
@@ -381,10 +394,29 @@ function impactScreenSummary(group){
  };
  return '<div class="section-card" style="margin:8px 0;border-color:#b99b4d"><strong>GEOGRAPHIC IMPACT SCREENING</strong><p>'+categories.length+' distinct reporting categories appear in this town-level archive group.</p>'+categories.map(c=>'<div class="meta">• '+esc(c.name)+' // '+c.count+' record(s) // '+esc(pathways[c.name]||"General reporting")+'</div>').join("")+'<p class="map-note">This is a co-location screen, not evidence that services are disrupted together or that reports share a cause. Town locations are approximate unless a source provides verified coordinates.</p></div>';
 }
+const DEPENDENCY_LINKS=[
+ {a:"POWER",b:"WATER",label:"Electricity ↔ water treatment / pumping",note:"Check NI Water service notices and NIE Networks status independently."},
+ {a:"POWER",b:"TRANSPORT",label:"Electricity ↔ transport systems",note:"Potential relevance to signals, depots, pumps and logistics; no asset-level match is available."},
+ {a:"POWER",b:"EMERGENCY",label:"Electricity ↔ emergency / health continuity",note:"Check responsible operators; co-reported categories do not confirm a service impact."},
+ {a:"WATER",b:"EMERGENCY",label:"Water ↔ health / emergency continuity",note:"Potential operational dependency only; no facility-level service data is held here."},
+ {a:"TRANSPORT",b:"EMERGENCY",label:"Transport access ↔ emergency response",note:"Road reporting may be relevant to access; routes and response times are not modelled."},
+ {a:"WEATHER",b:"TRANSPORT",label:"Weather ↔ transport access",note:"Check official warnings and TrafficWatchNI for current local restrictions."},
+ {a:"WEATHER",b:"POWER",label:"Weather ↔ electricity network",note:"Weather reports do not establish damage or an electricity outage."}
+];
+function dependencyPairs(group){if(!group||!group.cats)return [];return DEPENDENCY_LINKS.filter(link=>(group.cats[link.a]||0)>0&&(group.cats[link.b]||0)>0);}
+function dependencyScreenSummary(){
+ const hits=townGroups.map(g=>({group:g,pairs:dependencyPairs(g)})).filter(x=>x.pairs.length),node=$("dependency-screen-summary");
+ if(node)node.innerHTML=hits.length?'<strong>'+hits.length+' locations with co-reported dependency categories</strong><div class="meta">'+hits.slice(0,8).map(x=>esc(x.group.town.name)+' · '+x.pairs.length+' pathway(s)').join('<br>')+'</div><div class="meta">Current filters and archive window only. Review prompts, not confirmed cascading failures.</div>':'No co-reported dependency pairs in the current filtered archive.';
+}
+function dependencyDetail(group){
+ const pairs=dependencyPairs(group);
+ if(!pairs.length)return '<div class="map-item"><strong>DEPENDENCY REVIEW</strong><div class="meta">No predefined cross-sector dependency pair appears in this location’s current report categories. This does not establish that dependencies are absent.</div></div>';
+ return '<div class="map-item" style="border-left-color:#74d5c4"><strong>INFRASTRUCTURE DEPENDENCIES // REVIEW</strong><div class="meta">'+pairs.length+' co-reported pathway(s) in this location’s current archive:</div>'+pairs.map(p=>'<div class="meta"><strong>'+esc(p.label)+'</strong><br>'+esc(p.note)+'</div>').join("")+'<div class="map-note">Category co-location only. No confirmed asset, service boundary, outage, causal link or downstream impact is inferred.</div></div>';
+}
 function renderDetail(group){
  if(!group){$("map-town-details").textContent="Select a town marker or a report below to inspect its source records.";return;}
  const counts=Object.entries(group.cats).map(([k,v])=>k+" "+v).join(" · ");
- $("map-town-details").innerHTML='<strong>'+esc(group.town.name)+' // '+group.items.length+' MATCHED REPORTS</strong><div class="meta">Approximate town-centre match only · '+esc(counts)+'</div>'+impactScreenSummary(group)+group.items.slice(0,8).map(a=>'<div class="map-item '+category(a).toLowerCase()+'" style="margin-top:7px"><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(dateText(stamp(a)))+'</div><button type="button" data-open-record="'+esc(a.url||"")+'" data-record-title="'+esc(a.title||"")+'" style="padding:6px 8px;font-size:10px">INSPECT RECORD</button>'+(safeUrl(a.url)?' <a href="'+esc(safeUrl(a.url))+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"")+'</div>').join("");
+ $("map-town-details").innerHTML='<strong>'+esc(group.town.name)+' // '+group.items.length+' MATCHED REPORTS</strong><div class="meta">Approximate town-centre match only · '+esc(counts)+'</div>'+dependencyDetail(group)+impactScreenSummary(group)+group.items.slice(0,8).map(a=>'<div class="map-item '+category(a).toLowerCase()+'" style="margin-top:7px"><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(dateText(stamp(a)))+'</div><button type="button" data-open-record="'+esc(a.url||"")+'" data-record-title="'+esc(a.title||"")+'" style="padding:6px 8px;font-size:10px">INSPECT RECORD</button>'+(safeUrl(a.url)?' <a href="'+esc(safeUrl(a.url))+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"")+'</div>').join("");
  $("map-town-details").querySelectorAll("[data-open-record]").forEach(btn=>{btn.addEventListener("click",()=>{const item=group.items.find(a=>(a.url||"")===btn.dataset.openRecord&&(a.title||"")===btn.dataset.recordTitle);if(item)openRecord(item);});});
 }
 function renderMarkers(){
@@ -403,6 +435,17 @@ function renderMarkers(){
    marker.bindTooltip("MESHCORE // "+String(node.id||"UNNAMED"),{direction:"top",offset:[0,-8]});
    marker.bindPopup('<strong>MESHCORE NODE // '+esc(node.id||"UNNAMED")+'</strong><div>Area match: '+esc(town.name)+' · approximate town position only</div><div>Type: '+esc(node.type||"Not recorded")+'</div><div>Evidence: '+esc(node.evidence||"Not recorded")+'</div><div class="map-note">Manual node register only — not live telemetry, an exact radio position or proof of coverage.</div>');
    marker.addTo(markerLayer);bounds.push([town.lat,town.lon]);
+  });
+ }
+ // Dependency screening uses co-reported categories at approximate town-centre positions.
+ if($("dependency-screen-toggle")?.checked){
+  townGroups.forEach(g=>{
+   const pairs=dependencyPairs(g);if(!pairs.length)return;
+   const marker=L.circleMarker([g.town.lat,g.town.lon],{radius:24,weight:3,color:"#74d5c4",fillColor:"#74d5c4",fillOpacity:.04,dashArray:"2 5",interactive:true});
+   marker.bindTooltip("DEPENDENCY REVIEW // "+g.town.name+" · "+pairs.length+" pathway(s)",{direction:"bottom"});
+   marker.bindPopup('<strong>INFRASTRUCTURE DEPENDENCY REVIEW // '+esc(g.town.name)+'</strong><div>'+pairs.map(p=>esc(p.label)).join("<br>")+'</div><div class="map-note">Co-reported categories only. Not proof of a real outage, asset dependency, cascade or causal connection.</div><a href="#" class="dw-dependency-open" data-town="'+esc(g.town.name)+'">OPEN DEPENDENCY DETAILS</a>');
+   marker.on("popupopen",event=>{const link=event.popup.getElement()?.querySelector(".dw-dependency-open");if(link)link.addEventListener("click",e=>{e.preventDefault();selectTown(g.town.name);map.closePopup();$("map-town-details").scrollIntoView({behavior:"smooth",block:"nearest"});});});
+   marker.addTo(markerLayer);
   });
  }
  // Geographic impact screening: ring only marks category overlap at an approximate town location.
@@ -468,6 +511,7 @@ function render(){
  $("kpi-traffic").textContent=records.filter(isTraffic).length.toLocaleString("en-GB");
  $("kpi-power").textContent=records.filter(isPower).length.toLocaleString("en-GB");$("kpi-water").textContent=records.filter(isWater).length.toLocaleString("en-GB");
  $("kpi-flood").textContent=records.filter(isFlood).length.toLocaleString("en-GB");
+ dependencyScreenSummary();
  $("town-select").innerHTML='<option value="">ALL LOCATIONS</option>'+TOWNS.filter(t=>townGroups.some(g=>g.town.name===t.name)).map(t=>'<option value="'+esc(t.name)+'">'+esc(t.name)+'</option>').join("");
  $("town-select").value=activeTown;
  if(map)renderMarkers();else renderFallback(townGroups);
@@ -527,6 +571,7 @@ $("mesh-nodes-toggle").addEventListener("change",render);
 // Refresh plotted node records when the MeshCore workspace is changed in another tab.
 window.addEventListener("storage",event=>{if(event.key==="doomwatch-meshcore-v1")render();});
 $("impact-screen-toggle").addEventListener("change",render);
+$("dependency-screen-toggle").addEventListener("change",render);
 $("density-toggle").addEventListener("change",render);
 $("labels-toggle").addEventListener("change",render);
 $("map-refresh").addEventListener("click",load);
