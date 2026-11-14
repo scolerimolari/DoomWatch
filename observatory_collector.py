@@ -37,7 +37,7 @@ FLOW_DEFS = {
  "fringe": {
   "name":"Fringe & Emerging Signals",
   "desc":"Alternative commentary, specialist communities and weak signals. Inclusion is for monitoring only; it is not an endorsement of the publisher or its claims.",
-  "terms":("alternative","fringe","unconventional","emerging","narrative","rumour","rumor","disinformation","influence operation","civil liberties","surveillance","preparedness","zero hedge","offguardian","daily sceptic","expose","uk column","activist post","statewatch"),
+  "terms":("alternative media","alternative commentary","fringe narrative","fringe","unconventional","emerging","narrative","rumour","rumor","disinformation","influence operation","civil liberties","surveillance","preparedness","zero hedge","offguardian","daily sceptic","expose","uk column","activist post","statewatch"),
   "types":("alternative_media","alternative_financial_media","independent_commentary","alternative_commentary","preparedness_media","independent_research","curated_alternative","civil_liberties_organisation")
  },
  "economic": {
