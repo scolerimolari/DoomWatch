@@ -148,12 +148,22 @@ def flow_match(article, flow):
  text=" ".join(str(article.get(k) or "") for k in ("title","description","summary","source","sourceType","sourceTrust","domain","region")).lower()
  source_type=str(article.get("sourceType") or "").lower()
  source_trust=str(article.get("sourceTrust") or "").lower()
- if flow=="community" and ("social" in source_type or "community" in source_type or "unverified_social" in source_trust or "unverified_community" in source_trust):
-  return True
- if flow=="fringe" and (source_trust in ("alternative_commentary","independent_commentary","curated_alternative") or source_type in ("alternative_media","alternative_financial_media","independent_commentary","preparedness_media")):
-  return True
- if flow=="independent" and (source_trust in ("independent_investigative","independent_media","established_media") and any(x in text for x in ("investigation","exclusive","belfast","northern ireland","declassified","opendemocracy","crisis group","ferret","byline","the detail"))):
-  return True
+ if flow=="community":
+  if ("social" in source_type or "community" in source_type or source_trust in ("unverified_social","unverified_community")):
+   return True
+  if source_type in ("regional_newsroom","national_newsroom") and any(x in text for x in ("ballyclare","newtownabbey","belfast","antrim","larne","derry","northern ireland")):
+   return True
+  return False
+ if flow=="fringe":
+  if source_trust in ("alternative_commentary","independent_commentary","curated_alternative") or source_type in ("alternative_media","alternative_financial_media","independent_commentary","preparedness_media","curated_alternative"):
+   return True
+  if source_trust in ("unverified_social","unverified_community") and any(x in text for x in ("rumour","rumor","disinformation","conspiracy","unverified claim","influence operation","emerging narrative","fringe narrative")):
+   return True
+  return False
+ if flow=="independent":
+  if source_trust in ("independent_investigative","independent_media","established_media") and any(x in text for x in ("investigation","exclusive","belfast","northern ireland","declassified","opendemocracy","crisis group","ferret","byline","the detail")):
+   return True
+  return False
  if flow=="digital" and any(x in text for x in FLOW_DEFS[flow]["terms"]):
   return True
  if flow=="economic" and any(x in text for x in FLOW_DEFS[flow]["terms"]):
