@@ -99,7 +99,6 @@ if(main){
 function openHashTarget(){const id=decodeURIComponent(location.hash.slice(1));if(!id)return;const target=document.getElementById(id);if(!target)return;let parent=target.parentElement;while(parent){if(parent.matches?.("details.dw-fold"))parent.open=true;parent=parent.parentElement;}if(target.matches?.("details.dw-fold"))target.open=true;}
 window.addEventListener("hashchange",openHashTarget);openHashTarget();
 body.classList.add("dw-ready");
-})();
 
 // MESH INTELLIGENCE CORRELATION — screening aid only; never promotes a match to a verified incident.
 (function meshCorrelationModule(){
