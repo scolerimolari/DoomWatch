@@ -4,47 +4,103 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#111714">
-<meta name="description" content="DoomWatch geographic incident map for Northern Ireland.">
-<title>DOOMWATCH // MAP</title>
+<meta name="description" content="DoomWatch geographic incident and open-source intelligence map for Northern Ireland.">
+<title>DOOMWATCH // GEOINT MAP</title>
 <link rel="stylesheet" href="./doomwatch.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
-.map-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
-#event-map{height:min(66vh,650px);min-height:360px;width:100%;background:#101713;border:1px solid #66715d;border-radius:4px;z-index:1}
-.map-key{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.map-key span{border:1px solid #596653;padding:5px 8px;font-size:10px;color:#d9c69e}
-.map-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:10px}
-.map-item{padding:12px;background:#19211c;border:1px solid #4b574e;border-left:4px solid #c6a36b;overflow-wrap:anywhere}
-.map-item summary{cursor:pointer;list-style:none}.map-item summary::-webkit-details-marker{display:none}.map-item summary:after{content:"OPEN +";display:block;color:#b9dc9a;font-size:10px;margin-top:5px}.map-item[open] summary:after{content:"CLOSE −"}
-#map-town-details{margin-top:10px}#event-map [data-town]:focus{outline:none}#event-map [data-town]:focus circle{stroke:#f2c84b;stroke-width:5}
-.map-item strong{display:block;color:#f0d28e;margin-bottom:5px}.map-item .meta{margin:5px 0}
-.map-item a{display:inline-block;margin-top:7px}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#1b241e;color:#eee;border:1px solid #8c754d}.leaflet-popup-content a{color:#b9dc9a}
-@media(max-width:600px){#event-map{height:54vh;min-height:330px}.map-item{font-size:13px}}
- .map-search-label{display:block;margin:8px 0 3px;color:#d9c69e;font-size:11px;letter-spacing:1px;font-weight:700}#map-search{margin:0 0 10px}.map-key span{line-height:1.5}.map-item summary{line-height:1.5}.map-item .meta{line-height:1.5}
+.map-intro{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.map-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
+.map-kpi{background:#111914;border:1px solid #52604f;padding:10px;min-width:0}
+.map-kpi strong{display:block;color:#f0cf86;font-size:clamp(19px,3vw,27px);line-height:1.2;overflow-wrap:anywhere}
+.map-kpi span{display:block;color:#a9b1a4;font-size:10px;letter-spacing:.7px;margin-top:4px}
+.map-workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,330px);gap:10px;align-items:start}
+#event-map{height:min(68vh,720px);min-height:390px;width:100%;background:#101713;border:1px solid #66715d;border-radius:4px;z-index:1}
+.map-side{display:grid;gap:10px;min-width:0}
+.map-box{background:#151d18;border:1px solid #4d5b4e;padding:11px;min-width:0}
+.map-box h3{margin:0 0 9px;color:#e4c787}
+.layer-row{display:flex;align-items:center;gap:8px;padding:6px 2px;border-bottom:1px solid #354138;font-size:11px;color:#d9dfd2}
+.layer-row input{width:auto;margin:0;accent-color:#b9dc9a}
+.layer-dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:0 0 10px}
+.map-label{display:block;color:#d9c69e;font-size:10px;letter-spacing:1px;font-weight:700;margin:9px 0 4px}
+.map-control{width:100%;margin:0 0 7px;padding:9px;background:#0d120f;color:#eee;border:1px solid #657064}
+.map-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.map-actions button{padding:8px 10px;font-size:10px}
+.map-key{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0}
+.map-key span{border:1px solid #596653;padding:5px 8px;font-size:10px;color:#d9c69e}
+.map-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:9px}
+.map-item{padding:11px;background:linear-gradient(145deg,#222b25,#151c17);border:1px solid #4b574e;border-left:4px solid #8b9b78;overflow-wrap:anywhere;min-width:0}
+.map-item.transport{border-left-color:#d6b574}.map-item.weather{border-left-color:#79bde0}.map-item.emergency{border-left-color:#ed5146}.map-item.other{border-left-color:#a8d58b}
+.map-item summary{cursor:pointer;list-style:none;line-height:1.45}.map-item summary::-webkit-details-marker{display:none}
+.map-item summary:after{content:"OPEN +";display:block;color:#b9dc9a;font-size:10px;margin-top:5px}.map-item[open] summary:after{content:"CLOSE −"}
+.map-item strong{display:block;color:#f0d28e;margin-bottom:5px}.map-item .meta{margin:5px 0;line-height:1.45}
+.map-item a{display:inline-block;margin-top:7px}
+.map-detail{line-height:1.55;color:#d9dfd2}.map-detail .meta{margin:5px 0}
+.map-detail .detail-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.map-detail button{padding:8px 10px;font-size:10px}
+.map-note{font-size:11px;color:#aeb7aa;line-height:1.5}
+.map-timeline{display:flex;gap:10px;align-items:center}.map-timeline input{flex:1;min-width:100px;margin:0}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#1b241e;color:#eee;border:1px solid #8c754d}
+.leaflet-popup-content{margin:11px;line-height:1.5}.leaflet-popup-content a{color:#b9dc9a!important}
+.leaflet-control-attribution{font-size:9px!important}
+#map-status{overflow-wrap:anywhere}
+@media(max-width:850px){.map-workspace{grid-template-columns:1fr}.map-side{grid-template-columns:repeat(2,minmax(0,1fr))}.map-side .map-box:first-child{grid-column:1/-1}}
+@media(max-width:600px){.map-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.map-side{grid-template-columns:1fr}#event-map{height:54vh;min-height:340px}.map-list{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">MAP // NORTHERN IRELAND EVENT PLOT</div></div><div class="classification">GEOSPATIAL MONITOR</div></div></header>
+<header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">GEOINT // NORTHERN IRELAND EVENT PLOT</div></div><div class="classification">MAP OPERATIONS</div></div></header>
 <main>
-<h2>MAP // NORTHERN IRELAND OCCURRENCES</h2>
-<div class="terminal" id="map-status">CONNECTING TO INTELLIGENCE ARCHIVE…</div>
-<div class="map-key"><span>● INCIDENT / EMERGENCY</span><span>● TRANSPORT / INFRASTRUCTURE</span><span>● WEATHER / ENVIRONMENT</span><span>● OTHER LOCAL REPORT</span><span>PIN = APPROXIMATE TOWN CENTRE, NOT INCIDENT COORDINATES</span></div>
-<div class="controls" id="map-filters" aria-label="Filter mapped reports">
-<button class="active" data-filter="ALL" aria-pressed="true">ALL EVENTS</button>
-<button data-filter="TRANSPORT" aria-pressed="false">TRANSPORT</button>
-<button data-filter="WEATHER" aria-pressed="false">WEATHER</button>
-<button data-filter="EMERGENCY" aria-pressed="false">EMERGENCY</button>
-<button data-filter="OTHER" aria-pressed="false">OTHER</button>
-<button type="button" id="map-refresh">REFRESH ARCHIVE</button>
+<div class="map-intro"><div><h2>MAP // OPERATIONAL GEOGRAPHIC INTELLIGENCE</h2><div class="muted">Northern Ireland reports plotted by town-level location, with source-linked incident records.</div></div><button type="button" class="action-button" id="map-refresh">↻ REFRESH ARCHIVE</button></div>
+<div class="terminal" id="map-status" role="status" aria-live="polite">CONNECTING TO INTELLIGENCE ARCHIVE…</div>
+<div class="map-kpis">
+ <div class="map-kpi"><strong id="kpi-total">—</strong><span>MATCHING REPORTS</span></div>
+ <div class="map-kpi"><strong id="kpi-located">—</strong><span>TOWN-LOCATED</span></div>
+ <div class="map-kpi"><strong id="kpi-towns">—</strong><span>LOCATIONS WITH REPORTS</span></div>
+ <div class="map-kpi"><strong id="kpi-sources">—</strong><span>UNIQUE SOURCES</span></div>
 </div>
-<label class="map-search-label" for="map-search">SEARCH LOCAL REPORTS</label>
-<input id="map-search" type="search" placeholder="Search town, incident, source or article…" autocomplete="off">
-<div class="panel map-layout"><div id="event-map" role="application" aria-label="Map of Northern Ireland news and incident mentions"></div></div>
-<div class="panel" id="map-town-details" aria-live="polite">SELECT A TOWN MARKER TO SEE ITS LATEST MATCHED REPORTS. LOCATIONS ARE APPROXIMATE TOWN CENTRES.</div>
-<h2>EVENT RECORDS // ARTICLE LINKS</h2>
-<div class="panel muted" id="map-list-status">Waiting for event records…</div>
+<div class="map-workspace">
+ <div class="panel" style="padding:8px">
+  <div id="event-map" role="application" aria-label="Interactive map of Northern Ireland report locations"></div>
+  <div class="map-key"><span>● Emergency / safety</span><span>● Transport / infrastructure</span><span>● Weather / environment</span><span>● Other reports</span></div>
+  <div class="map-note">Map pins indicate approximate town-centre matches, not exact incident coordinates. A report mentioning a town does not establish that an incident occurred at the marker.</div>
+ </div>
+ <aside class="map-side">
+  <section class="map-box">
+   <h3>MAP LAYERS // TOGGLE</h3>
+   <label class="layer-row"><input type="checkbox" data-layer="EMERGENCY" checked><i class="layer-dot" style="background:#ed5146"></i> Emergency / public safety</label>
+   <label class="layer-row"><input type="checkbox" data-layer="TRANSPORT" checked><i class="layer-dot" style="background:#d6b574"></i> Transport / infrastructure</label>
+   <label class="layer-row"><input type="checkbox" data-layer="WEATHER" checked><i class="layer-dot" style="background:#79bde0"></i> Weather / environment</label>
+   <label class="layer-row"><input type="checkbox" data-layer="OTHER" checked><i class="layer-dot" style="background:#a8d58b"></i> Other local reports</label>
+   <label class="layer-row"><input type="checkbox" id="density-toggle"><i class="layer-dot" style="background:#e6d08a;opacity:.5"></i> Activity density overlay</label>
+   <label class="layer-row"><input type="checkbox" id="labels-toggle" checked> Show town labels</label>
+  </section>
+  <section class="map-box">
+   <h3>TIME WINDOW</h3>
+   <label class="map-label" for="age-range">SHOW REPORTS FROM LAST <strong id="age-label">30 DAYS</strong></label>
+   <div class="map-timeline"><input id="age-range" type="range" min="1" max="90" value="30" step="1"><span id="age-value">30d</span></div>
+   <label class="layer-row" style="margin-top:7px"><input type="checkbox" id="all-time"> Include entire archive</label>
+   <div class="map-note">The slider changes the reporting window. Undated records remain visible and are labelled as undated.</div>
+  </section>
+  <section class="map-box">
+   <h3>SEARCH & LOCATION</h3>
+   <label class="map-label" for="map-search">SEARCH REPORTS</label>
+   <input class="map-control" id="map-search" type="search" placeholder="Town, headline, source…">
+   <label class="map-label" for="town-select">FOCUS LOCATION</label>
+   <select class="map-control" id="town-select"><option value="">ALL LOCATIONS</option></select>
+   <div class="map-actions"><button type="button" id="clear-filters">CLEAR FILTERS</button><button type="button" id="fit-map">FIT NI MAP</button></div>
+  </section>
+  <section class="map-box">
+   <h3>SELECTED LOCATION</h3>
+   <div class="map-detail" id="map-town-details" aria-live="polite">Select a town marker or a report below to inspect its source records.</div>
+  </section>
+ </aside>
+</div>
+<h2>EVENT RECORDS // SOURCE-LINKED REPORTS</h2>
+<div class="panel muted" id="map-list-status" role="status" aria-live="polite">Waiting for event records…</div>
 <div class="map-list" id="map-articles"></div>
 </main>
-<footer>DOOMWATCH // MAP INTELLIGENCE<br>GEOGRAPHY IS APPROXIMATE WHERE THE SOURCE DOES NOT PROVIDE COORDINATES</footer>
+<footer>DOOMWATCH // MAP INTELLIGENCE<br>OPEN SOURCE REPORTING // APPROXIMATE GEOGRAPHY // NOT AN EMERGENCY SERVICE</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 "use strict";
@@ -73,80 +129,152 @@ const TOWNS=[
 {name:"Derry/Londonderry",lat:54.9970,lon:-7.3090,terms:["derry","londonderry","waterside"]},
 {name:"Ballycastle",lat:55.2044,lon:-6.2540,terms:["ballycastle","bushmills","cushendall","causeway coast"]}
 ];
+const COLORS={EMERGENCY:"#ed5146",TRANSPORT:"#d6b574",WEATHER:"#79bde0",OTHER:"#a8d58b"};
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const date=v=>{if(!v)return "Date not supplied";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB");};
-const allText=a=>(String(a.title||"")+" "+String(a.description||"")).toLowerCase();
-const hasTerm=(text,term)=>new RegExp("(^|[^a-z0-9])"+term+"([^a-z0-9]|$)","i").test(text);
+const safeUrl=v=>/^https?:\/\//i.test(String(v||""))?String(v):"";
+const stamp=a=>a.publishedAt||a.date||a.collectedAt||"";
+const dateText=v=>{if(!v)return "DATE NOT SUPPLIED";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB");};
+const allText=a=>[a.title,a.description,a.summary,a.source,a.region,a.category,a.locality?.name].map(v=>String(v||"")).join(" ").toLowerCase();
+const hasTerm=(text,term)=>new RegExp("(^|[^a-z0-9])"+term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"([^a-z0-9]|$)","i").test(text);
 const isNI=a=>/northern ireland/i.test(String(a.region||""))||/(^|[;,/])\s*ni\s*($|[;,/])/i.test(String(a.region||""))||!!a.locality||TOWNS.some(t=>t.terms.some(term=>hasTerm(allText(a),term)));
-const locate=a=>{if(a.locality&&a.locality.name){const found=TOWNS.find(t=>t.name.toLowerCase()===String(a.locality.name).toLowerCase());if(found)return found;}const t=allText(a);for(const town of TOWNS){if(town.terms.some(term=>hasTerm(t,term)))return town;}return null;};
-const category=a=>{const t=allText(a),s=String(a.sourceType||"").toLowerCase(),v=t+" "+s;if(/traffic|roadwork|transport|rail|airport|port|ferry|bridge|closure/.test(v))return "TRANSPORT";if(/police|fire|emergency|incident|crash|collision|evacuat|rescue|ambulance|explosion|outage|crime|missing person/.test(v))return "EMERGENCY";if(/weather|flood|storm|wind|snow|ice|environment|rainfall|met office|coastal erosion/.test(v))return "WEATHER";return "OTHER";}
-function diverse(records,limit,perSource){
- const counts=new Map(),out=[];
- for(const item of records){
-  const key=String(item.sourceId||item.source||"unknown");
-  const count=counts.get(key)||0;
-  if(count>=perSource)continue;
-  counts.set(key,count+1);out.push(item);
-  if(out.length>=limit)break;
- }
- return out;
+function locate(a){
+ const locality=a.locality&&typeof a.locality==="object"?String(a.locality.name||""):"";
+ if(locality){const exact=TOWNS.find(t=>t.name.toLowerCase()===locality.toLowerCase());if(exact)return exact;const partial=TOWNS.find(t=>t.terms.some(term=>locality.toLowerCase().includes(term)));if(partial)return partial;}
+ const txt=allText(a);for(const town of TOWNS){if(town.terms.some(term=>hasTerm(txt,term)))return town;}return null;
 }
-let records=[],filtered=[],markers=[],active="ALL",map=null,layer=null,searchTerm="";
+function category(a){
+ const t=allText(a),s=String(a.sourceType||"").toLowerCase(),v=t+" "+s;
+ if(/traffic|roadwork|transport|rail|airport|port|ferry|bridge|closure|freight|logistics/.test(v))return "TRANSPORT";
+ if(/police|fire|emergency|incident|crash|collision|evacuat|rescue|ambulance|explosion|outage|crime|missing person/.test(v))return "EMERGENCY";
+ if(/weather|flood|storm|wind|snow|ice|environment|rainfall|met office|coastal erosion/.test(v))return "WEATHER";
+ return "OTHER";
+}
+function uniqueSources(items){return new Set(items.map(a=>String(a.sourceId||a.source||"unknown"))).size;}
+function validDate(a){const d=new Date(stamp(a));return stamp(a)&&!Number.isNaN(d.getTime())?d:null;}
+let archive=[],records=[],townGroups=[],map=null,markerLayer=null,densityLayer=null,activeTown="",searchTerm="",ageDays=30,showAll=false;
 function initMap(){
- map=null;layer=null;
- if(window.L&&typeof window.L.map==="function"){
+ if(window.L&&typeof L.map==="function"){
   try{
    map=L.map("event-map",{scrollWheelZoom:false,preferCanvas:true}).setView([54.62,-6.55],8);
-   layer=L.layerGroup().addTo(map);
-   const tiles=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a> contributors"});
-   let tileErrorShown=false;tiles.on("tileerror",()=>{if(!tileErrorShown){tileErrorShown=true;$("map-status").textContent="MAP TILES UNAVAILABLE // SHOWING INCIDENT MARKERS WITHOUT BASE TILES";}});tiles.addTo(map);
-   $("map-status").textContent="OPENSTREETMAP // NORTHERN IRELAND INCIDENT PLOT // APPROXIMATE TOWN-CENTRE MATCHES";
-   return;
-  }catch(error){map=null;layer=null;}
+   markerLayer=L.layerGroup().addTo(map);densityLayer=L.layerGroup();
+   const tiles=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© <a href='https://www.openstreetmap.org/copyright' target='_blank' rel='noopener'>OpenStreetMap</a> contributors"});
+   let tileError=false;tiles.on("tileerror",()=>{if(!tileError){tileError=true;$("map-status").textContent="BASE MAP TILES UNAVAILABLE // INCIDENT OVERLAYS REMAIN ACTIVE";}});tiles.addTo(map);
+   $("map-status").textContent="MAP ENGINE READY // LOADING NORTHERN IRELAND INTELLIGENCE";
+   setTimeout(()=>map&&map.invalidateSize(),250);return;
+  }catch(e){map=null;markerLayer=null;densityLayer=null;}
  }
- $("map-status").textContent="OFFLINE SCHEMATIC MAP // EXTERNAL MAP SERVICE UNAVAILABLE";
+ $("map-status").textContent="OFFLINE SCHEMATIC MODE // EXTERNAL MAP SERVICE UNAVAILABLE";
 }
-
 function project(lat,lon){return [48+(lon+7.85)/2.65*604,48+(55.45-lat)/1.55*804];}
-function renderFallbackMap(groups){
+function renderFallback(groups){
  const outline=[[55.25,-7.35],[55.28,-6.95],[55.18,-6.58],[55.24,-6.18],[55.08,-5.95],[54.92,-5.82],[54.76,-5.72],[54.56,-5.75],[54.36,-5.88],[54.20,-6.05],[54.08,-6.34],[54.10,-6.68],[54.18,-7.02],[54.31,-7.28],[54.50,-7.55],[54.70,-7.65],[54.90,-7.55],[55.08,-7.50]];
  const points=outline.map(p=>project(p[0],p[1]).join(",")).join(" ");
- let svg='<svg viewBox="0 0 700 900" role="img" aria-label="Schematic Northern Ireland map with town event counts" style="width:100%;height:100%;min-height:360px;background:#101713">';
+ let svg='<svg viewBox="0 0 700 900" role="img" aria-label="Schematic Northern Ireland report map" style="width:100%;height:100%;min-height:360px;background:#101713">';
  for(let x=50;x<=650;x+=50)svg+='<line x1="'+x+'" y1="35" x2="'+x+'" y2="865" stroke="#26372d"/>';
  for(let y=50;y<=850;y+=50)svg+='<line x1="35" y1="'+y+'" x2="665" y2="'+y+'" stroke="#26372d"/>';
  svg+='<polygon points="'+points+'" fill="#27382d" stroke="#a8b59a" stroke-width="3"/><text x="350" y="460" text-anchor="middle" fill="#8fa08e" opacity=".28" font-size="38" font-weight="bold" transform="rotate(-18 350 460)">NORTHERN IRELAND</text>';
- groups.forEach(group=>{const p=project(group.town.lat,group.town.lon),count=group.items.length,c=group.items.some(a=>category(a)==="EMERGENCY")?"#ed5146":group.items.some(a=>category(a)==="TRANSPORT")?"#d6b574":group.items.some(a=>category(a)==="WEATHER")?"#79bde0":"#a8d58b";svg+='<g data-town="'+esc(group.town.name)+'" role="button" tabindex="0" style="cursor:pointer"><circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+Math.min(21,10+Math.log2(count)*2)+'" fill="'+c+'" stroke="#101713" stroke-width="3"/><text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="#111" font-size="12" font-weight="bold">'+count+'</text><text x="'+(p[0]+14)+'" y="'+(p[1]-13)+'" fill="#f1ead9" font-size="13" stroke="#101713" stroke-width="3" paint-order="stroke">'+esc(group.town.name)+'</text></g>';});
- svg+='<text x="350" y="885" text-anchor="middle" fill="#c7cdbd" font-size="12">SCHEMATIC TOWN PLOT · APPROXIMATE LOCATIONS · NOT INCIDENT GPS</text></svg>';$("event-map").innerHTML=svg;
- $("event-map").querySelectorAll("[data-town]").forEach(node=>{
-  const activate=()=>{
-   const group=groups.find(item=>item.town.name===node.getAttribute("data-town"));
-   if(!group)return;
-   $("map-town-details").innerHTML='<strong>'+esc(group.town.name)+' // '+group.items.length+' MATCHED RECORDS</strong><div class="meta">Approximate town-centre match. Not precise incident coordinates.</div>'+group.items.slice(0,12).map(a=>'<div class="map-item"><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(date(a.publishedAt||a.collectedAt))+'</div>'+(a.url&&(String(a.url).startsWith("https://")||String(a.url).startsWith("http://"))?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a>':"")+'</div>').join("");
-  };
-  node.addEventListener("click",activate);
-  node.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();activate();}});
+ groups.forEach(g=>{const p=project(g.town.lat,g.town.lon),n=g.items.length,c=COLORS[g.dominant];svg+='<g data-town="'+esc(g.town.name)+'" role="button" tabindex="0" style="cursor:pointer"><circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+Math.min(24,10+Math.log2(n)*2)+'" fill="'+c+'" stroke="#101713" stroke-width="3"/><text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" fill="#111" font-size="12" font-weight="bold">'+n+'</text><text x="'+(p[0]+14)+'" y="'+(p[1]-13)+'" fill="#f1ead9" font-size="13" stroke="#101713" stroke-width="3" paint-order="stroke">'+esc(g.town.name)+'</text></g>';});
+ svg+='<text x="350" y="885" text-anchor="middle" fill="#c7cdbd" font-size="12">SCHEMATIC TOWN PLOT · APPROXIMATE LOCATIONS · NOT INCIDENT GPS</text></svg>';
+ $("event-map").innerHTML=svg;
+ $("event-map").querySelectorAll("[data-town]").forEach(node=>{const activate=()=>selectTown(node.getAttribute("data-town"));node.addEventListener("click",activate);node.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();activate();}});});
+}
+function layerEnabled(cat){const node=document.querySelector('[data-layer="'+cat+'"]');return !node||node.checked;}
+function getFiltered(){
+ const cutoff=Date.now()-ageDays*86400000;
+ return archive.filter(a=>{
+  if(!showAll){const d=validDate(a);if(d&&d.getTime()<cutoff)return false;}
+  const c=category(a);if(!layerEnabled(c))return false;
+  if(activeTown&&locate(a)?.name!==activeTown)return false;
+  if(searchTerm&&!allText(a).includes(searchTerm))return false;
+  return true;
+ }).sort((a,b)=>(validDate(b)?.getTime()||0)-(validDate(a)?.getTime()||0));
+}
+function makeGroups(items){
+ const groups=new Map();
+ items.forEach(a=>{const town=locate(a);if(!town)return;const g=groups.get(town.name)||{town,items:[],cats:{}};g.items.push(a);g.cats[category(a)]=(g.cats[category(a)]||0)+1;groups.set(town.name,g);});
+ return [...groups.values()].map(g=>{g.dominant=Object.keys(g.cats).sort((a,b)=>g.cats[b]-g.cats[a])[0]||"OTHER";return g;});
+}
+function selectTown(name){
+ activeTown=name||"";$("town-select").value=activeTown;render();
+ const group=townGroups.find(g=>g.town.name===activeTown);
+ if(group&&map)map.setView([group.town.lat,group.town.lon],10);
+}
+function openRecord(a){
+ const town=locate(a),url=safeUrl(a.url);
+ $("map-town-details").innerHTML='<strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE TOWN MATCH":"LOCATION NOT IDENTIFIED")+' · '+esc(category(a))+' · '+esc(dateText(stamp(a)))+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">SOURCE: '+esc(a.source||"Not supplied")+' · EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div>'+(url?'<div class="detail-actions"><a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a>'+(town?'<button type="button" id="focus-record-town">FOCUS '+esc(town.name.toUpperCase())+'</button>':"")+'</div>':"");
+ const focus=$("focus-record-town");if(focus)focus.addEventListener("click",()=>selectTown(town.name));
+}
+function renderDetail(group){
+ if(!group){$("map-town-details").textContent="Select a town marker or a report below to inspect its source records.";return;}
+ const counts=Object.entries(group.cats).map(([k,v])=>k+" "+v).join(" · ");
+ $("map-town-details").innerHTML='<strong>'+esc(group.town.name)+' // '+group.items.length+' MATCHED REPORTS</strong><div class="meta">Approximate town-centre match only · '+esc(counts)+'</div>'+group.items.slice(0,8).map(a=>'<div class="map-item '+category(a).toLowerCase()+'" style="margin-top:7px"><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(dateText(stamp(a)))+'</div><button type="button" data-open-record="'+esc(a.url||"")+'" data-record-title="'+esc(a.title||"")+'" style="padding:6px 8px;font-size:10px">INSPECT RECORD</button>'+(safeUrl(a.url)?' <a href="'+esc(safeUrl(a.url))+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"")+'</div>').join("");
+ $("map-town-details").querySelectorAll("[data-open-record]").forEach(btn=>{btn.addEventListener("click",()=>{const item=group.items.find(a=>(a.url||"")===btn.dataset.openRecord&&(a.title||"")===btn.dataset.recordTitle);if(item)openRecord(item);});});
+}
+function renderMarkers(){
+ if(!map||!markerLayer)return;
+ markerLayer.clearLayers();densityLayer.clearLayers();
+ const bounds=[];
+ townGroups.forEach(g=>{
+  const enabledCats=Object.keys(g.cats).filter(layerEnabled);
+  if(!enabledCats.length)return;
+  const c=COLORS[g.dominant],n=g.items.length;
+  const marker=L.circleMarker([g.town.lat,g.town.lon],{radius:Math.min(20,7+Math.log2(n)*2),weight:2,color:"#101713",fillColor:c,fillOpacity:.92});
+  marker.bindTooltip(g.town.name+" · "+n+" reports",{direction:"top",offset:[0,-8]});
+  marker.bindPopup('<strong>'+esc(g.town.name)+' // '+n+' REPORTS</strong><div>Approximate town-centre match</div><div>'+esc(Object.entries(g.cats).map(([k,v])=>k+": "+v).join(" · "))+'</div><a href="#" class="dw-town-open" data-town="'+esc(g.town.name)+'">OPEN LOCATION DETAILS</a>');
+  marker.on("click",()=>{activeTown=g.town.name;$("town-select").value=activeTown;renderDetail(g);});
+  marker.addTo(markerLayer);bounds.push([g.town.lat,g.town.lon]);
+  if($("density-toggle").checked)L.circle([g.town.lat,g.town.lon],{radius:Math.min(14000,3500+n*450),color:c,weight:1,opacity:.3,fillColor:c,fillOpacity:.10,interactive:false}).addTo(densityLayer);
  });
+ if($("density-toggle").checked)densityLayer.addTo(map);
+ if(bounds.length&&!activeTown)map.fitBounds(bounds,{padding:[24,24],maxZoom:9});
+ else if(bounds.length&&activeTown){const t=TOWNS.find(x=>x.name===activeTown);if(t)map.setView([t.lat,t.lon],10);}
 }
 function render(){
- filtered=records.filter(a=>(active==="ALL"||category(a)===active)&&(!searchTerm||[a.title,a.description,a.source,a.region,locate(a)?.name].some(v=>String(v||"").toLowerCase().includes(searchTerm))));
- const groups=new Map();
- const plotRecords=diverse(filtered,500,45);
- plotRecords.forEach(a=>{const town=locate(a);if(!town)return;const group=groups.get(town.name)||{town,items:[]};group.items.push(a);groups.set(town.name,group);});
- if(layer){layer.clearLayers();const bounds=[];groups.forEach(group=>{const town=group.town,items=group.items,cats=items.map(category),c=cats.includes("EMERGENCY")?"#ed5146":cats.includes("TRANSPORT")?"#d6b574":cats.includes("WEATHER")?"#79bde0":"#a8d58b";const links=items.slice(0,8).map(a=>'<div style="margin:5px 0">'+esc(a.title||"Untitled report")+(a.url&&(String(a.url).startsWith("https://")||String(a.url).startsWith("http://"))?' <a target="_blank" rel="noopener" href="'+esc(a.url)+'">OPEN ↗</a>':"")+'</div>').join("");L.circleMarker([town.lat,town.lon],{radius:Math.min(16,7+Math.log2(items.length)*2),weight:2,color:"#111",fillColor:c,fillOpacity:.9}).bindPopup('<strong>'+esc(town.name)+' // '+items.length+' RECORDS</strong><div>Approximate town-centre location</div>'+links).addTo(layer);bounds.push([town.lat,town.lon]);});if(bounds.length)map.fitBounds(bounds,{padding:[24,24],maxZoom:9});}else renderFallbackMap([...groups.values()]);
- $("map-articles").innerHTML=diverse(filtered,80,10).map(a=>{const town=locate(a),c=category(a),url=a.url&&(String(a.url).startsWith("https://")||String(a.url).startsWith("http://"));return '<details class="map-item"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED")+" · "+esc(c)+" · "+esc(date(a.publishedAt||a.collectedAt))+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div>'+(url?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':'<span class="muted">No valid article URL supplied</span>')+'</details>';}).join("")||'<div class="panel muted">No Northern Ireland records match this filter.</div>';
- const located=filtered.filter(locate).length,plotted=plotRecords.filter(locate).length;
- $("map-list-status").textContent=filtered.length+" matching records · "+located+" with a town-level match · "+plotted+" included in the plotted sample. Showing up to 80 newest article links, capped at 10 per source.";
- if(!filtered.length)$("map-town-details").textContent="NO MATCHING REPORTS. Clear the search or select ALL EVENTS.";
- $("map-status").textContent=(layer?"LIVE STREET MAP":"BUILT-IN SCHEMATIC MAP")+" // "+plotted+" LOCATED RECORDS IN NEWEST 500 ACROSS "+groups.size+" TOWN LOCATIONS // "+filtered.length+" NI/LOCAL RECORDS IN ARCHIVE // APPROXIMATE TOWN LOCATIONS";
+ records=getFiltered();townGroups=makeGroups(records);
+ $("kpi-total").textContent=records.length.toLocaleString("en-GB");
+ $("kpi-located").textContent=records.filter(locate).length.toLocaleString("en-GB");
+ $("kpi-towns").textContent=townGroups.length.toLocaleString("en-GB");
+ $("kpi-sources").textContent=uniqueSources(records).toLocaleString("en-GB");
+ $("town-select").innerHTML='<option value="">ALL LOCATIONS</option>'+TOWNS.filter(t=>townGroups.some(g=>g.town.name===t.name)).map(t=>'<option value="'+esc(t.name)+'">'+esc(t.name)+'</option>').join("");
+ $("town-select").value=activeTown;
+ if(map)renderMarkers();else renderFallback(townGroups);
+ const list=records.slice(0,100);
+ $("map-articles").innerHTML=list.map((a,i)=>{const town=locate(a),c=category(a),url=safeUrl(a.url),d=validDate(a);return '<details class="map-item '+c.toLowerCase()+'"><summary><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(town?town.name+" // APPROXIMATE":"LOCATION NOT IDENTIFIED")+' · '+esc(c)+' · '+esc(d?dateText(d):"DATE NOT SUPPLIED")+'</div></summary><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(a.region||"Region not supplied")+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL ARTICLE ↗</a>':"<span class='muted'>No valid article URL supplied</span>")+(town?'<button type="button" data-focus-town="'+esc(town.name)+'">SHOW ON MAP</button>':"")+'</div></details>';}).join("")||'<div class="panel muted">No reports match the current filters. Try a longer time window or clear the search.</div>';
+ $("map-articles").querySelectorAll("[data-focus-town]").forEach(btn=>btn.addEventListener("click",()=>{selectTown(btn.dataset.focusTown);$("map-town-details").scrollIntoView({behavior:"smooth",block:"nearest"});}));
+ $("map-list-status").textContent=records.length+" matching archive records · "+records.filter(locate).length+" with approximate town matches · showing up to 100 source-linked reports.";
+ if(activeTown){const g=townGroups.find(x=>x.town.name===activeTown);renderDetail(g);}else renderDetail(null);
+ $("map-status").textContent=(map?"OPENSTREETMAP":"OFFLINE SCHEMATIC")+" // "+records.length+" FILTERED REPORTS // "+townGroups.length+" TOWN LOCATIONS // "+(records.length-records.filter(locate).length)+" WITHOUT TOWN MATCH";
 }
-async function load(){try{const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();records=(Array.isArray(d.articles)?d.articles:[]).filter(isNI).sort((a,b)=>new Date(b.publishedAt||b.collectedAt||0)-new Date(a.publishedAt||a.collectedAt||0));render();}catch(e){$("map-status").textContent="INTELLIGENCE LINK FAILED // "+e.message;}}
-initMap();
-document.querySelectorAll("#map-filters [data-filter]").forEach(b=>b.addEventListener("click",()=>{active=b.dataset.filter;document.querySelectorAll("#map-filters [data-filter]").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});render();}));
-$("map-search").addEventListener("input",event=>{searchTerm=String(event.target.value||"").trim().toLowerCase();render();});
-$("map-refresh").addEventListener("click",()=>{ $("map-status").textContent="REFRESHING INTELLIGENCE ARCHIVE…";load(); });
-async function load(){try{const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();records=(Array.isArray(d.articles)?d.articles:[]).filter(isNI).sort((a,b)=>new Date(b.publishedAt||b.collectedAt||0)-new Date(a.publishedAt||a.collectedAt||0));render();}catch(e){$("map-status").textContent="INTELLIGENCE LINK FAILED // "+e.message;$("map-list-status").textContent="The intelligence archive could not be loaded. Try again when the data link is restored.";}}
-load();
+async function load(){
+ $("map-status").textContent="REFRESHING SHARED INTELLIGENCE ARCHIVE…";
+ try{
+  const response=await fetch(DATA_URL+"?refresh="+Date.now(),{cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const data=await response.json();
+  archive=(Array.isArray(data.articles)?data.articles:[]).filter(isNI).sort((a,b)=>(validDate(b)?.getTime()||0)-(validDate(a)?.getTime()||0));
+  $("map-status").textContent="ARCHIVE LINK ACTIVE // "+archive.length+" NORTHERN IRELAND / LOCAL RECORDS AVAILABLE";
+  render();
+ }catch(error){
+  $("map-status").textContent="INTELLIGENCE LINK FAILED // "+error.message;
+  $("map-list-status").textContent="The shared intelligence archive could not be loaded. Check the connection and refresh. No sample incidents have been invented.";
+  $("map-articles").innerHTML="";
+ }
+}
+function updateAge(){ageDays=Number($("age-range").value)||30;$("age-label").textContent=ageDays+" DAYS";$("age-value").textContent=ageDays+"d";if(!$("all-time").checked)render();}
+$("age-range").addEventListener("input",updateAge);
+$("all-time").addEventListener("change",e=>{showAll=e.target.checked;$("age-range").disabled=showAll;render();});
+$("map-search").addEventListener("input",e=>{searchTerm=e.target.value.trim().toLowerCase();render();});
+$("town-select").addEventListener("change",e=>selectTown(e.target.value));
+document.querySelectorAll("[data-layer]").forEach(node=>node.addEventListener("change",render));
+$("density-toggle").addEventListener("change",render);
+$("labels-toggle").addEventListener("change",e=>{if(!map)return;markerLayer.eachLayer(layer=>{if(e.target.checked)layer.openTooltip?.();else layer.closeTooltip?.();});});
+$("map-refresh").addEventListener("click",load);
+$("fit-map").addEventListener("click",()=>{activeTown="";$("town-select").value="";if(map)map.setView([54.62,-6.55],8);render();});
+$("clear-filters").addEventListener("click",()=>{activeTown="";searchTerm="";showAll=false;$("map-search").value="";$("town-select").value="";$("all-time").checked=false;$("age-range").disabled=false;$("age-range").value="30";ageDays=30;document.querySelectorAll("[data-layer]").forEach(x=>x.checked=true);$("density-toggle").checked=false;$("labels-toggle").checked=true;updateAge();render();});
+document.addEventListener("click",e=>{const link=e.target.closest(".dw-town-open");if(link){e.preventDefault();selectTown(link.dataset.town);}});
+initMap();updateAge();load();
 </script>
 <script src="./doomwatch-ui.js"></script>
-</body></html>
+</body>
+</html>
