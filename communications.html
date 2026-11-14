@@ -36,7 +36,7 @@
  <a href="./index.html">COMMAND</a><a href="./markets.html">MARKETS</a><a href="./household.html">HOUSEHOLD</a><a href="./feed.html">FEED</a><a href="./map.html">MAP</a><a href="./communications.html" aria-current="page">COMMS</a>
 </nav>
 <main>
- <div class="comms-head"><div><h2>LIVE // TELECOMS & CONNECTIVITY WATCH</h2><div class="muted">Mobile networks, broadband infrastructure and independent outage indicators.</div></div><div class="comms-actions"><button id="refresh">↻ CHECK NOW</button><a class="action-button" href="./index.html">← COMMAND</a></div></div>
+ <div class="comms-head"><div><h2>LIVE // TELECOMS & CONNECTIVITY WATCH</h2><div class="muted">Mobile networks, broadband infrastructure and independent outage indicators.</div></div><div class="comms-actions"><button id="refresh">↻ CHECK NOW</button><button id="enable-alerts">ENABLE BROWSER ALERTS</button><a class="action-button" href="./index.html">← COMMAND</a></div></div>
  <div id="collector-status" class="terminal" role="status" aria-live="polite">CONNECTING TO COMMS INTELLIGENCE…</div>
  <div class="comms-grid">
   <div class="comms-card unknown"><strong>COLLECTOR</strong><div class="comms-status" id="collector-time">WAITING</div><div class="comms-detail">Last successful snapshot timestamp</div></div>
@@ -52,7 +52,7 @@
  <div id="official-list" class="comms-grid"></div>
  <h2>04 // OPERATING LIMITATIONS</h2>
  <div class="comms-warning"><strong>READ THIS CORRECTLY:</strong> An issue indicator is an independent traffic or community-report signal, not proof of an outage. “No issue signal” does not prove a service is available. Public sources do not currently provide dependable postcode-level live confirmation for Ballyclare. Check the relevant operator directly before making decisions.</div>
- <p class="comms-meta">Collector target: every 5 minutes. This page refreshes its display every 60 seconds. GitHub Actions scheduling is best-effort and can be delayed or skipped. A page update is not a guarantee of real-time detection.</p>
+ <p class="comms-meta">Collector target: every 5 minutes. This page refreshes its display every 60 seconds. Browser alerts can notify you of new current issue signals while this page is open or the installed app is running. They are not guaranteed push alerts when the app is fully closed. GitHub Actions scheduling is best-effort and can be delayed or skipped.</p>
  <ul id="limitations" class="comms-meta"></ul>
 </main>
 <script>
@@ -69,8 +69,28 @@ function statusLabel(status){return ({
  "STALE_ISSUE_SIGNAL":"STALE ISSUE REPORT — VERIFY DIRECTLY",
  "STALE_OR_UNKNOWN":"STALE / NO FRESH STATUS DATA"
 })[status]||"NO CURRENT DATA";}
+function checkForNewIssues(data){
+ const key="doomwatch-comms-alert-baseline-v1";
+ const current=(data.providers||[]).filter(p=>p.status==="ISSUE_SIGNAL").map(p=>p.provider).sort();
+ let previous=null;
+ try{const raw=localStorage.getItem(key);if(raw!==null)previous=JSON.parse(raw);}catch(_){}
+ if(Array.isArray(previous)){
+  const added=current.filter(name=>!previous.includes(name));
+  if(added.length&&"Notification" in window&&Notification.permission==="granted"){
+   const title="DOOMWATCH // COMMS ALERT";
+   const body="New current issue signal: "+added.join(", ")+". Check the source before treating this as a confirmed local outage.";
+   if("serviceWorker" in navigator){
+    navigator.serviceWorker.ready.then(reg=>reg.showNotification(title,{body,tag:"doomwatch-comms-"+added.join("-"),data:{url:"./communications.html"}})).catch(()=>{});
+   }else{
+    const n=new Notification(title,{body});n.onclick=()=>window.focus();
+   }
+  }
+ }
+ try{localStorage.setItem(key,JSON.stringify(current));}catch(_){}
+}
 function render(data){
  const sources=data.sources||[],providers=data.providers||[];
+ checkForNewIssues(data);
  const ok=sources.filter(s=>s.status==="OK").length;
  const issues=providers.filter(p=>p.status==="ISSUE_SIGNAL").length;\n const stale=providers.filter(p=>p.status==="STALE_ISSUE_SIGNAL").length;\n const unconfirmed=providers.filter(p=>p.status==="UNCONFIRMED_REPORT_SIGNAL").length;
  $("live-state").textContent=issues?"SIGNAL DETECTED":"MONITORING";
