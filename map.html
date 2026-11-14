@@ -104,8 +104,8 @@ body:has(#event-map) .map-note{color:#b6c0b1}
 <div class="map-workspace">
  <div class="panel map-canvas-shell" style="padding:8px">
   <div id="event-map" role="application" aria-label="Interactive map of Northern Ireland report locations"></div>
-  <div class="map-key"><span>● Emergency / safety</span><span>● Water service updates</span><span>● Transport / infrastructure</span><span>● Weather / environment</span><span>● River gauges</span><span>● Other reports</span></div>
-  <div class="map-note">Incident pins are approximate town-centre matches; NIE power faults use outward postcode districts. River gauges use station-page coordinates when verified, with no approximate pin shown when coordinates are unavailable. Gauge readings are provisional, not flood warnings.</div>
+  <div class="map-key"><span>◎ Multi-sector signal overlap (screening only)</span><span>● Emergency / safety</span><span>● Water service updates</span><span>● Transport / infrastructure</span><span>● Weather / environment</span><span>● River gauges</span><span>● Other reports</span></div>
+  <div class="map-note">Impact screening highlights locations where the current filtered archive contains reports in two or more distinct categories. It does not draw a real-world impact radius, infer service footprints, or establish a common cause. Incident pins are approximate town-centre matches; NIE power faults use outward postcode districts. River gauges use station-page coordinates when verified, with no approximate pin shown when coordinates are unavailable. Gauge readings are provisional, not flood warnings.</div>
  </div>
  <aside class="map-side">
   <section class="map-box">
@@ -124,6 +124,7 @@ body:has(#event-map) .map-note{color:#b6c0b1}
    <label class="layer-row"><input type="checkbox" data-layer="WEATHER" checked><i class="layer-dot" style="background:#79bde0"></i> Weather / environment</label>
    <label class="layer-row"><input type="checkbox" data-layer="OTHER" checked><i class="layer-dot" style="background:#a8d58b"></i> Other local reports</label>
    <label class="layer-row"><input type="checkbox" id="mesh-nodes-toggle" checked><i class="layer-dot" style="background:#e84b45"></i> MeshCore field nodes <span id="mesh-node-layer-count" style="margin-left:auto">0</span></label>
+   <label class="layer-row"><input type="checkbox" id="impact-screen-toggle" checked><i class="layer-dot" style="background:#f3d36b"></i> Multi-sector impact screening</label>
    <label class="layer-row"><input type="checkbox" id="density-toggle"><i class="layer-dot" style="background:#e6d08a;opacity:.5"></i> Activity density overlay</label>
    <label class="layer-row"><input type="checkbox" id="labels-toggle" checked> Show town labels</label>
   </section>
@@ -365,10 +366,25 @@ function openRecord(a){
  $("map-town-details").innerHTML='<strong>'+esc(title)+'</strong><div class="meta">'+esc(locationLabel)+' · '+esc(category(a))+' · '+esc(dateText(stamp(a)))+'</div><p>'+esc(a.summary||a.description||"No additional summary supplied.")+'</p><div class="meta">SOURCE CLASS: '+esc(provenance)+' · EVIDENCE: '+esc(a.evidenceStatus||"UNASSESSED")+' · CONFIDENCE: '+esc(a.confidence||"NOT SUPPLIED")+'</div><div class="meta">RELATED NEWSROOM COVERAGE: '+related.records+' record(s) · '+related.publishers+' other publisher domain(s). Similarity match only; not proof of independent confirmation.</div><div class="section-card"><strong>OPERATIONAL IMPACT PATHWAY // '+esc(impact[0])+'</strong><p>'+esc(impact[1])+'</p><div class="meta">SCREENING GUIDANCE ONLY · NOT A CONFIRMED LOCAL IMPACT ASSESSMENT</div></div><div class="detail-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">OPEN ORIGINAL REPORT ↗</a>':"")+'<a href="'+caseLink+'">OPEN INCIDENT CASE FILE ↗</a><a href="./feed.html?q='+encodeURIComponent(title)+'">RELATED FEED ↗</a><a href="./operations.html?search='+encodeURIComponent(title)+'">OPERATIONS ROOM ↗</a>'+(town?'<button type="button" id="focus-record-town">FOCUS '+esc(town.name.toUpperCase())+'</button>':"")+'</div>';
  const focus=$("focus-record-town");if(focus)focus.addEventListener("click",()=>selectTown(town.name));
 }
+function impactScreenSummary(group){
+ if(!group)return "";
+ const categories=Object.entries(group.cats).filter(([,count])=>count>0).map(([name,count])=>({name,count}));
+ const pathways={
+  WATER:"Water supply / service continuity",
+  POWER:"Electricity supply / network continuity",
+  FLOOD:"River and water-level monitoring",
+  TRAFFIC:"Road access / traffic movement",
+  TRANSPORT:"Transport and logistics access",
+  EMERGENCY:"Public safety / emergency response",
+  WEATHER:"Weather and environmental conditions",
+  OTHER:"Other local reporting"
+ };
+ return '<div class="section-card" style="margin:8px 0;border-color:#b99b4d"><strong>GEOGRAPHIC IMPACT SCREENING</strong><p>'+categories.length+' distinct reporting categories appear in this town-level archive group.</p>'+categories.map(c=>'<div class="meta">• '+esc(c.name)+' // '+c.count+' record(s) // '+esc(pathways[c.name]||"General reporting")+'</div>').join("")+'<p class="map-note">This is a co-location screen, not evidence that services are disrupted together or that reports share a cause. Town locations are approximate unless a source provides verified coordinates.</p></div>';
+}
 function renderDetail(group){
  if(!group){$("map-town-details").textContent="Select a town marker or a report below to inspect its source records.";return;}
  const counts=Object.entries(group.cats).map(([k,v])=>k+" "+v).join(" · ");
- $("map-town-details").innerHTML='<strong>'+esc(group.town.name)+' // '+group.items.length+' MATCHED REPORTS</strong><div class="meta">Approximate town-centre match only · '+esc(counts)+'</div>'+group.items.slice(0,8).map(a=>'<div class="map-item '+category(a).toLowerCase()+'" style="margin-top:7px"><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(dateText(stamp(a)))+'</div><button type="button" data-open-record="'+esc(a.url||"")+'" data-record-title="'+esc(a.title||"")+'" style="padding:6px 8px;font-size:10px">INSPECT RECORD</button>'+(safeUrl(a.url)?' <a href="'+esc(safeUrl(a.url))+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"")+'</div>').join("");
+ $("map-town-details").innerHTML='<strong>'+esc(group.town.name)+' // '+group.items.length+' MATCHED REPORTS</strong><div class="meta">Approximate town-centre match only · '+esc(counts)+'</div>'+impactScreenSummary(group)+group.items.slice(0,8).map(a=>'<div class="map-item '+category(a).toLowerCase()+'" style="margin-top:7px"><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(dateText(stamp(a)))+'</div><button type="button" data-open-record="'+esc(a.url||"")+'" data-record-title="'+esc(a.title||"")+'" style="padding:6px 8px;font-size:10px">INSPECT RECORD</button>'+(safeUrl(a.url)?' <a href="'+esc(safeUrl(a.url))+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"")+'</div>').join("");
  $("map-town-details").querySelectorAll("[data-open-record]").forEach(btn=>{btn.addEventListener("click",()=>{const item=group.items.find(a=>(a.url||"")===btn.dataset.openRecord&&(a.title||"")===btn.dataset.recordTitle);if(item)openRecord(item);});});
 }
 function renderMarkers(){
@@ -387,6 +403,18 @@ function renderMarkers(){
    marker.bindTooltip("MESHCORE // "+String(node.id||"UNNAMED"),{direction:"top",offset:[0,-8]});
    marker.bindPopup('<strong>MESHCORE NODE // '+esc(node.id||"UNNAMED")+'</strong><div>Area match: '+esc(town.name)+' · approximate town position only</div><div>Type: '+esc(node.type||"Not recorded")+'</div><div>Evidence: '+esc(node.evidence||"Not recorded")+'</div><div class="map-note">Manual node register only — not live telemetry, an exact radio position or proof of coverage.</div>');
    marker.addTo(markerLayer);bounds.push([town.lat,town.lon]);
+  });
+ }
+ // Geographic impact screening: ring only marks category overlap at an approximate town location.
+ if($("impact-screen-toggle")?.checked){
+  townGroups.forEach(g=>{
+   const categories=Object.keys(g.cats).filter(k=>g.cats[k]>0);
+   if(categories.length<2)return;
+   const marker=L.circleMarker([g.town.lat,g.town.lon],{radius:Math.min(27,13+categories.length*2),weight:3,color:"#f3d36b",fillColor:"#f3d36b",fillOpacity:.08,dashArray:"5 5",interactive:true});
+   marker.bindTooltip("IMPACT SCREEN // "+g.town.name+" · "+categories.length+" categories",{direction:"top"});
+   marker.bindPopup('<strong>GEOGRAPHIC IMPACT SCREEN // '+esc(g.town.name)+'</strong><div>'+categories.length+' distinct report categories in the current filtered archive</div><div>'+esc(categories.join(" · "))+'</div><div class="map-note">Screening signal only. Not a measured impact zone, service outage boundary, causal link or confirmed local effect.</div><a href="#" class="dw-town-open" data-town="'+esc(g.town.name)+'">OPEN LOCATION DETAILS</a>');
+   marker.on("popupopen",event=>{const link=event.popup.getElement()?.querySelector(".dw-town-open");if(link)link.addEventListener("click",e=>{e.preventDefault();selectTown(g.town.name);map.closePopup();$("map-town-details").scrollIntoView({behavior:"smooth",block:"nearest"});});});
+   marker.addTo(markerLayer);
   });
  }
  townGroups.forEach(g=>{
@@ -498,6 +526,7 @@ document.querySelectorAll("[data-layer],[data-traffic-kind]").forEach(node=>node
 $("mesh-nodes-toggle").addEventListener("change",render);
 // Refresh plotted node records when the MeshCore workspace is changed in another tab.
 window.addEventListener("storage",event=>{if(event.key==="doomwatch-meshcore-v1")render();});
+$("impact-screen-toggle").addEventListener("change",render);
 $("density-toggle").addEventListener("change",render);
 $("labels-toggle").addEventListener("change",render);
 $("map-refresh").addEventListener("click",load);
