@@ -139,6 +139,7 @@ footer {
   .intel-window {height:480px}
 }
 .mesh-public-network{margin:10px 0 14px}.mesh-public-kpis{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}.mesh-map-toolbar{margin:12px 0}.mesh-map-toolbar .controls{margin:7px 0}.mesh-map-toolbar button.active{background:var(--yellow);color:#111;border-color:var(--tan)}.mesh-public-map-frame{width:100%;height:clamp(360px,62vh,680px);border:1px solid var(--olive);background:#0b110d}.mesh-public-map-frame iframe{width:100%;height:100%;border:0;display:block}.mesh-map-footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:9px 2px;font-size:11px}.mesh-public-network .warning{font-size:11px;line-height:1.5}
+.mesh-history-panel{margin:10px 0 14px}.mesh-history-head,.mesh-history-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.mesh-history-kpis{grid-template-columns:repeat(auto-fit,minmax(135px,1fr));margin-top:12px}.mesh-history-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:12px 0}.mesh-history-controls select{margin:0}.mesh-history-list{max-height:560px;overflow:auto;margin-top:10px}.mesh-history-item{border:1px solid var(--line);border-left:3px solid var(--olive);background:#10140f;padding:10px;margin:7px 0;overflow-wrap:anywhere}.mesh-history-item.new{border-left-color:var(--green)}.mesh-history-item.updated,.mesh-history-item.restored{border-left-color:var(--yellow)}.mesh-history-item.missing{border-left-color:var(--red)}.mesh-history-item strong{color:var(--yellow)}.mesh-history-item .meta{line-height:1.5}.mesh-history-foot{margin-top:12px;color:var(--muted);font-size:10px}
 </style>
 <link rel="stylesheet" href="./doomwatch.css">
 <style>
@@ -454,6 +455,28 @@ footer {
     </div>
     <div class="mesh-map-footer"><span id="mesh-public-map-region" class="green">VIEW: NORTHERN IRELAND</span><a href="https://map.meshcore.io/" target="_blank" rel="noopener noreferrer">OPEN FULL MESHCORE MAP ↗</a></div>
     <div class="warning" style="margin-top:10px">INTERPRETATION: The public map shows nodes whose adverts have been uploaded with location information. A marker does not prove that a node is currently online, reachable from your radio, or carrying traffic. The map does not expose private messages or room-server queues. Use the map's own node freshness and type filters when assessing individual entries.</div>
+  </section>
+
+  <h3>01B // REGIONAL NODE CHANGE TRACKER</h3>
+  <section class="panel mesh-history-panel" id="mesh-history-panel">
+    <div class="mesh-history-head">
+      <div><div class="panel-title">OFFICIAL PUBLIC NODE DIRECTORY // SNAPSHOT COMPARISON</div><div class="meta">UK + Ireland geographical filter · local history on this device</div></div>
+      <button type="button" class="action-button" id="mesh-history-sync">CHECK DIRECTORY NOW</button>
+    </div>
+    <div class="grid mesh-history-kpis">
+      <div class="section-card"><div class="panel-title">CURRENT DIRECTORY</div><div class="big-status yellow" id="mesh-h-current">—</div><div class="meta">Located in UK / Ireland bounds</div></div>
+      <div class="section-card"><div class="panel-title">NEW SINCE BASELINE</div><div class="big-status green" id="mesh-h-new">—</div><div class="meta">First observed by this tracker</div></div>
+      <div class="section-card"><div class="panel-title">ADVERT CHANGES</div><div class="big-status yellow" id="mesh-h-updated">—</div><div class="meta">Changed public node details</div></div>
+      <div class="section-card"><div class="panel-title">NOT RETURNED</div><div class="big-status red" id="mesh-h-missing">—</div><div class="meta">Absent from 2 successful checks</div></div>
+    </div>
+    <div class="mesh-history-controls">
+      <select id="mesh-history-region" aria-label="Filter node history by region"><option value="all">All UK & Ireland</option><option value="ni">Northern Ireland</option><option value="ireland">Republic of Ireland</option><option value="scotland">Scotland</option><option value="wales">Wales</option><option value="england">England</option></select>
+      <select id="mesh-history-kind" aria-label="Filter node history by change"><option value="all">All changes</option><option value="new">New nodes</option><option value="updated">Changed adverts</option><option value="restored">Returned nodes</option><option value="missing">Not returned</option></select>
+    </div>
+    <div class="meta" id="mesh-history-status" aria-live="polite">Not checked yet on this device. First successful check creates a baseline; later checks reveal changes.</div>
+    <div id="mesh-history-list" class="mesh-history-list"><p class="muted">No local history yet. Run the first directory check to establish a baseline.</p></div>
+    <div class="mesh-history-foot"><span id="mesh-history-last">LAST CHECK: NEVER</span><button type="button" class="action-button" id="mesh-history-export">EXPORT HISTORY JSON</button></div>
+    <div class="warning" style="margin-top:10px">EVIDENCE LIMIT: This compares snapshots of the public advertised-node directory. “Not returned” does not prove a radio is offline or removed. History is stored only in this browser on this device; it is not shared with other DoomWatch users. The first check is a baseline, not a backdated history.</div>
   </section>
 
   <h3>02 // PUBLIC ROOM & AUTOMATED SIGNALS</h3>
@@ -1424,6 +1447,74 @@ function meshRenderDirectory(){
  const list=meshRegions.filter(r=>meshRegionFilter==="all"||(meshRegionFilter==="ioi"?r.group==="ioi":r.group===meshRegionFilter));
  $("mesh-region-directory").innerHTML=list.map(r=>'<div class="section-card"><div class="panel-title">'+meshEscape(r.name)+'</div><div class="big-status yellow" style="font-size:13px">'+meshEscape(r.state)+'</div><div class="meta">SCOPE: '+meshEscape(r.scope)+' · CHANNEL: '+meshEscape(r.channel)+'</div><p>'+meshEscape(r.detail)+'</p><a href="'+meshEscape(r.url)+'" target="_blank" rel="noopener noreferrer">REGION INFORMATION ↗</a></div>').join("");
 }
+/* REGIONAL MESHCORE NODE HISTORY — public API snapshots only */
+const MESH_HISTORY_KEY="doomwatch-mesh-public-history-v1";
+const MESH_HISTORY_API="https://map.meshcore.io/api/v1/nodes?binary=0";
+let meshHistory={nodes:{},events:[],checks:[],lastCheck:null,baseline:false};
+try{const saved=JSON.parse(localStorage.getItem(MESH_HISTORY_KEY)||"null");if(saved&&saved.nodes&&Array.isArray(saved.events))meshHistory={...meshHistory,...saved};}catch(e){}
+function meshHistoryRegion(n){
+ const lat=Number(n.lat),lon=Number(n.lon);if(!Number.isFinite(lat)||!Number.isFinite(lon))return null;
+ if(lat<49.5||lat>61.5||lon< -11.5||lon>3.5)return null;
+ if(lat>=54.0&&lon< -5.2)return "ni";
+ if(lat<55.5&&lon< -5.2)return "ireland";
+ if(lat>=55.3&&lon< -0.5)return "scotland";
+ if(lat>=51.3&&lon< -2.5)return "wales";
+ return "england";
+}
+function meshHistoryKey(n){return String(n.public_key||n.pk||n.key||"").toLowerCase();}
+function meshHistoryName(n){return String(n.adv_name||n.name||n.n||"Unnamed node").slice(0,100);}
+function meshHistoryType(n){const v=n.type??n.device_role??n.t;const m={1:"Client",2:"Repeater",3:"Room Server",4:"Sensor",client:"Client",repeater:"Repeater",room_server:"Room Server",sensor:"Sensor"};return m[v]||String(v??"Unknown");}
+function meshHistorySignature(n){return JSON.stringify([meshHistoryName(n),meshHistoryType(n),Number(n.lat).toFixed(4),Number(n.lon).toFixed(4),n.params||n.p||null]);}
+function meshHistorySave(){try{localStorage.setItem(MESH_HISTORY_KEY,JSON.stringify(meshHistory));}catch(e){$("mesh-history-status").textContent="Storage limit reached. Export and clear browser storage before continuing; no history was discarded automatically.";}}
+function meshHistoryEscape(v){return meshEscape(String(v??""));}
+function meshHistoryRender(){
+ const values=Object.values(meshHistory.nodes);const active=values.filter(n=>n.state!=="missing");
+ const counts={new:0,updated:0,restored:0,missing:0};meshHistory.events.forEach(e=>{if(counts[e.kind]!==undefined)counts[e.kind]++;});
+ $("mesh-h-current").textContent=active.length;$("mesh-h-new").textContent=counts.new;$("mesh-h-updated").textContent=counts.updated;$("mesh-h-missing").textContent=values.filter(n=>n.state==="missing").length;
+ const region=$("mesh-history-region").value,kind=$("mesh-history-kind").value;
+ const names={ni:"Northern Ireland",ireland:"Republic of Ireland",scotland:"Scotland",wales:"Wales",england:"England"};
+ const items=meshHistory.events.filter(e=>(region==="all"||e.region===region)&&(kind==="all"||e.kind===kind)).slice(0,250);
+ $("mesh-history-list").innerHTML=items.length?items.map(e=>'<article class="mesh-history-item '+e.kind+'"><strong>'+meshHistoryEscape(e.kind.toUpperCase())+' // '+meshHistoryEscape(e.name)+'</strong><div class="meta">'+meshHistoryEscape(names[e.region]||e.region||"Region unknown")+' · '+meshHistoryEscape(e.type||"Unknown type")+' · '+meshHistoryEscape(new Date(e.at).toLocaleString())+'</div><div class="meta">'+meshHistoryEscape(e.detail||"Public directory change observed")+'</div></article>').join(""):'<p class="muted">No changes match these filters. A quiet result is not evidence of an inactive network.</p>';
+ $("mesh-history-last").textContent="LAST CHECK: "+(meshHistory.lastCheck?new Date(meshHistory.lastCheck).toLocaleString():"NEVER");
+}
+async function meshHistorySync(){
+ const button=$("mesh-history-sync"),status=$("mesh-history-status");if(button.disabled)return;
+ button.disabled=true;button.textContent="CHECKING…";status.textContent="Requesting public node directory…";
+ try{
+  const response=await fetch(MESH_HISTORY_API,{cache:"no-store"});if(!response.ok)throw new Error("Directory returned HTTP "+response.status);
+  const payload=await response.json();const list=Array.isArray(payload)?payload:(Array.isArray(payload.nodes)?payload.nodes:null);
+  if(!list)throw new Error("Unexpected API response format. No history changed.");
+  const observedAt=new Date().toISOString(),current={};
+  for(const raw of list){const region=meshHistoryRegion(raw),key=meshHistoryKey(raw);if(!region||!key)continue;current[key]={key,name:meshHistoryName(raw),type:meshHistoryType(raw),lat:Number(raw.lat),lon:Number(raw.lon),region,signature:meshHistorySignature(raw)};}
+  if(!meshHistory.baseline){
+   for(const [key,n] of Object.entries(current))meshHistory.nodes[key]={...n,firstSeen:observedAt,lastSeen:observedAt,state:"present",misses:0};
+   meshHistory.baseline=true;meshHistory.events.unshift({kind:"baseline",name:"Initial regional baseline",region:"all",type:"SYSTEM",at:observedAt,detail:currentCountText(Object.keys(current).length)+" recorded. Changes will be detected on later checks."});
+   status.textContent="Baseline established: "+Object.keys(current).length+" located nodes. Run another check later to detect changes.";
+  }else{
+   for(const [key,n] of Object.entries(current)){
+    const old=meshHistory.nodes[key];
+    if(!old){meshHistory.nodes[key]={...n,firstSeen:observedAt,lastSeen:observedAt,state:"present",misses:0};meshHistory.events.unshift({kind:"new",...n,at:observedAt,detail:"First observed in this device's public-directory snapshots."});}
+    else{
+     if(old.state==="missing"){meshHistory.events.unshift({kind:"restored",...n,at:observedAt,detail:"Node returned to the public directory after being absent from earlier snapshots."});}
+     else if(old.signature!==n.signature){meshHistory.events.unshift({kind:"updated",...n,at:observedAt,detail:"Advertised name, type, position or radio parameters changed."});}
+     meshHistory.nodes[key]={...old,...n,firstSeen:old.firstSeen||observedAt,lastSeen:observedAt,state:"present",misses:0};
+    }
+   }
+   for(const [key,old] of Object.entries(meshHistory.nodes)){if(!current[key]&&old.state!=="missing"){old.misses=(old.misses||0)+1;if(old.misses>=2){old.state="missing";meshHistory.events.unshift({kind:"missing",...old,at:observedAt,detail:"Not returned in two consecutive successful snapshots. This does not confirm the radio is offline."});}}}
+   status.textContent="Check complete: "+Object.keys(current).length+" located nodes processed; changes recorded locally.";
+  }
+  meshHistory.lastCheck=observedAt;meshHistory.checks.unshift({at:observedAt,count:Object.keys(current).length});meshHistory.checks=meshHistory.checks.slice(0,100);meshHistory.events=meshHistory.events.slice(0,1000);
+  const keys=Object.keys(meshHistory.nodes);if(keys.length>5000){keys.sort((a,b)=>String(meshHistory.nodes[a].lastSeen).localeCompare(String(meshHistory.nodes[b].lastSeen)));keys.slice(0,keys.length-5000).forEach(k=>delete meshHistory.nodes[k]);}
+  meshHistorySave();meshHistoryRender();
+ }catch(error){status.textContent="CHECK FAILED — "+error.message+". No successful snapshot was recorded. Check the public API/CORS access and try again.";}
+ finally{button.disabled=false;button.textContent="CHECK DIRECTORY NOW";}
+}
+function currentCountText(n){return n.toLocaleString()+" UK / Ireland nodes";}
+$("mesh-history-sync").addEventListener("click",meshHistorySync);
+$("mesh-history-region").addEventListener("change",meshHistoryRender);
+$("mesh-history-kind").addEventListener("change",meshHistoryRender);
+$("mesh-history-export").addEventListener("click",()=>{const blob=new Blob([JSON.stringify({format:"doomwatch-mesh-public-history",version:1,exportedAt:new Date().toISOString(),history:meshHistory},null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="doomwatch-mesh-public-history.json";a.click();URL.revokeObjectURL(url);});
+meshHistoryRender();
 const meshPublicViews={
  ni:{name:"NORTHERN IRELAND",lat:54.7,lon:-6.7,zoom:8},
  ireland:{name:"ISLAND OF IRELAND",lat:53.25,lon:-8.0,zoom:6},
