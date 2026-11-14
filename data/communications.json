@@ -1,13 +1,13 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-14T12:19:53Z",
+  "generatedAt": "2026-11-14T12:20:08Z",
   "collectionIntervalMinutes": 5,
   "displayRefreshSeconds": 60,
   "staleAfterMinutes": 120,
-  "overallStatus": "STALE_REPORTS_ONLY",
+  "overallStatus": "UNCONFIRMED_REPORTS",
   "summary": {
     "currentIssueProviders": 0,
-    "unconfirmedReportProviders": 0,
+    "unconfirmedReportProviders": 14,
     "staleIssueProviders": 1
   },
   "sources": [
@@ -19,11 +19,78 @@
       "kind": "provider_status_and_community_reports",
       "scope": "UK mobile networks",
       "format": "json",
-      "status": "NO_STRUCTURED_STATUS",
-      "checkedAt": "2026-11-14T12:19:51Z",
+      "status": "OK",
+      "checkedAt": "2026-11-14T12:20:06Z",
       "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
-      "providerSignals": [],
-      "note": "Page was reachable, but no recognised current provider-status rows were extracted."
+      "providerSignals": [
+        {
+          "provider": "EE",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "O2",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "Vodafone",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "Three",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "Stour",
+          "reportedStatus": "NO_ISSUE_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "All Systems Operational",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "statuspage",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "Asda Mobile",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        }
+      ],
+      "note": "Source data is independent/provider-status aggregation; read evidence class and source timestamp."
     },
     {
       "id": "statuspages-broadband",
@@ -33,11 +100,155 @@
       "kind": "provider_status_and_community_reports",
       "scope": "UK fixed broadband providers",
       "format": "json",
-      "status": "NO_STRUCTURED_STATUS",
-      "checkedAt": "2026-11-14T12:19:51Z",
+      "status": "OK",
+      "checkedAt": "2026-11-14T12:20:06Z",
       "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
-      "providerSignals": [],
-      "note": "Page was reachable, but no recognised current provider-status rows were extracted."
+      "providerSignals": [
+        {
+          "provider": "Virgin Media",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "Sky Broadband",
+          "reportedStatus": "STATUS_UNCLEAR",
+          "rawIndicator": "unknown",
+          "summary": "No unusual user reports; our own check could not reach the site",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "BT Broadband",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "EE",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "TalkTalk",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "Plusnet",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "Vodafone",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "NOW Broadband",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "Hyperoptic",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "Community Fibre",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "Zen Internet",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "KCOM",
+          "reportedStatus": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "crowd",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        },
+        {
+          "provider": "Starlink",
+          "reportedStatus": "NO_ISSUE_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "All systems operational",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "via": "statuspage",
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "evidenceClass": "provider_status_and_community_reports"
+        }
+      ],
+      "note": "Source data is independent/provider-status aggregation; read evidence class and source timestamp."
     },
     {
       "id": "updownsignal-mobile",
@@ -48,8 +259,8 @@
       "scope": "UK-wide carrier indicators",
       "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-14T12:19:52Z",
-      "sourceUpdatedAt": "2026-11-14 04:19:52",
+      "checkedAt": "2026-11-14T12:20:06Z",
+      "sourceUpdatedAt": "2026-11-14 04:20:07",
       "providerSignals": [
         {
           "provider": "EE",
@@ -59,7 +270,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-14 04:19:52",
+          "sourceUpdatedAt": "2026-11-14 04:20:07",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -70,7 +281,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-14 04:19:52",
+          "sourceUpdatedAt": "2026-11-14 04:20:07",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -81,7 +292,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-14 04:19:52",
+          "sourceUpdatedAt": "2026-11-14 04:20:07",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -92,7 +303,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-14 04:19:52",
+          "sourceUpdatedAt": "2026-11-14 04:20:07",
           "evidenceClass": "independent_traffic_and_reports"
         }
       ],
@@ -107,7 +318,7 @@
       "scope": "UK-wide fixed broadband infrastructure reports",
       "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-14T12:19:52Z",
+      "checkedAt": "2026-11-14T12:20:07Z",
       "sourceUpdatedAt": null,
       "providerSignals": [
         {
@@ -127,13 +338,118 @@
   ],
   "providers": [
     {
-      "provider": "EE",
-      "status": "STALE_OR_UNKNOWN",
+      "provider": "Asda Mobile",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
       "noIssueSignals": 0,
-      "unconfirmedSignals": 0,
+      "unconfirmedSignals": 1,
       "observations": [
+        {
+          "sourceId": "statuspages-mobile",
+          "source": "StatusPages UK mobile networks data",
+          "url": "https://status-pages.com/mobile",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        }
+      ]
+    },
+    {
+      "provider": "BT Broadband",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 1,
+      "observations": [
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        }
+      ]
+    },
+    {
+      "provider": "Community Fibre",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 1,
+      "observations": [
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        }
+      ]
+    },
+    {
+      "provider": "EE",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 2,
+      "observations": [
+        {
+          "sourceId": "statuspages-mobile",
+          "source": "StatusPages UK mobile networks data",
+          "url": "https://status-pages.com/mobile",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        },
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        },
         {
           "sourceId": "updownsignal-mobile",
           "source": "UpDownSignal UK mobile carriers",
@@ -143,8 +459,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14 04:19:52",
-          "checkedAt": "2026-11-14T12:19:52Z",
+          "sourceUpdatedAt": "2026-11-14 04:20:07",
+          "checkedAt": "2026-11-14T12:20:06Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -152,13 +468,103 @@
       ]
     },
     {
-      "provider": "O2",
-      "status": "STALE_OR_UNKNOWN",
+      "provider": "Hyperoptic",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
       "noIssueSignals": 0,
-      "unconfirmedSignals": 0,
+      "unconfirmedSignals": 1,
       "observations": [
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        }
+      ]
+    },
+    {
+      "provider": "KCOM",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 1,
+      "observations": [
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        }
+      ]
+    },
+    {
+      "provider": "NOW Broadband",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 1,
+      "observations": [
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        }
+      ]
+    },
+    {
+      "provider": "O2",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 1,
+      "observations": [
+        {
+          "sourceId": "statuspages-mobile",
+          "source": "StatusPages UK mobile networks data",
+          "url": "https://status-pages.com/mobile",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        },
         {
           "sourceId": "updownsignal-mobile",
           "source": "UpDownSignal UK mobile carriers",
@@ -168,8 +574,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14 04:19:52",
-          "checkedAt": "2026-11-14T12:19:52Z",
+          "sourceUpdatedAt": "2026-11-14 04:20:07",
+          "checkedAt": "2026-11-14T12:20:06Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -194,7 +600,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": null,
-          "checkedAt": "2026-11-14T12:19:52Z",
+          "checkedAt": "2026-11-14T12:20:07Z",
           "evidenceClass": "community_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -202,13 +608,153 @@
       ]
     },
     {
-      "provider": "Three",
+      "provider": "Plusnet",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 1,
+      "observations": [
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        }
+      ]
+    },
+    {
+      "provider": "Sky Broadband",
       "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
       "staleIssueSignals": 0,
       "noIssueSignals": 0,
       "unconfirmedSignals": 0,
       "observations": [
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "STATUS_UNCLEAR",
+          "rawIndicator": "unknown",
+          "summary": "No unusual user reports; our own check could not reach the site",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        }
+      ]
+    },
+    {
+      "provider": "Starlink",
+      "status": "NO_ISSUE_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 1,
+      "unconfirmedSignals": 0,
+      "observations": [
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "NO_ISSUE_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "All systems operational",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "statuspage",
+          "stale": false
+        }
+      ]
+    },
+    {
+      "provider": "Stour",
+      "status": "NO_ISSUE_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 1,
+      "unconfirmedSignals": 0,
+      "observations": [
+        {
+          "sourceId": "statuspages-mobile",
+          "source": "StatusPages UK mobile networks data",
+          "url": "https://status-pages.com/mobile",
+          "status": "NO_ISSUE_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "All Systems Operational",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "statuspage",
+          "stale": false
+        }
+      ]
+    },
+    {
+      "provider": "TalkTalk",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 1,
+      "observations": [
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        }
+      ]
+    },
+    {
+      "provider": "Three",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 1,
+      "observations": [
+        {
+          "sourceId": "statuspages-mobile",
+          "source": "StatusPages UK mobile networks data",
+          "url": "https://status-pages.com/mobile",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        },
         {
           "sourceId": "updownsignal-mobile",
           "source": "UpDownSignal UK mobile carriers",
@@ -218,8 +764,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14 04:19:52",
-          "checkedAt": "2026-11-14T12:19:52Z",
+          "sourceUpdatedAt": "2026-11-14 04:20:07",
+          "checkedAt": "2026-11-14T12:20:06Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -227,13 +773,68 @@
       ]
     },
     {
-      "provider": "Vodafone",
-      "status": "STALE_OR_UNKNOWN",
+      "provider": "Virgin Media",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
       "noIssueSignals": 0,
-      "unconfirmedSignals": 0,
+      "unconfirmedSignals": 1,
       "observations": [
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        }
+      ]
+    },
+    {
+      "provider": "Vodafone",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 2,
+      "observations": [
+        {
+          "sourceId": "statuspages-mobile",
+          "source": "StatusPages UK mobile networks data",
+          "url": "https://status-pages.com/mobile",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        },
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
+        },
         {
           "sourceId": "updownsignal-mobile",
           "source": "UpDownSignal UK mobile carriers",
@@ -243,11 +844,36 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14 04:19:52",
-          "checkedAt": "2026-11-14T12:19:52Z",
+          "sourceUpdatedAt": "2026-11-14 04:20:07",
+          "checkedAt": "2026-11-14T12:20:06Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
+        }
+      ]
+    },
+    {
+      "provider": "Zen Internet",
+      "status": "UNCONFIRMED_REPORT_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 0,
+      "unconfirmedSignals": 1,
+      "observations": [
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "UNCONFIRMED_REPORT_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-14T12:15:22.337Z",
+          "checkedAt": "2026-11-14T12:20:06Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": false
         }
       ]
     }
