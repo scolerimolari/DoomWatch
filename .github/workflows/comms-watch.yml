@@ -38,6 +38,37 @@ jobs:
       - name: Validate collector
         run: python -m py_compile comms_collector.py
 
+      - name: Validate communications dashboard JavaScript
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+
+          class Scripts(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.items = []
+                  self.current = None
+              def handle_starttag(self, tag, attrs):
+                  if tag == "script" and not dict(attrs).get("src"):
+                      self.current = []
+              def handle_data(self, data):
+                  if self.current is not None:
+                      self.current.append(data)
+              def handle_endtag(self, tag):
+                  if tag == "script" and self.current is not None:
+                      self.items.append("".join(self.current))
+                      self.current = None
+
+          parser = Scripts()
+          parser.feed(Path("communications.html").read_text(encoding="utf-8"))
+          if not parser.items:
+              raise SystemExit("No inline dashboard JavaScript found")
+          for index, script in enumerate(parser.items, 1):
+              Path(f"/tmp/comms-{index}.js").write_text(script, encoding="utf-8")
+          PY
+          for script in /tmp/comms-*.js; do node --check "$script"; done
+
       - name: Collect communications signals
         run: python comms_collector.py
 
