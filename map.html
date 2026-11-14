@@ -220,7 +220,7 @@ function category(a){
 }
 function uniqueSources(items){return new Set(items.map(a=>String(a.sourceId||a.source||"unknown"))).size;}
 function validDate(a){const d=new Date(stamp(a));return stamp(a)&&!Number.isNaN(d.getTime())?d:null;}
-let archive=[],records=[],townGroups=[],map=null,markerLayer=null,densityLayer=null,activeTown="",searchTerm="",ageDays=30,showAll=false,ballyclareWatch=false;
+let archive=[],historyArchive=[],records=[],townGroups=[],map=null,markerLayer=null,densityLayer=null,activeTown="",searchTerm="",ageDays=30,showAll=false,ballyclareWatch=false;
 function initMap(){
  if(window.L&&typeof L.map==="function"){
   try{
@@ -318,12 +318,12 @@ function renderMarkers(){
 function renderBallyclareHistory(){
  const node=$("history-window");if(!node)return;
  const days=Number(node.value)||0,cutoff=days?Date.now()-days*86400000:0;
- const matches=archive.filter(a=>matchesBallyclareWatch(a)&&["incident","roadworks"].includes(trafficKind(a))).filter(a=>{const d=validDate(a);return d&&(!cutoff||d.getTime()>=cutoff);}).sort((a,b)=>(validDate(b)?.getTime()||0)-(validDate(a)?.getTime()||0));
+ const historySource=historyArchive.length?historyArchive:archive;\n const matches=historySource.filter(a=>matchesBallyclareWatch(a)&&["incident","roadworks"].includes(trafficKind(a))).filter(a=>{const d=validDate(a);return d&&(!cutoff||d.getTime()>=cutoff);}).sort((a,b)=>(validDate(b)?.getTime()||0)-(validDate(a)?.getTime()||0));
  const incidents=matches.filter(a=>trafficKind(a)==="incident"),works=matches.filter(a=>trafficKind(a)==="roadworks");
  $("history-incidents").textContent=incidents.length.toLocaleString("en-GB");
  $("history-roadworks").textContent=works.length.toLocaleString("en-GB");
  const dates=matches.map(validDate).filter(Boolean),oldest=dates.length?dates[dates.length-1]:null,newest=dates.length?dates[0]:null;
- $("history-coverage").textContent=matches.length+" dated archive records in this window"+(oldest?" · "+oldest.toLocaleDateString("en-GB")+" to "+newest.toLocaleDateString("en-GB"):"")+" · undated records excluded. Archive retention is limited; this is not a complete official incident register.";
+ $("history-coverage").textContent=matches.length+" dated archive records in this window"+(oldest?" · "+oldest.toLocaleDateString("en-GB")+" to "+newest.toLocaleDateString("en-GB"):"")+" · undated records excluded. "+(historyArchive.length?"Persistent archive, capped at 10,000 unique source records.":"Persistent archive not yet available; showing rolling intelligence archive.")+" Not a complete official incident register.";
  const routeTerms=["A8","A57","B94","B59","M2","BALLYCLARE","DOAGH","PARKGATE","BALLYNURE","TEMPLEPATRICK","HILLHEAD ROAD","BALLYEASTON","BALLYCORR","BALLYBOLEY"];
  const ranked=routeTerms.map(term=>({term,count:matches.filter(a=>hasTerm(allText(a).toUpperCase(),term)).length})).filter(x=>x.count>0).sort((a,b)=>b.count-a.count);
  $("history-hotspots").innerHTML=ranked.length?ranked.slice(0,8).map(x=>'<div class="layer-row"><strong>'+esc(x.term)+'</strong><span style="margin-left:auto">'+x.count+' record'+(x.count===1?'':'s')+'</span></div>').join(""):"No repeated route/place terms identified in this window.";
@@ -355,6 +355,11 @@ async function load(){
   if(!response.ok)throw new Error("HTTP "+response.status);
   const data=await response.json();
   archive=(Array.isArray(data.articles)?data.articles:[]).filter(isNI).sort((a,b)=>(validDate(b)?.getTime()||0)-(validDate(a)?.getTime()||0));
+  try{
+   const historyResponse=await fetch("./data/ballyclare-history.json?refresh="+Date.now(),{cache:"no-store"});
+   if(historyResponse.ok){const historyData=await historyResponse.json();historyArchive=Array.isArray(historyData.records)?historyData.records:[];}
+  }catch(historyError){historyArchive=[];}
+
   $("map-status").textContent="ARCHIVE LINK ACTIVE // "+archive.length+" NORTHERN IRELAND / LOCAL RECORDS AVAILABLE";
   render();renderBallyclareHistory();
  }catch(error){
