@@ -183,7 +183,7 @@ function trafficLabel(a){const kind=trafficKind(a);return ({incident:"LIVE ROAD 
 function matchesBallyclareWatch(a){
  if(!isTraffic(a))return false;
  const raw=allText(a).toUpperCase();
- const txt=raw.replace(/\b([AB])0+(\\d+)\b/g,"$1$2");
+ const txt=raw.replace(/\b([AB])0+(\d+)\b/g,"$1$2");
  const places=["BALLYCLARE","DOAGH","PARKGATE","BALLYNURE","TEMPLEPATRICK","HILLHEAD ROAD","BALLYEASTON","BALLYCORR","BALLYBOLEY"];
  if(places.some(term=>hasTerm(txt.toLowerCase(),term.toLowerCase())))return true;
  if(/\bA57\b|\bA8\b|\bB94\b|\bB59\b/.test(txt))return true;
