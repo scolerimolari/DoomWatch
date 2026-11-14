@@ -8,9 +8,9 @@ const routes=[
  ["preparedness","index.html#preparedness","PREP"],["meshcore","index.html#meshcore","MESHCORE"],["markets","markets.html","MARKETS"],
  ["household","household.html","HOUSEHOLD"],["feed","feed.html","FEED"],
  ["map","map.html","MAP"],["communications","communications.html","COMMS"],
- ["incident","incident.html","CASE FILE"],["sources","index.html#sources","SOURCES"]
+ ["incident","incident.html","CASE FILE"],["backup","index.html#backup-centre","BACKUP"],["sources","index.html#sources","SOURCES"]
 ];
-const active=path.endsWith("/operations.html")?"operations":path.endsWith("/markets.html")?"markets":path.endsWith("/household.html")?"household":path.endsWith("/feed.html")?"feed":path.endsWith("/map.html")?"map":path.endsWith("/communications.html")?"communications":path.endsWith("/incident.html")?"incident":({intelligence:"intelligence",sections:"sectors",preparedness:"preparedness",meshcore:"meshcore",sources:"sources"})[hash]||"command";
+const active=path.endsWith("/operations.html")?"operations":path.endsWith("/markets.html")?"markets":path.endsWith("/household.html")?"household":path.endsWith("/feed.html")?"feed":path.endsWith("/map.html")?"map":path.endsWith("/communications.html")?"communications":path.endsWith("/incident.html")?"incident":({intelligence:"intelligence",sections:"sectors",preparedness:"preparedness",meshcore:"meshcore",sources:"sources","backup":"backup"})[hash]||"command";
 const mast=document.createElement("header");mast.className="dw-masthead";
 mast.innerHTML='<div class="dw-brand"><img class="dw-emblem" src="./containment.svg" alt="DoomWatch red containment unit emblem"><div><div class="dw-wordmark">DOOMWATCH</div><div class="dw-tagline">OPERATION CONTAINMENT // RESILIENCE INTELLIGENCE</div><div class="dw-statusline" id="dw-statusline"></div></div></div><div class="dw-hardware" aria-hidden="true"><div class="dw-statusbox"><strong>CONTAINMENT SYSTEM</strong><span>POWER / FIELD UNIT</span><div class="dw-lamps"><i class="dw-lamp red"></i><i class="dw-lamp amber"></i><i class="dw-lamp green"></i></div></div><div class="dw-valves"><i class="dw-valve red"></i><i class="dw-valve"></i></div><div class="dw-switches"><i class="dw-switch on"></i><i class="dw-switch"></i></div></div>';
 body.insertBefore(mast,body.firstChild);
