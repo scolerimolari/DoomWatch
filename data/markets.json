@@ -1,51 +1,51 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-14T10:22:29+00:00",
-  "generatedAt": "2026-11-14T10:22:29+00:00",
+  "updatedAt": "2026-11-14T12:47:31+00:00",
+  "generatedAt": "2026-11-14T12:47:31+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:21+00:00"
+      "checkedAt": "2026-11-14T12:47:27+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:21+00:00"
+      "checkedAt": "2026-11-14T12:47:27+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:21+00:00"
+      "checkedAt": "2026-11-14T12:47:28+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:21+00:00"
+      "checkedAt": "2026-11-14T12:47:28+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:22+00:00"
+      "checkedAt": "2026-11-14T12:47:28+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:22+00:00"
+      "checkedAt": "2026-11-14T12:47:28+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:22+00:00"
+      "checkedAt": "2026-11-14T12:47:28+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:22+00:00"
+      "checkedAt": "2026-11-14T12:47:28+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:22+00:00"
+      "checkedAt": "2026-11-14T12:47:28+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:23+00:00"
+      "checkedAt": "2026-11-14T12:47:28+00:00"
     },
     "heatingOil": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:25+00:00",
+      "checkedAt": "2026-11-14T12:47:30+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
       "observationsImported": 179,
@@ -54,7 +54,7 @@
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:26+00:00",
+      "checkedAt": "2026-11-14T12:47:30+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
       "observationsImported": 463,
@@ -63,7 +63,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:28+00:00",
+      "checkedAt": "2026-11-14T12:47:31+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -72,7 +72,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:28+00:00",
+      "checkedAt": "2026-11-14T12:47:31+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -81,7 +81,7 @@
     },
     "supermarketPriceIndex": {
       "status": "ok",
-      "checkedAt": "2026-11-14T10:22:28+00:00",
+      "checkedAt": "2026-11-14T12:47:31+00:00",
       "url": "https://data.yappman.com/shelf-price-index/",
       "datasetUrl": "https://api.apify.com/v2/datasets/AvRCWqFinCiNjx3sP/items?format=json",
       "licence": "CC BY 4.0",
@@ -6255,10 +6255,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 67204.33,
-      "changePct": -28.807,
+      "price": 67094.0,
+      "changePct": -28.924,
       "currency": "USD",
-      "observedAt": "2026-11-14T10:22:19+00:00",
+      "observedAt": "2026-11-14T12:47:23+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -7730,7 +7730,7 @@
         },
         {
           "date": "2026-11-14",
-          "value": 67204.328125
+          "value": 67094.0
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -8802,7 +8802,7 @@
       "price": 1.1981,
       "changePct": 5.802,
       "currency": "EUR",
-      "observedAt": "2026-11-13T22:29:33+00:00",
+      "observedAt": "2026-11-13T22:29:46+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -23978,7 +23978,7 @@
         ]
       }
     ],
-    "updatedAt": "2026-11-14T10:22:25+00:00",
+    "updatedAt": "2026-11-14T12:47:30+00:00",
     "source": "Consumer Council Northern Ireland",
     "sourceUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker",
     "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
@@ -28022,7 +28022,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-14T10:22:26+00:00",
+    "updatedAt": "2026-11-14T12:47:30+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
@@ -36941,7 +36941,7 @@
         "missingPackSize": null
       }
     ],
-    "supermarketIndexUpdatedAt": "2026-11-14T10:22:28+00:00",
+    "supermarketIndexUpdatedAt": "2026-11-14T12:47:31+00:00",
     "supermarketIndex": {
       "vintage": "2026-W45",
       "publishedAt": "2026-11-09T12:49:02Z",
@@ -36962,6 +36962,24 @@
     }
   },
   "news": [
+    {
+      "title": "US has floated Ukraine ceding Donbas for Nato membership, Zelensky says",
+      "url": "https://www.bbc.co.uk/news/articles/cwvg2l312ylqo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-14T11:41:20+00:00"
+    },
+    {
+      "title": "Watch: Cruise ship overturns after collision with tanker in New Orleans",
+      "url": "https://www.bbc.co.uk/news/videos/ck4gn4y77m40o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-14T11:30:10+00:00"
+    },
+    {
+      "title": "Hungarian authorities uncover $20m during probe of Orbán-era minister",
+      "url": "https://www.bbc.co.uk/news/articles/ckjwj03w4w0qo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-14T10:42:20+00:00"
+    },
     {
       "title": "Football kit giveaway aims to boost participation",
       "url": "https://www.bbc.co.uk/news/articles/ck20v651473qo?at_medium=RSS&at_campaign=rss",
@@ -37047,12 +37065,6 @@
       "publishedAt": "2026-11-13T23:00:31+00:00"
     },
     {
-      "title": "Watch: Cruise ship seen sinking after collision with cargo ship in New Orleans",
-      "url": "https://www.bbc.co.uk/news/videos/ck4gn4y77m40o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-13T21:15:24+00:00"
-    },
-    {
       "title": "Bird flu (avian influenza): latest situation in England",
       "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
       "source": "DEFRA",
@@ -37129,18 +37141,6 @@
       "url": "https://www.bbc.co.uk/news/articles/c6jre3z03w4go?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-13T15:42:52+00:00"
-    },
-    {
-      "title": "Research: Avian influenza (bird flu) in Europe and the UK",
-      "url": "https://www.gov.uk/government/publications/avian-influenza-bird-flu-in-europe",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T15:16:53Z"
-    },
-    {
-      "title": "Watch: Divers explore US ship sunk off Florida coast to create new reef",
-      "url": "https://www.bbc.co.uk/news/videos/ckqx5ryx905qo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-13T15:09:40+00:00"
     }
   ],
   "supplyNews": [
