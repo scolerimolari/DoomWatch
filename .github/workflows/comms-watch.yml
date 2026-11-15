@@ -70,6 +70,10 @@ jobs:
           for script in /tmp/comms-*.js; do node --check "$script"; done
 
       - name: Collect communications signals
+        env:
+          DOWNDETECTOR_CLIENT_ID: ${{ secrets.DOWNDETECTOR_CLIENT_ID }}
+          DOWNDETECTOR_CLIENT_SECRET: ${{ secrets.DOWNDETECTOR_CLIENT_SECRET }}
+          DOWNDETECTOR_COMPANY_SLUGS: ${{ vars.DOWNDETECTOR_COMPANY_SLUGS }}
         run: python comms_collector.py
 
       - name: Publish latest snapshot
