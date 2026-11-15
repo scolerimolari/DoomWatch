@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-15",
+  "sources": [
+    {
+      "id": "black-vault",
+      "name": "The Black Vault",
+      "url": "https://www.theblackvault.com/feed/",
+      "category": "UFO / UAP",
+      "class": "UFO research archive",
+      "trust": "SPECIALIST / DOCUMENT-LED",
+      "description": "FOIA documents, UAP records and investigative archive."
+    },
+    {
+      "id": "debrief",
+      "name": "The Debrief",
+      "url": "https://thedebrief.org/feed/",
+      "category": "UFO / UAP",
+      "class": "Specialist science and defence reporting",
+      "trust": "SPECIALIST REPORTING",
+      "description": "Science, defence, aerospace and UAP reporting; assess claims at article level."
+    },
+    {
+      "id": "mysterious-universe",
+      "name": "Mysterious Universe",
+      "url": "https://mysteriousuniverse.org/feed/",
+      "category": "UFO / UAP",
+      "class": "Fringe / paranormal media",
+      "trust": "CLAIM-LED / UNVERIFIED",
+      "description": "Paranormal, anomalous and unexplained topics; discovery leads, not verification."
+    },
+    {
+      "id": "ancient-origins",
+      "name": "Ancient Origins",
+      "url": "https://www.ancient-origins.net/rss.xml",
+      "category": "ANCIENT CIVILISATIONS",
+      "class": "Alternative archaeology and history",
+      "trust": "ALTERNATIVE HISTORY / VERIFY",
+      "description": "Ancient history and archaeology, including disputed interpretations."
+    },
+    {
+      "id": "skeptical-inquirer",
+      "name": "Skeptical Inquirer",
+      "url": "https://skepticalinquirer.org/feed/",
+      "category": "CONTEXT & SCEPTICAL REVIEW",
+      "class": "Sceptical / investigative",
+      "trust": "SCEPTICAL REVIEW",
+      "description": "Critical examination of paranormal, pseudoscience and extraordinary claims."
+    },
+    {
+      "id": "coast-to-coast",
+      "name": "Coast to Coast AM",
+      "url": "https://www.coasttocoastam.com/feed/",
+      "category": "OCCULT & ESOTERIC",
+      "class": "Paranormal talk media",
+      "trust": "CLAIM-LED / UNVERIFIED",
+      "description": "Paranormal, occult, UFO and conspiracy discussion; not an evidentiary authority."
+    },
+    {
+      "id": "news-nwo",
+      "name": "Google News search — New World Order",
+      "url": "https://news.google.com/rss/search?q=%22New+World+Order%22+conspiracy+global+governance&hl=en-GB&gl=GB&ceid=GB:en",
+      "category": "NEW WORLD ORDER",
+      "class": "News search aggregator",
+      "trust": "AGGREGATED DISCOVERY — VERIFY ORIGINAL",
+      "description": "Discovery feed only. Open the publisher's original article and assess evidence."
+    },
+    {
+      "id": "news-bilderberg",
+      "name": "Google News search — Bilderberg & elite networks",
+      "url": "https://news.google.com/rss/search?q=Bilderberg+Group+secret+societies+global+elite&hl=en-GB&gl=GB&ceid=GB:en",
+      "category": "NEW WORLD ORDER",
+      "class": "News search aggregator",
+      "trust": "AGGREGATED DISCOVERY — VERIFY ORIGINAL",
+      "description": "Discovery feed only. Open the publisher's original article and assess evidence."
+    },
+    {
+      "id": "news-occult",
+      "name": "Google News search — occult & secret orders",
+      "url": "https://news.google.com/rss/search?q=occult+symbolism+secret+societies+esoteric+history&hl=en-GB&gl=GB&ceid=GB:en",
+      "category": "OCCULT & ESOTERIC",
+      "class": "News search aggregator",
+      "trust": "AGGREGATED DISCOVERY — VERIFY ORIGINAL",
+      "description": "Discovery feed only. Open the publisher's original article and assess evidence."
+    },
+    {
+      "id": "news-uap",
+      "name": "Google News search — UFO / UAP disclosure",
+      "url": "https://news.google.com/rss/search?q=UFO+UAP+disclosure+whistleblower+government+report&hl=en-GB&gl=GB&ceid=GB:en",
+      "category": "UFO / UAP",
+      "class": "News search aggregator",
+      "trust": "AGGREGATED DISCOVERY — VERIFY ORIGINAL",
+      "description": "Discovery feed only. Open the publisher's original article and assess evidence."
+    },
+    {
+      "id": "news-ancient",
+      "name": "Google News search — ancient lost civilisations",
+      "url": "https://news.google.com/rss/search?q=ancient+lost+civilization+archaeology+megalithic&hl=en-GB&gl=GB&ceid=GB:en",
+      "category": "ANCIENT CIVILISATIONS",
+      "class": "News search aggregator",
+      "trust": "AGGREGATED DISCOVERY — VERIFY ORIGINAL",
+      "description": "Discovery feed only. Open the publisher's original article and assess evidence."
+    },
+    {
+      "id": "news-history",
+      "name": "Google News search — hidden history",
+      "url": "https://news.google.com/rss/search?q=historical+cover+up+declassified+intelligence+documents&hl=en-GB&gl=GB&ceid=GB:en",
+      "category": "HIDDEN HISTORY",
+      "class": "News search aggregator",
+      "trust": "AGGREGATED DISCOVERY — VERIFY ORIGINAL",
+      "description": "Discovery feed only. Open the publisher's original article and assess evidence."
+    }
+  ]
+}
