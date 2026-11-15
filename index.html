@@ -1134,8 +1134,32 @@ async function runSystemDiagnostics(){
   if(!response.ok)throw new Error("HTTP "+response.status);
   const payload=await response.json();
   if(!payload||typeof payload!=="object"||Array.isArray(payload))throw new Error("Unexpected JSON structure");
-  add("Communications data","PASS","Endpoint returned valid JSON"+(payload.generatedAt?"; generated "+dateText(payload.generatedAt):"; generated timestamp absent")+".");
+  const stamp=payload.generatedAt||"";
+  const age=stamp?Date.now()-new Date(stamp).getTime():NaN;
+  if(!Number.isFinite(age))add("Communications data","WARN","Valid JSON, but generatedAt is missing or invalid.");
+  else if(age<0)add("Communications freshness","WARN","Snapshot timestamp is in the future; check collector clock.");
+  else if(age>60*60000)add("Communications freshness","FAIL","Last snapshot is "+(age/60000).toFixed(0)+" minutes old; expected a five-minute collection cycle.");
+  else if(age>15*60000)add("Communications freshness","WARN","Last snapshot is "+(age/60000).toFixed(0)+" minutes old; expected a five-minute collection cycle.");
+  else add("Communications freshness","PASS","Snapshot refreshed "+(age/60000).toFixed(0)+" minutes ago.");
+  add("Communications data","PASS","Endpoint returned valid JSON"+(stamp?"; generated "+dateText(stamp):"; generated timestamp absent")+".");
  }catch(e){add("Communications data","WARN","Not available or invalid: "+String(e.message||e));}
+ try{
+  const response=await fetch("./data/markets.json?diag="+Date.now(),{cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const payload=await response.json();
+  if(!payload||typeof payload!=="object"||Array.isArray(payload))throw new Error("Unexpected JSON structure");
+  const stamp=payload.generatedAt||payload.updatedAt||"";
+  const age=stamp?Date.now()-new Date(stamp).getTime():NaN;
+  if(!Number.isFinite(age))add("Markets data","WARN","Valid JSON, but generatedAt/updatedAt is missing or invalid.");
+  else if(age<0)add("Markets freshness","WARN","Snapshot timestamp is in the future; check collector clock.");
+  else if(age>24*3600000)add("Markets freshness","FAIL","Last snapshot is "+(age/3600000).toFixed(1)+" hours old; expected a six-hour collection cycle.");
+  else if(age>12*3600000)add("Markets freshness","WARN","Last snapshot is "+(age/3600000).toFixed(1)+" hours old; expected a six-hour collection cycle.");
+  else add("Markets freshness","PASS","Snapshot refreshed "+(age/3600000).toFixed(1)+" hours ago.");
+  const sourceValues=Object.values(payload.sources||{});
+  const failed=sourceValues.filter(x=>String(x?.status||"").toLowerCase()==="failed").length;
+  const total=sourceValues.length;
+  add("Markets source status",total?(failed?"WARN":"PASS"):"WARN",total+" source records; "+failed+" marked failed.");
+ }catch(e){add("Markets data","WARN","Not available or invalid: "+String(e.message||e));}
  try{
   if(!("serviceWorker" in navigator))add("Service worker","WARN","This browser does not expose service-worker support.");
   else{
