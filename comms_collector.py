@@ -3,8 +3,6 @@
 Five-minute best-effort collection of public provider status and independent outage signals.
 """
 import json
-import os
-import base64
 import re
 from datetime import datetime, timezone
 from html.parser import HTMLParser
@@ -336,110 +334,8 @@ def collect_one(source):
 
 
 
-# Optional official Downdetector Enterprise API integration.
-# Credentials are GitHub Actions secrets; never expose them to the browser.
-DD_API = "https://downdetectorapi.com/v2"
-DD_SLUGS = [x.strip() for x in os.environ.get(
-    "DOWNDETECTOR_COMPANY_SLUGS",
-    "bt,virgin-media,vodafone,ee,o2,three,sky,microsoft-teams"
-).split(",") if x.strip()]
-
-
-def dd_request(url, token=None, basic=None, method="GET"):
-    headers = {"User-Agent": USER_AGENT, "Accept": "application/json"}
-    if token:
-        headers["Authorization"] = "Bearer " + token
-    if basic:
-        headers["Authorization"] = "Basic " + basic
-    req = Request(url, headers=headers, method=method)
-    with urlopen(req, timeout=TIMEOUT) as response:
-        raw = response.read(MAX_BYTES + 1)
-        if len(raw) > MAX_BYTES:
-            raise ValueError("Downdetector API response exceeded size limit")
-        return json.loads(raw.decode("utf-8", errors="replace"))
-
-
-def collect_downdetector():
-    client_id = os.environ.get("DOWNDETECTOR_CLIENT_ID", "").strip()
-    client_secret = os.environ.get("DOWNDETECTOR_CLIENT_SECRET", "").strip()
-    now = utc_now()
-    if not client_id or not client_secret:
-        return {
-            "configured": False, "status": "NOT_CONFIGURED",
-            "checkedAt": now, "products": [],
-            "note": "Official Downdetector Enterprise API credentials are not configured. Public service links remain available."
-        }
-    try:
-        basic = base64.b64encode((client_id + ":" + client_secret).encode()).decode()
-        auth_url = DD_API + "/tokens?grant_type=client_credentials"
-        token_data = dd_request(auth_url, basic=basic, method="POST")
-        token = token_data.get("access_token")
-        if not token:
-            raise ValueError("Token response did not contain access_token")
-        products, errors = [], []
-        for slug in DD_SLUGS:
-            try:
-                url = DD_API + "/slugs/" + slug + "/companies?fields=id,name,slug,stats_24,baseline,baseline_current,status,country_iso,tz"
-                found = dd_request(url, token=token)
-                if isinstance(found, dict):
-                    found = found.get("companies") or found.get("data") or [found]
-                if not isinstance(found, list) or not found:
-                    errors.append(slug + ": no company match")
-                    continue
-                for company in found[:3]:
-                    if not isinstance(company, dict) or not company.get("id"):
-                        continue
-                    cid = company["id"]
-                    last15 = dd_request(DD_API + "/companies/" + str(cid) + "/last_15", token=token)
-                    status_data = dd_request(DD_API + "/companies/" + str(cid) + "/status", token=token)
-                    if isinstance(last15, dict):
-                        reports = last15.get("count", last15.get("reports", last15.get("last_15", 0)))
-                    else:
-                        reports = last15
-                    try:
-                        reports = int(reports or 0)
-                    except (TypeError, ValueError):
-                        reports = 0
-                    baseline = company.get("baseline_current")
-                    try:
-                        baseline = float(baseline) if baseline is not None else None
-                    except (TypeError, ValueError):
-                        baseline = None
-                    status_value = status_data.get("status") if isinstance(status_data, dict) else status_data
-                    status_value = str(status_value or company.get("status") or "unknown").lower()
-                    ratio = (reports / baseline) if baseline and baseline > 0 else None
-                    elevated = reports >= 5 and ratio is not None and ratio >= 2.0
-                    products.append({
-                        "id": cid, "name": str(company.get("name") or slug),
-                        "slug": slug, "country": company.get("country_iso"),
-                        "status": status_value, "reportsLast15Minutes": reports,
-                        "baselineCurrent": baseline,
-                        "reportRatio": round(ratio, 2) if ratio is not None else None,
-                        "elevatedReports": elevated,
-                        "source": "Downdetector Enterprise API",
-                        "url": "https://downdetector.co.uk/status/" + slug + "/",
-                        "checkedAt": now,
-                        "evidenceClass": "licensed_user_report_telemetry",
-                    })
-            except Exception as exc:
-                errors.append(slug + ": " + type(exc).__name__)
-        return {
-            "configured": True, "status": "OK" if products else "NO_DATA",
-            "checkedAt": now, "products": products,
-            "errors": errors[:12],
-            "note": "Licensed Downdetector report telemetry. Elevated reports are user-report anomalies, not confirmed provider faults."
-        }
-    except Exception as exc:
-        return {
-            "configured": True, "status": "API_ERROR",
-            "checkedAt": now, "products": [],
-            "note": (type(exc).__name__ + ": " + str(exc))[:240]
-        }
-
-
 def main():
     results = [collect_one(source) for source in SOURCES]
-    downdetector = collect_downdetector()
     now = datetime.now(timezone.utc)
     grouped = {}
     for result in results:
@@ -511,7 +407,6 @@ def main():
         },
         "sources": results,
         "providers": providers,
-        "downdetector": downdetector,
         "officialCheckers": [
             {"name": "EE service status", "url": "https://ee.co.uk/help/service-status/broadband/confirm-mobile-number"},
             {"name": "Vodafone network status", "url": "https://www.vodafone.co.uk/network/status-checker"},
@@ -522,7 +417,6 @@ def main():
             "This is a five-minute best-effort collector, not a carrier-operated monitoring feed.",
             "StatusPages aggregates provider status pages and user reports; user reports are unverified.",
             "Independent traffic and community reports can indicate an emerging problem but do not prove an outage.",
-            "Downdetector Enterprise report-volume data is included only when valid licensed API credentials are configured.",
             "Old source data is labelled stale and is not presented as a current fault.",
             "No recognised signal does not prove that a network is working.",
             "The monitored public sources do not guarantee postcode-level confirmation for Ballyclare.",
