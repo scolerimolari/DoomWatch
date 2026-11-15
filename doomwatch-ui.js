@@ -1,6 +1,12 @@
 (()=>{"use strict";
 if(window.__doomwatchUiReady)return;window.__doomwatchUiReady=true;
 const body=document.body,oldHeader=body.querySelector(":scope > header"),oldNav=body.querySelector(":scope > nav");
+document.querySelectorAll("nav").forEach(el=>{
+ if(el.classList.contains("dw-global-nav"))return;
+ if(el.querySelector("button[data-page]")){
+  const tabs=document.createElement("div");tabs.className="dw-local-tabs";tabs.innerHTML=el.innerHTML;el.replaceWith(tabs);
+ }else el.remove();
+});
 const path=location.pathname.toLowerCase(),hash=decodeURIComponent(location.hash.slice(1)).toLowerCase(),embedMode=new URLSearchParams(location.search).has("embed");
 if((path==="/"||path.endsWith("/")||path.endsWith("/index.html"))&&!hash){location.replace("./index.html#overview");return;}
 const active=path.endsWith("/operations.html")?"regional":path.endsWith("/map.html")?"map":path.endsWith("/communications.html")?"comms":path.endsWith("/markets.html")||path.endsWith("/household.html")?"economy":path.endsWith("/feed.html")?"streams":path.endsWith("/observatory.html")?"intelligence":path.endsWith("/correlation.html")?"signals":path.endsWith("/incident.html")?"report":path.endsWith("/meshcore.html")?"mesh":({overview:"overview",intelligence:"intelligence",sections:"reference",preparedness:"reference",meshcore:"mesh",sources:"reference"})[hash]||"overview";
@@ -25,8 +31,8 @@ const groups=[
 ];
 groups.forEach(([heading,items])=>{const group=document.createElement("section");group.className="dw-explore-group";const h=document.createElement("h2");h.textContent=heading;group.appendChild(h);items.forEach(([url,label,desc])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.innerHTML="<strong>"+label+"</strong><span>"+desc+"</span>";if((url==="operations.html"&&active==="regional")||(url==="communications.html"&&active==="comms")||(url==="correlation.html"&&active==="signals")||(url==="meshcore.html"&&active==="mesh")||(url==="markets.html"&&active==="economy")||(url==="markets.html#household"&&active==="economy")||(url==="index.html#sections"&&active==="reference")||(url==="index.html#preparedness"&&active==="reference")||(url==="index.html#sources"&&active==="reference"))a.setAttribute("aria-current","page");group.appendChild(a);});panel.appendChild(group);});
 body.appendChild(panel);
-const setMore=open=>{panel.classList.toggle("is-open",open);more.setAttribute("aria-expanded",String(open));more.textContent=open?"Close":"Explore";};
-more.addEventListener("click",()=>setMore(!panel.classList.contains("is-open")));
+const setMore=open=>{panel.classList.toggle("is-open",open);more.setAttribute("aria-expanded",String(open));more.textContent=open?"Close":"Explore";if(open)panel.style.top=Math.max(8,Math.round(nav.getBoundingClientRect().bottom+6))+"px";};
+more.addEventListener("click",()=>setMore(!panel.classList.contains("is-open")));window.addEventListener("scroll",()=>{if(panel.classList.contains("is-open"))panel.style.top=Math.max(8,Math.round(nav.getBoundingClientRect().bottom+6))+"px";},{passive:true});window.addEventListener("resize",()=>{if(panel.classList.contains("is-open"))panel.style.top=Math.max(8,Math.round(nav.getBoundingClientRect().bottom+6))+"px";});
 document.addEventListener("click",e=>{if(!nav.contains(e.target)&&!panel.contains(e.target))setMore(false);});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")setMore(false);});
 const skip=document.createElement("a");skip.className="dw-skip-link";skip.href="#dw-main-content";skip.textContent="Skip to content";
