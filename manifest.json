@@ -1,13 +1,13 @@
 {
-  "name": "DoomWatch — Operation Containment",
+  "name": "DoomWatch — Independent Intelligence",
   "short_name": "DoomWatch",
-  "description": "Northern Ireland-first UK emergency preparedness and resilience intelligence dashboard.",
+  "description": "Independent, source-led intelligence for the UK and Northern Ireland.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#0b0d0c",
-  "theme_color": "#111714",
+  "background_color": "#09131b",
+  "theme_color": "#0b1720",
   "categories": [
     "news",
     "utilities",
