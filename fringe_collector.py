@@ -5,6 +5,7 @@ Uses only the Python standard library; no accounts, social APIs or paid services
 from __future__ import annotations
 import json, re, time, hashlib
 from datetime import datetime, timezone, timedelta
+from email.utils import parsedate_to_datetime
 from html import unescape
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -30,7 +31,7 @@ def local(tag):
 def clean(value):
     value = unescape(str(value or ""))
     value = re.sub(r"<[^>]+>", " ", value)
-    return re.sub(r"\\s+", " ", value).strip()
+    return re.sub(r"\s+", " ", value).strip()
 
 def child_value(element, names):
     for child in element.iter():
@@ -122,7 +123,10 @@ def main():
     for article in combined.values():
         value = article.get("publishedAt") or article.get("collectedAt")
         try:
-            dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+            try:
+                dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+            except ValueError:
+                dt = parsedate_to_datetime(str(value))
             if dt.tzinfo is None:
                 dt = dt.replace(tzinfo=timezone.utc)
         except Exception:
@@ -141,7 +145,7 @@ def main():
         "editorialPolicy": "Fringe and extraordinary claims are discovery leads. Publisher class is not proof. Each claim remains UNASSESSED until independently examined."
     }
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
-    DATA_FILE.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    DATA_FILE.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print("FRINGE COLLECTION COMPLETE:", len(fresh), "new records;", len(retained), "retained")
 
 if __name__ == "__main__":
