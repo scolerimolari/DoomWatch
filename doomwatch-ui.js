@@ -34,7 +34,7 @@ primaryRoutes.forEach(([key,url,label])=>{
  a.href=new URL(url,document.baseURI).href;
  a.textContent=label;
  a.className="dw-route-primary";
- if(key===active)a.setAttribute("aria-current","page");
+ if(key===active||(key==="intelligence"&&["feed","correlation"].includes(active)))a.setAttribute("aria-current","page");
  nav.appendChild(a);
 });
 const areaToggle=document.createElement("button");areaToggle.type="button";areaToggle.className="dw-nav-toggle";areaToggle.textContent="TOOLS +";areaToggle.setAttribute("aria-expanded","false");areaToggle.setAttribute("aria-controls","dw-route-extras");nav.appendChild(areaToggle);
