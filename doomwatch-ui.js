@@ -3,124 +3,31 @@ if(window.__doomwatchUiReady)return;window.__doomwatchUiReady=true;
 const body=document.body,oldHeader=body.querySelector(":scope > header"),oldNav=body.querySelector(":scope > nav");
 const path=location.pathname.toLowerCase(),hash=decodeURIComponent(location.hash.slice(1)).toLowerCase();
 if((path==="/"||path.endsWith("/")||path.endsWith("/index.html"))&&!hash){location.replace("./index.html#overview");return;}
-const routes=[
- ["command","index.html#overview","COMMAND",true],
- ["intelligence","observatory.html","INTELLIGENCE",true],
- ["operations","operations.html","OPERATIONS",true],
- ["resilience","index.html#sections","RESILIENCE",true],
- ["meshcore","meshcore.html","FIELD NETWORK",true],
- ["feed","feed.html","LIVE FEED",false],
- ["correlation","correlation.html","CORRELATION",false],
- ["markets","markets.html","MARKETS",false],
- ["sectors","index.html#sections","11 SECTORS",false],
- ["preparedness","index.html#preparedness","PREPAREDNESS",false],
- ["incident","incident.html","CASE FILE",false],
- ["backup","index.html#backup-centre","BACKUP & RECOVERY",false],
- ["sources","index.html#sources","SOURCE DIRECTORY",false]
-];
-const active=path.endsWith("/operations.html")?"operations":path.endsWith("/map.html")?"map":path.endsWith("/communications.html")?"communications":path.endsWith("/markets.html")?"markets":path.endsWith("/household.html")?"markets":path.endsWith("/feed.html")?"feed":path.endsWith("/observatory.html")?"intelligence":path.endsWith("/correlation.html")?"correlation":path.endsWith("/incident.html")?"incident":path.endsWith("/meshcore.html")?"meshcore":({overview:"command",intelligence:"intelligence",sections:"resilience-sectors",preparedness:"resilience-preparedness","backup-centre":"resilience-backup",meshcore:"mesh-directory",sources:"sources"})[hash]||"command";
+const active=path.endsWith("/operations.html")?"operations":path.endsWith("/map.html")?"map":path.endsWith("/communications.html")?"communications":path.endsWith("/markets.html")||path.endsWith("/household.html")?"economy":path.endsWith("/feed.html")?"streams":path.endsWith("/observatory.html")?"intelligence":path.endsWith("/correlation.html")?"correlation":path.endsWith("/incident.html")?"incident":path.endsWith("/meshcore.html")?"field":({overview:"overview",intelligence:"intelligence",sections:"resilience",preparedness:"resilience","backup-centre":"resilience",meshcore:"field",sources:"explore"})[hash]||"overview";
 const mast=document.createElement("header");mast.className="dw-masthead";
-mast.innerHTML='<div class="dw-brand"><img class="dw-emblem" src="./containment.svg" alt="DoomWatch red containment unit emblem"><div><div class="dw-wordmark">DOOMWATCH</div><div class="dw-tagline">OPERATION CONTAINMENT // RESILIENCE INTELLIGENCE</div><div class="dw-statusline" id="dw-statusline"></div></div></div><div class="dw-hardware" aria-hidden="true"><div class="dw-statusbox"><strong>CONTAINMENT SYSTEM</strong><span>POWER / FIELD UNIT</span><div class="dw-lamps"><i class="dw-lamp red"></i><i class="dw-lamp amber"></i><i class="dw-lamp green"></i></div></div><div class="dw-valves"><i class="dw-valve red"></i><i class="dw-valve"></i></div><div class="dw-switches"><i class="dw-switch on"></i><i class="dw-switch"></i></div></div>';
+mast.innerHTML='<div class="dw-brand"><img class="dw-emblem" src="./containment.svg" alt=""><div><div class="dw-wordmark">DOOMWATCH</div><div class="dw-tagline">INDEPENDENT INTELLIGENCE // UK & NORTHERN IRELAND</div><div class="dw-statusline" id="dw-statusline"></div></div></div><div class="dw-mast-note"><span class="dw-live-dot"></span> INFORMATION ONLY <span class="dw-mast-sep">/</span> LIVE SOURCES</div>';
 body.insertBefore(mast,body.firstChild);
 const statusline=mast.querySelector("#dw-statusline");
 ["clock","connection","updated"].forEach(id=>{const node=document.getElementById(id);if(node){const wrap=document.createElement("span");wrap.appendChild(node);statusline.appendChild(wrap);}});
 if(oldHeader)oldHeader.hidden=true;
-const nav=document.createElement("nav");nav.className="dw-global-nav";nav.setAttribute("aria-label","DoomWatch primary navigation");
-const primaryRoutes=routes.filter(route=>route[3]),toolRoutes=routes.filter(route=>!route[3]);
-primaryRoutes.forEach(([key,url,label])=>{
- const a=document.createElement("a");
- a.href=new URL(url,document.baseURI).href;
- a.textContent=label;
- a.className="dw-route-primary";
- if(key===active||(key==="intelligence"&&["feed","correlation"].includes(active))||(key==="operations"&&["map","communications"].includes(active))||(key==="resilience"&&["resilience-sectors","resilience-preparedness","resilience-backup"].includes(active))||(key==="meshcore"&&active==="mesh-directory"))a.setAttribute("aria-current","page");
- nav.appendChild(a);
-});
-const areaToggle=document.createElement("button");areaToggle.type="button";areaToggle.className="dw-nav-toggle";areaToggle.textContent="TOOLS +";areaToggle.setAttribute("aria-expanded","false");areaToggle.setAttribute("aria-controls","dw-route-extras");nav.appendChild(areaToggle);
-const extras=document.createElement("span");extras.id="dw-route-extras";extras.className="dw-route-extras";extras.setAttribute("aria-label","Specialist tools");
-toolRoutes.forEach(([key,url,label])=>{
- const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.textContent=label;a.className="dw-route-extra";
- if(key===active)a.setAttribute("aria-current","page");
- extras.appendChild(a);
-});
-nav.appendChild(extras);
-const setExpanded=expanded=>{nav.classList.toggle("dw-expanded",expanded);areaToggle.setAttribute("aria-expanded",String(expanded));areaToggle.textContent=expanded?"CLOSE −":"TOOLS +";};
-areaToggle.addEventListener("click",()=>setExpanded(!nav.classList.contains("dw-expanded")));
-if(extras.querySelector('[aria-current="page"]'))setExpanded(true);
+const nav=document.createElement("nav");nav.className="dw-global-nav dw-bottom-dock";nav.setAttribute("aria-label","DoomWatch primary navigation");
+const routes=[["overview","index.html#overview","OVERVIEW"],["intelligence","observatory.html","INTELLIGENCE"],["streams","feed.html","STREAMS"],["economy","markets.html","ECONOMY"]];
+routes.forEach(([key,url,label])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.textContent=label;a.className="dw-route-primary";if(key===active||(key==="intelligence"&&active==="correlation"))a.setAttribute("aria-current","page");nav.appendChild(a);});
+const more=document.createElement("button");more.type="button";more.className="dw-nav-toggle";more.textContent="EXPLORE +";more.setAttribute("aria-expanded","false");more.setAttribute("aria-controls","dw-explore-panel");nav.appendChild(more);
+const panel=document.createElement("div");panel.id="dw-explore-panel";panel.className="dw-route-extras";panel.setAttribute("aria-label","Explore DoomWatch");
+const extras=[["operations.html","Situation room","Connected overview"],["map.html","Geographic picture","Events and infrastructure"],["communications.html","Connectivity","Telecoms and broadband"],["correlation.html","Signal connections","Cross-stream patterns"],["index.html#sections","Resilience reference","11 critical sectors"],["index.html#preparedness","Preparedness","Practical reference"],["meshcore.html","Field network","MeshCore resources"],["index.html#sources","Source directory","Publishers and data sources"]];
+extras.forEach(([url,label,desc])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.innerHTML="<strong>"+label+"</strong><span>"+desc+"</span>";if((url==="map.html"&&active==="map")||(url==="operations.html"&&active==="operations")||(url==="communications.html"&&active==="communications")||(url==="correlation.html"&&active==="correlation")||(url==="meshcore.html"&&active==="field"))a.setAttribute("aria-current","page");panel.appendChild(a);});
+body.appendChild(panel);
+const setExplore=open=>{panel.classList.toggle("is-open",open);more.setAttribute("aria-expanded",String(open));more.textContent=open?"CLOSE −":"EXPLORE +";};
+more.addEventListener("click",()=>setExplore(!panel.classList.contains("is-open")));
+document.addEventListener("click",e=>{if(!nav.contains(e.target)&&!panel.contains(e.target))setExplore(false);});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")setExplore(false);});
 const skip=document.createElement("a");skip.className="dw-skip-link";skip.href="#dw-main-content";skip.textContent="SKIP TO CONTENT";
 const mainForSkip=document.querySelector("main");if(mainForSkip){mainForSkip.id=mainForSkip.id||"dw-main-content";skip.href="#"+mainForSkip.id;}
 body.insertBefore(skip,body.firstChild);
-// Every page uses this single shared route bar. Page-local section menus are
-// intentionally removed: dashboard partitions and standalone modules are
-// reached through the same consistent route list above.
 if(oldNav)oldNav.remove();
 mast.insertAdjacentElement("afterend",nav);
-nav.classList.add("dw-bottom-dock");
 const wire=document.createElement("div");wire.className="dw-wire";wire.setAttribute("aria-hidden","true");nav.insertAdjacentElement("afterend",wire);
-/* DOOMWATCH // INTELLIGENCE WORKSPACE SUBNAVIGATION */
-if(["intelligence","feed","correlation"].includes(active)){
- const sub=document.createElement("nav");sub.className="dw-intel-nav";sub.setAttribute("aria-label","Intelligence workspace");
- const tabs=[
-  ["intelligence","observatory.html","OSINT OBSERVATORY"],
-  ["feed","feed.html","LIVE & COMMUNITY FEED"],
-  ["correlation","correlation.html","CORRELATION"]
- ];
- tabs.forEach(([key,url,label])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.textContent=label;if(key===active)a.setAttribute("aria-current","page");sub.appendChild(a);});
- wire.insertAdjacentElement("afterend",sub);
-}
-
-/* DOOMWATCH // OPERATIONS WORKSPACE SUBNAVIGATION */
-if(["operations","map","communications"].includes(active)){
- const sub=document.createElement("nav");sub.className="dw-operations-nav";sub.setAttribute("aria-label","Operations workspace");
- const tabs=[
-  ["operations","operations.html","SITUATION ROOM"],
-  ["map","map.html","GEOGRAPHIC MAP"],
-  ["communications","communications.html","COMMUNICATIONS"]
- ];
- tabs.forEach(([key,url,label])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.textContent=label;if(key===active)a.setAttribute("aria-current","page");sub.appendChild(a);});
- wire.insertAdjacentElement("afterend",sub);
-}
-/* DOOMWATCH // RESILIENCE WORKSPACE SUBNAVIGATION */
-if(["resilience-sectors","resilience-preparedness","resilience-backup"].includes(active)){
- const sub=document.createElement("nav");sub.className="dw-resilience-nav";sub.setAttribute("aria-label","Resilience workspace");
- const tabs=[
-  ["resilience-sectors","index.html#sections","11 SECTORS"],
-  ["resilience-preparedness","index.html#preparedness","PREPAREDNESS"],
-  ["resilience-backup","index.html#backup-centre","BACKUP & RECOVERY"]
- ];
- tabs.forEach(([key,url,label])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.textContent=label;if(key===active)a.setAttribute("aria-current","page");sub.appendChild(a);});
- wire.insertAdjacentElement("afterend",sub);
-}
-/* DOOMWATCH // FIELD NETWORK SUBNAVIGATION */
-if(["meshcore","mesh-directory"].includes(active)){
- const sub=document.createElement("nav");sub.className="dw-field-nav";sub.setAttribute("aria-label","Field Network workspace");
- const tabs=[
-  ["meshcore","meshcore.html","M9 FIELD OPERATIONS"],
-  ["mesh-directory","index.html#meshcore","REGIONAL DIRECTORY & PUBLIC MAP"]
- ];
- tabs.forEach(([key,url,label])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.textContent=label;if(key===active)a.setAttribute("aria-current","page");sub.appendChild(a);});
- wire.insertAdjacentElement("afterend",sub);
-}
-/* DOOMWATCH // SHARED INVESTIGATION CONTEXT */
-(function investigationContext(){
- const KEY="doomwatch-investigation-context-v1",params=new URLSearchParams(location.search),clean=v=>String(v||"").trim().slice(0,500);
- let state={area:clean(params.get("dw_area")||params.get("q")||params.get("search")),title:clean(params.get("dw_title")),source:clean(params.get("dw_source")),url:clean(params.get("dw_url"))};
- try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");if(saved&&typeof saved==="object")state={...saved,...Object.fromEntries(Object.entries(state).filter(([,v])=>v))};}catch(_){}
- const validUrl=v=>{try{const u=new URL(v);return /^https?:$/.test(u.protocol)?u.href:"";}catch(_){return"";}};state.url=validUrl(state.url);
- const bar=document.createElement("details");bar.className="dw-context-bar";bar.setAttribute("aria-label","Shared investigation context");
- bar.innerHTML='<summary class="dw-context-heading"><strong>ACTIVE INVESTIGATION</strong><span id="dw-context-status">LOCAL WORKSPACE CONTEXT</span><span class="dw-context-expand">EDIT CONTEXT</span></summary><div class="dw-context-body"><div class="dw-context-fields"><label>LOCATION / AREA<input id="dw-context-area" maxlength="500" placeholder="e.g. Ballyclare"></label><label>REPORT / INCIDENT<input id="dw-context-title" maxlength="500" placeholder="Optional report or incident title"></label></div><div class="dw-context-actions"><button type="button" id="dw-context-save">SAVE CONTEXT</button><button type="button" id="dw-context-clear">CLEAR</button><a id="dw-context-source" href="#" hidden target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a></div><p class="dw-context-note">Context follows you between DoomWatch workspaces on this browser only. It is an investigation aid, not a verified incident record.</p></div>';
- const main=document.querySelector("main");if(main)main.insertBefore(bar,main.firstChild);
- const $=id=>document.getElementById(id);
- function render(){if(!$("dw-context-area"))return;$("dw-context-area").value=state.area||"";$("dw-context-title").value=state.title||"";$("dw-context-status").textContent=state.area||state.title?"CONTEXT ACTIVE · SAVED ON THIS DEVICE":"NO ACTIVE INVESTIGATION";const a=$("dw-context-source");a.hidden=!state.url;if(state.url)a.href=state.url;}
- function save(){state.area=clean($("dw-context-area").value);state.title=clean($("dw-context-title").value);persist();}
- function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));$("dw-context-status").textContent="CONTEXT SAVED";}catch(_){$("dw-context-status").textContent="STORAGE UNAVAILABLE";}render();}
- function set(next){state={...state,...next};state.area=clean(state.area);state.title=clean(state.title);state.source=clean(state.source);state.url=validUrl(state.url);persist();}
- function clear(){state={area:"",title:"",source:"",url:""};try{localStorage.removeItem(KEY);}catch(_){}render();}
- $("dw-context-save")?.addEventListener("click",save);$("dw-context-clear")?.addEventListener("click",clear);render();window.DoomWatchContext={get:()=>({...state}),set,clear};
- if(!state.area){const legacy=clean(params.get("q")||params.get("search"));if(legacy)set({area:legacy});}
- document.addEventListener("click",event=>{const a=event.target.closest("a[href]");if(!a||(!state.area&&!state.title))return;const u=new URL(a.href,location.href);if(u.origin!==location.origin||a.target==="_blank")return;if(!/\.html$/.test(u.pathname)&&!u.hash)return;["dw_area","dw_title","dw_source","dw_url"].forEach(k=>u.searchParams.delete(k));if(state.area)u.searchParams.set("dw_area",state.area);if(state.title)u.searchParams.set("dw_title",state.title);if(state.source)u.searchParams.set("dw_source",state.source);if(state.url)u.searchParams.set("dw_url",state.url);a.href=u.href;},true);
-})();
-
-const top=document.createElement("button");top.type="button";top.className="dw-top";top.textContent="TOP";top.setAttribute("aria-label","Back to top");top.addEventListener("click",()=>window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}));body.appendChild(top);
 function foldSection(section,index){
  if(section.closest("details.dw-fold"))return;
  const heading=section.querySelector(":scope > h1,:scope > h2,:scope > h3,:scope h2,:scope h3");
