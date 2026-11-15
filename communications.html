@@ -71,13 +71,7 @@
   <div class="dd-note"><strong>INTEGRATION STATUS: LIVE SOURCE LINKS — API NOT CONNECTED.</strong> DoomWatch does not currently ingest Downdetector report volumes, incident states or location data. The official API is a commercial service requiring credentials. No website scraping or unofficial endpoint is used. Downdetector signals are not official operator confirmation and must not independently promote a DoomWatch RAG rating to RED.</div>
  </section>
 
- <section class="dd-panel" aria-labelledby="dd-api-title">
-  <h2 id="dd-api-title">05 // DOWNDETECTOR ENTERPRISE — API INTELLIGENCE</h2>
-  <div id="dd-api-status" class="comms-meta">CHECKING LICENSED API SNAPSHOT…</div>
-  <div id="dd-api-products" class="dd-grid"><div class="panel muted">Waiting for collector snapshot.</div></div>
-  <div class="dd-note" id="dd-api-note">This panel displays licensed report-volume telemetry only when Enterprise API credentials are configured in the repository's GitHub Actions secrets. No credentials are exposed to the public dashboard.</div>
- </section>
- <h2>06 // OPERATING LIMITATIONS</h2>
+ <h2>05 // OPERATING LIMITATIONS</h2>
  <div class="comms-warning"><strong>READ THIS CORRECTLY:</strong> An issue indicator is an independent traffic or community-report signal, not proof of an outage. “No issue signal” does not prove a service is available. Public sources do not currently provide dependable postcode-level live confirmation for Ballyclare. Check the relevant operator directly before making decisions.</div>
  <p class="comms-meta">Collector target: every 5 minutes. This page refreshes its display every 60 seconds. GitHub Actions scheduling is best-effort and can be delayed or skipped.</p>
  <ul id="limitations" class="comms-meta"></ul>
@@ -112,13 +106,6 @@ function render(data){
  $("source-list").innerHTML=sources.map(s=>'<article class="comms-source"><strong>'+esc(s.name)+'</strong><div class="comms-meta">STATUS: '+esc(s.status)+' · CHECKED: '+time(s.checkedAt)+' · TYPE: '+esc(s.kind)+'</div><div class="comms-detail">'+esc(s.note||"")+'</div><div class="comms-actions"><a class="action-button" href="'+esc(s.displayUrl||s.url)+'" target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a></div></article>').join("");
  $("official-list").innerHTML=(data.officialCheckers||[]).map(s=>'<div class="comms-card"><strong>'+esc(s.name)+'</strong><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">OPEN OFFICIAL CHECKER ↗</a></div>').join("");
 
- const dd=data.downdetector||{};
- const ddStatus=$("dd-api-status"),ddProducts=$("dd-api-products"),ddNote=$("dd-api-note");
- if(ddStatus){
-  ddStatus.textContent="API: "+(dd.status||"NOT CONFIGURED")+" · CHECKED: "+time(dd.checkedAt)+" · SERVICES: "+((dd.products||[]).length);
-  ddNote.textContent=dd.note||"No Downdetector API status supplied.";
-  ddProducts.innerHTML=(dd.products||[]).length?dd.products.map(p=>'<article class="comms-card '+(p.elevatedReports?'issue':'unknown')+'"><strong>'+esc(p.name)+'</strong><div class="comms-status">'+(p.elevatedReports?'ELEVATED USER REPORTS':'NO ELEVATION FLAG')+'</div><div class="comms-detail">Reports / 15 min: '+esc(p.reportsLast15Minutes)+' · Baseline: '+esc(p.baselineCurrent??"not supplied")+' · Ratio: '+esc(p.reportRatio??"n/a")+'×<br>API status: '+esc(p.status)+'<br>Checked: '+time(p.checkedAt)+'</div><div class="comms-actions"><a class="action-button" href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer">OPEN PUBLIC REPORT ↗</a></div></article>').join(""):'<div class="panel muted">'+(dd.status==="NOT_CONFIGURED"?'Enterprise credentials not configured. Public Downdetector links above remain available.':esc(dd.note||"No licensed API observations returned."))+'</div>';
- }
  $("limitations").innerHTML=(data.limitations||[]).map(x=>"<li>"+esc(x)+"</li>").join("");
 }
 async function load(){
