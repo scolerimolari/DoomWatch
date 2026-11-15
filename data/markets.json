@@ -1,51 +1,51 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-15T06:22:12+00:00",
-  "generatedAt": "2026-11-15T06:22:12+00:00",
+  "updatedAt": "2026-11-15T18:28:16+00:00",
+  "generatedAt": "2026-11-15T18:28:16+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:08+00:00"
+      "checkedAt": "2026-11-15T18:28:11+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:08+00:00"
+      "checkedAt": "2026-11-15T18:28:11+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:09+00:00"
+      "checkedAt": "2026-11-15T18:28:11+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:09+00:00"
+      "checkedAt": "2026-11-15T18:28:12+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:09+00:00"
+      "checkedAt": "2026-11-15T18:28:12+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:09+00:00"
+      "checkedAt": "2026-11-15T18:28:12+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:09+00:00"
+      "checkedAt": "2026-11-15T18:28:12+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:09+00:00"
+      "checkedAt": "2026-11-15T18:28:12+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:09+00:00"
+      "checkedAt": "2026-11-15T18:28:12+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:09+00:00"
+      "checkedAt": "2026-11-15T18:28:12+00:00"
     },
     "heatingOil": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:10+00:00",
+      "checkedAt": "2026-11-15T18:28:14+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
       "observationsImported": 179,
@@ -54,7 +54,7 @@
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:11+00:00",
+      "checkedAt": "2026-11-15T18:28:15+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
       "observationsImported": 463,
@@ -63,7 +63,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:12+00:00",
+      "checkedAt": "2026-11-15T18:28:15+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -72,7 +72,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:12+00:00",
+      "checkedAt": "2026-11-15T18:28:15+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -81,7 +81,7 @@
     },
     "supermarketPriceIndex": {
       "status": "ok",
-      "checkedAt": "2026-11-15T06:22:12+00:00",
+      "checkedAt": "2026-11-15T18:28:16+00:00",
       "url": "https://data.yappman.com/shelf-price-index/",
       "datasetUrl": "https://api.apify.com/v2/datasets/AvRCWqFinCiNjx3sP/items?format=json",
       "licence": "CC BY 4.0",
@@ -6255,10 +6255,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 64399.02,
-      "changePct": -32.601,
+      "price": 64634.12,
+      "changePct": -32.355,
       "currency": "USD",
-      "observedAt": "2026-11-15T06:22:07+00:00",
+      "observedAt": "2026-11-15T18:28:10+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -7730,11 +7730,11 @@
         },
         {
           "date": "2026-11-14",
-          "value": 63917.089844
+          "value": 64128.050781
         },
         {
           "date": "2026-11-15",
-          "value": 64399.019531
+          "value": 64634.121094
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -23986,7 +23986,7 @@
         ]
       }
     ],
-    "updatedAt": "2026-11-15T06:22:10+00:00",
+    "updatedAt": "2026-11-15T18:28:14+00:00",
     "source": "Consumer Council Northern Ireland",
     "sourceUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker",
     "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
@@ -28030,7 +28030,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-15T06:22:11+00:00",
+    "updatedAt": "2026-11-15T18:28:15+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
@@ -36949,7 +36949,7 @@
         "missingPackSize": null
       }
     ],
-    "supermarketIndexUpdatedAt": "2026-11-15T06:22:12+00:00",
+    "supermarketIndexUpdatedAt": "2026-11-15T18:28:16+00:00",
     "supermarketIndex": {
       "vintage": "2026-W45",
       "publishedAt": "2026-11-09T12:49:02Z",
@@ -36971,16 +36971,88 @@
   },
   "news": [
     {
-      "title": "Judge temporarily blocks Trump from closing Washington DC golf course for renovation",
+      "title": "Zelensky urges US and Musk to lift Starlink restrictions and be on 'right side of history'",
+      "url": "https://www.bbc.co.uk/news/articles/c6m25zg88k45o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T18:08:20+00:00"
+    },
+    {
+      "title": "Czechs rally against plan to switch funding of public media",
+      "url": "https://www.bbc.co.uk/news/articles/cm8e0knr7604o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T17:23:40+00:00"
+    },
+    {
+      "title": "Judge blocks Trump closure of 'Trash Island' Washington DC golf course on Sunday",
       "url": "https://www.bbc.co.uk/news/articles/c6j9mn7l14y0o?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-15T03:21:04+00:00"
+      "publishedAt": "2026-11-15T15:57:03+00:00"
+    },
+    {
+      "title": "How telecoms upgrade work sparked US flight chaos",
+      "url": "https://www.bbc.co.uk/news/articles/cqx2wyvyr3zzo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T14:57:15+00:00"
+    },
+    {
+      "title": "Suspected China spy linked to Nvidia's ex-boss left in 2025, Megaspeed says ",
+      "url": "https://www.bbc.co.uk/news/articles/cmdx1vpprk9vo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-15T14:56:21+00:00"
+    },
+    {
+      "title": "New Orleans port files $1m lawsuit over 'miracle on the Mississippi' tanker collision ",
+      "url": "https://www.bbc.co.uk/news/articles/cwe89y2r5j20o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T14:33:59+00:00"
+    },
+    {
+      "title": "Iran targets US military base in Bahrain with drone attack",
+      "url": "https://www.bbc.co.uk/news/articles/cqn4e2py48kwo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T13:42:58+00:00"
+    },
+    {
+      "title": "South Korea's top scorer in tax accountancy exam admits cheating",
+      "url": "https://www.bbc.co.uk/news/articles/ckvg2ezvpe08o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T13:37:45+00:00"
+    },
+    {
+      "title": "Minister backs legal right to job support for young people",
+      "url": "https://www.bbc.co.uk/news/articles/cqr7gn1zmlj1o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-15T13:06:15+00:00"
+    },
+    {
+      "title": "Three men sentenced to death in Jordan over fatal church mass shooting",
+      "url": "https://www.bbc.co.uk/news/articles/c3rrg9xgqlwpo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T11:06:32+00:00"
     },
     {
       "title": "Pope Leo speaks of community 'suffering' on visit to remote Andes town",
       "url": "https://www.bbc.co.uk/news/articles/cr4gnz0lv2vlo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-15T02:49:45+00:00"
+      "publishedAt": "2026-11-15T09:57:25+00:00"
+    },
+    {
+      "title": "Fifth Canadian soldier dies from injuries caused by large fire at military base",
+      "url": "https://www.bbc.co.uk/news/articles/cmrlgn4x2xw8o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T09:26:37+00:00"
+    },
+    {
+      "title": "Israel kills Hamas commander in strike on Gaza camp, officials say",
+      "url": "https://www.bbc.co.uk/news/articles/cqrkg4r6mg7xo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T08:17:41+00:00"
+    },
+    {
+      "title": "Copper wire upgrade behind US flight suspension, transport secretary says",
+      "url": "https://www.bbc.co.uk/news/articles/c6wy9lynq4qno?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T07:10:31+00:00"
     },
     {
       "title": "My mother told me I would die if I sought treatment for Ebola - I am proof you can survive",
@@ -36995,22 +37067,10 @@
       "publishedAt": "2026-11-15T00:06:51+00:00"
     },
     {
-      "title": "Beauty advent calendars can cost hundreds - but are they value for money?",
+      "title": "Beauty advent calendars can cost hundreds but are they value for money?",
       "url": "https://www.bbc.co.uk/news/articles/cqn83l442724o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
       "publishedAt": "2026-11-15T00:01:07+00:00"
-    },
-    {
-      "title": "How telecoms upgrade work sparked US flight chaos",
-      "url": "https://www.bbc.co.uk/news/articles/cqx2wyvyr3zzo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T23:11:27+00:00"
-    },
-    {
-      "title": "US has floated Ukraine ceding Donbas for Nato membership, Zelensky says",
-      "url": "https://www.bbc.co.uk/news/articles/cwvg2l312ylqo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T22:37:25+00:00"
     },
     {
       "title": "'Can you believe it?': SpaceX catches part of its Starship rocket on return to Earth",
@@ -37023,12 +37083,6 @@
       "url": "https://www.bbc.co.uk/news/videos/ck4gn4y77m40o?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-14T19:14:33+00:00"
-    },
-    {
-      "title": "Copper wire upgrade caused nationwide flight suspension, US transport secretary says",
-      "url": "https://www.bbc.co.uk/news/articles/c6wy9lynq4qno?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T19:12:25+00:00"
     },
     {
       "title": "Italy fines Meta €805m over accessing users' photos",
@@ -37095,60 +37149,6 @@
       "url": "https://www.bbc.co.uk/news/articles/c6702j7e48eno?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
       "publishedAt": "2026-11-14T06:33:06+00:00"
-    },
-    {
-      "title": "'We'll get home one day' - US travellers impacted by nationwide ground stop",
-      "url": "https://www.bbc.co.uk/news/videos/c893ryz7lw33o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T01:47:36+00:00"
-    },
-    {
-      "title": "Jojo the gorilla has spent his life alone. Can he finally find a companion?",
-      "url": "https://www.bbc.co.uk/news/articles/cwm2mn272nqlo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T00:03:56+00:00"
-    },
-    {
-      "title": "Arrested generals and a threatened VP: President's son fuels Ugandan succession fever",
-      "url": "https://www.bbc.co.uk/news/articles/cmlydy0xw45wo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T00:03:52+00:00"
-    },
-    {
-      "title": "After a summer win, India's Gen Z protesters face a winter of uncertainty",
-      "url": "https://www.bbc.co.uk/news/articles/cq99e0z4vg1eo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-13T23:11:51+00:00"
-    },
-    {
-      "title": "How the Jensen Huang scandal created a headache for business-friendly Singapore",
-      "url": "https://www.bbc.co.uk/news/articles/ck1exevgql4qo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-13T23:00:31+00:00"
-    },
-    {
-      "title": "Bird flu (avian influenza): latest situation in England",
-      "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T20:44:01Z"
-    },
-    {
-      "title": "Guidance: Bird flu: designated slaughterhouses",
-      "url": "https://www.gov.uk/government/publications/bird-flu-designated-slaughterhouses",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T20:43:36Z"
-    },
-    {
-      "title": "Pressure grows on Trump's Commerce Secretary Lutnick in fallout from Nvidia scandal",
-      "url": "https://www.bbc.co.uk/news/articles/cqvg2d1eg7zro?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-13T19:53:57+00:00"
-    },
-    {
-      "title": "Why is Microsoft's outage lasting so long and will emails be lost?",
-      "url": "https://www.bbc.co.uk/news/articles/cwvg238zrnm5o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-13T18:36:57+00:00"
     }
   ],
   "supplyNews": [
