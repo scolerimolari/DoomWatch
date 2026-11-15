@@ -25,6 +25,13 @@
 .comms-table{width:100%;border-collapse:collapse;font-size:11px}
 .comms-table th,.comms-table td{text-align:left;padding:8px;border-bottom:1px solid #3d493f;vertical-align:top}
 @media(max-width:600px){.comms-table{display:block;overflow-x:auto;white-space:normal}}
+
+.dd-panel{margin:14px 0;padding:15px;border:1px solid #526b5a;background:linear-gradient(145deg,#1d2a22,#121a15)}
+.dd-intro{max-width:900px;color:#b8c5b5;font-size:12px;line-height:1.6}
+.dd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:9px;margin:12px 0}
+.dd-card{display:flex;flex-direction:column;gap:7px;min-height:112px;padding:12px;border:1px solid #465847;border-left:3px solid #d3b46d;background:#141d17;text-decoration:none!important}
+.dd-card strong{color:#f0d28e;font-size:13px}.dd-card span{color:#aebbaa;font-size:10px;line-height:1.5}.dd-card b{margin-top:auto;color:#b9dc9a;font-size:9px;letter-spacing:.08em}
+.dd-note{padding:11px;border-left:3px solid #d3b46d;background:#282316;color:#d8c99f;font-size:10px;line-height:1.6}
 </style>
 </head>
 <body>
@@ -50,7 +57,20 @@
  <div id="source-list"><div class="panel muted">Waiting for source diagnostics.</div></div>
  <h2>03 // OFFICIAL SERVICE CHECKERS</h2>
  <div id="official-list" class="comms-grid"></div>
- <h2>04 // OPERATING LIMITATIONS</h2>
+
+ <section class="dd-panel" aria-labelledby="dd-title">
+  <h2 id="dd-title">04 // COMMUNITY OUTAGE SIGNALS — DOWNDETECTOR</h2>
+  <p class="dd-intro">Independent user-report signal. Open a provider page to see its current report trend, reported problem types, comments and geographic report map where available. Prioritise Northern Ireland-relevant comments and locations, but treat individual reports as unverified leads.</p>
+  <div class="dd-grid">
+   <a class="dd-card" href="https://downdetector.co.uk/status/bt-british-telecom/" target="_blank" rel="noopener noreferrer"><strong>BT</strong><span>Broadband, landline and email reports</span><b>OPEN LIVE REPORTS ↗</b></a>
+   <a class="dd-card" href="https://downdetector.co.uk/status/virgin-media/" target="_blank" rel="noopener noreferrer"><strong>Virgin Media</strong><span>Broadband, Wi-Fi, TV and mobile reports</span><b>OPEN LIVE REPORTS ↗</b></a>
+   <a class="dd-card" href="https://downdetector.co.uk/status/vodafone/" target="_blank" rel="noopener noreferrer"><strong>Vodafone</strong><span>Mobile, broadband and account-service reports</span><b>OPEN LIVE REPORTS ↗</b></a>
+   <a class="dd-card" href="https://downdetector.co.uk/status/Teams/" target="_blank" rel="noopener noreferrer"><strong>Microsoft Teams</strong><span>Collaboration, sign-in and app reports</span><b>OPEN LIVE REPORTS ↗</b></a>
+   <a class="dd-card" href="https://downdetector.co.uk/" target="_blank" rel="noopener noreferrer"><strong>UK service directory</strong><span>Sky, EE, Three, TalkTalk, Microsoft 365, Google, banks and other tracked services</span><b>OPEN ALL SERVICES ↗</b></a>
+  </div>
+  <div class="dd-note"><strong>INTEGRATION STATUS: LIVE SOURCE LINKS — API NOT CONNECTED.</strong> DoomWatch does not currently ingest Downdetector report volumes, incident states or location data. The official API is a commercial service requiring credentials. No website scraping or unofficial endpoint is used. Downdetector signals are not official operator confirmation and must not independently promote a DoomWatch RAG rating to RED.</div>
+ </section>
+ <h2>05 // OPERATING LIMITATIONS</h2>
  <div class="comms-warning"><strong>READ THIS CORRECTLY:</strong> An issue indicator is an independent traffic or community-report signal, not proof of an outage. “No issue signal” does not prove a service is available. Public sources do not currently provide dependable postcode-level live confirmation for Ballyclare. Check the relevant operator directly before making decisions.</div>
  <p class="comms-meta">Collector target: every 5 minutes. This page refreshes its display every 60 seconds. GitHub Actions scheduling is best-effort and can be delayed or skipped.</p>
  <ul id="limitations" class="comms-meta"></ul>
