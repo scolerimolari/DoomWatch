@@ -1159,6 +1159,14 @@ async function runSystemDiagnostics(){
   const failed=sourceValues.filter(x=>String(x?.status||"").toLowerCase()==="failed").length;
   const total=sourceValues.length;
   add("Markets source status",total?(failed?"WARN":"PASS"):"WARN",total+" source records; "+failed+" marked failed.");
+  const dated=sourceValues.filter(x=>x&&x.latestObservation);
+  const old=dated.map(x=>({name:x.name||x.source||"Market series",date:String(x.latestObservation),age:(Date.now()-new Date(x.latestObservation).getTime())/86400000})).filter(x=>Number.isFinite(x.age)&&x.age>=0);
+  const veryOld=old.filter(x=>x.age>180);
+  const aging=old.filter(x=>x.age>90&&x.age<=180);
+  if(veryOld.length)add("Markets observation freshness","FAIL",veryOld.map(x=>x.name+" ("+x.date+", "+Math.round(x.age)+" days old)").join("; ")+". Collection succeeded but underlying observations are old.");
+  else if(aging.length)add("Markets observation freshness","WARN",aging.map(x=>x.name+" ("+x.date+", "+Math.round(x.age)+" days old)").join("; ")+".");
+  else if(dated.length)add("Markets observation freshness","PASS",dated.length+" dated source observations checked; none exceed 90 days.");
+  else add("Markets observation freshness","WARN","No dated latestObservation values supplied by market sources.");
  }catch(e){add("Markets data","WARN","Not available or invalid: "+String(e.message||e));}
  try{
   if(!("serviceWorker" in navigator))add("Service worker","WARN","This browser does not expose service-worker support.");
