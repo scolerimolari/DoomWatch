@@ -536,7 +536,7 @@ function renderDetail(group){
  const counts=Object.entries(group.cats).map(([k,v])=>k+" "+v).join(" · ");
  $("map-town-details").innerHTML='<strong>'+esc(group.town.name)+' // '+group.items.length+' MATCHED REPORTS</strong><div class="meta">Approximate town-centre match only · '+esc(counts)+'</div><div class="detail-actions"><a href="./feed.html?q='+encodeURIComponent(group.town.name)+'">FEED // '+esc(group.town.name.toUpperCase())+' ↗</a><a href="./operations.html?search='+encodeURIComponent(group.town.name)+'">OPS ROOM // '+esc(group.town.name.toUpperCase())+' ↗</a><a href="./communications.html">COMMS WATCH ↗</a></div>'+dependencyDetail(group)+impactScreenSummary(group)+group.items.slice(0,8).map(a=>'<div class="map-item '+category(a).toLowerCase()+'" style="margin-top:7px"><strong>'+esc(a.title||"Untitled report")+'</strong><div class="meta">'+esc(a.source||"Unknown source")+' · '+esc(dateText(stamp(a)))+'</div><button type="button" data-open-record="'+esc(a.url||"")+'" data-record-title="'+esc(a.title||"")+'" style="padding:6px 8px;font-size:10px">INSPECT RECORD</button>'+(safeUrl(a.url)?' <a href="'+esc(safeUrl(a.url))+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"")+'</div>').join("");
  $("map-town-details").querySelectorAll("[data-open-record]").forEach(btn=>{btn.addEventListener("click",()=>{const item=group.items.find(a=>(a.url||"")===btn.dataset.openRecord&&(a.title||"")===btn.dataset.recordTitle);
- if(item&&window.DoomWatchContext)window.DoomWatchContext.set({area:group.town.name,title:item.title||"Untitled report",source:item.source||"",url:item.url||""});if(item)openRecord(item);});});
+ if(item)openRecord(item);});});
 }
 function renderMarkers(){
  if(!map||!markerLayer)return;
@@ -717,7 +717,7 @@ document.addEventListener("click",e=>{const link=e.target.closest(".dw-town-open
  drawerHead.innerHTML='<span>SELECTED INTELLIGENCE // DETAIL DRAWER</span><button type="button" id="dw-map-close-detail" aria-label="Close detail drawer">CLOSE ×</button>';
  drawer.appendChild(drawerHead);document.body.appendChild(drawer);
  const toolbar=document.createElement("div");toolbar.className="dw-map-toolbar";toolbar.setAttribute("aria-label","Immersive map controls");
- toolbar.innerHTML='<button type="button" id="dw-map-console-toggle" aria-expanded="true">CONSOLE −</button><select id="dw-map-preset" aria-label="Operational map preset"><option value="">QUICK VIEWS</option><option value="ni">NI WIDE</option><option value="ballyclare">BALLYCLARE</option><option value="infrastructure">INFRASTRUCTURE</option><option value="transport">TRANSPORT</option><option value="utilities">WATER + POWER</option></select><select id="dw-map-saved" aria-label="Saved map views"><option value="">SAVED VIEWS</option></select><button type="button" id="dw-map-save">SAVE VIEW +</button><button type="button" id="dw-map-fit">FIT NI ↗</button><button type="button" id="dw-map-exit">EXIT ×</button><span id="dw-map-coordinates" role="status">MAP COORDINATES // TAP MAP</span><button type="button" id="dw-map-copy-coords" disabled>COPY COORDS</button><button type="button" id="dw-map-measure" aria-pressed="false">MEASURE DISTANCE</button><button type="button" id="dw-map-clear-measure" disabled>CLEAR LINE</button>';
+ toolbar.innerHTML='<button type="button" id="dw-map-console-toggle" aria-expanded="true">CONSOLE −</button><select id="dw-map-preset" aria-label="Operational map preset"><option value="">QUICK VIEWS</option><option value="ni">NI WIDE</option><option value="ballyclare">BALLYCLARE</option><option value="infrastructure">INFRASTRUCTURE</option><option value="transport">TRANSPORT</option><option value="utilities">WATER + POWER</option></select><button type="button" id="dw-map-fit">FIT NI ↗</button><button type="button" id="dw-map-exit">EXIT ×</button><span id="dw-map-coordinates" role="status">MAP COORDINATES // TAP MAP</span><button type="button" id="dw-map-copy-coords" disabled>COPY COORDS</button><button type="button" id="dw-map-measure" aria-pressed="false">MEASURE DISTANCE</button><button type="button" id="dw-map-clear-measure" disabled>CLEAR LINE</button>';
  document.body.appendChild(toolbar);
  const launch=document.createElement("button");launch.type="button";launch.className="action-button";launch.id="dw-map-launch";launch.textContent="⛶ IMMERSIVE MAP";
  intro.querySelector(".map-actions")?.prepend(launch);
@@ -740,26 +740,8 @@ document.addEventListener("click",e=>{const link=e.target.closest(".dw-town-open
   const b=document.getElementById("dw-map-console-toggle");b.textContent=closed?"SHOW CONSOLE +":"HIDE CONSOLE −";b.setAttribute("aria-expanded",String(!closed));resizeMap();
  });
  document.getElementById("dw-map-fit").addEventListener("click",()=>document.getElementById("fit-map")?.click());
- const preset=document.getElementById("dw-map-preset"),saved=document.getElementById("dw-map-saved");
+ const preset=document.getElementById("dw-map-preset");
  const layerNodes=[...document.querySelectorAll("[data-layer]")],trafficNodes=[...document.querySelectorAll("[data-traffic-kind]")];
- const storageKey="doomwatch-map-presets-v1";
- function readSaved(){try{const v=JSON.parse(localStorage.getItem(storageKey)||"[]");return Array.isArray(v)?v.filter(x=>x&&typeof x.name==="string"&&x.state):[];}catch(e){return[];}}
- function refreshSaved(){const items=readSaved();saved.innerHTML='<option value="">SAVED VIEWS ('+items.length+')</option>'+items.map((x,i)=>'<option value="'+i+'">'+String(x.name).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))+'</option>').join("");}
- function captureView(){
-  const center=typeof map!=="undefined"&&map?map.getCenter():null;
-  return {center:center?[center.lat,center.lng]:[54.62,-6.55],zoom:map?map.getZoom():8,ageDays,showAll,activeTown,search:$("map-search").value,categoryFilter,ballyclareWatch,layers:layerNodes.map(x=>[x.dataset.layer,x.checked]),traffic:trafficNodes.map(x=>[x.dataset.trafficKind,x.checked]),mesh:$("mesh-nodes-toggle").checked,dependency:$("dependency-screen-toggle").checked,impact:$("impact-screen-toggle").checked,density:$("density-toggle").checked,labels:$("labels-toggle").checked};
- }
- function applyState(st){
-  if(!st||typeof st!=="object")return;
-  ballyclareWatch=!!st.ballyclareWatch;activeTown=st.activeTown||"";searchTerm=String(st.search||"").trim().toLowerCase();categoryFilter=st.categoryFilter||"";showAll=!!st.showAll;ageDays=Math.max(1,Math.min(90,Number(st.ageDays)||30));
-  $("ballyclare-watch").setAttribute("aria-pressed",String(ballyclareWatch));$("ballyclare-watch").textContent="BALLYCLARE AREA WATCH: "+(ballyclareWatch?"ON":"OFF");
-  $("map-search").value=st.search||"";$("category-filter").value=categoryFilter;$("town-select").value=activeTown;
-  $("date-window").value=showAll?"all":String(ageDays);$("all-time").checked=showAll;$("age-range").disabled=showAll;$("age-range").value=String(ageDays);$("age-label").textContent=ageDays+" DAYS";$("age-value").textContent=ageDays+"d";
-  (st.layers||[]).forEach(([k,v])=>{const n=layerNodes.find(x=>x.dataset.layer===k);if(n)n.checked=!!v;});
-  (st.traffic||[]).forEach(([k,v])=>{const n=trafficNodes.find(x=>x.dataset.trafficKind===k);if(n)n.checked=!!v;});
-  $("mesh-nodes-toggle").checked=st.mesh!==false;$("dependency-screen-toggle").checked=!!st.dependency;$("impact-screen-toggle").checked=st.impact!==false;$("density-toggle").checked=!!st.density;$("labels-toggle").checked=st.labels!==false;
-  render();if(map&&Array.isArray(st.center))map.setView(st.center,Math.max(5,Math.min(17,Number(st.zoom)||8)));resizeMap();
- }
  function setPreset(name){
   const all=()=>layerNodes.forEach(x=>x.checked=true),only=keys=>layerNodes.forEach(x=>x.checked=keys.includes(x.dataset.layer));
   ballyclareWatch=false;activeTown="";searchTerm="";$("map-search").value="";categoryFilter="";$("category-filter").value="";showAll=false;ageDays=30;$("date-window").value="30";$("age-range").value="30";$("age-range").disabled=false;$("all-time").checked=false;
@@ -774,14 +756,6 @@ document.addEventListener("click",e=>{const link=e.target.closest(".dw-town-open
   render();if(map)map.setView(centre,zoom);resizeMap();
  }
  preset.addEventListener("change",()=>{if(preset.value)setPreset(preset.value);preset.value="";});
- document.getElementById("dw-map-save").addEventListener("click",()=>{
-  const name=prompt("Name this map view (e.g. Belfast utilities):");if(!name||!name.trim())return;
-  const items=readSaved();const clean=name.trim().slice(0,36);const existing=items.findIndex(x=>x.name.toLowerCase()===clean.toLowerCase());
-  const entry={name:clean,state:captureView(),savedAt:new Date().toISOString()};if(existing>=0)items[existing]=entry;else items.unshift(entry);
-  try{localStorage.setItem(storageKey,JSON.stringify(items.slice(0,12)));refreshSaved();saved.value=String(Math.max(0,items.findIndex(x=>x.name===clean)));$("map-status").textContent="MAP VIEW SAVED LOCALLY // "+clean;}catch(e){$("map-status").textContent="SAVE FAILED // BROWSER STORAGE UNAVAILABLE";}
- });
- saved.addEventListener("change",()=>{const items=readSaved(),item=items[Number(saved.value)];if(item){applyState(item.state);$("map-status").textContent="SAVED MAP VIEW RESTORED // "+item.name;}});
- refreshSaved();
  if(typeof map!=="undefined"&&map){
   const coord=document.getElementById("dw-map-coordinates"),copy=document.getElementById("dw-map-copy-coords");let lastCoords="";
   let measuring=false,measurePoints=[],measureLine=null,measurePins=[];
