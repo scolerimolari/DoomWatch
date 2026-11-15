@@ -248,7 +248,7 @@ footer {
   </div>
   <h2>04A // REGIONAL INFRASTRUCTURE</h2>
   <div class="panel">
-    <div class="muted">OFFICIAL NI SERVICE AND TRANSPORT RECORDS IN THE CURRENT COLLECTOR SNAPSHOT. COUNTS ARE RECORDS, NOT CONFIRMED ACTIVE OUTAGES.</div>
+    <div class="muted">OFFICIAL NI SERVICE AND TRANSPORT RECORDS. RAG: RED = recent explicit active disruption; AMBER = recent report needing status confirmation; GREEN = explicitly restored; GREY = stale or unassessed. Counts are source records, not a live service guarantee.</div>
     <div class="grid" id="infrastructure-watch" style="margin-top:12px">
       <div class="panel"><div class="panel-title">ELECTRICITY // NIE NETWORKS</div><div class="big-status" id="infra-power">—</div><div class="muted">Network fault records</div></div>
       <div class="panel"><div class="panel-title">WATER // NI WATER</div><div class="big-status" id="infra-water">—</div><div class="muted">Service update records</div></div>
@@ -955,6 +955,18 @@ function renderAlerts() {
     : '<div class="panel muted">No explicit medium/high incident severity is recorded. This does not mean no risks exist.</div>';
 }
 
+function serviceRag(item) {
+  const text=[item.title,item.summary,item.description,item.status].filter(Boolean).join(" ").toLowerCase();
+  const published=new Date(item.date||item.publishedAt||0);
+  const age=(Date.now()-published.getTime())/3600000;
+  if(/\\b(restored|reinstated|service resumed|back to normal|fully operational|reopened|repairs completed|resolved)\\b/i.test(text))
+    return {level:"GREEN",label:"RESTORED"};
+  if(!Number.isFinite(age)||age<0||age>72)
+    return {level:"GREY",label:"STALE / UNASSESSED"};
+  const active=/\\b(ongoing|currently|continues|still closed|closed until|no service|without supply|homes without|customers affected|widespread|major outage|emergency repairs|service suspended|diversion in place|road closed|line closed|cancellations in place)\\b/i.test(text);
+  if(active&&age<=24)return {level:"RED",label:"ACTIVE DISRUPTION"};
+  return {level:"AMBER",label:"REPORTED / CHECK STATUS"};
+}
 function renderInfrastructureWatch() {
   const isSource=(item,id,type)=>item.sourceId===id||item.sourceType===type;
   const power=articles.filter(item=>isSource(item,"nie-network-outages","electricity_network_outage"));
@@ -967,13 +979,18 @@ function renderInfrastructureWatch() {
   set("infra-roads",roadIncidents.length);
   set("infra-planned",planned.length);
   const recent=[...power,...water,...roadIncidents,...planned]
-    .sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).slice(0,5);
+    .sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).slice(0,8);
   const target=$("infra-latest");
   if(!target)return;
-  target.innerHTML=recent.length?'<strong class="tan">LATEST UTILITY / TRANSPORT RECORDS</strong>'+recent.map(item=>{
+  const assessed=recent.map(item=>({item,rag:serviceRag(item)}));
+  const counts={RED:0,AMBER:0,GREEN:0,GREY:0};
+  assessed.forEach(x=>counts[x.rag.level]++);
+  const colors={RED:"#f07870",AMBER:"#e8bd62",GREEN:"#70c990",GREY:"#a8b6bd"};
+  const summary='<div style="display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 12px">'+Object.entries(counts).map(([level,count])=>'<span style="display:inline-flex;gap:6px;align-items:center;padding:5px 8px;border:1px solid '+colors[level]+';border-radius:6px;color:'+colors[level]+';font-size:9px;font-weight:800">'+level+' '+count+'</span>').join("")+'</div>';
+  target.innerHTML=summary+(assessed.length?'<strong class="tan">LATEST UTILITY / TRANSPORT RECORDS · RAG STATUS</strong>'+assessed.map(({item,rag})=>{
     const url=item.url?'<a href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':'';
-    return '<div class="section-card"><strong>'+escapeHTML(item.title)+'</strong><div class="meta">'+escapeHTML(item.source)+' · '+escapeHTML(dateText(item.date))+' · EVIDENCE '+escapeHTML(item.evidenceStatus||"UNASSESSED")+'</div>'+(url?'<p>'+url+'</p>':'')+'</div>';
-  }).join(""):'No matching utility or transport records in the current snapshot. This is not confirmation that services are unaffected.';
+    return '<div class="section-card"><div style="display:flex;gap:8px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap"><strong>'+escapeHTML(item.title)+'</strong><span style="padding:4px 7px;border:1px solid '+colors[rag.level]+';border-radius:5px;color:'+colors[rag.level]+';font-size:9px;font-weight:800">'+rag.label+'</span></div><div class="meta">'+escapeHTML(item.source)+' · '+escapeHTML(dateText(item.date))+' · EVIDENCE '+escapeHTML(item.evidenceStatus||"UNASSESSED")+'</div>'+(url?'<p>'+url+'</p>':'')+'</div>';
+  }).join(""):'No matching utility or transport records in the current snapshot. This is not confirmation that services are unaffected.');
 }
 function renderFeed() {
   const regionCounts = {NI:0,UK:0,INTERNATIONAL:0,UNKNOWN:0};
