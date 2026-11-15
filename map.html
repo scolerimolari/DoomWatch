@@ -205,9 +205,9 @@ body.dw-map-immersive .map-canvas-shell:before{top:20px;right:20px}
 </style>
 </head>
 <body>
-<header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">GEOINT // NORTHERN IRELAND EVENT PLOT</div></div><div class="classification">MAP OPERATIONS</div></div></header>
+<header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">GEOGRAPHIC INTELLIGENCE // UK & NORTHERN IRELAND</div></div><div class="classification">GEOGRAPHIC VIEW</div></div></header>
 <main>
-<div class="map-intro"><div><h2>MAP // OPERATIONAL GEOGRAPHIC INTELLIGENCE</h2><div class="muted">Northern Ireland reports plotted by town-level location, with source-linked incident records.</div></div><div class="map-actions"><a class="action-button" href="https://www.trafficwatchni.com/twni/" target="_blank" rel="noopener noreferrer">LIVE TRAFFICWATCH NI ↗</a><button type="button" class="action-button" id="map-refresh">↻ REFRESH ARCHIVE</button></div></div>
+<div class="map-intro"><div><h2>MAP // REGIONAL GEOGRAPHIC PICTURE</h2><div class="muted">Explore source-linked reporting, public-service updates and infrastructure context by location. Map points are approximate where stated.</div></div><div class="map-actions"><a class="action-button" href="https://www.trafficwatchni.com/twni/" target="_blank" rel="noopener noreferrer">LIVE TRAFFICWATCH NI ↗</a><button type="button" class="action-button" id="map-refresh">↻ REFRESH ARCHIVE</button></div></div>
 <div class="terminal" id="map-status" role="status" aria-live="polite">CONNECTING TO INTELLIGENCE ARCHIVE…</div>
 <div class="map-kpis">
  <div class="map-kpi"><strong id="kpi-total">—</strong><span>MATCHING REPORTS</span></div>
@@ -291,7 +291,7 @@ body.dw-map-immersive .map-canvas-shell:before{top:20px;right:20px}
    <div class="map-actions"><button type="button" id="ballyclare-watch" aria-pressed="false">BALLYCLARE AREA WATCH: OFF</button></div>
    <div class="map-note">Local traffic filter for Ballyclare, Doagh, Parkgate and connecting routes: A8, A57, M2 J2–J4, B94 and B59. Reports without a reliable point remain in the source list, not an invented map pin.</div>
    <div class="map-box" id="ballyclare-history" style="margin-top:10px">
-    <h3>BALLYCLARE // INCIDENT HISTORY</h3>
+    <h3>BALLYCLARE // LOCAL REPORT HISTORY</h3>
     <p class="map-note">Historical view of matching TrafficWatchNI incidents and roadworks retained in the DoomWatch archive. Counts are records, not proof of separate incidents or a statistically validated hotspot.</p>
     <label class="map-label" for="history-window">HISTORY WINDOW</label>
     <select class="map-control" id="history-window"><option value="30">LAST 30 DAYS</option><option value="90" selected>LAST 90 DAYS</option><option value="365">LAST 12 MONTHS</option><option value="0">ALL DATED ARCHIVE</option></select>
@@ -315,7 +315,7 @@ body.dw-map-immersive .map-canvas-shell:before{top:20px;right:20px}
   </section>
  </aside>
 </div>
-<h2>EVENT RECORDS // SOURCE-LINKED REPORTS</h2>
+<h2>REGIONAL REPORTS // SOURCE-LINKED RECORDS</h2>
 <div class="panel muted" id="map-list-status" role="status" aria-live="polite">Waiting for event records…</div>
 <div class="map-list" id="map-articles"></div>
 </main>
