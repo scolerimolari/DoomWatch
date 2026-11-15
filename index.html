@@ -384,38 +384,6 @@ footer {
    <details class="panel"><summary><strong>03 // CYBER OR TELECOMS DISRUPTION</strong></summary><ul><li>Keep key phone numbers, meeting points and essential documents available offline.</li><li>Use mobile data or another trusted connection only where safe; verify service notices through official channels.</li><li>Do not open unexpected links or attachments. Change compromised passwords from a trusted device and enable MFA.</li><li>Do not forward screenshots or claims as fact until the original source and date are checked.</li></ul></details>
   </div>
 
-  <h3>PERSONAL READINESS // PROGRESS</h3>
-  <div class="panel">
-    <div id="prep-progress-label" class="muted">0 OF 12 ACTIONS COMPLETE</div>
-    <div class="prep-progress" role="progressbar" aria-label="Preparedness checklist completion" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><span id="prep-progress-fill"></span></div>
-    <div id="checklist"></div>
-  </div>
-
-  <h3>OPERATIONAL NOTES</h3>
-  <div class="panel">
-    <label for="note-title">NOTE TITLE</label>
-    <input id="note-title" placeholder="Enter title">
-    <label for="note-body">NOTE</label>
-    <textarea id="note-body" placeholder="Enter operational note"></textarea>
-    <button class="action-button" id="save-note">SAVE NOTE</button>
-    <div id="notes-list"></div>
-  </div>
-
-  <h3>RUMOUR AND CLAIM MONITOR</h3>
-  <div class="panel">
-    <input id="rumour-claim" placeholder="Claim or rumour">
-    <input id="rumour-source" placeholder="Where was it reported?">
-    <label for="rumour-status">ASSESSMENT STATUS</label>
-    <select id="rumour-status">
-      <option value="UNVERIFIED">UNVERIFIED // NOT YET CHECKED</option>
-      <option value="CORROBORATED">CORROBORATED // INDEPENDENT SUPPORT FOUND</option>
-      <option value="CONTRADICTED">CONTRADICTED // CONFLICTING EVIDENCE</option>
-      <option value="DEBUNKED">DEBUNKED // RELIABLE EVIDENCE DISPROVES</option>
-    </select>
-    <textarea id="rumour-evidence" placeholder="Evidence / verification notes"></textarea>
-    <button class="action-button" id="save-rumour">RECORD CLAIM</button>
-    <div id="rumour-list"></div>
-  </div>
 </section>
 
 <section class="page" id="meshcore">
@@ -729,27 +697,7 @@ footer {
 </section>
 
 
-<section id="backup-centre" class="page panel" style="margin:16px 0;border-color:var(--yellow)">
- <h2>09 // BACKUP & RECOVERY CENTRE</h2>
- <p class="muted">Protect locally stored DoomWatch records on this browser. Export a complete backup before clearing browser data, changing phones or reinstalling the app.</p>
- <div class="grid" style="margin:12px 0">
-  <div class="panel"><div class="panel-title">LOCAL DATA STORES</div><div class="big-status" id="dw-backup-stores">—</div></div>
-  <div class="panel"><div class="panel-title">BACKUP SIZE</div><div class="big-status" id="dw-backup-size">—</div></div>
-  <div class="panel"><div class="panel-title">LAST BACKUP IN THIS SESSION</div><div class="big-status" id="dw-backup-last">NOT CREATED</div></div>
- </div>
- <div class="controls">
-  <button type="button" class="action-button" id="dw-backup-export">EXPORT COMPLETE BACKUP</button>
-  <button type="button" class="action-button" id="dw-backup-import-trigger">IMPORT / MERGE BACKUP</button>
-  <input type="file" id="dw-backup-file" accept=".json,application/json" hidden>
-  <button type="button" class="action-button" id="dw-backup-refresh">REFRESH DATA INVENTORY</button>
- </div>
- <div class="section-card">
-  <strong class="yellow">INCLUDED LOCAL STORES</strong>
-  <div id="dw-backup-inventory" class="meta" style="line-height:1.8">Scanning local DoomWatch data…</div>
- </div>
- <div id="dw-backup-status" class="terminal" role="status" aria-live="polite">READY // No data has been changed.</div>
- <div class="warning" style="margin-top:12px">IMPORTANT: This backup covers DoomWatch records stored in this browser's localStorage under the <b>doomwatch-</b> namespace. It does not back up GitHub source files, browser cache, passwords, connected services or data held on another device. Import merges records and preserves existing values where conflicts occur; it is not a full overwrite or a substitute for keeping the original backup file.</div>
-</section>
+
 </main>
 
 <footer>
@@ -828,18 +776,9 @@ const CHECKS = [
   "Local emergency information bookmarked"
 ];
 
-const STORE_KEY = "doomwatch-v1";
-
 let intelligence = null;
 let articles = [];
 let activeFilter = "ALL";
-
-let saved = {
-  notes:[],
-  rumours:[],
-  checks:{},
-  plan:""
-};
 
 function $(id) {
   return document.getElementById(id);
@@ -861,24 +800,6 @@ function safeURL(value) {
     return ["http:","https:"].includes(url.protocol) ? url.href : "";
   } catch {
     return "";
-  }
-}
-
-function loadSaved() {
-  try {
-    const data = JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
-    saved = {...saved,...data};
-    if (!Array.isArray(saved.notes)) saved.notes = [];
-    if (!Array.isArray(saved.rumours)) saved.rumours = [];
-    if (!saved.checks || typeof saved.checks !== "object") saved.checks = {};
-  } catch {}
-}
-
-function saveSaved() {
-  try {
-    localStorage.setItem(STORE_KEY,JSON.stringify(saved));
-  } catch(error) {
-    alert("Could not save local data: " + error.message);
   }
 }
 
@@ -1498,58 +1419,6 @@ function renderSources() {
   `).join("");
 }
 
-function renderChecklist() {
- const groups=[
-  {name:"WATER & FOOD",items:[0,1]},
-  {name:"HEALTH & FIRST AID",items:[2,6]},
-  {name:"POWER & INFORMATION",items:[3,4,5]},
-  {name:"COMMUNICATION & DOCUMENTS",items:[7,10,11]},
-  {name:"MOBILITY & HOUSEHOLD",items:[8,9]}
- ];
- $("checklist").innerHTML=groups.map(group=>'<div class="prep-group"><h3>'+group.name+'</h3>'+group.items.map(index=>'<label class="checkline"><input type="checkbox" data-check="'+index+'" '+(saved.checks[index]?"checked":"")+'><span>'+escapeHTML(CHECKS[index])+'</span></label>').join("")+'</div>').join("");
- $("checklist").querySelectorAll("input").forEach(input=>input.addEventListener("change",()=>{
-  saved.checks[input.dataset.check]=input.checked;saveSaved();updatePrepProgress();
- }));
- updatePrepProgress();
-}
-function updatePrepProgress(){
- const complete=CHECKS.filter((item,index)=>!!saved.checks[index]).length;
- const label=$("prep-progress-label"),fill=$("prep-progress-fill"),bar=document.querySelector('[role="progressbar"]');
- if(label)label.textContent=complete+" OF "+CHECKS.length+" ACTIONS COMPLETE";
- if(fill)fill.style.width=(complete/CHECKS.length*100)+"%";
- if(bar)bar.setAttribute("aria-valuenow",String(complete));
-}
-
-function renderNotes() {
-  $("notes-list").innerHTML = saved.notes.map((note,index) => `
-    <div class="section-card">
-      <strong class="yellow">${escapeHTML(note.title)}</strong>
-      <p>${escapeHTML(note.body)}</p>
-      <div class="meta">${escapeHTML(note.date)}</div>
-      <button class="action-button" data-delete-note="${index}">DELETE</button>
-    </div>
-  `).join("") || '<p class="muted">No saved notes.</p>';
-}
-
-function renderRumours() {
-  $("rumour-list").innerHTML = saved.rumours.map((item,index) => `
-    <div class="section-card">
-      <strong class="yellow">${escapeHTML(item.claim)}</strong>
-      <p>REPORTED: ${escapeHTML(item.source||"Source not recorded")}</p>
-      <p>${escapeHTML(item.evidence||"No verification notes recorded.")}</p>
-      <div class="meta">${escapeHTML(item.status||"UNVERIFIED")} // RECORDED ${escapeHTML(item.date)}</div>
-      <label>UPDATE ASSESSMENT</label>
-      <select data-rumour-status="${index}">
-        <option value="UNVERIFIED" ${!item.status||item.status==="UNVERIFIED"?"selected":""}>UNVERIFIED</option>
-        <option value="CORROBORATED" ${item.status==="CORROBORATED"?"selected":""}>CORROBORATED</option>
-        <option value="CONTRADICTED" ${item.status==="CONTRADICTED"?"selected":""}>CONTRADICTED</option>
-        <option value="DEBUNKED" ${item.status==="DEBUNKED"?"selected":""}>DEBUNKED</option>
-      </select>
-      <button class="action-button" data-delete-rumour="${index}">DELETE</button>
-    </div>
-  `).join("") || '<p class="muted">No claims recorded.</p>';
-}
-
 function showPage(name, options = {}) {
   const target = document.getElementById(name);
   if (!target || !target.classList.contains("page")) name = "overview";
@@ -1663,76 +1532,6 @@ document.querySelectorAll("[data-filter]").forEach(button => {
 $("search").addEventListener("input",renderFeed);
 $("refresh-button").addEventListener("click",loadIntelligence);
 $("fusion-filter").addEventListener("change",renderOperationalFusion);
-
-/* NOTES */
-
-$("save-note").addEventListener("click",() => {
-  const title = $("note-title").value.trim();
-  const body = $("note-body").value.trim();
-
-  if (!title || !body) return;
-
-  saved.notes.unshift({
-    title,body,date:new Date().toLocaleString()
-  });
-
-  saveSaved();
-  renderNotes();
-
-  $("note-title").value = "";
-  $("note-body").value = "";
-});
-
-/* RUMOUR MONITOR */
-
-$("save-rumour").addEventListener("click",() => {
-  const claim = $("rumour-claim").value.trim();
-  if (!claim) return;
-
-  saved.rumours.unshift({
-    claim,
-    source:$("rumour-source").value.trim(),
-    evidence:$("rumour-evidence").value.trim(),
-    status:$("rumour-status").value||"UNVERIFIED",
-    date:new Date().toLocaleString()
-  });
-
-  saveSaved();
-  renderRumours();
-
-  $("rumour-claim").value = "";
-  $("rumour-source").value = "";
-  $("rumour-evidence").value = "";
-});
-
-/* CLAIM ASSESSMENT UPDATES */
-
-document.addEventListener("change",event => {
-  if (event.target.dataset.rumourStatus !== undefined) {
-    const index=Number(event.target.dataset.rumourStatus);
-    if (!saved.rumours[index]) return;
-    saved.rumours[index].status=event.target.value;
-    saved.rumours[index].assessedAt=new Date().toLocaleString();
-    saveSaved();
-    renderRumours();
-  }
-});
-
-/* DELETE ACTIONS */
-
-document.addEventListener("click",event => {
-  if (event.target.dataset.deleteNote !== undefined) {
-    saved.notes.splice(Number(event.target.dataset.deleteNote),1);
-    saveSaved();
-    renderNotes();
-  }
-
-  if (event.target.dataset.deleteRumour !== undefined) {
-    saved.rumours.splice(Number(event.target.dataset.deleteRumour),1);
-    saveSaved();
-    renderRumours();
-  }
-});
 
 /* MESH FEED — public directory + manually imported local archive */
 const MESH_KEY="doomwatch-meshcore-v1";
@@ -1956,10 +1755,6 @@ function updateClock() {
   $("clock").textContent = new Date().toLocaleString();
 }
 
-loadSaved();
-renderChecklist();
-renderNotes();
-renderRumours();
 renderSources();
 updateClock();
 setInterval(updateClock,1000);
@@ -2025,87 +1820,6 @@ load();render();
 <script src="./doomwatch-ui.js"></script>
 <script src="./doomwatch-watch.js"></script>
 
-<script>
-(()=>{"use strict";
-const PREFIX="doomwatch-",FORMAT="doomwatch-complete-backup",VERSION=1;
-const $=id=>document.getElementById(id);
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const bytes=n=>n<1024?n+" B":n<1048576?(n/1024).toFixed(1)+" KB":(n/1048576).toFixed(2)+" MB";
-function collect(){
- const stores={};let total=0;
- for(let i=0;i<localStorage.length;i++){
-  const key=localStorage.key(i);if(!key||!key.startsWith(PREFIX))continue;
-  const raw=localStorage.getItem(key);if(raw===null)continue;
-  stores[key]=raw;total+=key.length+raw.length;
- }
- return {stores,total,keys:Object.keys(stores).sort()};
-}
-function refresh(){
- const data=collect();
- $("dw-backup-stores").textContent=String(data.keys.length);
- $("dw-backup-size").textContent=bytes(data.total*2);
- $("dw-backup-inventory").innerHTML=data.keys.length?data.keys.map(k=>'<div>• <b>'+esc(k)+'</b> <span class="muted">— '+bytes((data.stores[k].length+k.length)*2)+'</span></div>').join(""):"No DoomWatch local records found in this browser.";
- return data;
-}
-function download(data){
- const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
- const url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="doomwatch-complete-backup-"+new Date().toISOString().replace(/[:.]/g,"-")+".json";
- document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
-}
-function mergeValue(current,incoming){
- if(Array.isArray(current)&&Array.isArray(incoming)){
-  const out=current.slice(),seen=new Set(out.map(x=>{try{return JSON.stringify(x)}catch(_){return String(x)}}));
-  incoming.forEach(x=>{let sig;try{sig=JSON.stringify(x)}catch(_){sig=String(x)}if(!seen.has(sig)){seen.add(sig);out.push(x);}});
-  return out;
- }
- if(current&&incoming&&typeof current==="object"&&typeof incoming==="object"&&!Array.isArray(current)&&!Array.isArray(incoming)){
-  const out={...current};
-  Object.keys(incoming).forEach(k=>{out[k]=Object.prototype.hasOwnProperty.call(out,k)?mergeValue(out[k],incoming[k]):incoming[k];});
-  return out;
- }
- return current;
-}
-function parseStored(raw){try{return JSON.parse(raw)}catch(_){return raw}}
-function exportBackup(){
- const data=collect();
- const payload={format:FORMAT,version:VERSION,createdAt:new Date().toISOString(),application:"DoomWatch",storage:"localStorage",stores:data.stores,manifest:{storeCount:data.keys.length,approxBytes:data.total*2,keys:data.keys}};
- download(payload);
- $("dw-backup-last").textContent=new Date().toLocaleTimeString();
- $("dw-backup-status").textContent="BACKUP EXPORTED // "+data.keys.length+" local stores · "+bytes(data.total*2)+". Keep the downloaded JSON file somewhere separate from this phone.";
-}
-function importBackup(file){
- const status=$("dw-backup-status");status.textContent="READING BACKUP…";
- const reader=new FileReader();
- reader.onload=()=>{
-  try{
-   const payload=JSON.parse(String(reader.result||""));
-   if(!payload||payload.format!==FORMAT||payload.version!==VERSION||!payload.stores||typeof payload.stores!=="object"||Array.isArray(payload.stores))throw new Error("Unsupported backup format or version.");
-   const entries=Object.entries(payload.stores).filter(([k,v])=>k.startsWith(PREFIX)&&typeof v==="string");
-   if(!entries.length)throw new Error("No valid DoomWatch data stores were found in this backup.");
-   let added=0,merged=0,unchanged=0;
-   entries.forEach(([key,raw])=>{
-    const current=localStorage.getItem(key);
-    if(current===null){localStorage.setItem(key,raw);added++;return;}
-    const a=parseStored(current),b=parseStored(raw);
-    const combined=mergeValue(a,b),encoded=typeof combined==="string"?combined:JSON.stringify(combined);
-    if(encoded===current)unchanged++;
-    else{localStorage.setItem(key,encoded);merged++;}
-   });
-   refresh();
-   status.textContent="IMPORT / MERGE COMPLETE // "+added+" stores restored · "+merged+" stores merged · "+unchanged+" unchanged. Existing records were retained where conflicts occurred. Reload DoomWatch pages to refresh their displayed data.";
-  }catch(error){status.textContent="IMPORT FAILED // "+error.message+" No existing store was deliberately cleared.";}
-  $("dw-backup-file").value="";
- };
- reader.onerror=()=>{status.textContent="IMPORT FAILED // Could not read the selected file. Existing data was not changed.";};
- reader.readAsText(file);
-}
-$("dw-backup-export").addEventListener("click",exportBackup);
-$("dw-backup-import-trigger").addEventListener("click",()=>$("dw-backup-file").click());
-$("dw-backup-file").addEventListener("change",e=>{const file=e.target.files&&e.target.files[0];if(file)importBackup(file);});
-$("dw-backup-refresh").addEventListener("click",()=>{refresh();$("dw-backup-status").textContent="INVENTORY REFRESHED // No data changed.";});
-refresh();
-})();
-</script>
+
 </body>
 </html>
