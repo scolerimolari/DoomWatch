@@ -2,7 +2,7 @@
 if(window.__doomwatchUiReady)return;window.__doomwatchUiReady=true;
 const body=document.body,oldHeader=body.querySelector(":scope > header"),oldNav=body.querySelector(":scope > nav");
 const path=location.pathname.toLowerCase(),hash=decodeURIComponent(location.hash.slice(1)).toLowerCase();
-if((path==="/"||path.endsWith("/index.html"))&&!hash){location.replace("./index.html#overview");return;}
+if((path==="/"||path.endsWith("/")||path.endsWith("/index.html"))&&!hash){location.replace("./index.html#overview");return;}
 const routes=[
  ["command","index.html#overview","COMMAND",true],
  ["intelligence","observatory.html","INTELLIGENCE",true],
