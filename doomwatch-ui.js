@@ -28,12 +28,12 @@ const mainForSkip=document.querySelector("main");if(mainForSkip){mainForSkip.id=
 body.insertBefore(skip,body.firstChild);if(oldNav)oldNav.remove();mast.insertAdjacentElement("afterend",nav);
 const wire=document.createElement("div");wire.className="dw-wire";wire.setAttribute("aria-hidden","true");nav.insertAdjacentElement("afterend",wire);
 if(embedMode){body.classList.add("dw-map-embed");}
-const main=document.querySelector("main");
-if(main&&!embedMode&&active==="overview"&&!document.getElementById("dw-command-centre")){
+const dashboardMain=document.querySelector("main");
+if(dashboardMain&&!embedMode&&active==="overview"&&!document.getElementById("dw-command-centre")){
  const intro=document.createElement("section");intro.id="dw-command-centre";intro.className="dw-command-centre";
  intro.innerHTML='<div class="dw-command-copy"><div class="dw-eyebrow">NORTHERN IRELAND FIRST <b>•</b> UK & GLOBAL CONTEXT</div><h1>Understand what is changing.</h1><p>A source-led view of developing events, infrastructure, markets and emerging signals. Information, context and evidence — not incident management.</p><div class="dw-command-links"><a href="./observatory.html">Explore intelligence <span>↗</span></a><a href="./feed.html">Browse all streams <span>↗</span></a></div></div><div class="dw-command-side"><div class="dw-command-label"><span class="dw-live-dot"></span> GEOGRAPHIC PICTURE</div><a class="dw-map-preview" href="./map.html" aria-label="Open interactive DoomWatch map"><iframe title="Northern Ireland geographic intelligence map preview" src="./map.html?embed=1" loading="lazy" tabindex="-1"></iframe><span class="dw-map-open">OPEN INTERACTIVE MAP ↗</span></a><div class="dw-command-foot">REPORT LOCATIONS <i>/</i> INFRASTRUCTURE <i>/</i> REGIONAL CONTEXT</div></div>';
- main.insertBefore(intro,main.firstChild);
- const first=main.querySelector("section:not(#dw-command-centre)");if(first){const h=first.querySelector("h1,h2");if(h&&/LIVE SITUATION|INFORMATION OVERVIEW/i.test(h.textContent))h.textContent="THE INTELLIGENCE PICTURE";}
+ dashboardMain.insertBefore(intro,dashboardMain.firstChild);
+ const first=dashboardMain.querySelector("section:not(#dw-command-centre)");if(first){const h=first.querySelector("h1,h2");if(h&&/LIVE SITUATION|INFORMATION OVERVIEW/i.test(h.textContent))h.textContent="THE INTELLIGENCE PICTURE";}
 }
 function foldSection(section,index){
  if(section.closest("details.dw-fold"))return;
