@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     # Five-minute best-effort polling. Offset from the hour to reduce queue delays.
-    - cron: "2/5 * * * *"
+    - cron: "*/5 * * * *"
   push:
     branches: [main]
     paths:
