@@ -12,7 +12,7 @@ const statusline=mast.querySelector("#dw-statusline");
 if(oldHeader)oldHeader.hidden=true;
 const nav=document.createElement("nav");nav.className="dw-global-nav";nav.setAttribute("aria-label","DoomWatch navigation");
 const routes=[["overview","index.html#overview","Briefing"],["intelligence","observatory.html","Intelligence"],["streams","feed.html","Streams"],["map","map.html","Map"]];
-routes.forEach(([key,url,label])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.textContent=label;a.className="dw-route-primary";if(key===active||(key==="intelligence"&&active==="signals"))a.setAttribute("aria-current","page");nav.appendChild(a);});
+routes.forEach(([key,url,label])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.textContent=label;a.className="dw-route-primary";if(key===active)a.setAttribute("aria-current","page");nav.appendChild(a);});
 const more=document.createElement("button");more.type="button";more.className="dw-nav-toggle";more.textContent="Explore";more.setAttribute("aria-expanded","false");more.setAttribute("aria-controls","dw-explore-panel");nav.appendChild(more);
 if(!["overview","intelligence","streams","map"].includes(active))more.setAttribute("aria-current","page");
 const panel=document.createElement("div");panel.id="dw-explore-panel";panel.className="dw-route-extras";panel.setAttribute("aria-label","Explore DoomWatch sections");
@@ -23,7 +23,7 @@ const groups=[
 ];
 groups.forEach(([heading,items])=>{const group=document.createElement("section");group.className="dw-explore-group";const h=document.createElement("h2");h.textContent=heading;group.appendChild(h);items.forEach(([url,label,desc])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.innerHTML="<strong>"+label+"</strong><span>"+desc+"</span>";if((url==="operations.html"&&active==="regional")||(url==="communications.html"&&active==="comms")||(url==="correlation.html"&&active==="signals")||(url==="meshcore.html"&&active==="mesh")||(url==="markets.html"&&active==="economy")||(url==="household.html"&&active==="economy")||(url==="index.html#sections"&&active==="reference")||(url==="index.html#preparedness"&&active==="reference")||(url==="index.html#sources"&&active==="reference"))a.setAttribute("aria-current","page");group.appendChild(a);});panel.appendChild(group);});
 body.appendChild(panel);
-const setMore=open=>{panel.classList.toggle("is-open",open);more.setAttribute("aria-expanded",String(open));more.textContent=open?"Close":"More";};
+const setMore=open=>{panel.classList.toggle("is-open",open);more.setAttribute("aria-expanded",String(open));more.textContent=open?"Close":"Explore";};
 more.addEventListener("click",()=>setMore(!panel.classList.contains("is-open")));
 document.addEventListener("click",e=>{if(!nav.contains(e.target)&&!panel.contains(e.target))setMore(false);});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")setMore(false);});
