@@ -792,10 +792,6 @@ async function runSystemDiagnostics(){
   }
  }catch(e){add("Service worker","WARN",String(e.message||e));}
  try{
-  let bytes=0,stores=0;
-  for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i)||"";if(key.startsWith("doomwatch-")){stores++;bytes+=(key.length+String(localStorage.getItem(key)||"").length)*2;}}
-  add("Local browser records","PASS",stores+" DoomWatch localStorage keys; approximately "+(bytes/1024).toFixed(1)+" KiB. No records were changed.");
- }catch(e){add("Local browser records","WARN","Storage could not be inspected: "+String(e.message||e));}
  const rank={FAIL:0,WARN:1,PASS:2};
  const fails=checks.filter(x=>x.state==="FAIL").length,warns=checks.filter(x=>x.state==="WARN").length;
  target.innerHTML='<strong class="'+(fails?"red":warns?"yellow":"green")+'">'+(fails?"CHECKS NEED ATTENTION":warns?"CHECKS PARTIALLY COMPLETE":"CHECKS PASSED")+'</strong><div class="meta">'+checks.length+" checks · "+fails+" failures · "+warns+" warnings · "+new Date().toLocaleString()+'</div>'+checks.sort((a,b)=>rank[a.state]-rank[b.state]).map(x=>'<div class="section-card" style="margin-top:6px"><strong class="'+(x.state==="PASS"?"green":x.state==="FAIL"?"red":"yellow")+'">'+x.state+'</strong> // '+escapeHTML(x.name)+'<div class="meta">'+escapeHTML(x.detail)+'</div></div>').join("")+'<p class="meta">LIMITATION: checks validate DoomWatch&#39;s current browser view and published data endpoints. They do not probe each publisher, validate claims, test radio reachability, or confirm collector scheduling outside this page.</p>';
