@@ -36,19 +36,6 @@
 <header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">FEED // OPEN SOURCE SIGNAL MONITOR</div></div><div class="classification">UNVERIFIED SIGNALS</div></div></header>
 <main>
 <h2>FEED // SOCIAL & OPEN-SOURCE SIGNALS</h2>
-<section class="panel" id="watch-desk" style="margin-top:12px;border:1px solid #b64d3d;border-left:5px solid #d65a45">
- <div style="display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap">
-  <div><div class="muted">IN-APP MONITOR // LOCAL WATCH DESK</div><h3 style="margin:5px 0;color:#f0d28e">NEW SIGNALS SINCE YOUR LAST CHECK</h3></div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="action-button" id="watch-refresh">CHECK NOW</button><button type="button" class="action-button" id="watch-ack">MARK REVIEWED</button></div>
- </div>
- <div class="signal-grid" style="margin-top:10px">
-  <div class="signal-stat"><span class="muted">NEW RECORDS</span><strong id="watch-new-count">—</strong></div>
-  <div class="signal-stat"><span class="muted">WATCH TOPICS</span><strong id="watch-topic-count">—</strong></div>
-  <div class="signal-stat"><span class="muted">LAST CHECK</span><strong id="watch-last-check" style="font-size:13px">FIRST VISIT</strong></div>
- </div>
- <div id="watch-items" style="margin-top:10px" aria-live="polite" class="muted">WAITING FOR THE SIGNAL ARCHIVE…</div>
- <div class="muted" style="margin-top:9px;font-size:11px">This desk updates inside DoomWatch when the archive changes. Collector schedule: approximately every three hours. It does not send external reports or background alerts. Signals are not verified threat assessments.</div>
-</section>
 <div class="disclaimer"><strong>EDITORIAL PRIORITY:</strong> Newsroom reporting is shown first, followed by specialist analysis and official notices. Social posts are secondary leads only. “Independent reporting” means reporting produced by a newsroom rather than an official government or agency feed; it does not mean every publisher is independently owned. Social posts remain unverified and are never corroboration by repetition.</div>
 <div class="signal-grid" style="margin-top:12px">
 <div class="signal-stat"><span class="muted">PUBLIC SOCIAL POSTS</span><strong id="social-count">—</strong><span class="muted">Collected from Bluesky search</span></div>
@@ -199,11 +186,9 @@ function render(){
    if(mapSearch)mapParams.set("search",mapSearch);
    if(a.url&&/^https?:\/\//i.test(a.url))mapParams.set("record",a.url);
    const mapLink=mapSearch?'<a class="action-button" href="./map.html?'+mapParams.toString()+'">FIND ON MAP ↗</a>':"";
-   const caseLink='<a class="action-button" href="./incident.html?'+(a.url?'url='+encodeURIComponent(a.url):'title='+encodeURIComponent(a.title||""))+'">OPEN INCIDENT CASE FILE ↗</a>';
-   const globalIndex=list.indexOf(a);
-   return '<div class="cluster-source"><strong>'+esc(a.source||"Source not supplied")+'</strong> · '+esc(date(a.publishedAt||a.collectedAt))+'<p>'+esc(a.title||"Untitled report")+'</p><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(provenance)+" · "+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+' '+mapLink+' '+caseLink+'<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px"><button type="button" class="action-button" data-investigate="'+globalIndex+'">SET AS ACTIVE INVESTIGATION</button><button type="button" class="action-button" data-flag="'+globalIndex+'">SAVE TO RUMOUR MONITOR</button></div></div>';
+   return '<div class="cluster-source"><strong>'+esc(a.source||"Source not supplied")+'</strong> · '+esc(date(a.publishedAt||a.collectedAt))+'<p>'+esc(a.title||"Untitled report")+'</p><p>'+esc(a.description||"No additional text supplied.")+'</p><div>'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+'</div><div class="meta">'+esc(provenance)+" · "+esc(a.sourceTrust||"Trust class not supplied")+' · '+esc(a.region||"Region not supplied")+' · '+esc(status)+'</div>'+link+' '+mapLink+'</div>';
   }).join("");
-  return '<details class="cluster"><summary><h3>'+esc(lead.title||"Untitled story")+'</h3><div class="cluster-meta">'+esc(cluster.bucket)+' · '+items.length+' report(s) · '+sources+' distinct publisher(s) · '+stats.newsrooms+' newsroom publisher(s) · latest '+esc(date(cluster.latest))+'</div></summary><div class="cluster-note"><strong>'+esc(corroborationLabel(stats))+'</strong><br>A newsroom count is not proof of independent sourcing. Records explicitly labelled as syndicated or aggregated, official releases and social reposts are excluded from newsroom counts. Open the originals and compare reporting before treating this as corroboration. · <a href="./operations.html?search='+encodeURIComponent(lead.title||"") +'">TRACK IN OPS TIMELINE ↗</a></div><div class="cluster-sources">'+sourcesHtml+'</div></details>';
+  return '<details class="cluster"><summary><h3>'+esc(lead.title||"Untitled story")+'</h3><div class="cluster-meta">'+esc(cluster.bucket)+' · '+items.length+' report(s) · '+sources+' distinct publisher(s) · '+stats.newsrooms+' newsroom publisher(s) · latest '+esc(date(cluster.latest))+'</div></summary><div class="cluster-note"><strong>'+esc(corroborationLabel(stats))+'</strong><br>A newsroom count is not proof of independent sourcing. Records explicitly labelled as syndicated or aggregated, official releases and social reposts are excluded from newsroom counts. Open the originals and compare reporting before treating this as corroboration.</div><div class="cluster-sources">'+sourcesHtml+'</div></details>';
  }).join("")||'<div class="panel muted">No records match this filter and search. Try another topic or clear the search.</div>';
  $("feed-status").textContent="SHOWING "+list.length+" RECORDS IN "+clusters.length+" STORY GROUPS // SOURCE: "+activeSource+" // TOPIC: "+active+" // AUTOMATED GROUPING IS NOT VERIFICATION.";
 }
@@ -214,22 +199,6 @@ function renderTrends(){
  $("topic-count").textContent=counts.filter(x=>x.count>0).length;
 }
 function signalTime(a){const d=new Date(a.collectedAt||a.publishedAt||a.updatedAt||0);return Number.isFinite(d.getTime())?d.getTime():0;}
-function renderWatch(){
- const key="doomwatch-feed-last-seen-v1";
- let since=0;
- try{since=Number(localStorage.getItem(key)||0);}catch(e){}
- const fresh=articles.filter(a=>signalTime(a)>since).sort((a,b)=>signalTime(b)-signalTime(a));
- const activeTopics=Object.keys(topics).filter(k=>fresh.some(a=>hits(a,k)));
- $("watch-new-count").textContent=fresh.length.toLocaleString("en-GB");
- $("watch-topic-count").textContent=activeTopics.length?activeTopics.map(k=>labels[k].split(" / ")[0]).join(" · "):"NONE";
- $("watch-last-check").textContent=since?date(since):"FIRST VISIT";
- $("watch-items").innerHTML=fresh.length?fresh.slice(0,8).map(a=>{
-  const matched=Object.keys(topics).filter(k=>hits(a,k));
-  const socialPost=social(a);
-  const link=a.url&&(String(a.url).startsWith("https://")||String(a.url).startsWith("http://"))?' <a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"";
-  return '<div style="padding:9px 0;border-top:1px solid #414738"><strong style="color:#f0d28e">'+esc(a.title||"Untitled signal")+'</strong><div class="muted" style="margin-top:4px">'+esc(date(a.collectedAt||a.publishedAt))+' · '+esc(a.source||"Unknown source")+' · '+(socialPost?"UNVERIFIED SOCIAL": "OPEN SOURCE")+'</div><div style="margin-top:4px">'+matched.map(k=>'<span class="pill">'+esc(labels[k])+'</span>').join("")+link+'</div></div>';
- }).join(""):'<div style="padding:10px 0">NO NEW RECORDS SINCE LAST REVIEW. The archive will be checked again automatically while this page remains open.</div>';
-}
 async function load(){
  try{
   const r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
@@ -241,47 +210,15 @@ async function load(){
   $("social-count").textContent=articles.filter(social).length;
   $("record-count").textContent=articles.length.toLocaleString("en-GB");
   $("feed-updated").textContent=date(collectorRun);
-  renderTrends();renderBriefing();render();renderWatch();
+  renderTrends();renderBriefing();render();
   $("feed-status").textContent="ARCHIVE CONNECTED // "+articles.length+" RECORDS // AUTO-CHECK EVERY 5 MINUTES WHILE OPEN";
  }catch(e){$("feed-status").textContent="SIGNAL ARCHIVE FAILED // "+e.message;}
 }
 const feedParams=new URLSearchParams(location.search),initialFeedQuery=feedParams.get("q")||feedParams.get("dw_title")||feedParams.get("dw_area")||"";if(initialFeedQuery)$("feed-search").value=initialFeedQuery;
-$("feed-items").addEventListener("click",event=>{
- const pick=event.target.closest("[data-investigate]");if(!pick)return;
- const item=rendered[Number(pick.dataset.investigate)];if(!item)return;
- if(window.DoomWatchContext)window.DoomWatchContext.set({area:String(item.locality?.name||item.area||item.location||""),title:String(item.title||item.description||"Untitled report"),source:String(item.source||""),url:String(item.url||"")});
- pick.textContent="INVESTIGATION CONTEXT SET";pick.disabled=true;
-});
-$("feed-items").addEventListener("click",event=>{
- const button=event.target.closest("[data-flag]");
- if(!button)return;
- const item=rendered[Number(button.dataset.flag)];
- if(!item)return;
- try{
-  const store=JSON.parse(localStorage.getItem("doomwatch-v1")||"{}");
-  if(!Array.isArray(store.rumours))store.rumours=[];
-  const claim=String(item.title||item.description||"Untitled signal");
-  const source=String(item.source||"Source not supplied");
-  const original=String(item.url||"");
-  const duplicate=store.rumours.some(r=>(original&&r.evidence&&r.evidence.includes(original))||(r.claim===claim&&r.source===source));
-  if(!duplicate){
-   store.rumours.unshift({claim,source,evidence:"Captured from DoomWatch FEED. Verification pending. Original source: "+original,status:"UNVERIFIED",date:new Date().toLocaleString()});
-   localStorage.setItem("doomwatch-v1",JSON.stringify(store));
-  }
-  button.textContent=duplicate?"ALREADY SAVED":"SAVED TO RUMOUR MONITOR";
-  button.disabled=true;
- }catch(error){button.textContent="SAVE FAILED // STORAGE UNAVAILABLE";}
-});
 document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{active=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});render();}));
 $("feed-search").addEventListener("input",render);
 $("feed-clear").addEventListener("click",()=>{$("feed-search").value="";render();$("feed-search").focus();});
 document.querySelectorAll("[data-source]").forEach(b=>b.addEventListener("click",()=>{activeSource=b.dataset.source;document.querySelectorAll("[data-source]").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});render();}));
-$("watch-refresh").addEventListener("click",()=>load());
-$("watch-ack").addEventListener("click",()=>{
- try{localStorage.setItem("doomwatch-feed-last-seen-v1",String(Date.now()));}
- catch(e){$("watch-items").textContent="Could not save review state: browser storage unavailable.";return;}
- renderWatch();
-});
 load();
 if(watchTimer)clearInterval(watchTimer);
 watchTimer=setInterval(load,5*60*1000);
