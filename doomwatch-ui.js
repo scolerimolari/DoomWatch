@@ -9,6 +9,8 @@ mast.innerHTML='<a class="dw-brand" href="./index.html#overview" aria-label="Doo
 body.insertBefore(mast,body.firstChild);
 const statusline=mast.querySelector("#dw-statusline");
 ["clock","connection","updated"].forEach(id=>{const node=document.getElementById(id);if(node){const wrap=document.createElement("span");wrap.appendChild(node);statusline.appendChild(wrap);}});
+const commsState=document.getElementById("live-state"),commsHeading=document.querySelector(".comms-head");
+if(commsState&&commsHeading){commsState.classList.add("dw-comms-live");commsHeading.appendChild(commsState);}
 if(oldHeader)oldHeader.hidden=true;
 const nav=document.createElement("nav");nav.className="dw-global-nav";nav.setAttribute("aria-label","DoomWatch navigation");
 const routes=[["overview","index.html#overview","Briefing"],["intelligence","observatory.html","Intelligence"],["streams","feed.html","Streams"],["map","map.html","Map"]];
@@ -18,10 +20,10 @@ if(!["overview","intelligence","streams","map"].includes(active))more.setAttribu
 const panel=document.createElement("div");panel.id="dw-explore-panel";panel.className="dw-route-extras";panel.setAttribute("aria-label","Explore DoomWatch sections");
 const groups=[
  ["REGIONAL INTELLIGENCE",[["operations.html","Regional picture","Northern Ireland and UK developments"],["correlation.html","Signal connections","Patterns across independent streams"]]],
- ["SYSTEMS & ECONOMY",[["communications.html","Connectivity","Networks, broadband and outage signals"],["markets.html","Economy & markets","Energy, commodities and financial context"],["household.html","Household resilience","Practical household reference"]]],
+ ["SYSTEMS & ECONOMY",[["communications.html","Connectivity","Networks, broadband and outage signals"],["markets.html","Economy & markets","Energy, commodities and financial context"],["markets.html#household","Household resilience","Practical household reference"]]],
  ["FIELD & REFERENCE",[["meshcore.html","MeshCore","Mesh networking, UK resources and field guide"],["index.html#sections","Resilience reference","Critical sectors and dependencies"],["index.html#preparedness","Preparedness","Practical, information-only guidance"],["index.html#sources","Sources & methodology","Publishers, access and data provenance"]]]
 ];
-groups.forEach(([heading,items])=>{const group=document.createElement("section");group.className="dw-explore-group";const h=document.createElement("h2");h.textContent=heading;group.appendChild(h);items.forEach(([url,label,desc])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.innerHTML="<strong>"+label+"</strong><span>"+desc+"</span>";if((url==="operations.html"&&active==="regional")||(url==="communications.html"&&active==="comms")||(url==="correlation.html"&&active==="signals")||(url==="meshcore.html"&&active==="mesh")||(url==="markets.html"&&active==="economy")||(url==="household.html"&&active==="economy")||(url==="index.html#sections"&&active==="reference")||(url==="index.html#preparedness"&&active==="reference")||(url==="index.html#sources"&&active==="reference"))a.setAttribute("aria-current","page");group.appendChild(a);});panel.appendChild(group);});
+groups.forEach(([heading,items])=>{const group=document.createElement("section");group.className="dw-explore-group";const h=document.createElement("h2");h.textContent=heading;group.appendChild(h);items.forEach(([url,label,desc])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.innerHTML="<strong>"+label+"</strong><span>"+desc+"</span>";if((url==="operations.html"&&active==="regional")||(url==="communications.html"&&active==="comms")||(url==="correlation.html"&&active==="signals")||(url==="meshcore.html"&&active==="mesh")||(url==="markets.html"&&active==="economy")||(url==="markets.html#household"&&active==="economy")||(url==="index.html#sections"&&active==="reference")||(url==="index.html#preparedness"&&active==="reference")||(url==="index.html#sources"&&active==="reference"))a.setAttribute("aria-current","page");group.appendChild(a);});panel.appendChild(group);});
 body.appendChild(panel);
 const setMore=open=>{panel.classList.toggle("is-open",open);more.setAttribute("aria-expanded",String(open));more.textContent=open?"Close":"Explore";};
 more.addEventListener("click",()=>setMore(!panel.classList.contains("is-open")));
