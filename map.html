@@ -542,9 +542,8 @@ function renderMarkers(){
  if(!map||!markerLayer)return;
  markerLayer.clearLayers();densityLayer.clearLayers();
  const bounds=[];
- // Read the MeshCore workspace register. Only exact known town names are plotted.
- let meshNodes=[];
- try{const raw=localStorage.getItem("doomwatch-meshcore-v1");const parsed=raw?JSON.parse(raw):null;meshNodes=parsed&&Array.isArray(parsed.nodes)?parsed.nodes:[];}catch(e){meshNodes=[];}
+ // User-maintained MeshCore node registers are not part of this information-only map.
+ const meshNodes=[];
  const townByName=new Map(TOWNS.map(t=>[String(t.name||"").trim().toLowerCase(),t]));
  const plottedMesh=meshNodes.map(n=>({node:n,town:townByName.get(String(n.area||"").trim().toLowerCase())})).filter(x=>x.town);
  const meshCount=$("mesh-node-layer-count");if(meshCount)meshCount.textContent=plottedMesh.length+" / "+meshNodes.length;
