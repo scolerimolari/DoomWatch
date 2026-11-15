@@ -220,3 +220,26 @@ body.dw-map-immersive .dw-map-drawer{bottom:calc(78px + env(safe-area-inset-bott
 .dw-context-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;align-items:center}.dw-context-actions button,.dw-context-actions a{min-height:38px;padding:8px 10px;font-size:9px;display:inline-flex;align-items:center;justify-content:center}.dw-context-actions a[hidden]{display:none}.dw-context-note{margin:7px 0 0;color:#98a596;font-size:9px;line-height:1.4}
 @media(max-width:560px){.dw-context-fields{grid-template-columns:1fr}.dw-context-bar{margin:8px;padding:10px}.dw-context-actions>*{flex:1 1 auto}}
 @media(orientation:landscape) and (max-height:600px){.dw-context-bar{margin:6px 10px;padding:7px 9px}.dw-context-fields{grid-template-columns:1fr 1.5fr}.dw-context-note{display:none}}
+
+
+/* DOOMWATCH // CONSOLIDATED FIVE-WORKSPACE NAVIGATION */
+.dw-bottom-dock{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.dw-bottom-dock>.dw-route-primary{font-size:clamp(8px,2.1vw,10px)!important;letter-spacing:.015em!important}
+.dw-bottom-dock>.dw-nav-toggle{font-size:clamp(8px,2vw,9px)!important;border-color:#c6a36b!important;background:linear-gradient(#72512e,#3b2b1d)!important;color:#fff!important}
+.dw-bottom-dock.dw-expanded>.dw-route-extras{
+ max-height:min(58vh,520px)!important;overflow-y:auto!important;overscroll-behavior:contain!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;align-content:start!important
+}
+.dw-bottom-dock .dw-route-extra[aria-current="page"]{border-color:#ef6656!important;background:linear-gradient(#8e2925,#4b1918)!important;color:#fff!important}
+.dw-context-bar{padding:0!important}
+.dw-context-bar>summary{list-style:none!important;cursor:pointer!important;min-height:42px!important;padding:10px 12px!important}
+.dw-context-bar>summary::-webkit-details-marker{display:none!important}
+.dw-context-expand{margin-left:auto!important;color:#d4b16c!important;font-size:9px!important;white-space:nowrap!important}
+.dw-context-bar[open]>.dw-context-heading{border-bottom:1px solid #4d5c49!important}
+.dw-context-body{padding:10px 12px 12px!important}
+.dw-context-body .dw-context-fields{margin-top:0!important}
+@media(max-width:420px){
+ .dw-bottom-dock{gap:3px!important;padding-left:4px!important;padding-right:4px!important}
+ .dw-bottom-dock>.dw-route-primary,.dw-bottom-dock>.dw-nav-toggle{font-size:8px!important;padding:5px 2px!important}
+ .dw-bottom-dock.dw-expanded>.dw-route-extras{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
