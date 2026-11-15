@@ -249,3 +249,9 @@ body.dw-map-immersive .dw-map-drawer{bottom:calc(78px + env(safe-area-inset-bott
 .dw-intel-nav a{display:flex;align-items:center;justify-content:center;min-height:39px;padding:7px 5px;text-align:center;text-decoration:none;font-size:clamp(8px,2.1vw,10px);line-height:1.2;letter-spacing:.035em;color:#c9d6c0;background:#1a251c;border:1px solid #394b39}
 .dw-intel-nav a[aria-current="page"]{color:#fff;background:linear-gradient(#8e2925,#4b1918);border-color:#ef6656;box-shadow:0 0 10px #bd3e3338}
 @media(max-width:380px){.dw-intel-nav{gap:3px;margin-left:5px;margin-right:5px;padding:4px}.dw-intel-nav a{font-size:8px;padding:5px 2px;min-height:36px}}
+
+/* DOOMWATCH // OPERATIONS WORKSPACE TABS */
+.dw-operations-nav{position:relative;z-index:20;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px clamp(8px,2vw,20px) 12px;padding:6px;background:rgba(12,19,14,.96);border:1px solid #53634b;border-left:3px solid #d45a42}
+.dw-operations-nav a{display:flex;align-items:center;justify-content:center;min-height:39px;padding:7px 5px;text-align:center;text-decoration:none;font-size:clamp(8px,2.1vw,10px);line-height:1.2;letter-spacing:.035em;color:#c9d6c0;background:#1a251c;border:1px solid #394b39}
+.dw-operations-nav a[aria-current="page"]{color:#fff;background:linear-gradient(#8e2925,#4b1918);border-color:#ef6656;box-shadow:0 0 10px #bd3e3338}
+@media(max-width:380px){.dw-operations-nav{gap:3px;margin-left:5px;margin-right:5px;padding:4px}.dw-operations-nav a{font-size:8px;padding:5px 2px;min-height:36px}}
