@@ -71,7 +71,7 @@ footer{color:#78909b!important;border-color:#294454!important}
 .dw-fold>section,.dw-fold>.brief-card,.dw-fold>.case-panel{padding:12px!important}
 .dw-ready .page{scroll-margin-top:70px}
 .dw-map-embed{background:#0a151d!important}
-.dw-map-embed .dw-masthead,.dw-map-embed .dw-global-nav,.dw-map-embed .dw-wire,.dw-map-embed #dw-explore-panel,.dw-map-embed .dw-skip-link,.dw-map-embed body>footer{display:none!important}
+.dw-map-embed .dw-masthead,.dw-map-embed .dw-global-nav,.dw-map-embed .dw-wire,.dw-map-embed #dw-explore-panel,.dw-map-embed .dw-skip-link,.dw-map-embed>footer{display:none!important}
 .dw-map-embed main{padding:0!important;margin:0!important;max-width:none!important}
 .dw-map-embed .map-intro,.dw-map-embed #map-status,.dw-map-embed .map-kpis,.dw-map-embed .map-side,.dw-map-embed .map-key,.dw-map-embed .map-note{display:none!important}
 .dw-map-embed .map-workspace{display:block!important;margin:0!important}
