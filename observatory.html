@@ -34,7 +34,7 @@
 <header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">INTELLIGENCE OBSERVATORY // SIX SOURCE FLOWS</div></div><div class="classification">OPEN SOURCE // REVIEW REQUIRED</div></div></header>
 <main>
 <div class="obs-hero">
- <div class="obs-kicker">OPERATION CONTAINMENT / MULTI-DOMAIN COLLECTION</div>
+ <div class="obs-kicker">SOURCE-LED RESEARCH / SIX INTELLIGENCE STREAMS</div>
  <div class="obs-title">INTELLIGENCE OBSERVATORY</div>
  <div class="obs-sub">Six distinct collection and assessment streams. One common record format. Source reliability is separated from claim confidence. Social posts, alternative commentary and machine-generated matches remain leads until independently checked.</div>
  <div class="obs-stats">
@@ -45,8 +45,8 @@
  </div>
  <div class="obs-status" id="obs-status" aria-live="polite">CONNECTING TO OBSERVATORY SNAPSHOT…</div>
 </div>
-<div class="panel" id="obs-integrations" style="margin:12px 0;border:1px solid #596653"><div class="panel-title">CONNECTED DOOMWATCH WORKSPACES</div><div class="obs-actions"><a href="./feed.html">FEED / SIGNAL ROOM ↗</a><a href="./map.html">LIVE MAP ↗</a><a href="./operations.html">OPERATIONS ↗</a><a href="./markets.html">MARKETS ↗</a><a href="./index.html#intelligence">INTELLIGENCE / GRAPHS ↗</a><a href="./index.html#meshcore">MESHCORE ↗</a></div><div class="obs-status" style="margin-top:8px">Use the shared investigation context to carry an area or report between workspaces. New catalogue records remain in this observatory until a human chooses to open a source detail view.</div></div>
-<div class="obs-note"><strong>ASSESSMENT RULE:</strong> Reliability grades describe the type of source, not whether a particular claim is true. Repeated posts, syndicated copy and reports citing one original source are not independent corroboration. No automatic escalation establishes an incident.</div>
+<div class="panel" id="obs-integrations" style="margin:12px 0;border:1px solid #596653"><div class="panel-title">CONNECTED DOOMWATCH WORKSPACES</div><div class="obs-actions"><a href="./feed.html">FEED / SIGNAL ROOM ↗</a><a href="./map.html">LIVE MAP ↗</a><a href="./operations.html">OPERATIONS ↗</a><a href="./markets.html">MARKETS ↗</a><a href="./index.html#intelligence">INTELLIGENCE / GRAPHS ↗</a><a href="./index.html#meshcore">MESHCORE ↗</a></div><div class="obs-status" style="margin-top:8px">Move between information streams to compare coverage, geography, market context and source provenance. All records are read-only source information.</div></div>
+<div class="obs-note"><strong>ASSESSMENT RULE:</strong> Reliability grades describe the type of source, not whether a particular claim is true. Repeated posts, syndicated copy and reports citing one original source are not independent corroboration. Automated grouping is a research aid, not proof of an event or a common cause.</div>
 <h2>SELECT AN INTELLIGENCE FLOW</h2>
 <div class="obs-tabs" id="obs-tabs" role="tablist" aria-label="Six intelligence flows">
  <button type="button" class="active" data-flow="osint" role="tab" aria-selected="true"><strong>01 / OSINT OBSERVATORY</strong><span>Satellite, geospatial, transport & hazards</span></button>
@@ -116,11 +116,7 @@ function mapAction(record){
  }
  return '<a href="'+esc(mapLink(record))+'">MAP / LOCATION ↗</a>';
 }
-function caseLink(record){
- const p=new URLSearchParams();
- if(record.url)p.set("url",record.url);else p.set("title",record.title);
- return "./incident.html?"+p.toString();
-}
+
 function renderRecord(r){
  const grade=String(r.reliabilityGrade||"U").toUpperCase();
  const evidence=String(r.evidenceStatus||"UNASSESSED").replace(/_/g," ");
@@ -129,7 +125,7 @@ function renderRecord(r){
  const summary=r.summary?'<p>'+esc(r.summary)+'</p>':'<p class="obs-status">No summary supplied by source.</p>';
  const cve=r.cve?'<span class="obs-tag">'+esc(r.cve)+'</span>':"";
  const ransomware=r.ransomwareUse&&r.ransomwareUse!=="Unknown"?'<span class="obs-tag">RANSOMWARE: '+esc(r.ransomwareUse)+'</span>':"";
- return '<article class="obs-record grade-'+esc(grade)+'"><div class="obs-tags"><span class="obs-tag grade">SOURCE GRADE '+esc(grade)+'</span><span class="obs-tag">'+esc(r.reliabilityLabel||"Unclassified")+'</span><span class="obs-tag">'+esc(evidence)+'</span>'+cve+ransomware+'</div><h3>'+esc(r.title)+'</h3>'+summary+'<div class="obs-meta"><strong>'+esc(r.source||"Source not specified")+'</strong><br>TYPE: '+esc(r.sourceType||"unclassified")+' · REGION: '+esc(r.region||"Not stated")+'<br>PUBLISHED: '+esc(date(r.publishedAt))+'<br>'+esc(conf)+'</div><div class="obs-actions">'+sourceUrl+mapAction(r)+'<a href="'+esc(caseLink(r))+'">REPORT DETAIL ↗</a><a href="./feed.html">FEED ↗</a><a href="./operations.html">OPS ↗</a>'+(activeFlow==="economic"?'<a href="./markets.html">MARKETS ↗</a>':"")+'</div></article>';
+ return '<article class="obs-record grade-'+esc(grade)+'"><div class="obs-tags"><span class="obs-tag grade">SOURCE GRADE '+esc(grade)+'</span><span class="obs-tag">'+esc(r.reliabilityLabel||"Unclassified")+'</span><span class="obs-tag">'+esc(evidence)+'</span>'+cve+ransomware+'</div><h3>'+esc(r.title)+'</h3>'+summary+'<div class="obs-meta"><strong>'+esc(r.source||"Source not specified")+'</strong><br>TYPE: '+esc(r.sourceType||"unclassified")+' · REGION: '+esc(r.region||"Not stated")+'<br>PUBLISHED: '+esc(date(r.publishedAt))+'<br>'+esc(conf)+'</div><div class="obs-actions">'+sourceUrl+mapAction(r)<a href="./feed.html">FEED ↗</a><a href="./operations.html">OPS ↗</a>'+(activeFlow==="economic"?'<a href="./markets.html">MARKETS ↗</a>':"")+'</div></article>';
 }
 function render(){
  if(!data)return;
