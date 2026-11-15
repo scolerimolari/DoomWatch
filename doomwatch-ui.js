@@ -2,48 +2,53 @@
 if(window.__doomwatchUiReady)return;window.__doomwatchUiReady=true;
 const body=document.body,oldHeader=body.querySelector(":scope > header"),oldNav=body.querySelector(":scope > nav");
 const path=location.pathname.toLowerCase(),hash=decodeURIComponent(location.hash.slice(1)).toLowerCase();
-if((path==="/"||path.endsWith("/index.html"))&&!hash){location.replace("./map.html");return;}
+if((path==="/"||path.endsWith("/index.html"))&&!hash){location.replace("./index.html#overview");return;}
 const routes=[
- ["map","map.html","MAP"],["feed","feed.html","FEED"],["operations","operations.html","OPS"],["communications","communications.html","COMMS"],
- ["command","index.html#overview","COMMAND"],["intelligence","index.html#intelligence","INTEL"],["observatory","observatory.html","OBSERVATORY"],["sectors","index.html#sections","11 SECTORS"],
- ["preparedness","index.html#preparedness","PREP"],["meshcore","index.html#meshcore","MESHCORE"],["markets","markets.html","MARKETS"],
- ["household","household.html","HOUSEHOLD"],
- ["incident","incident.html","CASE FILE"],["backup","index.html#backup-centre","BACKUP"],["sources","index.html#sources","SOURCES"]
+ ["command","index.html#overview","COMMAND",true],
+ ["intelligence","observatory.html","INTELLIGENCE",true],
+ ["operations","operations.html","OPERATIONS",true],
+ ["resilience","index.html#sections","RESILIENCE",true],
+ ["meshcore","meshcore.html","FIELD NETWORK",true],
+ ["map","map.html","MAP",false],
+ ["feed","feed.html","LIVE FEED",false],
+ ["correlation","correlation.html","CORRELATION",false],
+ ["markets","markets.html","MARKETS",false],
+ ["communications","communications.html","COMMS",false],
+ ["sectors","index.html#sections","11 SECTORS",false],
+ ["preparedness","index.html#preparedness","PREPAREDNESS",false],
+ ["household","household.html","HOUSEHOLD COSTS",false],
+ ["incident","incident.html","CASE FILE",false],
+ ["backup","index.html#backup-centre","BACKUP & RECOVERY",false],
+ ["sources","index.html#sources","SOURCE DIRECTORY",false]
 ];
-const active=path.endsWith("/operations.html")?"operations":path.endsWith("/markets.html")?"markets":path.endsWith("/household.html")?"household":path.endsWith("/feed.html")?"feed":path.endsWith("/map.html")?"map":path.endsWith("/communications.html")?"communications":path.endsWith("/observatory.html")?"observatory":path.endsWith("/incident.html")?"incident":path.endsWith("/meshcore.html")?"meshcore":({intelligence:"intelligence",sections:"sectors",preparedness:"preparedness",meshcore:"meshcore",sources:"sources","backup":"backup"})[hash]||"command";
+const active=path.endsWith("/operations.html")?"operations":path.endsWith("/markets.html")?"markets":path.endsWith("/household.html")?"household":path.endsWith("/feed.html")?"feed":path.endsWith("/map.html")?"map":path.endsWith("/communications.html")?"communications":path.endsWith("/observatory.html")?"intelligence":path.endsWith("/correlation.html")?"correlation":path.endsWith("/incident.html")?"incident":path.endsWith("/meshcore.html")?"meshcore":({overview:"command",intelligence:"intelligence",sections:"resilience",preparedness:"preparedness",meshcore:"meshcore",sources:"sources","backup":"backup"})[hash]||"command";
 const mast=document.createElement("header");mast.className="dw-masthead";
 mast.innerHTML='<div class="dw-brand"><img class="dw-emblem" src="./containment.svg" alt="DoomWatch red containment unit emblem"><div><div class="dw-wordmark">DOOMWATCH</div><div class="dw-tagline">OPERATION CONTAINMENT // RESILIENCE INTELLIGENCE</div><div class="dw-statusline" id="dw-statusline"></div></div></div><div class="dw-hardware" aria-hidden="true"><div class="dw-statusbox"><strong>CONTAINMENT SYSTEM</strong><span>POWER / FIELD UNIT</span><div class="dw-lamps"><i class="dw-lamp red"></i><i class="dw-lamp amber"></i><i class="dw-lamp green"></i></div></div><div class="dw-valves"><i class="dw-valve red"></i><i class="dw-valve"></i></div><div class="dw-switches"><i class="dw-switch on"></i><i class="dw-switch"></i></div></div>';
 body.insertBefore(mast,body.firstChild);
 const statusline=mast.querySelector("#dw-statusline");
 ["clock","connection","updated"].forEach(id=>{const node=document.getElementById(id);if(node){const wrap=document.createElement("span");wrap.appendChild(node);statusline.appendChild(wrap);}});
 if(oldHeader)oldHeader.hidden=true;
-const nav=document.createElement("nav");nav.className="dw-global-nav";nav.setAttribute("aria-label","All DoomWatch pages and sections");
-let areaToggle=null;
-routes.forEach(([key,url,label],index)=>{
- if(index===4){
-  areaToggle=document.createElement("button");areaToggle.type="button";areaToggle.className="dw-nav-toggle";areaToggle.textContent="ALL AREAS +";areaToggle.setAttribute("aria-expanded","false");areaToggle.setAttribute("aria-controls","dw-route-extras");nav.appendChild(areaToggle);
- }
+const nav=document.createElement("nav");nav.className="dw-global-nav";nav.setAttribute("aria-label","DoomWatch primary navigation");
+const primaryRoutes=routes.filter(route=>route[3]),toolRoutes=routes.filter(route=>!route[3]);
+primaryRoutes.forEach(([key,url,label])=>{
  const a=document.createElement("a");
  a.href=new URL(url,document.baseURI).href;
  a.textContent=label;
- a.className=index<4?"dw-route-primary":"dw-route-extra";
- if(index>=4)a.dataset.dwExtra="true";
- if(key===active){a.setAttribute("aria-current","page");}
+ a.className="dw-route-primary";
+ if(key===active)a.setAttribute("aria-current","page");
  nav.appendChild(a);
 });
-const extras=document.createElement("span");extras.id="dw-route-extras";extras.className="dw-route-extras";
-[...nav.querySelectorAll(".dw-route-extra")].forEach(a=>extras.appendChild(a));
+const areaToggle=document.createElement("button");areaToggle.type="button";areaToggle.className="dw-nav-toggle";areaToggle.textContent="TOOLS +";areaToggle.setAttribute("aria-expanded","false");areaToggle.setAttribute("aria-controls","dw-route-extras");nav.appendChild(areaToggle);
+const extras=document.createElement("span");extras.id="dw-route-extras";extras.className="dw-route-extras";extras.setAttribute("aria-label","Specialist tools");
+toolRoutes.forEach(([key,url,label])=>{
+ const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.textContent=label;a.className="dw-route-extra";
+ if(key===active)a.setAttribute("aria-current","page");
+ extras.appendChild(a);
+});
 nav.appendChild(extras);
-if(areaToggle){
- const setExpanded=expanded=>{nav.classList.toggle("dw-expanded",expanded);areaToggle.setAttribute("aria-expanded",String(expanded));areaToggle.textContent=expanded?"CLOSE AREAS −":"ALL AREAS +";};
- areaToggle.addEventListener("click",()=>setExpanded(!nav.classList.contains("dw-expanded")));
- if(nav.querySelector('[aria-current="page"].dw-route-extra'))setExpanded(true);
-}
-const expandAll=document.createElement("button");expandAll.type="button";expandAll.className="dw-nav-action";expandAll.textContent="EXPAND SECTIONS";
-const collapseAll=document.createElement("button");collapseAll.type="button";collapseAll.className="dw-nav-action";collapseAll.textContent="COLLAPSE SECTIONS";
-nav.append(expandAll,collapseAll);
-expandAll.addEventListener("click",()=>document.querySelectorAll("details.dw-fold").forEach(el=>el.open=true));
-collapseAll.addEventListener("click",()=>document.querySelectorAll("details.dw-fold").forEach(el=>el.open=false));
+const setExpanded=expanded=>{nav.classList.toggle("dw-expanded",expanded);areaToggle.setAttribute("aria-expanded",String(expanded));areaToggle.textContent=expanded?"CLOSE −":"TOOLS +";};
+areaToggle.addEventListener("click",()=>setExpanded(!nav.classList.contains("dw-expanded")));
+if(extras.querySelector('[aria-current="page"]'))setExpanded(true);
 const skip=document.createElement("a");skip.className="dw-skip-link";skip.href="#dw-main-content";skip.textContent="SKIP TO CONTENT";
 const mainForSkip=document.querySelector("main");if(mainForSkip){mainForSkip.id=mainForSkip.id||"dw-main-content";skip.href="#"+mainForSkip.id;}
 body.insertBefore(skip,body.firstChild);
@@ -61,8 +66,8 @@ const wire=document.createElement("div");wire.className="dw-wire";wire.setAttrib
  let state={area:clean(params.get("dw_area")||params.get("q")||params.get("search")),title:clean(params.get("dw_title")),source:clean(params.get("dw_source")),url:clean(params.get("dw_url"))};
  try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");if(saved&&typeof saved==="object")state={...saved,...Object.fromEntries(Object.entries(state).filter(([,v])=>v))};}catch(_){}
  const validUrl=v=>{try{const u=new URL(v);return /^https?:$/.test(u.protocol)?u.href:"";}catch(_){return"";}};state.url=validUrl(state.url);
- const bar=document.createElement("section");bar.className="dw-context-bar";bar.setAttribute("aria-label","Shared investigation context");
- bar.innerHTML='<div class="dw-context-heading"><strong>ACTIVE INVESTIGATION</strong><span id="dw-context-status">LOCAL WORKSPACE CONTEXT</span></div><div class="dw-context-fields"><label>LOCATION / AREA<input id="dw-context-area" maxlength="500" placeholder="e.g. Ballyclare"></label><label>REPORT / INCIDENT<input id="dw-context-title" maxlength="500" placeholder="Optional report or incident title"></label></div><div class="dw-context-actions"><button type="button" id="dw-context-save">SAVE CONTEXT</button><button type="button" id="dw-context-clear">CLEAR</button><a id="dw-context-source" href="#" hidden target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a></div><p class="dw-context-note">Context follows you between DoomWatch workspaces on this browser only. It is an investigation aid, not a verified incident record.</p>';
+ const bar=document.createElement("details");bar.className="dw-context-bar";bar.setAttribute("aria-label","Shared investigation context");
+ bar.innerHTML='<summary class="dw-context-heading"><strong>ACTIVE INVESTIGATION</strong><span id="dw-context-status">LOCAL WORKSPACE CONTEXT</span><span class="dw-context-expand">EDIT CONTEXT</span></summary><div class="dw-context-body"><div class="dw-context-fields"><label>LOCATION / AREA<input id="dw-context-area" maxlength="500" placeholder="e.g. Ballyclare"></label><label>REPORT / INCIDENT<input id="dw-context-title" maxlength="500" placeholder="Optional report or incident title"></label></div><div class="dw-context-actions"><button type="button" id="dw-context-save">SAVE CONTEXT</button><button type="button" id="dw-context-clear">CLEAR</button><a id="dw-context-source" href="#" hidden target="_blank" rel="noopener noreferrer">OPEN SOURCE ↗</a></div><p class="dw-context-note">Context follows you between DoomWatch workspaces on this browser only. It is an investigation aid, not a verified incident record.</p></div>';
  const main=document.querySelector("main");if(main)main.insertBefore(bar,main.firstChild);
  const $=id=>document.getElementById(id);
  function render(){if(!$("dw-context-area"))return;$("dw-context-area").value=state.area||"";$("dw-context-title").value=state.title||"";$("dw-context-status").textContent=state.area||state.title?"CONTEXT ACTIVE · SAVED ON THIS DEVICE":"NO ACTIVE INVESTIGATION";const a=$("dw-context-source");a.hidden=!state.url;if(state.url)a.href=state.url;}
