@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-14T22:38:32Z",
+  "generatedAt": "2026-11-15T02:08:35Z",
   "collectionIntervalMinutes": 5,
   "displayRefreshSeconds": 60,
   "staleAfterMinutes": 120,
@@ -9,7 +9,7 @@
     "currentIssueProviders": 0,
     "unconfirmedReportProviders": 0,
     "staleIssueProviders": 1,
-    "staleOrUnknownProviders": 12
+    "staleOrUnknownProviders": 5
   },
   "sources": [
     {
@@ -21,8 +21,8 @@
       "scope": "UK mobile networks",
       "format": "json",
       "status": "OK",
-      "checkedAt": "2026-11-14T22:38:30Z",
-      "sourceUpdatedAt": "2026-11-14T22:35:22.392Z",
+      "checkedAt": "2026-11-15T02:08:32Z",
+      "sourceUpdatedAt": "2026-11-15T02:05:22.600Z",
       "providerSignals": [
         {
           "provider": "EE",
@@ -102,8 +102,8 @@
       "scope": "UK fixed broadband providers",
       "format": "json",
       "status": "OK",
-      "checkedAt": "2026-11-14T22:38:31Z",
-      "sourceUpdatedAt": "2026-11-14T22:35:22.392Z",
+      "checkedAt": "2026-11-15T02:08:33Z",
+      "sourceUpdatedAt": "2026-11-15T02:05:22.600Z",
       "providerSignals": [
         {
           "provider": "Virgin Media",
@@ -113,7 +113,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-14T20:35:39.958Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.025Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -124,7 +124,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-14T20:35:39.958Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.025Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -135,7 +135,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-14T20:35:39.958Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.025Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -146,7 +146,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-14T20:35:39.958Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.025Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -157,7 +157,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-14T20:35:39.958Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.025Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -168,7 +168,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-14T20:35:39.958Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.025Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -179,7 +179,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-14T20:35:40.043Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.225Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -190,7 +190,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-14T20:35:40.207Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.393Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -201,7 +201,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-14T20:35:40.275Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.775Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -212,7 +212,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-14T20:35:40.613Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.852Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -223,7 +223,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-14T20:35:40.728Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.855Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -234,7 +234,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-14T20:35:40.731Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:37.202Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -245,7 +245,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "statuspage",
-          "sourceUpdatedAt": "2026-11-14T20:35:41.154Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:37.247Z",
           "evidenceClass": "provider_status_and_community_reports"
         }
       ],
@@ -260,8 +260,8 @@
       "scope": "UK-wide carrier indicators",
       "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-14T22:38:31Z",
-      "sourceUpdatedAt": "2026-11-14 14:38:31",
+      "checkedAt": "2026-11-15T02:08:33Z",
+      "sourceUpdatedAt": "2026-11-14 18:08:34",
       "providerSignals": [
         {
           "provider": "EE",
@@ -271,7 +271,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-14 14:38:31",
+          "sourceUpdatedAt": "2026-11-14 18:08:34",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -282,7 +282,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-14 14:38:31",
+          "sourceUpdatedAt": "2026-11-14 18:08:34",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -293,7 +293,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-14 14:38:31",
+          "sourceUpdatedAt": "2026-11-14 18:08:34",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -304,7 +304,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-14 14:38:31",
+          "sourceUpdatedAt": "2026-11-14 18:08:34",
           "evidenceClass": "independent_traffic_and_reports"
         }
       ],
@@ -319,7 +319,7 @@
       "scope": "UK-wide fixed broadband infrastructure reports",
       "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-14T22:38:31Z",
+      "checkedAt": "2026-11-15T02:08:34Z",
       "sourceUpdatedAt": null,
       "providerSignals": [
         {
@@ -340,10 +340,10 @@
   "providers": [
     {
       "provider": "Asda Mobile",
-      "status": "NO_ISSUE_SIGNAL",
+      "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 1,
+      "noIssueSignals": 0,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -356,7 +356,32 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-14T20:50:33.114Z",
-          "checkedAt": "2026-11-14T22:38:30Z",
+          "checkedAt": "2026-11-15T02:08:32Z",
+          "evidenceClass": "provider_status_and_community_reports",
+          "via": "crowd",
+          "stale": true
+        }
+      ]
+    },
+    {
+      "provider": "BT Broadband",
+      "status": "NO_ISSUE_SIGNAL",
+      "issueSignals": 0,
+      "staleIssueSignals": 0,
+      "noIssueSignals": 1,
+      "unconfirmedSignals": 0,
+      "observations": [
+        {
+          "sourceId": "statuspages-broadband",
+          "source": "StatusPages UK broadband data",
+          "url": "https://status-pages.com/broadband",
+          "status": "NO_ISSUE_SIGNAL",
+          "rawIndicator": "operational",
+          "summary": "No unusual user reports",
+          "activeIncidents": [],
+          "reportedAreas": [],
+          "sourceUpdatedAt": "2026-11-15T01:20:36.025Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": false
@@ -364,36 +389,11 @@
       ]
     },
     {
-      "provider": "BT Broadband",
-      "status": "STALE_OR_UNKNOWN",
-      "issueSignals": 0,
-      "staleIssueSignals": 0,
-      "noIssueSignals": 0,
-      "unconfirmedSignals": 0,
-      "observations": [
-        {
-          "sourceId": "statuspages-broadband",
-          "source": "StatusPages UK broadband data",
-          "url": "https://status-pages.com/broadband",
-          "status": "NO_ISSUE_SIGNAL",
-          "rawIndicator": "operational",
-          "summary": "No unusual user reports",
-          "activeIncidents": [],
-          "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:39.958Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
-          "evidenceClass": "provider_status_and_community_reports",
-          "via": "crowd",
-          "stale": true
-        }
-      ]
-    },
-    {
       "provider": "Community Fibre",
-      "status": "STALE_OR_UNKNOWN",
+      "status": "NO_ISSUE_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 0,
+      "noIssueSignals": 1,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -405,11 +405,11 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:40.613Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.852Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": true
+          "stale": false
         }
       ]
     },
@@ -431,10 +431,10 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-14T20:50:32.634Z",
-          "checkedAt": "2026-11-14T22:38:30Z",
+          "checkedAt": "2026-11-15T02:08:32Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": false
+          "stale": true
         },
         {
           "sourceId": "statuspages-broadband",
@@ -445,11 +445,11 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:39.958Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.025Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": true
+          "stale": false
         },
         {
           "sourceId": "updownsignal-mobile",
@@ -460,8 +460,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14 14:38:31",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-14 18:08:34",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -470,10 +470,10 @@
     },
     {
       "provider": "Hyperoptic",
-      "status": "STALE_OR_UNKNOWN",
+      "status": "NO_ISSUE_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 0,
+      "noIssueSignals": 1,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -485,20 +485,20 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:40.275Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.775Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": true
+          "stale": false
         }
       ]
     },
     {
       "provider": "KCOM",
-      "status": "STALE_OR_UNKNOWN",
+      "status": "NO_ISSUE_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 0,
+      "noIssueSignals": 1,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -510,20 +510,20 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:40.731Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:37.202Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": true
+          "stale": false
         }
       ]
     },
     {
       "provider": "NOW Broadband",
-      "status": "STALE_OR_UNKNOWN",
+      "status": "NO_ISSUE_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 0,
+      "noIssueSignals": 1,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -535,20 +535,20 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:40.207Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.393Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": true
+          "stale": false
         }
       ]
     },
     {
       "provider": "O2",
-      "status": "NO_ISSUE_SIGNAL",
+      "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 1,
+      "noIssueSignals": 0,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -561,10 +561,10 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-14T20:50:32.634Z",
-          "checkedAt": "2026-11-14T22:38:30Z",
+          "checkedAt": "2026-11-15T02:08:32Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": false
+          "stale": true
         },
         {
           "sourceId": "updownsignal-mobile",
@@ -575,8 +575,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14 14:38:31",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-14 18:08:34",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -601,7 +601,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": null,
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "checkedAt": "2026-11-15T02:08:34Z",
           "evidenceClass": "community_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -610,10 +610,10 @@
     },
     {
       "provider": "Plusnet",
-      "status": "STALE_OR_UNKNOWN",
+      "status": "NO_ISSUE_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 0,
+      "noIssueSignals": 1,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -625,20 +625,20 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:39.958Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.025Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": true
+          "stale": false
         }
       ]
     },
     {
       "provider": "Sky Broadband",
-      "status": "STALE_OR_UNKNOWN",
+      "status": "NO_ISSUE_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 0,
+      "noIssueSignals": 1,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -650,20 +650,20 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:39.958Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.025Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": true
+          "stale": false
         }
       ]
     },
     {
       "provider": "Starlink",
-      "status": "STALE_OR_UNKNOWN",
+      "status": "NO_ISSUE_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 0,
+      "noIssueSignals": 1,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -675,20 +675,20 @@
           "summary": "All systems operational",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:41.154Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:37.247Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "statuspage",
-          "stale": true
+          "stale": false
         }
       ]
     },
     {
       "provider": "Stour",
-      "status": "NO_ISSUE_SIGNAL",
+      "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 1,
+      "noIssueSignals": 0,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -701,19 +701,19 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-14T20:50:32.984Z",
-          "checkedAt": "2026-11-14T22:38:30Z",
+          "checkedAt": "2026-11-15T02:08:32Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "statuspage",
-          "stale": false
+          "stale": true
         }
       ]
     },
     {
       "provider": "TalkTalk",
-      "status": "STALE_OR_UNKNOWN",
+      "status": "NO_ISSUE_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 0,
+      "noIssueSignals": 1,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -725,20 +725,20 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:39.958Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.025Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": true
+          "stale": false
         }
       ]
     },
     {
       "provider": "Three",
-      "status": "NO_ISSUE_SIGNAL",
+      "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 1,
+      "noIssueSignals": 0,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -751,10 +751,10 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-14T20:50:32.634Z",
-          "checkedAt": "2026-11-14T22:38:30Z",
+          "checkedAt": "2026-11-15T02:08:32Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": false
+          "stale": true
         },
         {
           "sourceId": "updownsignal-mobile",
@@ -765,8 +765,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14 14:38:31",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-14 18:08:34",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -775,10 +775,10 @@
     },
     {
       "provider": "Virgin Media",
-      "status": "STALE_OR_UNKNOWN",
+      "status": "NO_ISSUE_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 0,
+      "noIssueSignals": 1,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -790,11 +790,11 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:39.958Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.025Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": true
+          "stale": false
         }
       ]
     },
@@ -816,10 +816,10 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-14T20:50:32.634Z",
-          "checkedAt": "2026-11-14T22:38:30Z",
+          "checkedAt": "2026-11-15T02:08:32Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": false
+          "stale": true
         },
         {
           "sourceId": "statuspages-broadband",
@@ -830,11 +830,11 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:40.043Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.225Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": true
+          "stale": false
         },
         {
           "sourceId": "updownsignal-mobile",
@@ -845,8 +845,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14 14:38:31",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-14 18:08:34",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -855,10 +855,10 @@
     },
     {
       "provider": "Zen Internet",
-      "status": "STALE_OR_UNKNOWN",
+      "status": "NO_ISSUE_SIGNAL",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 0,
+      "noIssueSignals": 1,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -870,11 +870,11 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-14T20:35:40.728Z",
-          "checkedAt": "2026-11-14T22:38:31Z",
+          "sourceUpdatedAt": "2026-11-15T01:20:36.855Z",
+          "checkedAt": "2026-11-15T02:08:33Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": true
+          "stale": false
         }
       ]
     }
