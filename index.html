@@ -1134,7 +1134,7 @@ function showPage(name, options = {}) {
     page.setAttribute("aria-hidden",String(!active));
   });
 
-  document.querySelectorAll("nav button[data-page]").forEach(button => {
+  document.querySelectorAll(".dw-local-tabs button[data-page]").forEach(button => {
     const active = button.dataset.page === name;
     button.classList.toggle("active",active);
     button.setAttribute("aria-current",active ? "page" : "false");
@@ -1206,7 +1206,7 @@ async function loadIntelligence() {
 /* NAVIGATION */
 
 document.addEventListener("click",event => {
-  const button=event.target.closest("nav button[data-page]");
+  const button=event.target.closest(".dw-local-tabs button[data-page]");
   if(button) showPage(button.dataset.page);
 });
 function openPageFromHash(){
