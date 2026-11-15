@@ -120,5 +120,6 @@ function renderComms(){const d=snapshots.comms||{},p=Array.isArray(d.providers)?
 async function load(){const urls=["./data/intelligence.json","./data/observatory.json","./data/markets.json","./data/communications.json"];const names=["intel","obs","markets","comms"];const results=await Promise.allSettled(urls.map(u=>fetch(u+"?v="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw Error(u+" HTTP "+r.status);return r.json()})));const failures=[];results.forEach((x,i)=>{if(x.status==="fulfilled")snapshots[names[i]]=x.value;else failures.push(names[i]+": "+x.reason.message)});buildRecords();$("updated").textContent="SNAPSHOTS // "+names.map(n=>n.toUpperCase()+": "+(snapshots[n]?.generatedAt||snapshots[n]?.updatedAt||"UNAVAILABLE")).join(" · ");$("status").textContent=failures.length?"PARTIAL DATA // "+failures.join(" · "):"ALL FOUR SOURCE SNAPSHOTS LOADED.";renderClusters();renderMarkets();renderComms();}
 ["search","window","scope"].forEach(id=>$(id).addEventListener(id==="search"?"input":"change",renderClusters));load();setInterval(load,5*60*1000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)load()});
 </script>
+<script src="./doomwatch-ui.js"></script>
 </body>
 </html>
