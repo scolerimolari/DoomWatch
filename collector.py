@@ -1190,135 +1190,6 @@ def fetch_feed(source):
     return articles, content_type, len(body), root_tag
 
 
-def collect_bluesky_searches():
-    """Collect public Bluesky search posts as explicitly unverified signals."""
-    searches = [
-        ("cyber", "ransomware cyber attack data breach"),
-        ("supply-chain", "supply chain"),
-        ("belfast-local", "Belfast"),
-        ("northern-ireland", "Northern Ireland"),
-        ("conflict-shipping", "war conflict shipping disruption"),
-        ("fuel-food", "fuel shortage food supply shortage"),
-        ("culture-war", "culture war"),
-        ("civil-liberties", "civil liberties"),
-        ("newtownabbey-local", "Newtownabbey"),
-        ("ballyclare-local", "Ballyclare"),
-        ("ni-utilities", "Northern Ireland power outage water disruption"),
-        ("ni-supply-chain", "Northern Ireland fuel food supply shortage"),
-        ("belfast-ports", "Belfast port ferry freight disruption"),
-        ("ni-cyber", "Northern Ireland cyber attack ransomware")
-    ]
-    endpoints = [
-        "https://api.bsky.app/xrpc/app.bsky.feed.searchPosts",
-        "https://api.bsky.app/xrpc/app.bsky.feed.SEARCHPOSTS",
-        "https://public.api.bsky.app/xrpc/app.bsky.feed.SEARCHPOSTS"
-    ]
-    results, statuses = [], []
-
-    for search_id, query in searches:
-        try:
-            payload = None
-            last_http_error = None
-            for endpoint in endpoints:
-                url = endpoint + "?" + urlencode({
-                    "q": query, "limit": 20, "sort": "latest", "lang": "en"
-                })
-                request = urllib.request.Request(
-                    url,
-                    headers={"User-Agent": USER_AGENT, "Accept": "application/json"}
-                )
-                try:
-                    with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
-                        payload = json.loads(
-                            response.read(2_000_000).decode("utf-8-sig", errors="replace")
-                        )
-                    break
-                except HTTPError as error:
-                    if error.code != 403:
-                        raise
-                    last_http_error = error
-
-            if payload is None:
-                raise last_http_error or RuntimeError("All Bluesky search endpoints failed")
-
-            posts = payload.get("posts", []) if isinstance(payload, dict) else []
-            added = 0
-            for item in posts:
-                if not isinstance(item, dict):
-                    continue
-                record = item.get("record") or {}
-                author = item.get("author") or {}
-                post_text = clean(record.get("text", ""))[:1200]
-                uri = str(item.get("uri", ""))
-                if not post_text or not uri:
-                    continue
-
-                parts = uri.split("/")
-                rkey = parts[-1] if parts else ""
-                handle = str(author.get("handle", ""))
-                link = (
-                    "https://bsky.app/profile/" + handle + "/post/" + rkey
-                    if handle and rkey else ""
-                )
-                published = str(item.get("indexedAt") or record.get("createdAt") or "")
-                lower = post_text.lower()
-                region = (
-                    "Northern Ireland"
-                    if any(term in lower for term in (
-                        "northern ireland", "belfast", "derry", "londonderry",
-                        "newtownabbey", "ballyclare", "antrim", "armagh",
-                        "omagh", "coleraine", "ballymena", "newry", "larne"
-                    ))
-                    else "Global"
-                )
-                results.append({
-                    "id": "bluesky:" + uri,
-                    "sourceId": "bluesky-" + search_id,
-                    "source": "Bluesky public search",
-                    "title": post_text.splitlines()[0][:240],
-                    "url": link,
-                    "publishedAt": published,
-                    "collectedAt": iso(),
-                    "description": post_text,
-                    "domain": "open_social_signals",
-                    "region": region,
-                    "priority": "low",
-                    "sourceTrust": "unverified_social",
-                    "sourceType": "social_network",
-                    "platform": "Bluesky",
-                    "searchQuery": query,
-                    "evidenceStatus": "UNASSESSED",
-                    "confidence": "UNASSESSED"
-                })
-                added += 1
-
-            statuses.append({
-                "id": "bluesky-" + search_id,
-                "name": "Bluesky public search: " + query,
-                "status": "OK" if added else "EMPTY",
-                "checkedAt": iso(),
-                "articleCount": added,
-                "sourceTrust": "unverified_social",
-                "sourceType": "social_network"
-            })
-            print("BLUESKY:", search_id, "-", added, "public posts")
-
-        except Exception as error:
-            statuses.append({
-                "id": "bluesky-" + search_id,
-                "name": "Bluesky public search: " + query,
-                "status": "FAILED",
-                "checkedAt": iso(),
-                "error": str(error)[:300],
-                "articleCount": 0,
-                "sourceTrust": "unverified_social",
-                "sourceType": "social_network"
-            })
-            print("BLUESKY FAILED:", search_id, "-", str(error)[:200])
-
-    return results, statuses
-
-
 def load_json(path, default):
     if not path.exists():
         return default
@@ -1493,17 +1364,16 @@ def main():
                 str(error)
             )
 
-    # Public social listening layer. Posts remain explicitly unverified.
-    social_posts, social_status = collect_bluesky_searches()
-    collected.extend(social_posts)
-    source_status.extend(social_status)
+    # Public social collection is retired.
 
     existing = intelligence.get("articles", [])
     combined = {}
 
     for article in existing + collected:
+        # Exclude records from the retired social-network collector.
+        if str(article.get("sourceType", "")).lower() == "social_network":
+            continue
         key = article.get("id") or article.get("url")
-
         if key:
             combined[key] = article
 
