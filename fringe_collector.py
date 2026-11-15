@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""Collect public RSS/Atom sources for DoomWatch's Fringe & Unexplained desk.
-Uses only the Python standard library; no accounts, social APIs or paid services.
-"""
+"""Collect public RSS/Atom feeds for DoomWatch regional and thematic news desk."""
 from __future__ import annotations
 import json, re, time, hashlib
 from datetime import datetime, timezone, timedelta
@@ -14,8 +12,8 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parent
 SOURCE_FILE = ROOT / "fringe_sources.json"
 DATA_FILE = ROOT / "data" / "fringe.json"
-USER_AGENT = "DoomWatch-FringeCollector/1.0 (+https://github.com/scolerimolari/DoomWatch)"
-TIMEOUT = 18
+USER_AGENT = "DoomWatch-NewsCollector/2.0 (+https://github.com/scolerimolari/DoomWatch)"
+TIMEOUT = 14
 MAX_BYTES = 2_000_000
 RETENTION_DAYS = 120
 
@@ -49,13 +47,13 @@ def parse_feed(payload, source):
     for item in root.iter():
         if local(item.tag) not in ("item", "entry"):
             continue
-        title = child_value(item, {"title"})
-        link = ""
-        publisher = ""
+        title, link, publisher = child_value(item, {"title"}), "", ""
         for child in item:
             tag = local(child.tag)
             if tag == "link":
-                link = child.attrib.get("href") or clean(child.text)
+                rel = child.attrib.get("rel", "alternate")
+                if rel == "alternate" or not link:
+                    link = child.attrib.get("href") or clean(child.text)
             elif tag == "source" and child.text:
                 publisher = clean(child.text)
         if not link:
@@ -70,10 +68,11 @@ def parse_feed(payload, source):
             "sourceId": source["id"], "source": source["name"],
             "publisher": publisher or source["name"], "title": title[:360],
             "url": link, "publishedAt": published[:120], "collectedAt": iso(),
-            "description": summary[:1800], "category": source["category"],
-            "sourceClass": source["class"], "sourceTrust": source["trust"],
-            "feedUrl": source["url"], "evidenceStatus": "UNASSESSED",
-            "confidence": "UNASSESSED", "editorialNote": source["description"]
+            "description": summary[:1800], "region": source["region"],
+            "category": source["category"], "sourceClass": source["class"],
+            "sourceTrust": source["trust"], "feedUrl": source["url"],
+            "evidenceStatus": "UNASSESSED", "confidence": "UNASSESSED",
+            "editorialNote": source["description"]
         })
     return records
 
@@ -85,15 +84,18 @@ def main():
             previous = json.loads(DATA_FILE.read_text(encoding="utf-8"))
             old = {a.get("id"): a for a in previous.get("articles", []) if a.get("id")}
         except Exception:
-            old = {}
+            pass
+    source_map = {s["id"]: s for s in config.get("sources", [])}
+    for article in old.values():
+        src = source_map.get(article.get("sourceId"), {})
+        article.setdefault("region", src.get("region", "GLOBAL"))
+        article.setdefault("category", src.get("category", "UNCATEGORISED"))
     statuses, fresh = [], {}
     for source in config.get("sources", []):
         started = time.monotonic()
         try:
-            req = Request(source["url"], headers={
-                "User-Agent": USER_AGENT,
-                "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*"
-            })
+            req = Request(source["url"], headers={"User-Agent": USER_AGENT,
+                "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*"})
             with urlopen(req, timeout=TIMEOUT) as response:
                 payload = response.read(MAX_BYTES)
                 content_type = response.headers.get("Content-Type", "")
@@ -102,20 +104,20 @@ def main():
             items = parse_feed(payload, source)
             for item in items:
                 fresh[item["id"]] = item
-            statuses.append({
-                "id": source["id"], "name": source["name"],
+            statuses.append({"id": source["id"], "name": source["name"],
+                "region": source["region"], "category": source["category"],
+                "trust": source["trust"], "url": source["url"],
                 "status": "OK" if items else "EMPTY", "checkedAt": iso(),
-                "articleCount": len(items), "durationSeconds": round(time.monotonic() - started, 2),
-                "contentType": content_type[:120]
-            })
-            print("FRINGE:", source["name"], len(items))
+                "articleCount": len(items), "durationSeconds": round(time.monotonic()-started,2),
+                "contentType": content_type[:120]})
+            print("FEED", source["region"], source["name"], len(items))
         except Exception as error:
-            statuses.append({
-                "id": source["id"], "name": source["name"], "status": "FAILED",
-                "checkedAt": iso(), "articleCount": 0, "error": str(error)[:260]
-            })
-            print("FRINGE FAILED:", source["name"], str(error)[:180])
-
+            statuses.append({"id": source["id"], "name": source["name"],
+                "region": source["region"], "category": source["category"],
+                "trust": source["trust"], "url": source["url"],
+                "status": "FAILED", "checkedAt": iso(), "articleCount": 0,
+                "error": str(error)[:260]})
+            print("FEED FAILED", source["name"], str(error)[:180])
     combined = dict(old)
     combined.update(fresh)
     cutoff = now() - timedelta(days=RETENTION_DAYS)
@@ -123,30 +125,22 @@ def main():
     for article in combined.values():
         value = article.get("publishedAt") or article.get("collectedAt")
         try:
-            try:
-                dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
-            except ValueError:
-                dt = parsedate_to_datetime(str(value))
-            if dt.tzinfo is None:
-                dt = dt.replace(tzinfo=timezone.utc)
-        except Exception:
-            dt = now()
-        if dt >= cutoff:
-            retained.append(article)
+            try: dt = datetime.fromisoformat(str(value).replace("Z","+00:00"))
+            except ValueError: dt = parsedate_to_datetime(str(value))
+            if dt.tzinfo is None: dt = dt.replace(tzinfo=timezone.utc)
+        except Exception: dt = now()
+        if dt >= cutoff: retained.append(article)
     retained.sort(key=lambda a: str(a.get("publishedAt") or a.get("collectedAt") or ""), reverse=True)
-    output = {
-        "schemaVersion": 1, "collectorLastRun": iso(), "updatedAt": iso(),
-        "configuredFeeds": len(config.get("sources", [])),
-        "successfulFeeds": sum(1 for s in statuses if s["status"] == "OK"),
-        "emptyFeeds": sum(1 for s in statuses if s["status"] == "EMPTY"),
-        "failedFeeds": sum(1 for s in statuses if s["status"] == "FAILED"),
-        "newRecords": len(fresh), "recordCount": len(retained),
-        "sources": statuses, "articles": retained[:900],
-        "editorialPolicy": "Fringe and extraordinary claims are discovery leads. Publisher class is not proof. Each claim remains UNASSESSED until independently examined."
-    }
-    DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
-    DATA_FILE.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print("FRINGE COLLECTION COMPLETE:", len(fresh), "new records;", len(retained), "retained")
-
-if __name__ == "__main__":
-    main()
+    output = {"schemaVersion":2,"collectorLastRun":iso(),"updatedAt":iso(),
+        "configuredFeeds":len(config.get("sources",[])),
+        "successfulFeeds":sum(s["status"]=="OK" for s in statuses),
+        "emptyFeeds":sum(s["status"]=="EMPTY" for s in statuses),
+        "failedFeeds":sum(s["status"]=="FAILED" for s in statuses),
+        "newRecords":len(fresh),"recordCount":len(retained),
+        "sectionOrder":config.get("sectionOrder",[]),"sources":statuses,
+        "articles":retained[:1400],
+        "editorialPolicy":"A news feed is a discovery and reading service, not an endorsement. Source type is context, not a truth score."}
+    DATA_FILE.parent.mkdir(parents=True,exist_ok=True)
+    DATA_FILE.write_text(json.dumps(output,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    print("NEWS COLLECTION COMPLETE:",len(fresh),"new;",len(retained),"retained")
+if __name__=="__main__": main()
