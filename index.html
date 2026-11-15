@@ -234,12 +234,12 @@ footer {
     <div class="grid" style="margin-top:10px">
       <div class="panel"><div class="panel-title">NEWSROOM RECORDS</div><div class="big-status" id="evidence-newsroom-count">—</div></div>
       <div class="panel"><div class="panel-title">OFFICIAL RECORDS</div><div class="big-status" id="evidence-official-count">—</div></div>
-      <div class="panel"><div class="panel-title">UNVERIFIED SOCIAL</div><div class="big-status" id="evidence-social-count">—</div></div>
+      <div class="panel"><div class="panel-title">UNASSESSED CLAIMS</div><div class="big-status" id="evidence-unassessed-count">—</div></div>
       <div class="panel"><div class="panel-title">POTENTIAL CROSS-PUBLISHER GROUPS</div><div class="big-status" id="evidence-groups-count">—</div></div>
     </div>
     <div id="evidence-groups" style="margin-top:10px" class="muted">Waiting for source records.</div>
     <div class="muted" style="margin-top:8px">Classification uses publisher metadata and a transparent domain list. Unknown sources remain unclassified; copied or syndicated material may still appear under multiple publisher names.</div>
-    <p><a class="action-button" href="./feed.html">OPEN SOURCE COMPARISON IN FEED ↗</a> <a class="action-button" href="./map.html">VIEW GEOGRAPHIC PICTURE ↗</a></p>
+    <p><a class="action-button" href="./feed.html">OPEN FRINGE & UNEXPLAINED ↗</a> <a class="action-button" href="./map.html">VIEW GEOGRAPHIC PICTURE ↗</a></p>
   </section>
 
   <h2>03 // DEVELOPING SIGNALS</h2>
@@ -313,10 +313,10 @@ footer {
   <div class="terminal">
     DOOMWATCH INTELLIGENCE TERMINAL<br>
     PRIORITY: NORTHERN IRELAND → UNITED KINGDOM<br>
-    MONITORING: OPEN SOURCE / OFFICIAL / ALTERNATIVE / SOCIAL<br>
+    MONITORING: OPEN SOURCE / OFFICIAL / ALTERNATIVE<br>
     STATUS: <span id="terminal-status">AWAITING DATA</span>
   </div>
-  <details class="panel" style="margin:10px 0"><summary class="panel-title">HOW TO READ THIS INTELLIGENCE // ASSESSMENT RULES</summary><p><strong>Source class</strong> describes the publisher, not whether an individual claim is true.</p><p><strong>Evidence status</strong> is assessed separately. UNASSESSED means the claim has not been independently verified by this dashboard.</p><p><strong>Social posts</strong> are unverified leads only. They are not treated as confirmed incidents or independent corroboration.</p><p><strong>Sector coverage</strong> combines keyword matches and feeds assigned to a sector. These groups can overlap; counts are not risk scores or proof of complete coverage.</p></details>
+  <details class="panel" style="margin:10px 0"><summary class="panel-title">HOW TO READ THIS INTELLIGENCE // ASSESSMENT RULES</summary><p><strong>Source class</strong> describes the publisher, not whether an individual claim is true.</p><p><strong>Evidence status</strong> is assessed separately. UNASSESSED means the claim has not been independently verified by this dashboard.</p><p><strong>Sector coverage</strong> combines keyword matches and feeds assigned to a sector. These groups can overlap; counts are not risk scores or proof of complete coverage.</p></details>
 
   <div class="controls">
     <button class="active" data-filter="ALL">ALL</button>
@@ -857,7 +857,7 @@ function renderStatus() {
 function evidenceDomain(item){try{return new URL(String(item.url||"")).hostname.toLowerCase().replace(/^www[.]/,"");}catch(e){return String(item.source||"unknown").trim().toLowerCase();}}
 function evidenceClass(item){
  const trust=String(item.sourceTrust||"").toLowerCase(),type=String(item.sourceType||"").toLowerCase(),domain=evidenceDomain(item);
- if(/social|bluesky|unverified_social/.test(trust+" "+type))return "SOCIAL / UNVERIFIED";
+ if(/social|unverified_social/.test(trust+" "+type))return "SOCIAL / UNVERIFIED";
  if(/syndicat|aggregat|wire_service|press_release|republication/.test(trust+" "+type))return "AGGREGATED / SYNDICATED";
  if(/official|government|public_authority|agency/.test(trust+" "+type)||domain.endsWith(".gov.uk")||domain.endsWith(".police.uk")||/(nidirect|niwater|trafficwatchni|nienetworks|metoffice|psni|daera-ni)/.test(domain))return "OFFICIAL / PUBLIC AUTHORITY";
  const media=["belfastlive.co.uk","belfasttelegraph.co.uk","irishnews.com","bbc.co.uk","bbc.com","itv.com","rte.ie","reuters.com","apnews.com","theguardian.com","independent.co.uk","sky.com","channel4.com"];
@@ -870,7 +870,7 @@ function renderEvidencePicture(){
  const counts={"NEWSROOM REPORTING":0,"OFFICIAL / PUBLIC AUTHORITY":0,"SOCIAL / UNVERIFIED":0};
  articles.forEach(a=>{const c=evidenceClass(a);if(counts[c]!==undefined)counts[c]++;});
  const set=(id,v)=>{const n=$(id);if(n)n.textContent=String(v);};
- set("evidence-newsroom-count",counts["NEWSROOM REPORTING"]);set("evidence-official-count",counts["OFFICIAL / PUBLIC AUTHORITY"]);set("evidence-social-count",counts["SOCIAL / UNVERIFIED"]);
+ set("evidence-newsroom-count",counts["NEWSROOM REPORTING"]);set("evidence-official-count",counts["OFFICIAL / PUBLIC AUTHORITY"]);set("evidence-unassessed-count",articles.filter(a=>String(a.evidenceStatus||"UNASSESSED").toUpperCase()==="UNASSESSED").length);
  const recent=articles.filter(a=>{const d=new Date(a.date||0);return !Number.isNaN(d.getTime())&&d.getTime()>Date.now()-72*3600000;}).slice(0,350),groups=[];
  recent.forEach(a=>{if(evidenceClass(a)!=="NEWSROOM REPORTING")return;const tok=evidenceTokens(a),time=new Date(a.date||0).getTime();let found=null;for(const g of groups){if(Math.abs(time-g.time)>72*3600000)continue;const overlap=[...tok].filter(t=>g.tokens.has(t)).length,den=Math.max(1,Math.min(tok.size,g.tokens.size));if(overlap>=2&&overlap/den>=.55){found=g;break;}}if(found){found.items.push(a);tok.forEach(t=>found.tokens.add(t));}else groups.push({items:[a],tokens:tok,time});});
  const candidates=groups.map(g=>({items:g.items,publishers:new Set(g.items.map(evidenceDomain)).size})).filter(g=>g.publishers>=2).sort((a,b)=>b.publishers-a.publishers).slice(0,4);
