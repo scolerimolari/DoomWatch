@@ -187,3 +187,13 @@ td{color:#b8c8cd}
 .dw-comms-live{display:inline-flex;align-items:center;gap:7px;margin-left:10px;padding:6px 9px;border:1px solid #42665f;border-radius:99px;background:#142a2b;color:#8ed0bf;font-size:9px;font-weight:850;letter-spacing:.08em}
 .dw-comms-live:before{content:"";width:6px;height:6px;border-radius:50%;background:#78c8a8;box-shadow:0 0 9px #78c8a8}
 @media(max-width:600px){.dw-comms-live{margin:6px 0 0}}
+
+
+/* Single global navigation; dashboard workspace tabs remain compact local controls */
+.dw-local-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 16px;padding:8px;border:1px solid #294454;border-radius:10px;background:#0d1b25}
+.dw-local-tabs button{flex:1 1 auto;min-height:34px;padding:7px 11px;border:1px solid transparent;border-radius:7px;background:#142936;color:#9eb5be;font:800 10px/1.2 ui-sans-serif,system-ui,sans-serif;letter-spacing:.045em}
+.dw-local-tabs button.active,.dw-local-tabs button[aria-selected=true]{border-color:#5c9b98;background:#1b3742;color:#e7d2a6}
+.dw-route-extras.is-open{grid-template-columns:repeat(3,minmax(0,1fr))}
+.dw-route-extras{width:auto;max-width:1100px}
+@media(max-width:760px){.dw-route-extras.is-open{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.dw-local-tabs{gap:4px;padding:6px}.dw-local-tabs button{flex:1 1 30%;padding:7px 5px;font-size:9px}.dw-route-extras.is-open{grid-template-columns:1fr 1fr}}
