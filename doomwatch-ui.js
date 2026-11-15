@@ -1,34 +1,40 @@
 (()=>{"use strict";
 if(window.__doomwatchUiReady)return;window.__doomwatchUiReady=true;
 const body=document.body,oldHeader=body.querySelector(":scope > header"),oldNav=body.querySelector(":scope > nav");
-const path=location.pathname.toLowerCase(),hash=decodeURIComponent(location.hash.slice(1)).toLowerCase();
+const path=location.pathname.toLowerCase(),hash=decodeURIComponent(location.hash.slice(1)).toLowerCase(),embedMode=new URLSearchParams(location.search).has("embed");
 if((path==="/"||path.endsWith("/")||path.endsWith("/index.html"))&&!hash){location.replace("./index.html#overview");return;}
-const active=path.endsWith("/operations.html")?"operations":path.endsWith("/map.html")?"map":path.endsWith("/communications.html")?"communications":path.endsWith("/markets.html")||path.endsWith("/household.html")?"economy":path.endsWith("/feed.html")?"streams":path.endsWith("/observatory.html")?"intelligence":path.endsWith("/correlation.html")?"correlation":path.endsWith("/incident.html")?"incident":path.endsWith("/meshcore.html")?"field":({overview:"overview",intelligence:"intelligence",sections:"resilience",preparedness:"resilience","backup-centre":"resilience",meshcore:"field",sources:"explore"})[hash]||"overview";
+const active=path.endsWith("/operations.html")?"regional":path.endsWith("/map.html")?"map":path.endsWith("/communications.html")?"comms":path.endsWith("/markets.html")||path.endsWith("/household.html")?"economy":path.endsWith("/feed.html")?"streams":path.endsWith("/observatory.html")?"intelligence":path.endsWith("/correlation.html")?"signals":path.endsWith("/incident.html")?"report":path.endsWith("/meshcore.html")?"mesh":({overview:"overview",intelligence:"intelligence",sections:"reference",preparedness:"reference",meshcore:"mesh",sources:"reference"})[hash]||"overview";
 const mast=document.createElement("header");mast.className="dw-masthead";
-mast.innerHTML='<div class="dw-brand"><img class="dw-emblem" src="./containment.svg" alt=""><div><div class="dw-wordmark">DOOMWATCH</div><div class="dw-tagline">INDEPENDENT INTELLIGENCE // UK & NORTHERN IRELAND</div><div class="dw-statusline" id="dw-statusline"></div></div></div><div class="dw-mast-note"><span class="dw-live-dot"></span> INFORMATION ONLY <span class="dw-mast-sep">/</span> LIVE SOURCES</div>';
+mast.innerHTML='<a class="dw-brand" href="./index.html#overview" aria-label="DoomWatch overview"><img class="dw-emblem" src="./containment.svg" alt=""><span><span class="dw-wordmark">DOOMWATCH</span><span class="dw-tagline">INDEPENDENT INTELLIGENCE <i>/</i> UK & NORTHERN IRELAND</span><span class="dw-statusline" id="dw-statusline"></span></span></a><div class="dw-mast-note"><span class="dw-live-dot"></span><span>INFORMATION ONLY</span><i>/</i><span>OPEN SOURCES</span></div>';
 body.insertBefore(mast,body.firstChild);
 const statusline=mast.querySelector("#dw-statusline");
 ["clock","connection","updated"].forEach(id=>{const node=document.getElementById(id);if(node){const wrap=document.createElement("span");wrap.appendChild(node);statusline.appendChild(wrap);}});
 if(oldHeader)oldHeader.hidden=true;
-const nav=document.createElement("nav");nav.className="dw-global-nav dw-bottom-dock";nav.setAttribute("aria-label","DoomWatch primary navigation");
-const routes=[["overview","index.html#overview","OVERVIEW"],["intelligence","observatory.html","INTELLIGENCE"],["streams","feed.html","STREAMS"],["economy","markets.html","ECONOMY"]];
-routes.forEach(([key,url,label])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.textContent=label;a.className="dw-route-primary";if(key===active||(key==="intelligence"&&active==="correlation"))a.setAttribute("aria-current","page");nav.appendChild(a);});
-const more=document.createElement("button");more.type="button";more.className="dw-nav-toggle";more.textContent="EXPLORE +";more.setAttribute("aria-expanded","false");more.setAttribute("aria-controls","dw-explore-panel");nav.appendChild(more);
-if(!["overview","intelligence","streams","economy"].includes(active))more.setAttribute("aria-current","page");
-const panel=document.createElement("div");panel.id="dw-explore-panel";panel.className="dw-route-extras";panel.setAttribute("aria-label","Explore DoomWatch");
-const extras=[["operations.html","Regional picture","NI and UK reports, infrastructure and services"],["map.html","Geographic picture","Events and infrastructure"],["communications.html","Connectivity","Telecoms and broadband"],["correlation.html","Signal connections","Cross-stream patterns"],["index.html#sections","Resilience reference","11 critical sectors"],["index.html#preparedness","Preparedness","Practical reference"],["meshcore.html","Field network","MeshCore resources"],["index.html#sources","Source directory","Publishers and data sources"]];
-extras.forEach(([url,label,desc])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.innerHTML="<strong>"+label+"</strong><span>"+desc+"</span>";if((url==="map.html"&&active==="map")||(url==="operations.html"&&active==="operations")||(url==="communications.html"&&active==="communications")||(url==="correlation.html"&&active==="correlation")||(url==="meshcore.html"&&active==="field")||(url==="index.html#sections"&&active==="resilience")||(url==="index.html#preparedness"&&hash==="preparedness")||(url==="index.html#sources"&&active==="explore"))a.setAttribute("aria-current","page");panel.appendChild(a);});
+const nav=document.createElement("nav");nav.className="dw-global-nav";nav.setAttribute("aria-label","DoomWatch navigation");
+const routes=[["overview","index.html#overview","Overview"],["intelligence","observatory.html","Intelligence"],["streams","feed.html","Streams"],["economy","markets.html","Economy"],["map","map.html","Map"]];
+routes.forEach(([key,url,label])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.textContent=label;a.className="dw-route-primary";if(key===active||(key==="intelligence"&&active==="signals"))a.setAttribute("aria-current","page");nav.appendChild(a);});
+const more=document.createElement("button");more.type="button";more.className="dw-nav-toggle";more.textContent="More";more.setAttribute("aria-expanded","false");more.setAttribute("aria-controls","dw-explore-panel");nav.appendChild(more);
+if(!["overview","intelligence","streams","economy","map"].includes(active))more.setAttribute("aria-current","page");
+const panel=document.createElement("div");panel.id="dw-explore-panel";panel.className="dw-route-extras";panel.setAttribute("aria-label","More DoomWatch sections");
+const extras=[["operations.html","Regional picture","Northern Ireland and UK reports"],["communications.html","Connectivity","Telecoms and network status"],["correlation.html","Signal connections","Cross-stream patterns"],["index.html#sections","Resilience reference","Critical sectors and dependencies"],["index.html#preparedness","Preparedness","Practical reference"],["meshcore.html","MeshCore","Field communications resources"],["index.html#sources","Sources","Publishers and data provenance"]];
+extras.forEach(([url,label,desc])=>{const a=document.createElement("a");a.href=new URL(url,document.baseURI).href;a.innerHTML="<strong>"+label+"</strong><span>"+desc+"</span>";if((url==="operations.html"&&active==="regional")||(url==="communications.html"&&active==="comms")||(url==="correlation.html"&&active==="signals")||(url==="meshcore.html"&&active==="mesh")||(url==="index.html#sections"&&active==="reference"))a.setAttribute("aria-current","page");panel.appendChild(a);});
 body.appendChild(panel);
-const setExplore=open=>{panel.classList.toggle("is-open",open);more.setAttribute("aria-expanded",String(open));more.textContent=open?"CLOSE −":"EXPLORE +";};
-more.addEventListener("click",()=>setExplore(!panel.classList.contains("is-open")));
-document.addEventListener("click",e=>{if(!nav.contains(e.target)&&!panel.contains(e.target))setExplore(false);});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")setExplore(false);});
-const skip=document.createElement("a");skip.className="dw-skip-link";skip.href="#dw-main-content";skip.textContent="SKIP TO CONTENT";
+const setMore=open=>{panel.classList.toggle("is-open",open);more.setAttribute("aria-expanded",String(open));more.textContent=open?"Close":"More";};
+more.addEventListener("click",()=>setMore(!panel.classList.contains("is-open")));
+document.addEventListener("click",e=>{if(!nav.contains(e.target)&&!panel.contains(e.target))setMore(false);});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")setMore(false);});
+const skip=document.createElement("a");skip.className="dw-skip-link";skip.href="#dw-main-content";skip.textContent="Skip to content";
 const mainForSkip=document.querySelector("main");if(mainForSkip){mainForSkip.id=mainForSkip.id||"dw-main-content";skip.href="#"+mainForSkip.id;}
-body.insertBefore(skip,body.firstChild);
-if(oldNav)oldNav.remove();
-mast.insertAdjacentElement("afterend",nav);
+body.insertBefore(skip,body.firstChild);if(oldNav)oldNav.remove();mast.insertAdjacentElement("afterend",nav);
 const wire=document.createElement("div");wire.className="dw-wire";wire.setAttribute("aria-hidden","true");nav.insertAdjacentElement("afterend",wire);
+if(embedMode){body.classList.add("dw-map-embed");}
+const main=document.querySelector("main");
+if(main&&!embedMode&&active==="overview"&&!document.getElementById("dw-command-centre")){
+ const intro=document.createElement("section");intro.id="dw-command-centre";intro.className="dw-command-centre";
+ intro.innerHTML='<div class="dw-command-copy"><div class="dw-eyebrow">NORTHERN IRELAND FIRST <b>•</b> UK & GLOBAL CONTEXT</div><h1>Understand what is changing.</h1><p>A source-led view of developing events, infrastructure, markets and emerging signals. Information, context and evidence — not incident management.</p><div class="dw-command-links"><a href="./observatory.html">Explore intelligence <span>↗</span></a><a href="./feed.html">Browse all streams <span>↗</span></a></div></div><div class="dw-command-side"><div class="dw-command-label"><span class="dw-live-dot"></span> GEOGRAPHIC PICTURE</div><a class="dw-map-preview" href="./map.html" aria-label="Open interactive DoomWatch map"><iframe title="Northern Ireland geographic intelligence map preview" src="./map.html?embed=1" loading="lazy" tabindex="-1"></iframe><span class="dw-map-open">OPEN INTERACTIVE MAP ↗</span></a><div class="dw-command-foot">REPORT LOCATIONS <i>/</i> INFRASTRUCTURE <i>/</i> REGIONAL CONTEXT</div></div>';
+ main.insertBefore(intro,main.firstChild);
+ const first=main.querySelector("section:not(#dw-command-centre)");if(first){const h=first.querySelector("h1,h2");if(h&&/LIVE SITUATION|INFORMATION OVERVIEW/i.test(h.textContent))h.textContent="THE INTELLIGENCE PICTURE";}
+}
 function foldSection(section,index){
  if(section.closest("details.dw-fold"))return;
  const heading=section.querySelector(":scope > h1,:scope > h2,:scope > h3,:scope h2,:scope h3");
