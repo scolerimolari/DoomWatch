@@ -10,6 +10,8 @@ name: DoomWatch Intelligence Collector
       - "observatory.html"
       - "correlation.html"
       - "feeds.json"
+      - "fringe_sources.json"
+      - "fringe_collector.py"
       - "sources.json"
       - "manifest.json"
       - "index.html"
@@ -56,6 +58,8 @@ jobs:
           python -m py_compile collector.py
           python -m py_compile observatory_collector.py
           python -m json.tool feeds.json > /dev/null
+          python -m json.tool fringe_sources.json > /dev/null
+          python -m py_compile fringe_collector.py
           python -m json.tool sources.json > /dev/null
           python -m json.tool manifest.json > /dev/null
           python -m py_compile markets_collector.py
@@ -102,6 +106,7 @@ jobs:
         run: |
           python collector.py
           python observatory_collector.py
+          python fringe_collector.py
 
       - name: Save updated intelligence safely
         run: |
@@ -111,7 +116,7 @@ jobs:
           for attempt in 1 2 3; do
             echo "Saving intelligence update, attempt $attempt"
 
-            git add data/intelligence.json data/ballyclare-history.json data/observatory.json
+            git add data/intelligence.json data/ballyclare-history.json data/observatory.json data/fringe.json
 
             if git diff --cached --quiet; then
               echo "No intelligence data changes to commit."
@@ -131,6 +136,7 @@ jobs:
             git reset --hard origin/main
             python collector.py
             python observatory_collector.py
+            python fringe_collector.py
           done
 
           echo "Unable to save intelligence after three attempts."
