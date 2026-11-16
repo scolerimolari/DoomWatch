@@ -304,7 +304,7 @@
     {
       "id": "global-google-nwo",
       "name": "New World Order & elite networks",
-      "url": "https://news.google.com/rss/search?q=%22New+World+Order%22+global+governance+Bilderberg+elite+networks&hl=en-GB&gl=GB&ceid=GB:en",
+      "url": "https://news.google.com/rss/search?q=%22New+World+Order%22+global+governance+Bilderberg+elite+networks+when%3A30d&hl=en-GB&gl=GB&ceid=GB:en",
       "region": "GLOBAL",
       "category": "OCCULT, ESOTERIC & CONSPIRACY",
       "class": "News search aggregator",
@@ -314,7 +314,7 @@
     {
       "id": "global-google-occult",
       "name": "Occult & esoteric history",
-      "url": "https://news.google.com/rss/search?q=occult+symbolism+secret+orders+esoteric+history&hl=en-GB&gl=GB&ceid=GB:en",
+      "url": "https://news.google.com/rss/search?q=occult+symbolism+secret+orders+esoteric+history+when%3A30d&hl=en-GB&gl=GB&ceid=GB:en",
       "region": "GLOBAL",
       "category": "OCCULT, ESOTERIC & CONSPIRACY",
       "class": "News search aggregator",
@@ -334,7 +334,7 @@
     {
       "id": "global-google-ancient",
       "name": "Ancient civilisations & lost history",
-      "url": "https://news.google.com/rss/search?q=ancient+lost+civilisation+archaeology+megalithic+discovery&hl=en-GB&gl=GB&ceid=GB:en",
+      "url": "https://news.google.com/rss/search?q=ancient+lost+civilisation+archaeology+megalithic+discovery+when%3A30d&hl=en-GB&gl=GB&ceid=GB:en",
       "region": "GLOBAL",
       "category": "ANCIENT CIVILISATIONS & HIDDEN HISTORY",
       "class": "News search aggregator",
