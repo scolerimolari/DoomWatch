@@ -1,51 +1,51 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-15T18:52:02+00:00",
-  "generatedAt": "2026-11-15T18:52:02+00:00",
+  "updatedAt": "2026-11-16T06:21:01+00:00",
+  "generatedAt": "2026-11-16T06:21:01+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:51:56+00:00"
+      "checkedAt": "2026-11-16T06:20:54+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:51:56+00:00"
+      "checkedAt": "2026-11-16T06:20:54+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:51:56+00:00"
+      "checkedAt": "2026-11-16T06:20:54+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:51:56+00:00"
+      "checkedAt": "2026-11-16T06:20:55+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:51:56+00:00"
+      "checkedAt": "2026-11-16T06:20:55+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:51:56+00:00"
+      "checkedAt": "2026-11-16T06:20:55+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:51:56+00:00"
+      "checkedAt": "2026-11-16T06:20:55+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:51:57+00:00"
+      "checkedAt": "2026-11-16T06:20:55+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:51:57+00:00"
+      "checkedAt": "2026-11-16T06:20:55+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:51:57+00:00"
+      "checkedAt": "2026-11-16T06:20:56+00:00"
     },
     "heatingOil": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:51:58+00:00",
+      "checkedAt": "2026-11-16T06:20:57+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
       "observationsImported": 179,
@@ -54,7 +54,7 @@
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:52:00+00:00",
+      "checkedAt": "2026-11-16T06:20:59+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
       "observationsImported": 463,
@@ -63,7 +63,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:52:02+00:00",
+      "checkedAt": "2026-11-16T06:21:00+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -72,7 +72,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:52:02+00:00",
+      "checkedAt": "2026-11-16T06:21:00+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -81,7 +81,7 @@
     },
     "supermarketPriceIndex": {
       "status": "ok",
-      "checkedAt": "2026-11-15T18:52:02+00:00",
+      "checkedAt": "2026-11-16T06:21:01+00:00",
       "url": "https://data.yappman.com/shelf-price-index/",
       "datasetUrl": "https://api.apify.com/v2/datasets/AvRCWqFinCiNjx3sP/items?format=json",
       "licence": "CC BY 4.0",
@@ -93,10 +93,10 @@
   "commodities": {
     "gold": {
       "symbol": "GC=F",
-      "price": 3886.3,
-      "changePct": -5.078,
+      "price": 3853.4,
+      "changePct": -5.426,
       "currency": "USD",
-      "observedAt": "2026-11-13T21:59:59+00:00",
+      "observedAt": "2026-11-16T06:10:52+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -1109,6 +1109,10 @@
         {
           "date": "2026-11-13",
           "value": 3886.300049
+        },
+        {
+          "date": "2026-11-16",
+          "value": 3853.399902
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -1118,10 +1122,10 @@
     },
     "silver": {
       "symbol": "SI=F",
-      "price": 49.121,
-      "changePct": -2.904,
+      "price": 47.39,
+      "changePct": -6.39,
       "currency": "USD",
-      "observedAt": "2026-11-13T21:59:59+00:00",
+      "observedAt": "2026-11-16T06:10:47+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -2133,7 +2137,11 @@
         },
         {
           "date": "2026-11-13",
-          "value": 49.120998
+          "value": 49.030998
+        },
+        {
+          "date": "2026-11-16",
+          "value": 47.389999
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -2143,10 +2151,10 @@
     },
     "brent": {
       "symbol": "BZ=F",
-      "price": 95.84,
-      "changePct": 48.843,
+      "price": 96.01,
+      "changePct": 49.548,
       "currency": "USD",
-      "observedAt": "2026-11-13T21:59:30+00:00",
+      "observedAt": "2026-11-16T06:10:51+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -3159,6 +3167,10 @@
         {
           "date": "2026-11-13",
           "value": 95.839996
+        },
+        {
+          "date": "2026-11-16",
+          "value": 96.010002
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -6255,10 +6267,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 64585.85,
-      "changePct": -32.406,
+      "price": 64379.53,
+      "changePct": -31.64,
       "currency": "USD",
-      "observedAt": "2026-11-15T18:51:53+00:00",
+      "observedAt": "2026-11-16T06:20:48+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -7735,6 +7747,10 @@
         {
           "date": "2026-11-15",
           "value": 64585.851562
+        },
+        {
+          "date": "2026-11-16",
+          "value": 64379.53125
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -7746,10 +7762,10 @@
   "fx": {
     "GBPUSD": {
       "symbol": "GBPUSD=X",
-      "price": 1.3212,
-      "changePct": 0.64,
+      "price": 1.3209,
+      "changePct": 0.433,
       "currency": "USD",
-      "observedAt": "2026-11-15T00:36:47+00:00",
+      "observedAt": "2026-11-16T06:20:43+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -8798,6 +8814,10 @@
         {
           "date": "2026-11-15",
           "value": 1.321213
+        },
+        {
+          "date": "2026-11-16",
+          "value": 1.320934
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -8807,10 +8827,10 @@
     },
     "GBPEUR": {
       "symbol": "GBPEUR=X",
-      "price": 1.1981,
-      "changePct": 5.802,
+      "price": 1.1982,
+      "changePct": 5.97,
       "currency": "EUR",
-      "observedAt": "2026-11-13T22:29:46+00:00",
+      "observedAt": "2026-11-16T06:19:43+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -9855,6 +9875,10 @@
         {
           "date": "2026-11-13",
           "value": 1.197
+        },
+        {
+          "date": "2026-11-16",
+          "value": 1.1982
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -9864,10 +9888,10 @@
     },
     "EURUSD": {
       "symbol": "EURUSD=X",
-      "price": 1.1028,
-      "changePct": -4.865,
+      "price": 1.1022,
+      "changePct": -5.244,
       "currency": "USD",
-      "observedAt": "2026-11-13T22:29:46+00:00",
+      "observedAt": "2026-11-16T06:20:43+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -10912,6 +10936,10 @@
         {
           "date": "2026-11-13",
           "value": 1.105021
+        },
+        {
+          "date": "2026-11-16",
+          "value": 1.102171
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -23986,7 +24014,7 @@
         ]
       }
     ],
-    "updatedAt": "2026-11-15T18:51:58+00:00",
+    "updatedAt": "2026-11-16T06:20:57+00:00",
     "source": "Consumer Council Northern Ireland",
     "sourceUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker",
     "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
@@ -28030,7 +28058,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-15T18:52:00+00:00",
+    "updatedAt": "2026-11-16T06:20:59+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
@@ -36949,7 +36977,7 @@
         "missingPackSize": null
       }
     ],
-    "supermarketIndexUpdatedAt": "2026-11-15T18:52:02+00:00",
+    "supermarketIndexUpdatedAt": "2026-11-16T06:21:01+00:00",
     "supermarketIndex": {
       "vintage": "2026-W45",
       "publishedAt": "2026-11-09T12:49:02Z",
@@ -36971,46 +36999,124 @@
   },
   "news": [
     {
-      "title": "Zelensky urges US and Musk to lift Starlink restrictions and be on 'right side of history'",
-      "url": "https://www.bbc.co.uk/news/articles/c6m25zg88k45o?at_medium=RSS&at_campaign=rss",
+      "title": "Thrift shop ask donors to nominate a charity",
+      "url": "https://www.bbc.co.uk/news/articles/c804wp1y2ky1o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-16T06:03:39+00:00"
+    },
+    {
+      "title": "'Break-in and rising costs could kill my business'",
+      "url": "https://www.bbc.co.uk/news/articles/c9n731r5mej5o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-16T05:57:19+00:00"
+    },
+    {
+      "title": "Wife of assassinated ex-Haitian leader registers for presidential election",
+      "url": "https://www.bbc.co.uk/news/articles/cmwy83432q1jo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-15T18:08:20+00:00"
+      "publishedAt": "2026-11-16T05:06:59+00:00"
+    },
+    {
+      "title": "Watch: New York teen reunites with cat missing after building collapse",
+      "url": "https://www.bbc.co.uk/news/videos/cm3wgeqnppljo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-16T04:36:45+00:00"
+    },
+    {
+      "title": "Mexican drug lord Miguel Angel Felix Gallardo dies age 80",
+      "url": "https://www.bbc.co.uk/news/articles/c51k9nkwrndxo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-16T03:21:56+00:00"
+    },
+    {
+      "title": "Australian MP 'full of gratitude' upon leaving hospital after alleged car attack",
+      "url": "https://www.bbc.co.uk/news/articles/cmpqr9j81888o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-16T03:09:49+00:00"
+    },
+    {
+      "title": "Yemeni forces' retreat leaves Houthis in control of key Red Sea waterway",
+      "url": "https://www.bbc.co.uk/news/articles/cqvg2xgyvnjpo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-16T03:08:31+00:00"
+    },
+    {
+      "title": "Investors sue chip giant Intel after 29% stock plunge",
+      "url": "https://www.bbc.co.uk/news/articles/cw62p42p288do?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-16T03:04:01+00:00"
+    },
+    {
+      "title": "Suspected China spy linked to Nvidia's ex-boss left in 2025, Megaspeed says ",
+      "url": "https://www.bbc.co.uk/news/articles/cmdx1vpprk9vo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-16T01:47:57+00:00"
+    },
+    {
+      "title": "Black Friday and tax return scams  - don't fall for these",
+      "url": "https://www.bbc.co.uk/news/articles/cm4gnlz2p61ko?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-16T00:50:39+00:00"
+    },
+    {
+      "title": "Russia's mega-rich are already imagining a future after Putin",
+      "url": "https://www.bbc.co.uk/news/articles/c60733mxm0x0o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-16T00:13:14+00:00"
+    },
+    {
+      "title": "Steering failure preceded New Orleans cruise ship collision, says NTSB",
+      "url": "https://www.bbc.co.uk/news/articles/c65y131w1534o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T22:57:27+00:00"
+    },
+    {
+      "title": "Cut National Insurance for under-25s to create jobs, Milburn report to say",
+      "url": "https://www.bbc.co.uk/news/articles/c6p9dzmj514ko?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-15T22:30:03+00:00"
+    },
+    {
+      "title": "Canada bars Russia from Junior World Championships",
+      "url": "https://www.bbc.co.uk/sport/ice-hockey/articles/cqkgm0jgv4mdo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T22:01:16+00:00"
+    },
+    {
+      "title": "UK will have 'voice' but no vote on EU food rules in Brexit reset",
+      "url": "https://www.bbc.co.uk/news/articles/c6wy4l8nl42wo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-15T22:00:24+00:00"
+    },
+    {
+      "title": "Prince Harry praises war veterans on surprise visit to Ukraine",
+      "url": "https://www.bbc.co.uk/news/articles/c60evn992jq8o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T22:00:13+00:00"
     },
     {
       "title": "Czechs rally against plan to switch funding of public media",
       "url": "https://www.bbc.co.uk/news/articles/cm8e0knr7604o?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-15T17:23:40+00:00"
+      "publishedAt": "2026-11-15T21:03:40+00:00"
     },
     {
-      "title": "Judge blocks Trump closure of 'Trash Island' Washington DC golf course on Sunday",
-      "url": "https://www.bbc.co.uk/news/articles/c6j9mn7l14y0o?at_medium=RSS&at_campaign=rss",
+      "title": "Zelensky urges US and Musk to lift Starlink restrictions and be on 'right side of history'",
+      "url": "https://www.bbc.co.uk/news/articles/c6m25zg88k45o?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-15T15:57:03+00:00"
+      "publishedAt": "2026-11-15T19:32:39+00:00"
+    },
+    {
+      "title": "Pope Leo rides in helicopter cockpit during Peru trip",
+      "url": "https://www.bbc.co.uk/news/videos/c6pw4rl00lrjo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-15T18:38:11+00:00"
     },
     {
       "title": "How telecoms upgrade work sparked US flight chaos",
       "url": "https://www.bbc.co.uk/news/articles/cqx2wyvyr3zzo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-15T14:57:15+00:00"
-    },
-    {
-      "title": "Suspected China spy linked to Nvidia's ex-boss left in 2025, Megaspeed says ",
-      "url": "https://www.bbc.co.uk/news/articles/cmdx1vpprk9vo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-15T14:56:21+00:00"
-    },
-    {
-      "title": "New Orleans port files $1m lawsuit over 'miracle on the Mississippi' tanker collision ",
-      "url": "https://www.bbc.co.uk/news/articles/cwe89y2r5j20o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-15T14:33:59+00:00"
-    },
-    {
-      "title": "Iran targets US military base in Bahrain with drone attack",
-      "url": "https://www.bbc.co.uk/news/articles/cqn4e2py48kwo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-15T13:42:58+00:00"
     },
     {
       "title": "South Korea's top scorer in tax accountancy exam admits cheating",
@@ -37023,36 +37129,6 @@
       "url": "https://www.bbc.co.uk/news/articles/cqr7gn1zmlj1o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
       "publishedAt": "2026-11-15T13:06:15+00:00"
-    },
-    {
-      "title": "Three men sentenced to death in Jordan over fatal church mass shooting",
-      "url": "https://www.bbc.co.uk/news/articles/c3rrg9xgqlwpo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-15T11:06:32+00:00"
-    },
-    {
-      "title": "Pope Leo speaks of community 'suffering' on visit to remote Andes town",
-      "url": "https://www.bbc.co.uk/news/articles/cr4gnz0lv2vlo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-15T09:57:25+00:00"
-    },
-    {
-      "title": "Fifth Canadian soldier dies from injuries caused by large fire at military base",
-      "url": "https://www.bbc.co.uk/news/articles/cmrlgn4x2xw8o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-15T09:26:37+00:00"
-    },
-    {
-      "title": "Israel kills Hamas commander in strike on Gaza camp, officials say",
-      "url": "https://www.bbc.co.uk/news/articles/cqrkg4r6mg7xo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-15T08:17:41+00:00"
-    },
-    {
-      "title": "Copper wire upgrade behind US flight suspension, transport secretary says",
-      "url": "https://www.bbc.co.uk/news/articles/c6wy9lynq4qno?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-15T07:10:31+00:00"
     },
     {
       "title": "My mother told me I would die if I sought treatment for Ebola - I am proof you can survive",
@@ -37085,42 +37161,6 @@
       "publishedAt": "2026-11-14T19:14:33+00:00"
     },
     {
-      "title": "Italy fines Meta €805m over accessing users' photos",
-      "url": "https://www.bbc.co.uk/news/articles/cwn83gxemk35o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T18:28:06+00:00"
-    },
-    {
-      "title": "Philippines wins first Eurovision Song Contest Asia ",
-      "url": "https://www.bbc.co.uk/news/articles/cqrlgnx9dx6eo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T18:17:58+00:00"
-    },
-    {
-      "title": "Sotheby's auction of $180m Van Gogh challenged over claims it was 'sold under duress'",
-      "url": "https://www.bbc.co.uk/news/articles/cmwy05gg75lvo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T18:00:10+00:00"
-    },
-    {
-      "title": "Trump, Putin and Xi plan historic joint meeting in China next week, White House says",
-      "url": "https://www.bbc.co.uk/news/articles/ckz74jzpy18do?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T15:53:55+00:00"
-    },
-    {
-      "title": "Nigeria cautions against travel via Ethiopia's main airport due to altitude",
-      "url": "https://www.bbc.co.uk/news/articles/cmz6qjpdy2wqo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T15:42:54+00:00"
-    },
-    {
-      "title": "Hungarian authorities uncover $20m during probe of Orbán-era minister",
-      "url": "https://www.bbc.co.uk/news/articles/ckjwj03w4w0qo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-14T10:42:20+00:00"
-    },
-    {
       "title": "Football kit giveaway aims to boost participation",
       "url": "https://www.bbc.co.uk/news/articles/ck20v651473qo?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
@@ -37137,18 +37177,6 @@
       "url": "https://www.bbc.co.uk/news/articles/c95y152k8erpo?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
       "publishedAt": "2026-11-14T07:11:26+00:00"
-    },
-    {
-      "title": "Microsoft says services fully restored after day-long global outage",
-      "url": "https://www.bbc.co.uk/news/articles/c6rrg51rkz09o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-14T06:42:27+00:00"
-    },
-    {
-      "title": "Food bank sees donations drop by 10% each year",
-      "url": "https://www.bbc.co.uk/news/articles/c6702j7e48eno?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-14T06:33:06+00:00"
     }
   ],
   "supplyNews": [
