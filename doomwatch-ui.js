@@ -25,7 +25,7 @@ const more=document.createElement("button");more.type="button";more.className="d
 if(!["overview","intelligence","streams","map"].includes(active))more.setAttribute("aria-current","page");
 const panel=document.createElement("div");panel.id="dw-explore-panel";panel.className="dw-route-extras";panel.setAttribute("aria-label","Explore DoomWatch sections");
 const groups=[
- ["REGIONAL INTELLIGENCE",[["operations.html","Regional picture","Northern Ireland and UK developments"],["correlation.html","Signal connections","Patterns across independent streams"]]],
+ ["REGIONAL INTELLIGENCE",[["operations.html","Regional picture","Northern Ireland and UK developments"],["correlation.html","Intelligence fusion & signals","Rising activity, cross-theme links and source overlap"]]],
  ["SYSTEMS & ECONOMY",[["communications.html","Connectivity","Networks, broadband and outage signals"],["markets.html","Economy & markets","Energy, commodities and financial context"],["markets.html#household","Household resilience","Practical household reference"]]],
  ["FIELD & REFERENCE",[["meshcore.html","MeshCore","Mesh networking, UK resources and field guide"],["index.html#sections","Resilience reference","Critical sectors and dependencies"],["index.html#preparedness","Preparedness","Practical, information-only guidance"],["index.html#sources","Sources & methodology","Publishers, access and data provenance"]]]
 ];
