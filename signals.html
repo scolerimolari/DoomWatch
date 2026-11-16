@@ -188,13 +188,21 @@ function renderDigital(){
 }
 function renderEconomic(){
  if(!markets){$("sig-economic").textContent="Market snapshot unavailable.";return;}
- const parts=[];
- if(markets.heatingOil)parts.push("Heating oil data available");
- if(markets.fuel)parts.push("Road fuel data available");
- if(markets.foodInflation)parts.push("Food inflation series available");
- if(markets.overallInflation)parts.push("Overall inflation series available");
- const n=(markets.commodities||[]).length;
- $("sig-economic").innerHTML='<strong>MARKET SNAPSHOT: '+esc(date(markets.updatedAt||markets.generatedAt))+'</strong><p>'+n+' commodity series · '+(markets.indices||[]).length+' indices · '+(markets.fx||[]).length+' FX pairs.</p><div class="sig-status">'+esc(parts.join(" · ")||"Economic dataset loaded; see markets workspace for detail.")+'</div><div class="sig-links"><a href="./markets.html">OPEN ECONOMIC DASHBOARD ↗</a></div>';
+ const commodityCount=Object.keys(markets.commodities||{}).length;
+ const indexCount=Object.keys(markets.indices||{}).length;
+ const fxCount=Object.keys(markets.fx||{}).length;
+ const oilCount=(markets.heatingOil?.items||[]).length;
+ const fuelCount=(markets.fuel?.items||[]).length;
+ const basketCount=Object.keys(markets.householdBasket||{}).length;
+ const lines=[
+  commodityCount+" commodity series",
+  indexCount+" equity indices",
+  fxCount+" currency pairs",
+  oilCount+" heating-oil observations",
+  fuelCount+" fuel observations"
+ ];
+ if(basketCount)lines.push("household basket data available");
+ $("sig-economic").innerHTML='<strong>MARKET SNAPSHOT: '+esc(date(markets.updatedAt||markets.generatedAt))+'</strong><p>'+esc(lines.join(" · "))+'.</p><div class="sig-status">This is context, not a composite economic-risk score. Review price direction, source dates and official inflation releases in the market workspace.</div><div class="sig-links"><a href="./markets.html">OPEN ECONOMIC DASHBOARD ↗</a><a href="./household.html">HOUSEHOLD PRESSURE ↗</a></div>';
 }
 function renderCoverage(){
  const flows=observatory.flows||{};
