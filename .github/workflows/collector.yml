@@ -8,6 +8,7 @@ name: DoomWatch Intelligence Collector
       - "collector.py"
       - "observatory_collector.py"
       - "observatory.html"
+      - "signals.html"
       - "correlation.html"
       - "feeds.json"
       - "fringe_sources.json"
@@ -89,7 +90,7 @@ jobs:
                       self.scripts.append("".join(self.current))
                       self.current = None
 
-          for page in ("index.html", "markets.html", "household.html", "map.html", "operations.html", "feed.html", "observatory.html", "correlation.html", "communications.html", "incident.html", "meshcore.html"):
+          for page in ("index.html", "markets.html", "household.html", "map.html", "operations.html", "feed.html", "observatory.html", "signals.html", "correlation.html", "communications.html", "incident.html", "meshcore.html"):
               parser = ScriptExtractor()
               parser.feed(Path(page).read_text(encoding="utf-8"))
               if not parser.scripts:
