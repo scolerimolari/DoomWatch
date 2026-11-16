@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-15",
+  "updatedAt": "2026-11-16",
   "regions": [
     "NI",
     "UK",
@@ -340,6 +340,56 @@
       "class": "News search aggregator",
       "trust": "AGGREGATED DISCOVERY",
       "description": "Archaeology, megalithic sites, ancient engineering and disputed history."
+    },
+    {
+      "id": "global-declassified-uk",
+      "name": "Declassified UK",
+      "url": "https://www.declassifieduk.org/feed/",
+      "region": "GLOBAL",
+      "category": "INDEPENDENT MEDIA & LEAKS",
+      "class": "Independent investigative journalism",
+      "trust": "INDEPENDENT REPORTING",
+      "description": "Investigations into UK foreign policy, military, intelligence, security and corporate power."
+    },
+    {
+      "id": "global-consortium-news",
+      "name": "Consortium News",
+      "url": "https://consortiumnews.com/feed/",
+      "region": "GLOBAL",
+      "category": "INDEPENDENT MEDIA & LEAKS",
+      "class": "Independent journalism",
+      "trust": "INDEPENDENT REPORTING",
+      "description": "Independent reporting and commentary on foreign policy, conflict and public affairs."
+    },
+    {
+      "id": "global-democracy-now",
+      "name": "Democracy Now!",
+      "url": "https://www.democracynow.org/democracynow.rss",
+      "region": "GLOBAL",
+      "category": "INDEPENDENT MEDIA & LEAKS",
+      "class": "Independent broadcast journalism",
+      "trust": "INDEPENDENT REPORTING",
+      "description": "Daily independent reporting on international affairs, politics, conflict and social issues."
+    },
+    {
+      "id": "global-dropsite",
+      "name": "Drop Site News",
+      "url": "https://www.dropsitenews.com/feed",
+      "region": "GLOBAL",
+      "category": "INDEPENDENT MEDIA & LEAKS",
+      "class": "Independent investigative journalism",
+      "trust": "INDEPENDENT REPORTING",
+      "description": "Investigative reporting, foreign policy, national security and accountability."
+    },
+    {
+      "id": "global-fair",
+      "name": "FAIR — Fairness & Accuracy in Reporting",
+      "url": "https://fair.org/feed/",
+      "region": "GLOBAL",
+      "category": "INDEPENDENT MEDIA & LEAKS",
+      "class": "Media criticism and analysis",
+      "trust": "MEDIA ANALYSIS",
+      "description": "Media criticism, source scrutiny and analysis of news framing and coverage."
     }
   ]
 }
