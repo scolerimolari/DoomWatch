@@ -51,7 +51,7 @@
 <div class="obs-tabs" id="obs-tabs" role="tablist" aria-label="Six intelligence flows">
  <button type="button" class="active" data-flow="osint" role="tab" aria-selected="true"><strong>01 / OSINT OBSERVATORY</strong><span>Satellite, geospatial, transport & hazards</span></button>
  <button type="button" data-flow="community" role="tab" aria-selected="false"><strong>02 / COMMUNITY SIGNALS</strong><span>Public social & local reporting</span></button>
- <button type="button" data-flow="fringe" role="tab" aria-selected="false"><strong>03 / FRINGE & EMERGING</strong><span>Alternative sources & weak signals</span></button>
+ <button type="button" id="fringe" data-flow="fringe" role="tab" aria-selected="false"><strong>03 / FRINGE & EMERGING</strong><span>Alternative sources & weak signals</span></button>
  <button type="button" data-flow="economic" role="tab" aria-selected="false"><strong>04 / ECONOMIC STRESS</strong><span>Food, fuel, trade & financial pressure</span></button>
  <button type="button" data-flow="digital" role="tab" aria-selected="false"><strong>05 / DIGITAL INFRASTRUCTURE</strong><span>Cyber, telecoms & utility dependencies</span></button>
  <button type="button" data-flow="independent" role="tab" aria-selected="false"><strong>06 / INDEPENDENT MEDIA</strong><span>Investigative & regional journalism</span></button>
@@ -101,7 +101,7 @@ const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const date=v=>{if(!v)return"DATE NOT SUPPLIED";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB");};
 const flowOrder=["osint","community","fringe","economic","digital","independent"];
-let data=null,activeFlow="osint";
+let data=null,activeFlow=flowOrder.includes(location.hash.slice(1))?location.hash.slice(1):"osint";
 const names={osint:"01 / OSINT OBSERVATORY",community:"02 / COMMUNITY SIGNALS",fringe:"03 / FRINGE & EMERGING SIGNALS",economic:"04 / ECONOMIC STRESS",digital:"05 / DIGITAL INFRASTRUCTURE",independent:"06 / INDEPENDENT MEDIA"};
 function mapLink(record){
  const params=new URLSearchParams();

@@ -62,6 +62,8 @@ def audit_pages():
  obs=(ROOT/"observatory.html").read_text(encoding="utf-8")
  declared=set(re.findall(r'data-flow="([^"]+)"',obs))
  if declared!=set(FLOWS):fail("Six observatory tabs do not match expected flows")
+ if 'id="fringe" data-flow="fringe"' not in obs:fail("Fringe deep link target is missing")
+ if "activeFlow=flowOrder.includes(location.hash.slice(1))" not in obs:fail("Fringe deep link does not select the requested flow")
  print(f"ROUTES: {len(PAGES)} pages checked; five main destinations present")
 def audit_bluesky():
  for name in CORE:
