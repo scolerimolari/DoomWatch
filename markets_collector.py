@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 DOOMWATCH - MARKETS COLLECTOR
-Build #83 - Aggregate Grocery Intelligence
+Build #85 - GBP Display Conversion
 
 Preserves existing market, stock, heating oil, fuel,
 inflation and news collection.
@@ -481,6 +481,179 @@ def collect_stocks(data):
                 stocks.append(existing[symbol])
 
     data["stocks"] = stocks
+
+
+# ==================================================
+# GBP DISPLAY CONVERSION
+# ==================================================
+
+def apply_gbp_conversions(data):
+    """
+    Add sterling display values without overwriting native source data.
+
+    USD prices are converted using the GBP/USD daily close on or before
+    each observation date. The native price/history remain untouched so
+    later collector runs never mix USD and GBP observations.
+    """
+    fx_item = (data.get("fx") or {}).get("GBPUSD", {})
+    fx_history = (
+        fx_item.get("history", [])
+        if isinstance(fx_item, dict) else []
+    )
+
+    fx_points = []
+    for point in fx_history:
+        if not isinstance(point, dict):
+            continue
+
+        day = point.get("date")
+        try:
+            rate = float(point.get("value", point.get("price")))
+        except (TypeError, ValueError):
+            continue
+
+        if (
+            isinstance(day, str)
+            and re.fullmatch(r"\d{4}-\d{2}-\d{2}", day)
+            and rate > 0
+        ):
+            fx_points.append({"date": day, "value": rate})
+
+    fx_points.sort(key=lambda point: point["date"])
+
+    latest_rate = None
+    try:
+        candidate = float(fx_item.get("price"))
+        if candidate > 0:
+            latest_rate = candidate
+    except (TypeError, ValueError, AttributeError):
+        pass
+
+    if latest_rate is None and fx_points:
+        latest_rate = fx_points[-1]["value"]
+
+    eligible_series = 0
+    converted_series = 0
+    converted_points = 0
+
+    for category in ("commodities", "crypto", "stocks"):
+        group = data.get(category) or {}
+
+        if isinstance(group, dict):
+            items = group.values()
+        elif isinstance(group, list):
+            items = group
+        else:
+            continue
+
+        for item in items:
+            if not isinstance(item, dict) or item.get("currency") != "USD":
+                continue
+
+            eligible_series += 1
+            history = item.get("history") or []
+            converted_history = []
+            rate_index = 0
+            current_rate = None
+            current_rate_day = None
+
+            for point in sorted(
+                (p for p in history if isinstance(p, dict)),
+                key=lambda p: str(p.get("date") or ""),
+            ):
+                day = point.get("date")
+                if not isinstance(day, str) or not re.fullmatch(
+                    r"\d{4}-\d{2}-\d{2}", day
+                ):
+                    continue
+
+                while (
+                    rate_index < len(fx_points)
+                    and fx_points[rate_index]["date"] <= day
+                ):
+                    current_rate = fx_points[rate_index]["value"]
+                    current_rate_day = fx_points[rate_index]["date"]
+                    rate_index += 1
+
+                if current_rate is None or current_rate_day is None:
+                    continue
+
+                try:
+                    age_days = (
+                        datetime.strptime(day, "%Y-%m-%d").date()
+                        - datetime.strptime(current_rate_day, "%Y-%m-%d").date()
+                    ).days
+                    native_value = float(point.get("value", point.get("price")))
+                except (TypeError, ValueError):
+                    continue
+
+                # Carry the last known FX close over weekends/short holidays,
+                # but never use a future rate or one older than seven days.
+                if 0 <= age_days <= 7 and native_value > 0:
+                    converted_history.append({
+                        "date": day,
+                        "value": round(native_value / current_rate, 6),
+                    })
+
+            if converted_history:
+                item["gbpHistory"] = converted_history
+                item["gbpCurrency"] = "GBP"
+                unit = str(item.get("unit") or "").lower()
+                if "troy oz" in unit:
+                    item["gbpUnit"] = "per troy oz"
+                elif "barrel" in unit:
+                    item["gbpUnit"] = "per barrel"
+                else:
+                    item["gbpUnit"] = ""
+
+                if len(converted_history) >= 2:
+                    previous_value = converted_history[-2]["value"]
+                    latest_value = converted_history[-1]["value"]
+                    item["gbpChangePct"] = round(
+                        (latest_value / previous_value - 1) * 100, 3
+                    )
+                converted_series += 1
+                converted_points += len(converted_history)
+            else:
+                item.pop("gbpHistory", None)
+                item.pop("gbpCurrency", None)
+                item.pop("gbpUnit", None)
+                item.pop("gbpChangePct", None)
+
+            if latest_rate is not None:
+                try:
+                    native_price = float(item.get("price"))
+                    if native_price > 0:
+                        item["gbpPrice"] = round(native_price / latest_rate, 6)
+                        item["gbpCurrency"] = "GBP"
+                except (TypeError, ValueError):
+                    item.pop("gbpPrice", None)
+            else:
+                item.pop("gbpPrice", None)
+
+    if eligible_series and converted_series == eligible_series:
+        status = "ok"
+    elif converted_series:
+        status = "partial"
+    else:
+        status = "failed"
+
+    data.setdefault("sources", {})["gbpConversion"] = {
+        "status": status,
+        "checkedAt": timestamp(),
+        "rateSource": "GBPUSD=X daily history from Yahoo Finance",
+        "latestRate": round(latest_rate, 6) if latest_rate else None,
+        "eligibleSeries": eligible_series,
+        "convertedSeries": converted_series,
+        "convertedObservations": converted_points,
+        "note": (
+            "USD-denominated commodities, Bitcoin and US shares receive "
+            "GBP display values. Historical conversion uses the most recent "
+            "GBP/USD daily close on or before each observation date; native "
+            "USD source values are preserved. Index points and FX quotes "
+            "remain in their natural units."
+        ),
+    }
 
 
 # ==================================================
@@ -1656,7 +1829,7 @@ def collect_news(data):
 def main():
     print("================================")
     print("DOOMWATCH MARKETS COLLECTION")
-    print("BUILD 84 - FIVE-YEAR MARKET HISTORY")
+    print("BUILD 85 - FIVE-YEAR MARKET HISTORY + GBP DISPLAY")
     print("================================")
 
     data = load_data()
@@ -1665,6 +1838,7 @@ def main():
     # Existing collection systems.
     collect_markets(data)
     collect_stocks(data)
+    apply_gbp_conversions(data)
     collect_heating_oil(data)
     collect_fuel(data)
     collect_groceries(data)
