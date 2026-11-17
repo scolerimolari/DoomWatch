@@ -74,12 +74,11 @@
 </div>
 <div class="obs-status" id="flow-status">Loading records…</div>
 <div class="obs-records" id="obs-records"></div>
-<h2 style="margin-top:20px">SOURCE REGISTER // ACCESS & LIMITATIONS</h2>
-<div class="obs-status" style="margin:-3px 0 9px">Sources are grouped by flow. Candidate and directory entries are not represented as successfully polled. Status reflects the current integration state, not source quality.</div>
-<div class="obs-directory" id="obs-directory"></div>
-<h2 style="margin-top:20px">COLLECTOR HEALTH</h2>
-<div class="obs-directory" id="obs-health"></div>
-<h2 style="margin-top:20px">RELIABILITY & EVIDENCE STANDARD</h2>
+<details class="obs-disclosure"><summary>SOURCE REGISTER / ACCESS & LIMITATIONS</summary>
+<div class="obs-status" style="margin:9px 0">Sources are grouped by flow. Candidate and directory entries are not represented as successfully polled. Status reflects the current integration state, not source quality.</div>
+<div class="obs-directory" id="obs-directory"></div></details>
+<details class="obs-disclosure"><summary>COLLECTOR HEALTH</summary><div class="obs-directory" id="obs-health"></div></details>
+<details class="obs-disclosure"><summary>RELIABILITY & EVIDENCE STANDARD</summary>
 <div class="panel">
  <div class="obs-directory">
   <div class="obs-source"><strong>GRADE A — OFFICIAL / PRIMARY</strong><p>Government, regulator, operator or primary catalogue. Strong provenance, but may be delayed, incomplete or narrowly scoped.</p></div>
@@ -90,7 +89,7 @@
   <div class="obs-source"><strong>GRADE U — UNCLASSIFIED</strong><p>Insufficient publisher metadata to assign a source class. Do not infer reliability from appearance or repetition.</p></div>
  </div>
  <p class="obs-status" style="margin-top:12px">Evidence labels are inherited from upstream records or describe a specific catalogue record. Claim confidence remains unassessed unless a numeric value was supplied upstream. Reliability grade is never converted into a confidence score.</p>
-</div>
+</div></details>
 <div class="obs-note"><strong>IMPORTANT LIMITS:</strong> OpenSky now requires OAuth2 for automated API use; Reddit requires approved API access; Telegram/X are not treated as unrestricted data sources; AIS services may be commercial; Cloudflare Radar API access requires a token; RIPE Atlas needs selected measurements. These connectors are deliberately not bypassed. Copernicus records are catalogue metadata only, not interpreted satellite imagery. Economic Stress is currently a qualitative signal stream, not a validated composite index.</div>
 </main>
 <footer>DOOMWATCH // INTELLIGENCE OBSERVATORY<br>PUBLIC / AUTHORISED SOURCES ONLY // HUMAN REVIEW REQUIRED</footer>
