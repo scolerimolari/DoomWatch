@@ -1,51 +1,51 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-16T21:57:50+00:00",
-  "generatedAt": "2026-11-16T21:57:50+00:00",
+  "updatedAt": "2026-11-17T07:50:30+00:00",
+  "generatedAt": "2026-11-17T07:50:30+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:44+00:00"
+      "checkedAt": "2026-11-17T07:50:26+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:45+00:00"
+      "checkedAt": "2026-11-17T07:50:27+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:45+00:00"
+      "checkedAt": "2026-11-17T07:50:27+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:45+00:00"
+      "checkedAt": "2026-11-17T07:50:27+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:45+00:00"
+      "checkedAt": "2026-11-17T07:50:27+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:45+00:00"
+      "checkedAt": "2026-11-17T07:50:27+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:45+00:00"
+      "checkedAt": "2026-11-17T07:50:27+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:45+00:00"
+      "checkedAt": "2026-11-17T07:50:27+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:45+00:00"
+      "checkedAt": "2026-11-17T07:50:27+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:45+00:00"
+      "checkedAt": "2026-11-17T07:50:27+00:00"
     },
     "heatingOil": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:47+00:00",
+      "checkedAt": "2026-11-17T07:50:28+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
       "observationsImported": 180,
@@ -54,7 +54,7 @@
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:48+00:00",
+      "checkedAt": "2026-11-17T07:50:29+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
       "observationsImported": 463,
@@ -63,7 +63,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:49+00:00",
+      "checkedAt": "2026-11-17T07:50:29+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -72,7 +72,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:49+00:00",
+      "checkedAt": "2026-11-17T07:50:29+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -81,7 +81,7 @@
     },
     "supermarketPriceIndex": {
       "status": "ok",
-      "checkedAt": "2026-11-16T21:57:50+00:00",
+      "checkedAt": "2026-11-17T07:50:29+00:00",
       "url": "https://data.yappman.com/shelf-price-index/",
       "datasetUrl": "https://api.apify.com/v2/datasets/AvRCWqFinCiNjx3sP/items?format=json",
       "licence": "CC BY 4.0",
@@ -93,10 +93,10 @@
   "commodities": {
     "gold": {
       "symbol": "GC=F",
-      "price": 3859.6,
-      "changePct": -5.274,
+      "price": 3876.6,
+      "changePct": -4.857,
       "currency": "USD",
-      "observedAt": "2026-11-16T21:47:41+00:00",
+      "observedAt": "2026-11-17T07:40:08+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -1112,7 +1112,11 @@
         },
         {
           "date": "2026-11-16",
-          "value": 3859.600098
+          "value": 3853.0
+        },
+        {
+          "date": "2026-11-17",
+          "value": 3876.600098
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -1122,10 +1126,10 @@
     },
     "silver": {
       "symbol": "SI=F",
-      "price": 46.975,
-      "changePct": -7.21,
+      "price": 47.435,
+      "changePct": -6.301,
       "currency": "USD",
-      "observedAt": "2026-11-16T21:47:42+00:00",
+      "observedAt": "2026-11-17T07:40:22+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -2141,7 +2145,11 @@
         },
         {
           "date": "2026-11-16",
-          "value": 46.974998
+          "value": 46.785
+        },
+        {
+          "date": "2026-11-17",
+          "value": 47.435001
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -2151,10 +2159,10 @@
     },
     "brent": {
       "symbol": "BZ=F",
-      "price": 91.83,
-      "changePct": 43.037,
+      "price": 92.09,
+      "changePct": 43.442,
       "currency": "USD",
-      "observedAt": "2026-11-16T21:47:38+00:00",
+      "observedAt": "2026-11-17T07:40:23+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -3170,7 +3178,11 @@
         },
         {
           "date": "2026-11-16",
-          "value": 91.830002
+          "value": 92.440002
+        },
+        {
+          "date": "2026-11-17",
+          "value": 92.089996
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -3185,7 +3197,7 @@
       "price": 7416.59,
       "changePct": 10.135,
       "currency": "USD",
-      "observedAt": "2026-11-16T21:20:01+00:00",
+      "observedAt": "2026-11-16T22:22:10+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -4214,7 +4226,7 @@
       "price": 24509.758,
       "changePct": 7.027,
       "currency": "USD",
-      "observedAt": "2026-11-16T21:57:43+00:00",
+      "observedAt": "2026-11-16T22:15:59+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -5230,7 +5242,7 @@
         },
         {
           "date": "2026-11-16",
-          "value": 24509.757812
+          "value": 24509.759766
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -6267,7 +6279,7 @@
         },
         {
           "date": "2026-11-16",
-          "value": 10881.549805
+          "value": 10881.599609
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -6279,10 +6291,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 65195.94,
-      "changePct": -30.773,
+      "price": 64557.52,
+      "changePct": -29.9,
       "currency": "USD",
-      "observedAt": "2026-11-16T21:57:39+00:00",
+      "observedAt": "2026-11-17T07:50:25+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -7762,7 +7774,11 @@
         },
         {
           "date": "2026-11-16",
-          "value": 65195.941406
+          "value": 64855.84375
+        },
+        {
+          "date": "2026-11-17",
+          "value": 64557.519531
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -7774,10 +7790,10 @@
   "fx": {
     "GBPUSD": {
       "symbol": "GBPUSD=X",
-      "price": 1.3185,
-      "changePct": 0.251,
+      "price": 1.3192,
+      "changePct": 0.243,
       "currency": "USD",
-      "observedAt": "2026-11-16T21:56:47+00:00",
+      "observedAt": "2026-11-17T07:49:44+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -8829,7 +8845,11 @@
         },
         {
           "date": "2026-11-16",
-          "value": 1.318513
+          "value": 1.32165
+        },
+        {
+          "date": "2026-11-17",
+          "value": 1.319157
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -8839,10 +8859,10 @@
     },
     "GBPEUR": {
       "symbol": "GBPEUR=X",
-      "price": 1.1984,
-      "changePct": 5.987,
+      "price": 1.1986,
+      "changePct": 5.799,
       "currency": "EUR",
-      "observedAt": "2026-11-16T21:55:47+00:00",
+      "observedAt": "2026-11-17T07:49:44+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -9890,7 +9910,11 @@
         },
         {
           "date": "2026-11-16",
-          "value": 1.1984
+          "value": 1.19874
+        },
+        {
+          "date": "2026-11-17",
+          "value": 1.1986
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -9900,10 +9924,10 @@
     },
     "EURUSD": {
       "symbol": "EURUSD=X",
-      "price": 1.1001,
-      "changePct": -5.425,
+      "price": 1.1004,
+      "changePct": -5.26,
       "currency": "USD",
-      "observedAt": "2026-11-16T21:56:47+00:00",
+      "observedAt": "2026-11-17T07:49:44+00:00",
       "history": [
         {
           "date": "2025-11-12",
@@ -10951,7 +10975,11 @@
         },
         {
           "date": "2026-11-16",
-          "value": 1.10011
+          "value": 1.102487
+        },
+        {
+          "date": "2026-11-17",
+          "value": 1.100352
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -24096,7 +24124,7 @@
         ]
       }
     ],
-    "updatedAt": "2026-11-16T21:57:47+00:00",
+    "updatedAt": "2026-11-17T07:50:28+00:00",
     "source": "Consumer Council Northern Ireland",
     "sourceUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker",
     "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
@@ -28140,7 +28168,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-16T21:57:48+00:00",
+    "updatedAt": "2026-11-17T07:50:29+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6af1cf45bf144e3b8a6c99d4/CSV__2018_-__.csv",
@@ -37059,7 +37087,7 @@
         "missingPackSize": null
       }
     ],
-    "supermarketIndexUpdatedAt": "2026-11-16T21:57:50+00:00",
+    "supermarketIndexUpdatedAt": "2026-11-17T07:50:29+00:00",
     "supermarketIndex": {
       "vintage": "2026-W45",
       "publishedAt": "2026-11-09T12:49:02Z",
@@ -37081,10 +37109,94 @@
   },
   "news": [
     {
-      "title": "Houthi rebel advance in Yemen may further destabilise global economy",
-      "url": "https://www.bbc.co.uk/news/articles/cmy97qperq9eo?at_medium=RSS&at_campaign=rss",
+      "title": "Ukraine and Russia trade strikes on key bridges",
+      "url": "https://www.bbc.co.uk/news/articles/cw772jk4rvmxo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-16T21:40:07+00:00"
+      "publishedAt": "2026-11-17T07:30:43+00:00"
+    },
+    {
+      "title": "Which areas have the most jobs for 16 to 24-year-olds? Find out here",
+      "url": "https://www.bbc.co.uk/news/articles/cw3djdjk5d7ko?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-17T07:21:37+00:00"
+    },
+    {
+      "title": "Ukraine accuses Russia of targeting rescue operation after 'double-tap' strike kills 72",
+      "url": "https://www.bbc.co.uk/news/articles/c30rk8x5g80qo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-17T05:59:01+00:00"
+    },
+    {
+      "title": "Vance says he will decide 'sometime next year' about 2028 US presidential run ",
+      "url": "https://www.bbc.co.uk/news/articles/cwkgr9m41engo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-17T03:07:23+00:00"
+    },
+    {
+      "title": "Nvidia dismisses 'Bring Jensen Back' campaign as Trump backs effort to reinstate ex boss",
+      "url": "https://www.bbc.co.uk/news/articles/cry49plv8v3go?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-17T02:37:53+00:00"
+    },
+    {
+      "title": "Imran Khan seeks urgent medical care fearing he 'may not return alive'",
+      "url": "https://www.bbc.co.uk/news/articles/cr894xq5yeyko?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-17T01:26:01+00:00"
+    },
+    {
+      "title": "Customers report service outages at major US banks",
+      "url": "https://www.bbc.co.uk/news/articles/cj752wvqneq6o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-17T00:18:01+00:00"
+    },
+    {
+      "title": "Kidnap, child marriage and poverty: Why millions of Nigerian children can't go to school",
+      "url": "https://www.bbc.co.uk/news/articles/c3pw450ndyjqo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-17T00:08:19+00:00"
+    },
+    {
+      "title": "We couldn't afford a house alone, so we bought one with strangers",
+      "url": "https://www.bbc.co.uk/news/articles/c5742lwdyzglo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-17T00:00:02+00:00"
+    },
+    {
+      "title": "The AI start-ups fixing India's broken roads and messy land records",
+      "url": "https://www.bbc.co.uk/news/articles/c820vnln2lzpo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-16T23:25:53+00:00"
+    },
+    {
+      "title": "Five EU countries announce migrant deportation centre in Rwanda",
+      "url": "https://www.bbc.co.uk/news/articles/cw987343352go?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-16T23:20:45+00:00"
+    },
+    {
+      "title": "OpenAI sued by California over Hugging Face attack",
+      "url": "https://www.bbc.co.uk/news/articles/c6wy4xv2mxglo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-16T23:12:24+00:00"
+    },
+    {
+      "title": "Taking Korea's toughest exam from behind bars",
+      "url": "https://www.bbc.co.uk/news/articles/cmewvxg855yno?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-16T23:09:49+00:00"
+    },
+    {
+      "title": "China is hosting the world's leaders in its AI wonderland. Here's what they won't see",
+      "url": "https://www.bbc.co.uk/news/articles/cm3eg3v9jkk8o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-16T23:07:20+00:00"
+    },
+    {
+      "title": "Pope Leo hit by flying rosary while waving to crowds in Peru",
+      "url": "https://www.bbc.co.uk/news/videos/ckpdwn23j5j8o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-16T21:12:13+00:00"
     },
     {
       "title": "Forensic expert says his analysis of autopsy photos suggests Epstein was killed",
@@ -37099,28 +37211,10 @@
       "publishedAt": "2026-11-16T19:30:30+00:00"
     },
     {
-      "title": "Trump backs return of ex-Nvidia boss after 'Bring Jensen Back' campaign launched",
-      "url": "https://www.bbc.co.uk/news/articles/cry49plv8v3go?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-16T19:16:52+00:00"
-    },
-    {
       "title": "'Parents are offering to pay kids' wages': Salon owner ",
       "url": "https://www.bbc.co.uk/news/videos/c60rkn7vdjxxo?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
       "publishedAt": "2026-11-16T18:05:17+00:00"
-    },
-    {
-      "title": "When will we see Robert Pattinson as Bond in cinemas?",
-      "url": "https://www.bbc.co.uk/news/videos/cmd91xjd9zk2o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-16T17:18:54+00:00"
-    },
-    {
-      "title": "Five EU countries announce migrant deportation centre in Rwanda",
-      "url": "https://www.bbc.co.uk/news/articles/cw987343352go?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-16T16:27:24+00:00"
     },
     {
       "title": "Form: Natural England’s nutrient mitigation scheme for developers",
@@ -37153,12 +37247,6 @@
       "publishedAt": "2026-11-16T15:02:41+00:00"
     },
     {
-      "title": "Landmark Crimea bridge hit as Russia reports biggest Ukrainian drone attack of war",
-      "url": "https://www.bbc.co.uk/news/articles/ckx27v6dpjz0o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-16T14:58:12+00:00"
-    },
-    {
       "title": "Raye, Rosalía and Dolly Parton recognised in Grammy nominations",
       "url": "https://www.bbc.co.uk/news/articles/cq9vwkggpx73o?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
@@ -37175,12 +37263,6 @@
       "url": "https://www.gov.uk/guidance/join-the-list-of-authorised-distance-plant-sellers",
       "source": "DEFRA",
       "publishedAt": "2026-11-16T14:31:14Z"
-    },
-    {
-      "title": "Estonia to close Russia border crossings after attempted drone factory arson attack",
-      "url": "https://www.bbc.co.uk/news/articles/cqp83nk673reo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-16T14:22:36+00:00"
     },
     {
       "title": "Controls of fish and shellfish diseases in England and Wales",
@@ -37205,60 +37287,6 @@
       "url": "https://www.gov.uk/government/statistical-data-sets/family-food-datasets",
       "source": "DEFRA",
       "publishedAt": "2026-11-16T13:30:39Z"
-    },
-    {
-      "title": "Create more jobs for under-25s by cutting National Insurance, key report urges",
-      "url": "https://www.bbc.co.uk/news/articles/c6p9dzmj514ko?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-16T13:19:33+00:00"
-    },
-    {
-      "title": "Ashes of exiled Nobel Laureate Miguel Ángel Asturias returned to Guatemala",
-      "url": "https://www.bbc.co.uk/news/articles/cvde1klewg88o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-16T12:42:14+00:00"
-    },
-    {
-      "title": "Two mass shootings in South Africa leave 17 dead",
-      "url": "https://www.bbc.co.uk/news/articles/c8y5x3n4kywpo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-16T10:57:48+00:00"
-    },
-    {
-      "title": "Avoid this Black Friday scam - how to check it's a real deal",
-      "url": "https://www.bbc.co.uk/news/articles/cm4gnlz2p61ko?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-16T09:58:52+00:00"
-    },
-    {
-      "title": "Gas starts flowing from Jackdaw after government green light",
-      "url": "https://www.bbc.co.uk/news/articles/c9x2elzm047po?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-16T06:24:08+00:00"
-    },
-    {
-      "title": "Thrift shop asks shoppers to nominate a charity",
-      "url": "https://www.bbc.co.uk/news/articles/c804wp1y2ky1o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-16T06:03:39+00:00"
-    },
-    {
-      "title": "'Break-in and rising costs could kill my business'",
-      "url": "https://www.bbc.co.uk/news/articles/c9n731r5mej5o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-16T05:57:19+00:00"
-    },
-    {
-      "title": "New York teen reunites with cat missing after building collapse",
-      "url": "https://www.bbc.co.uk/news/videos/cm3wgeqnppljo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-16T04:36:45+00:00"
-    },
-    {
-      "title": "Intel sued by investors after PC sales slump hits share price ",
-      "url": "https://www.bbc.co.uk/news/articles/cw62p42p288do?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-16T03:04:01+00:00"
     }
   ],
   "supplyNews": [
