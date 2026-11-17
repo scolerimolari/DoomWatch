@@ -468,7 +468,7 @@ function mapImpactPathway(a){
 function mapEvidenceDomain(a){try{return new URL(String(a.url||"")).hostname.toLowerCase().replace(/^www[.]/,"");}catch(e){return String(a.source||"unknown").trim().toLowerCase();}}
 function mapEvidenceClass(a){
  const trust=String(a.sourceTrust||"").toLowerCase(),type=String(a.sourceType||"").toLowerCase(),d=mapEvidenceDomain(a);
- if(/social|bluesky|unverified_social/.test(trust+" "+type))return "SOCIAL / UNVERIFIED";
+ if(/social|bluesky|social|unverified_social/.test(trust+" "+type))return "SOCIAL / UNVERIFIED";
  if(/syndicat|aggregat|wire_service|press_release|republication/.test(trust+" "+type))return "AGGREGATED / SYNDICATED";
  if(/official|government|public_authority|agency/.test(trust+" "+type)||d.endsWith(".gov.uk")||d.endsWith(".police.uk")||/(nidirect|niwater|trafficwatchni|nienetworks|metoffice|psni|daera-ni)/.test(d))return "OFFICIAL / PUBLIC AUTHORITY";
  const media=["belfastlive.co.uk","belfasttelegraph.co.uk","irishnews.com","bbc.co.uk","bbc.com","itv.com","rte.ie","reuters.com","apnews.com","theguardian.com","independent.co.uk","sky.com","channel4.com"];
