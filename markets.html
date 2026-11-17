@@ -55,6 +55,37 @@ main{padding:10px}
 .card .price{font-size:18px}
 }
 .chart-readout{margin-top:7px;padding:7px 9px;background:#111914;border-left:3px solid #a6d17a;color:#d7dfd0;font:11px/1.45 monospace;min-height:30px;overflow-wrap:anywhere}
+
+.history-explorer{border-color:#596548;background:linear-gradient(145deg,#20271e,#171c16)}
+.history-explorer-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}
+.history-explorer-head h3{margin:0 0 4px;color:#d6e8bd;letter-spacing:1px}
+.history-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:12px 0}
+.history-controls label,.history-custom label{display:block;color:#aab59d;font-size:10px;letter-spacing:1px}
+.history-controls select,.history-custom input{display:block;width:100%;min-height:42px;margin-top:5px;padding:9px;background:#111710;border:1px solid #596548;border-radius:4px;color:#e5e8dc;font:inherit;font-size:13px}
+.history-ranges{display:flex;gap:6px;overflow-x:auto;padding:5px 0 9px}
+.history-ranges button,.history-custom button{flex:0 0 auto;min-height:40px;padding:9px 14px;background:#252d22;border:1px solid #4a5740;border-radius:4px;color:#c9d5bd;font:inherit;font-size:11px;letter-spacing:.5px;cursor:pointer}
+.history-ranges button.active{background:#647a42;border-color:#a6d17a;color:#fff}
+.history-custom{display:grid;grid-template-columns:1fr 1fr auto;align-items:end;gap:9px;margin:4px 0 14px}
+.history-custom button{background:#39462d;color:#e7f0dc}
+.history-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin:12px 0}
+.history-metric{min-width:0;padding:10px;background:#151b14;border:1px solid #3b4735;border-radius:4px}
+.history-metric .metric-label{display:block;color:#9ba58e;font-size:9px;letter-spacing:1px;text-transform:uppercase}
+.history-metric .metric-value{display:block;margin:4px 0;color:#e5e8dc;font-size:17px;font-weight:700;overflow-wrap:anywhere}
+.history-metric .metric-detail{display:block;color:#9ba58e;font-size:10px;overflow-wrap:anywhere}
+.history-chart-wrap{height:270px;margin-top:8px}
+#marketHistoryChart{height:270px;touch-action:pan-y}
+.history-legend{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0;color:#aab59d;font-size:10px}
+.history-legend span{display:inline-flex;align-items:center;gap:5px}
+.history-legend i{display:inline-block;width:9px;height:9px;border-radius:50%}
+.history-status{margin:6px 0;color:#9ba58e;font-size:10px}
+.history-readout{min-height:42px}
+@media(max-width:520px){
+ .history-explorer-head{display:block}
+ .history-explorer-head .status{margin-top:8px}
+ .history-custom{grid-template-columns:1fr 1fr}
+ .history-custom button{grid-column:1/-1;width:100%}
+ .history-metric .metric-value{font-size:15px}
+}
 </style>
 <link rel="stylesheet" href="./doomwatch.css">
 </head>
@@ -83,6 +114,50 @@ main{padding:10px}
 <section id="overview">
 <h2>01 // MARKET OVERVIEW</h2>
 <div class="grid" id="overviewCards"></div>
+
+<div class="panel history-explorer" id="marketHistoryExplorer">
+ <div class="history-explorer-head">
+  <div>
+   <h3>INTERACTIVE MARKET HISTORY</h3>
+   <div class="small">Explore daily price history, choose a period, or compare two instruments.</div>
+  </div>
+  <span class="status">HISTORICAL DATA</span>
+ </div>
+ <div class="history-controls">
+  <label for="historyAsset">INSTRUMENT
+   <select id="historyAsset" aria-label="Choose a market instrument"></select>
+  </label>
+  <label for="historyCompare">COMPARE AGAINST
+   <select id="historyCompare" aria-label="Optional comparison instrument">
+    <option value="">No comparison</option>
+   </select>
+  </label>
+ </div>
+ <div class="history-ranges" role="group" aria-label="Historical time period">
+  <button type="button" data-history-range="5D">5D</button>
+  <button type="button" data-history-range="1M">1M</button>
+  <button type="button" data-history-range="3M">3M</button>
+  <button type="button" data-history-range="6M">6M</button>
+  <button type="button" data-history-range="1Y" class="active">1Y</button>
+  <button type="button" data-history-range="5Y">5Y</button>
+  <button type="button" data-history-range="ALL">ALL</button>
+ </div>
+ <div class="history-custom">
+  <label for="historyFrom">FROM
+   <input type="date" id="historyFrom">
+  </label>
+  <label for="historyTo">TO
+   <input type="date" id="historyTo">
+  </label>
+  <button type="button" id="historyApply">APPLY DATES</button>
+ </div>
+ <div class="history-metrics" id="marketHistoryMetrics"></div>
+ <div class="history-chart-wrap"><canvas id="marketHistoryChart"></canvas></div>
+ <div class="history-legend" id="marketHistoryLegend"></div>
+ <div class="chart-readout history-readout" id="marketHistoryReadout" aria-live="polite">Select an instrument and time period to inspect the history.</div>
+ <div class="history-status" id="marketHistoryStatus">Loading available market history...</div>
+ <div class="small">Comparison charts are rebased to 0% at the start of the selected period. Prices are daily closes, not live intraday quotes. Historical depth depends on the source.</div>
+</div>
 <div class="panel">
 <h3>MARKET DATA STATUS</h3>
 <div id="marketStatus" class="small">Waiting for data...</div>
@@ -471,6 +546,376 @@ function historyOf(item){
  return item&&Array.isArray(item.history)?item.history:[];
 }
 
+
+// --------------------------------------------------
+// INTERACTIVE FINANCIAL MARKET HISTORY EXPLORER
+// --------------------------------------------------
+
+const HISTORY_PERIOD_DAYS={"1M":30,"3M":90,"6M":180,"1Y":365,"5Y":1825};
+const HISTORY_COLOURS=["#a6d17a","#83b9d5","#e5bd68","#e27d70"];
+let MARKET_HISTORY_ITEMS=[];
+let activeHistoryRange="1Y";
+let customHistoryRange=false;
+
+function marketHistoryPoints(item){
+ return (item&&Array.isArray(item.history)?item.history:[])
+  .map(p=>({
+   date:String(p.date||p.timestamp||p.observedAt||"").slice(0,10),
+   value:Number(p.value??p.price??p.average??p.index)
+  }))
+  .filter(p=>/^\d{4}-\d{2}-\d{2}$/.test(p.date)&&Number.isFinite(p.value))
+  .sort((a,b)=>a.date.localeCompare(b.date))
+  .filter((p,i,arr)=>i===0||p.date!==arr[i-1].date);
+}
+
+function buildMarketHistoryItems(){
+ const items=[];
+ const addGroup=(group,title,source)=>{
+  if(Array.isArray(source)){
+   source.forEach((item,index)=>{
+    if(marketHistoryPoints(item).length){
+     const symbol=item.symbol||String(index+1);
+     items.push({id:group+"."+symbol,group:group,title:title,name:item.name||item.label||symbol,symbol:symbol,item:item});
+    }
+   });
+  }else if(source&&typeof source==="object"){
+   Object.entries(source).forEach(([key,item])=>{
+    if(marketHistoryPoints(item).length){
+     const symbol=item.symbol||key;
+     items.push({id:group+"."+key,group:group,title:title,name:item.name||item.label||pretty(key),symbol:symbol,item:item});
+    }
+   });
+  }
+ };
+ addGroup("commodities","COMMODITIES",D.commodities);
+ addGroup("indices","INDICES",D.indices);
+ addGroup("crypto","CRYPTO",D.crypto);
+ addGroup("fx","FX",D.fx);
+ addGroup("stocks","STOCKS",D.stocks);
+ return items;
+}
+
+function marketHistoryItem(id){
+ return MARKET_HISTORY_ITEMS.find(item=>item.id===id)||null;
+}
+
+function marketHistoryOptionLabel(item){
+ return item.title+" · "+item.name+(item.symbol?" ("+item.symbol+")":"");
+}
+
+function refreshHistoryCompareOptions(){
+ const main=$("historyAsset");
+ const compare=$("historyCompare");
+ if(!main||!compare)return;
+ const previous=compare.value;
+ compare.innerHTML="";
+ const none=document.createElement("option");
+ none.value="";
+ none.textContent="No comparison";
+ compare.appendChild(none);
+ MARKET_HISTORY_ITEMS.filter(item=>item.id!==main.value).forEach(item=>{
+  const option=document.createElement("option");
+  option.value=item.id;
+  option.textContent=marketHistoryOptionLabel(item);
+  compare.appendChild(option);
+ });
+ if(previous&&previous!==main.value&&marketHistoryItem(previous))compare.value=previous;
+ else compare.value="";
+}
+
+function updateHistoryRangeButtons(){
+ document.querySelectorAll("[data-history-range]").forEach(button=>{
+  const active=!customHistoryRange&&button.dataset.historyRange===activeHistoryRange;
+  button.classList.toggle("active",active);
+  button.setAttribute("aria-pressed",String(active));
+ });
+}
+
+function setHistoryRange(range){
+ activeHistoryRange=range;
+ customHistoryRange=false;
+ const selected=marketHistoryItem($("historyAsset").value);
+ const points=selected?marketHistoryPoints(selected.item):[];
+ if(points.length){
+  const end=points[points.length-1].date;
+  let start=points[0].date;
+  if(range==="5D"){
+   start=points[Math.max(0,points.length-5)].date;
+  }else if(range!=="ALL"){
+   const shifted=new Date(end+"T00:00:00Z");
+   shifted.setUTCDate(shifted.getUTCDate()-(HISTORY_PERIOD_DAYS[range]||365));
+   start=shifted.toISOString().slice(0,10);
+   if(start<points[0].date)start=points[0].date;
+  }
+  $("historyFrom").value=start;
+  $("historyTo").value=end;
+ }
+ updateHistoryRangeButtons();
+ drawMarketHistory();
+}
+
+function formatMarketHistoryValue(value,item){
+ if(item&&item.unit==="index points")return number(value)+" pts";
+ if(item&&item.currency){
+  const suffix=item.unit?item.unit.replace(item.currency,"").trim():"";
+  return money(value,item.currency)+(suffix?" "+suffix:"");
+ }
+ return number(value)+(item&&item.unit?" "+item.unit:"");
+}
+
+function historyMetric(container,title,value,detail,change){
+ const card=document.createElement("div");
+ card.className="history-metric";
+ const label=document.createElement("span");
+ label.className="metric-label";
+ label.textContent=title;
+ const amount=document.createElement("strong");
+ amount.className="metric-value"+(change>0?" up":change<0?" down":"");
+ amount.textContent=value;
+ const note=document.createElement("span");
+ note.className="metric-detail";
+ note.textContent=detail;
+ card.append(label,amount,note);
+ container.appendChild(card);
+}
+
+function drawMarketHistory(){
+ const canvas=$("marketHistoryChart");
+ if(!canvas)return;
+ const primary=marketHistoryItem($("historyAsset").value);
+ const compare=marketHistoryItem($("historyCompare").value);
+ const from=$("historyFrom").value;
+ const to=$("historyTo").value;
+ const metrics=$("marketHistoryMetrics");
+ const legend=$("marketHistoryLegend");
+ const status=$("marketHistoryStatus");
+ const readout=$("marketHistoryReadout");
+ const ctx=canvas.getContext("2d");
+ const rect=canvas.getBoundingClientRect();
+ const width=Math.max(300,rect.width);
+ const height=270;
+ const ratio=window.devicePixelRatio||1;
+ canvas.width=width*ratio;
+ canvas.height=height*ratio;
+ ctx.setTransform(ratio,0,0,ratio,0,0);
+ ctx.clearRect(0,0,width,height);
+ metrics.innerHTML="";
+ legend.innerHTML="";
+
+ if(!primary){
+  ctx.fillStyle="#9ba58e";ctx.font="12px Arial";ctx.fillText("No financial price history is available.",12,32);
+  status.textContent="No historical market series found.";
+  readout.textContent="No historical data available.";
+  return;
+ }
+ if(from&&to&&from>to){
+  ctx.fillStyle="#e5bd68";ctx.font="12px Arial";ctx.fillText("The start date must be before the end date.",12,32);
+  status.textContent="Invalid custom date range.";
+  readout.textContent="Choose a valid start and end date.";
+  return;
+ }
+
+ const selected=[primary,compare].filter(Boolean);
+ let series=selected.map((entry,index)=>({
+  id:entry.id,
+  name:entry.name,
+  item:entry.item,
+  colour:HISTORY_COLOURS[index],
+  points:marketHistoryPoints(entry.item).filter(point=>
+   (!from||point.date>=from)&&(!to||point.date<=to)
+  )
+ }));
+ const primaryAll=marketHistoryPoints(primary.item);
+ const primaryRange=series[0].points;
+ if(primaryRange.length<2){
+  ctx.fillStyle="#e5bd68";ctx.font="12px Arial";
+  ctx.fillText("Not enough observations in this period. Choose a wider range.",12,32);
+  status.textContent="Only "+primaryRange.length+" observation(s) in the selected period.";
+  readout.textContent="Widen the selected date range to display a chart.";
+  return;
+ }
+ const missingCompare=series.length>1&&series[1].points.length<2;
+ if(missingCompare)series=series.slice(0,1);
+ const comparisonMode=series.length>1;
+ const dates=Array.from(new Set(series.flatMap(entry=>entry.points.map(point=>point.date)))).sort();
+ const dateIndex=new Map(dates.map((stamp,index)=>[stamp,index]));
+ const allValues=[];
+ series.forEach(entry=>{
+  const base=entry.points[0].value;
+  entry.points.forEach(point=>{
+   point.plotValue=comparisonMode?(point.value/base-1)*100:point.value;
+   allValues.push(point.plotValue);
+  });
+ });
+ let minimum=Math.min(...allValues);
+ let maximum=Math.max(...allValues);
+ if(comparisonMode){minimum=Math.min(0,minimum);maximum=Math.max(0,maximum);}
+ if(minimum===maximum){
+  const pad=Math.max(Math.abs(maximum)*0.05,1);
+  minimum-=pad;maximum+=pad;
+ }else{
+  const pad=(maximum-minimum)*0.08;
+  minimum-=pad;maximum+=pad;
+ }
+ const left=62,right=15,top=18,bottom=34;
+ const plotWidth=width-left-right;
+ const plotHeight=height-top-bottom;
+ const xAt=index=>left+(dates.length<=1?0:index*plotWidth/(dates.length-1));
+ const yAt=value=>top+(maximum-value)*plotHeight/(maximum-minimum);
+
+ ctx.strokeStyle="#3d4937";ctx.lineWidth=1;ctx.fillStyle="#9ba58e";ctx.font="10px Arial";
+ for(let i=0;i<5;i++){
+  const value=maximum-(maximum-minimum)*i/4;
+  const y=yAt(value);
+  ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(width-right,y);ctx.stroke();
+  const label=comparisonMode?pct(value):number(value);
+  ctx.fillText(label,3,y+3);
+ }
+ series.forEach(entry=>{
+  ctx.strokeStyle=entry.colour;ctx.lineWidth=2.4;ctx.beginPath();
+  entry.points.forEach((point,index)=>{
+   const x=xAt(dateIndex.get(point.date));
+   const y=yAt(point.plotValue);
+   if(index===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  const last=entry.points[entry.points.length-1];
+  ctx.fillStyle=entry.colour;
+  ctx.beginPath();ctx.arc(xAt(dateIndex.get(last.date)),yAt(last.plotValue),3.5,0,Math.PI*2);ctx.fill();
+ });
+ ctx.fillStyle="#9ba58e";ctx.font="10px Arial";ctx.textAlign="left";
+ ctx.fillText(date(dates[0]),left,height-8);
+ ctx.textAlign="center";
+ ctx.fillText(date(dates[Math.floor((dates.length-1)/2)]),left+plotWidth/2,height-8);
+ ctx.textAlign="right";
+ ctx.fillText(date(dates[dates.length-1]),width-right,height-8);
+ ctx.textAlign="left";
+
+ series.forEach(entry=>{
+  const line=document.createElement("span");
+  const dot=document.createElement("i");
+  dot.style.background=entry.colour;
+  line.append(dot,document.createTextNode(entry.name));
+  legend.appendChild(line);
+ });
+
+ if(comparisonMode){
+  series.forEach(entry=>{
+   const first=entry.points[0],last=entry.points[entry.points.length-1];
+   const change=(last.value/first.value-1)*100;
+   historyMetric(metrics,entry.name,pct(change),
+    formatMarketHistoryValue(first.value,entry.item)+" → "+formatMarketHistoryValue(last.value,entry.item),
+    change);
+  });
+ }else{
+  const points=series[0].points;
+  const first=points[0],last=points[points.length-1];
+  const change=first.value?(last.value/first.value-1)*100:null;
+  const high=Math.max(...points.map(point=>point.value));
+  const low=Math.min(...points.map(point=>point.value));
+  historyMetric(metrics,"LATEST CLOSE",formatMarketHistoryValue(last.value,primary.item),date(last.date),0);
+  historyMetric(metrics,"PERIOD CHANGE",change===null?"—":pct(change),
+   date(first.date)+" → "+date(last.date),change);
+  historyMetric(metrics,"PERIOD HIGH",formatMarketHistoryValue(high,primary.item),"Selected period",0);
+  historyMetric(metrics,"PERIOD LOW",formatMarketHistoryValue(low,primary.item),"Selected period",0);
+ }
+
+ const fullStart=primaryAll.length?primaryAll[0].date:"—";
+ const fullEnd=primaryAll.length?primaryAll[primaryAll.length-1].date:"—";
+ status.textContent="AVAILABLE: "+primaryAll.length+" observations · "+fullStart+" to "+fullEnd+
+  " · DISPLAYING: "+primaryRange.length+" observations"+(missingCompare?" · comparison has insufficient data in this window":"");
+
+ function nearestPoint(points,stamp){
+  let found=points[0];
+  for(let i=0;i<points.length;i++){
+   if(points[i].date<=stamp)found=points[i];
+   else break;
+  }
+  return found;
+ }
+ function showReadout(index){
+  const stamp=dates[Math.max(0,Math.min(dates.length-1,index))];
+  const details=series.map(entry=>{
+   const point=nearestPoint(entry.points,stamp);
+   const change=entry.points[0].value?(point.value/entry.points[0].value-1)*100:null;
+   return entry.name+": "+formatMarketHistoryValue(point.value,entry.item)+
+    (comparisonMode?" ("+pct(change)+")":"");
+  });
+  readout.textContent=stamp+"  |  "+details.join("  |  ");
+ }
+ const inspect=event=>{
+  const bounds=canvas.getBoundingClientRect();
+  const local=Math.max(0,Math.min(bounds.width,event.clientX-bounds.left));
+  const index=Math.round((local-left)*Math.max(1,dates.length-1)/Math.max(1,bounds.width-left-right));
+  showReadout(index);
+ };
+ canvas.setAttribute("tabindex","0");
+ canvas.setAttribute("role","img");
+ canvas.setAttribute("aria-label","Interactive market history chart. Tap or move across the chart, or focus it and use the arrow keys.");
+ canvas.onpointermove=inspect;
+ canvas.onpointerdown=inspect;
+ let selectedIndex=dates.length-1;
+ canvas.onkeydown=event=>{
+  if(event.key!=="ArrowLeft"&&event.key!=="ArrowRight"&&event.key!=="Home"&&event.key!=="End")return;
+  event.preventDefault();
+  selectedIndex=event.key==="Home"?0:event.key==="End"?dates.length-1:
+   Math.max(0,Math.min(dates.length-1,selectedIndex+(event.key==="ArrowRight"?1:-1)));
+  showReadout(selectedIndex);
+ };
+ showReadout(selectedIndex);
+}
+
+function renderMarketHistoryExplorer(){
+ const main=$("historyAsset");
+ const compare=$("historyCompare");
+ if(!main||!compare)return;
+ MARKET_HISTORY_ITEMS=buildMarketHistoryItems();
+ const previous=main.value;
+ main.innerHTML="";
+ MARKET_HISTORY_ITEMS.forEach(item=>{
+  const option=document.createElement("option");
+  option.value=item.id;
+  option.textContent=marketHistoryOptionLabel(item);
+  main.appendChild(option);
+ });
+ const preferred=MARKET_HISTORY_ITEMS.some(item=>item.id===previous)?previous:
+  (MARKET_HISTORY_ITEMS.some(item=>item.id==="commodities.gold")?"commodities.gold":
+   MARKET_HISTORY_ITEMS.length?MARKET_HISTORY_ITEMS[0].id:"");
+ main.value=preferred;
+ refreshHistoryCompareOptions();
+
+ if(!main.dataset.bound){
+  main.addEventListener("change",()=>{
+   if(compare.value===main.value)compare.value="";
+   refreshHistoryCompareOptions();
+   if(customHistoryRange)drawMarketHistory();
+   else setHistoryRange(activeHistoryRange);
+  });
+  compare.addEventListener("change",drawMarketHistory);
+  document.querySelectorAll("[data-history-range]").forEach(button=>{
+   button.addEventListener("click",()=>setHistoryRange(button.dataset.historyRange));
+  });
+  $("historyApply").addEventListener("click",()=>{
+   const from=$("historyFrom").value;
+   const to=$("historyTo").value;
+   if(!from||!to||from>to){
+    $("marketHistoryStatus").textContent="Choose a valid start and end date before applying.";
+    return;
+   }
+   customHistoryRange=true;
+   updateHistoryRangeButtons();
+   drawMarketHistory();
+  });
+  main.dataset.bound="yes";
+ }
+ if(MARKET_HISTORY_ITEMS.length)setHistoryRange(activeHistoryRange);
+ else{
+  $("marketHistoryStatus").textContent="No financial history is available in the current data file.";
+  $("marketHistoryReadout").textContent="The collector has not supplied historical market observations.";
+ }
+}
+
+
 // COMMODITIES
 function renderCommodityCharts(){
  const items=displayItems(D.commodities);
@@ -839,6 +1284,7 @@ async function load(){
   ];
 
   renderCards("overviewCards",overview);
+  renderMarketHistoryExplorer();
   renderCards("commodityCards",D.commodities);
   renderCommodityCharts();
   renderIndices();
@@ -869,6 +1315,7 @@ window.addEventListener("resize",()=>{
  clearTimeout(resizeTimer);
  resizeTimer=setTimeout(()=>{
   if(!D||!Object.keys(D).length)return;
+  drawMarketHistory();
   renderCommodityCharts();
   renderOil();
   renderFuel();

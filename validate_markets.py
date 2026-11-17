@@ -65,6 +65,78 @@ def inspect_for_product_fields(value, path="$"):
             inspect_for_product_fields(child, f"{path}[{index}]")
 
 
+def validate_financial_histories(data):
+    """Check stored daily financial price histories for usable time-series data."""
+    groups = ("commodities", "indices", "crypto", "fx")
+    series = []
+
+    for group in groups:
+        values = data.get(group) or {}
+        if isinstance(values, dict):
+            series.extend((f"{group}.{key}", item) for key, item in values.items())
+        elif isinstance(values, list):
+            series.extend((f"{group}.{index}", item) for index, item in enumerate(values))
+
+    for index, item in enumerate(data.get("stocks") or []):
+        series.append((f"stocks.{index}", item))
+
+    checked_series = 0
+    total_points = 0
+    oldest = None
+    newest = None
+
+    for name, item in series:
+        if not isinstance(item, dict):
+            continue
+        history = item.get("history")
+        if history is None:
+            continue
+        if not isinstance(history, list):
+            fail(f"{name} history is not a list")
+        if len(history) > 2000:
+            fail(f"{name} history exceeds the 2,000-point retention limit")
+
+        previous_day = None
+        seen = set()
+        for position, point in enumerate(history):
+            if not isinstance(point, dict):
+                fail(f"{name} history point {position} is not an object")
+            day = point.get("date")
+            if not isinstance(day, str):
+                fail(f"{name} history point {position} has no date")
+            try:
+                datetime.strptime(day, "%Y-%m-%d")
+            except ValueError:
+                fail(f"{name} history point {position} has an invalid date")
+            if day in seen:
+                fail(f"{name} has duplicate history date {day}")
+            if previous_day and day < previous_day:
+                fail(f"{name} history is not in chronological order")
+            seen.add(day)
+            previous_day = day
+
+            value = point.get("value", point.get("price"))
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                fail(f"{name} history point {position} has an invalid price")
+            if not math.isfinite(value) or value <= 0:
+                fail(f"{name} history point {position} has a non-positive or non-finite price")
+
+        if history:
+            checked_series += 1
+            total_points += len(history)
+            oldest = min(oldest, history[0]["date"]) if oldest else history[0]["date"]
+            newest = max(newest, history[-1]["date"]) if newest else history[-1]["date"]
+
+    if checked_series == 0:
+        fail("No financial market price histories are available")
+
+    print(
+        "PASS: financial history integrity; "
+        f"{checked_series} series, {total_points} daily observations, "
+        f"{oldest} to {newest}."
+    )
+
+
 def main():
     if not DATA_FILE.exists():
         fail("data/markets.json does not exist")
@@ -72,6 +144,8 @@ def main():
     data = json.loads(DATA_FILE.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
         fail("Top-level market data must be an object")
+
+    validate_financial_histories(data)
 
     now = datetime.now(timezone.utc)
     updated = parse_time(data.get("updatedAt"), "updatedAt")

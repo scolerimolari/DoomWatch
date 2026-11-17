@@ -44,11 +44,11 @@ USER_AGENT = (
 )
 
 TIMEOUT = 25
-MAX_HISTORY = 400
+MAX_HISTORY = 2000
 
 YAHOO_URL = (
     "https://query1.finance.yahoo.com/v8/finance/chart/"
-    "{}?range=1y&interval=1d"
+    "{}?range=5y&interval=1d"
 )
 
 MARKETS = {
@@ -1656,7 +1656,7 @@ def collect_news(data):
 def main():
     print("================================")
     print("DOOMWATCH MARKETS COLLECTION")
-    print("BUILD 83 - AGGREGATE GROCERY INTELLIGENCE")
+    print("BUILD 84 - FIVE-YEAR MARKET HISTORY")
     print("================================")
 
     data = load_data()
