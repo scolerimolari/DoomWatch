@@ -45,7 +45,7 @@
  </div>
  <div class="obs-status" id="obs-status" aria-live="polite">CONNECTING TO OBSERVATORY SNAPSHOT…</div>
 </div>
-<div class="panel" id="obs-integrations" style="margin:12px 0;border:1px solid #596653"><div class="panel-title">CONNECTED DOOMWATCH WORKSPACES</div><div class="obs-actions"><a href="./feed.html">FEED / SIGNAL ROOM ↗</a><a href="./map.html">LIVE MAP ↗</a><a href="./operations.html">OPERATIONS ↗</a><a href="./markets.html">MARKETS ↗</a><a href="./index.html#intelligence">INTELLIGENCE / GRAPHS ↗</a><a href="./meshcore.html">MESHCORE ↗</a></div><div class="obs-status" style="margin-top:8px">Move between information streams to compare coverage, geography, market context and source provenance. All records are read-only source information.</div></div>
+<div class="panel" id="obs-integrations" style="margin:12px 0;border:1px solid #596653"><div class="panel-title">CONNECTED DOOMWATCH WORKSPACES</div><div class="obs-actions"><a href="./index.html">COMMAND ↗</a><a href="./map.html">MAP ↗</a><a href="./markets.html">ECONOMY ↗</a><a href="./communications.html">CONNECTIVITY ↗</a><a href="./meshcore.html">MESHCORE RESOURCES ↗</a></div><div class="obs-status" style="margin-top:8px">Move between information streams to compare coverage, geography, market context and source provenance. All records are read-only source information.</div></div>
 <div class="obs-note"><strong>ASSESSMENT RULE:</strong> Reliability grades describe the type of source, not whether a particular claim is true. Repeated posts, syndicated copy and reports citing one original source are not independent corroboration. Automated grouping is a research aid, not proof of an event or a common cause.</div>
 <h2>SELECT AN INTELLIGENCE FLOW</h2>
 <div class="obs-tabs" id="obs-tabs" role="tablist" aria-label="Six intelligence flows">
@@ -125,16 +125,16 @@ function renderRecord(r){
  const summary=r.summary?'<p>'+esc(r.summary)+'</p>':'<p class="obs-status">No summary supplied by source.</p>';
  const cve=r.cve?'<span class="obs-tag">'+esc(r.cve)+'</span>':"";
  const ransomware=r.ransomwareUse&&r.ransomwareUse!=="Unknown"?'<span class="obs-tag">RANSOMWARE: '+esc(r.ransomwareUse)+'</span>':"";
- return '<article class="obs-record grade-'+esc(grade)+'"><div class="obs-tags"><span class="obs-tag grade">SOURCE GRADE '+esc(grade)+'</span><span class="obs-tag">'+esc(r.reliabilityLabel||"Unclassified")+'</span><span class="obs-tag">'+esc(evidence)+'</span>'+cve+ransomware+'</div><h3>'+esc(r.title)+'</h3>'+summary+'<div class="obs-meta"><strong>'+esc(r.source||"Source not specified")+'</strong><br>TYPE: '+esc(r.sourceType||"unclassified")+' · REGION: '+esc(r.region||"Not stated")+'<br>PUBLISHED: '+esc(date(r.publishedAt))+'<br>'+esc(conf)+'</div><div class="obs-actions">'+sourceUrl+mapAction(r)+'<a href="./feed.html">FEED ↗</a><a href="./operations.html">OPS ↗</a>'+(activeFlow==="economic"?'<a href="./markets.html">MARKETS ↗</a>':"")+'</div></article>';
+ return '<article class="obs-record grade-'+esc(grade)+'"><div class="obs-tags"><span class="obs-tag grade">SOURCE GRADE '+esc(grade)+'</span><span class="obs-tag">'+esc(r.reliabilityLabel||"Unclassified")+'</span><span class="obs-tag">'+esc(evidence)+'</span>'+cve+ransomware+'</div><h3>'+esc(r.title)+'</h3>'+summary+'<div class="obs-meta"><strong>'+esc(r.source||"Source not specified")+'</strong><br>TYPE: '+esc(r.sourceType||"unclassified")+' · REGION: '+esc(r.region||"Not stated")+'<br>PUBLISHED: '+esc(date(r.publishedAt))+'<br>'+esc(conf)+'</div><div class="obs-actions">'+sourceUrl+mapAction(r)+''+(activeFlow==="economic"?'<a href="./markets.html">MARKETS ↗</a>':"")+'</div></article>';
 }
 function render(){
  if(!data)return;
  const flow=data.flows?.[activeFlow]||{records:[],directory:[],registeredSources:[],description:"No flow data."};
- const q=$("obs-search").value.trim().toLowerCase(),grade=$("obs-grade").value;
+ const q=$("obs-search").value.trim().toLowerCase(),grade=$("obs-grade").value,region=$("obs-region").value;
  const all=Array.isArray(flow.records)?flow.records:[];
  const visible=all.filter(r=>{
   const hay=[r.title,r.summary,r.source,r.region,r.sourceType,r.evidenceStatus].join(" ").toLowerCase();
-  return (!q||hay.includes(q))&&(grade==="ALL"||String(r.reliabilityGrade||"U").toUpperCase()===grade);
+  const geo=String(r.region||"").toLowerCase();\n  const regionMatch=region==="ALL"||(region==="NI"&&/northern ireland|\\bni\\b/.test(geo))||(region==="UK"&&/(\\buk\\b|united kingdom|england|scotland|wales|great britain)/.test(geo))||(region==="GLOBAL"&&/(global|international|world)/.test(geo));\n  return (!q||hay.includes(q))&&(grade==="ALL"||String(r.reliabilityGrade||"U").toUpperCase()===grade)&&regionMatch;
  });
  $("flow-name").textContent=names[activeFlow]||flow.name;
  $("flow-description").textContent=flow.description||"";
@@ -159,8 +159,8 @@ function selectFlow(key){
 }
 $("obs-tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-flow]");if(b)selectFlow(b.dataset.flow);});
 $("obs-search").addEventListener("input",render);
-$("obs-grade").addEventListener("change",render);
-$("obs-clear").addEventListener("click",()=>{$("obs-search").value="";$("obs-grade").value="ALL";render();});
+$("obs-grade").addEventListener("change",render);\n$("obs-region").addEventListener("change",render);
+$("obs-clear").addEventListener("click",()=>{$("obs-search").value="";$("obs-grade").value="ALL";$("obs-region").value="ALL";render();});
 async function load(){
  try{
   const response=await fetch(DATA_URL+"?v="+Date.now(),{cache:"no-store"});
