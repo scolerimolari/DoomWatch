@@ -1,60 +1,57 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-17T12:21:23+00:00",
-  "generatedAt": "2026-11-17T12:21:23+00:00",
+  "updatedAt": "2026-11-17T12:37:52+00:00",
+  "generatedAt": "2026-11-17T12:37:52+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:18+00:00"
+      "checkedAt": "2026-11-17T12:37:20+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:18+00:00"
+      "checkedAt": "2026-11-17T12:37:20+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:18+00:00"
+      "checkedAt": "2026-11-17T12:37:20+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:18+00:00"
+      "checkedAt": "2026-11-17T12:37:20+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:18+00:00"
+      "checkedAt": "2026-11-17T12:37:21+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:18+00:00"
+      "checkedAt": "2026-11-17T12:37:21+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:18+00:00"
+      "checkedAt": "2026-11-17T12:37:21+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:19+00:00"
+      "checkedAt": "2026-11-17T12:37:21+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:19+00:00"
+      "checkedAt": "2026-11-17T12:37:21+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:19+00:00"
+      "checkedAt": "2026-11-17T12:37:22+00:00"
     },
     "heatingOil": {
-      "status": "ok",
-      "checkedAt": "2026-11-17T12:21:21+00:00",
+      "status": "failed",
+      "checkedAt": "2026-11-17T12:37:49+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
-      "dailyArchiveUrl": "https://www.consumercouncil.org.uk/home-heating/price-checker/daily",
-      "observationsImported": 181,
-      "latestObservation": "2026-11-17",
-      "note": "Consumer Council NI published averages. Prices include 5% VAT. National and Ballyclare observations are kept separately."
+      "error": "The read operation timed out"
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:21+00:00",
+      "checkedAt": "2026-11-17T12:37:50+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6afb1224ccb3ea58ac8743ad/CSV__2018_-__.csv",
       "observationsImported": 464,
@@ -63,7 +60,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:22+00:00",
+      "checkedAt": "2026-11-17T12:37:51+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -72,7 +69,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:22+00:00",
+      "checkedAt": "2026-11-17T12:37:51+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -81,7 +78,7 @@
     },
     "supermarketPriceIndex": {
       "status": "ok",
-      "checkedAt": "2026-11-17T12:21:23+00:00",
+      "checkedAt": "2026-11-17T12:37:52+00:00",
       "url": "https://data.yappman.com/shelf-price-index/",
       "datasetUrl": "https://api.apify.com/v2/datasets/AvRCWqFinCiNjx3sP/items?format=json",
       "licence": "CC BY 4.0",
@@ -93,10 +90,10 @@
   "commodities": {
     "gold": {
       "symbol": "GC=F",
-      "price": 3868.7,
-      "changePct": 106.86,
+      "price": 3863.1,
+      "changePct": 106.561,
       "currency": "USD",
-      "observedAt": "2026-11-17T12:11:09+00:00",
+      "observedAt": "2026-11-17T12:27:17+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -5128,7 +5125,7 @@
         },
         {
           "date": "2026-11-17",
-          "value": 3868.699951
+          "value": 3863.100098
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -5138,10 +5135,10 @@
     },
     "silver": {
       "symbol": "SI=F",
-      "price": 47.58,
-      "changePct": 89.057,
+      "price": 47.535,
+      "changePct": 88.878,
       "currency": "USD",
-      "observedAt": "2026-11-17T12:11:00+00:00",
+      "observedAt": "2026-11-17T12:27:16+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -10169,7 +10166,7 @@
         },
         {
           "date": "2026-11-17",
-          "value": 47.580002
+          "value": 47.535
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -10179,10 +10176,10 @@
     },
     "brent": {
       "symbol": "BZ=F",
-      "price": 92.86,
-      "changePct": 15.67,
+      "price": 92.83,
+      "changePct": 15.633,
       "currency": "USD",
-      "observedAt": "2026-11-17T12:10:11+00:00",
+      "observedAt": "2026-11-17T12:27:00+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -15214,7 +15211,7 @@
         },
         {
           "date": "2026-11-17",
-          "value": 92.860001
+          "value": 92.830002
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -25284,10 +25281,10 @@
     },
     "ftse100": {
       "symbol": "^FTSE",
-      "price": 10795.98,
-      "changePct": 48.069,
+      "price": 10788.23,
+      "changePct": 47.962,
       "currency": "GBP",
-      "observedAt": "2026-11-17T12:06:18+00:00",
+      "observedAt": "2026-11-17T12:22:20+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -30335,7 +30332,7 @@
         },
         {
           "date": "2026-11-17",
-          "value": 10795.980469
+          "value": 10788.230469
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -30347,10 +30344,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 64818.57,
-      "changePct": 7.372,
+      "price": 64847.67,
+      "changePct": 7.421,
       "currency": "USD",
-      "observedAt": "2026-11-17T12:21:12+00:00",
+      "observedAt": "2026-11-17T12:37:17+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -37658,7 +37655,7 @@
         },
         {
           "date": "2026-11-17",
-          "value": 64818.570312
+          "value": 64847.671875
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -37670,10 +37667,10 @@
   "fx": {
     "GBPUSD": {
       "symbol": "GBPUSD=X",
-      "price": 1.319,
-      "changePct": -1.75,
+      "price": 1.3192,
+      "changePct": -1.736,
       "currency": "USD",
-      "observedAt": "2026-11-17T12:20:45+00:00",
+      "observedAt": "2026-11-17T12:36:46+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -42877,7 +42874,7 @@
         },
         {
           "date": "2026-11-17",
-          "value": 1.319018
+          "value": 1.319174
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -42887,10 +42884,10 @@
     },
     "GBPEUR": {
       "symbol": "GBPEUR=X",
-      "price": 1.1998,
-      "changePct": 1.172,
+      "price": 1.1999,
+      "changePct": 1.181,
       "currency": "EUR",
-      "observedAt": "2026-11-17T12:19:45+00:00",
+      "observedAt": "2026-11-17T12:35:46+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -48090,7 +48087,7 @@
         },
         {
           "date": "2026-11-17",
-          "value": 1.1998
+          "value": 1.1999
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -48100,10 +48097,10 @@
     },
     "EURUSD": {
       "symbol": "EURUSD=X",
-      "price": 1.0991,
-      "changePct": -2.915,
+      "price": 1.0993,
+      "changePct": -2.897,
       "currency": "USD",
-      "observedAt": "2026-11-17T12:20:45+00:00",
+      "observedAt": "2026-11-17T12:36:46+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -53303,7 +53300,7 @@
         },
         {
           "date": "2026-11-17",
-          "value": 1.099143
+          "value": 1.099264
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -111162,7 +111159,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-17T12:21:21+00:00",
+    "updatedAt": "2026-11-17T12:37:50+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6afb1224ccb3ea58ac8743ad/CSV__2018_-__.csv",
@@ -120081,7 +120078,7 @@
         "missingPackSize": null
       }
     ],
-    "supermarketIndexUpdatedAt": "2026-11-17T12:21:23+00:00",
+    "supermarketIndexUpdatedAt": "2026-11-17T12:37:52+00:00",
     "supermarketIndex": {
       "vintage": "2026-W45",
       "publishedAt": "2026-11-09T12:49:02Z",
@@ -120103,10 +120100,22 @@
   },
   "news": [
     {
+      "title": "Mozambique opposition leader faces trial over deadly 2024 election unrest ",
+      "url": "https://www.bbc.co.uk/news/articles/crq5vl1l6z2po?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-17T12:35:57+00:00"
+    },
+    {
       "title": "Where are the most jobs for 18-24 year-olds?",
       "url": "https://www.bbc.co.uk/news/articles/cw3djdjk5d7ko?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
-      "publishedAt": "2026-11-17T12:19:42+00:00"
+      "publishedAt": "2026-11-17T12:35:53+00:00"
+    },
+    {
+      "title": "Accredited official statistics: Latest cattle, sheep and pig slaughter statistics",
+      "url": "https://www.gov.uk/government/statistics/cattle-sheep-and-pig-slaughter",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-17T12:25:49Z"
     },
     {
       "title": "Gunmen kill Costa Rican journalist who reported on drugs trade",
@@ -120179,12 +120188,6 @@
       "url": "https://www.bbc.co.uk/news/articles/cr868wd2qg18o?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-17T09:27:44+00:00"
-    },
-    {
-      "title": "Mozambique opposition leader faces trial over deadly 2024 election unrest ",
-      "url": "https://www.bbc.co.uk/news/articles/crq5vl1l6z2po?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-17T09:20:29+00:00"
     },
     {
       "title": "Correspondence: Upper Costa Beck programme of measures: ministerial direction",
@@ -120275,15 +120278,15 @@
       "url": "https://www.bbc.co.uk/news/articles/cmewvxg855yno?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-16T23:09:49+00:00"
-    },
-    {
-      "title": "Business Daily",
-      "url": "https://www.bbc.co.uk/sounds/play/w3ct8grt?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-16T21:30:00+00:00"
     }
   ],
   "supplyNews": [
+    {
+      "title": "Accredited official statistics: Latest cattle, sheep and pig slaughter statistics",
+      "url": "https://www.gov.uk/government/statistics/cattle-sheep-and-pig-slaughter",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-17T12:25:49Z"
+    },
     {
       "title": "Fresh wave of funding to protect coral reefs and boost resilience",
       "url": "https://www.gov.uk/government/news/fresh-wave-of-funding-to-protect-coral-reefs-and-boost-resilience",
@@ -120397,12 +120400,6 @@
       "url": "https://www.gov.uk/government/publications/confined-establishments-approved-to-export-ungulates-to-the-eu",
       "source": "DEFRA",
       "publishedAt": "2026-11-13T14:50:14Z"
-    },
-    {
-      "title": "Research: Seasonal workers reviews and surveys",
-      "url": "https://www.gov.uk/government/publications/seasonal-workers-pilot-review",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-13T14:50:05Z"
     }
   ],
   "foodInflationHistory": [
