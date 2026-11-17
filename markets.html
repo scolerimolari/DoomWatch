@@ -157,6 +157,7 @@ main{padding:10px}
  <div class="chart-readout history-readout" id="marketHistoryReadout" aria-live="polite">Select an instrument and time period to inspect the history.</div>
  <div class="history-status" id="marketHistoryStatus">Loading available market history...</div>
  <div class="small">Comparison charts are rebased to 0% at the start of the selected period. Prices are daily closes, not live intraday quotes. Historical depth depends on the source.</div>
+ <div class="small">GBP is the display currency for USD-priced commodities, Bitcoin and US shares. Historical values use the GBP/USD rate on or before each observation date. Indices remain points; FX instruments remain quoted exchange rates.</div>
 </div>
 <div class="panel">
 <h3>MARKET DATA STATUS</h3>
@@ -370,11 +371,14 @@ function currency(item){return item.currency||null;}
 
 function priceDisplay(item){
  const p=price(item);
+ if(item&&item.unit==="index points")return number(p)+" pts";
+ if(item&&item.gbpPrice!==null&&item.gbpPrice!==undefined&&Number.isFinite(Number(item.gbpPrice)))return money(item.gbpPrice,"GBP");
+ if(item&&item.unit&&/\bper\b/i.test(item.unit))return number(p)+" "+item.unit;
  return currency(item)?money(p,currency(item)):number(p);
 }
 
 function movement(item){
- const v=item.changePct??item.changePercent;
+ const v=item.gbpChangePct??item.changePct??item.changePercent;
  const n=Number(v);
  const cls=!Number.isFinite(n)?"neutral":n>0?"up":n<0?"down":"neutral";
  return `<span class="${cls}">${pct(v)}</span>`;
@@ -460,13 +464,14 @@ function chart(canvasId,history,unit=""){
  ctx.beginPath();ctx.arc(x(points.length-1),y(points[points.length-1].value),4,0,Math.PI*2);ctx.fill();
 
  ctx.fillStyle="#9ba58e";ctx.font="10px Arial";
- ctx.fillText(number(max)+unit,3,pad);
- ctx.fillText(number(min)+unit,3,h-pad);
+ const chartValue=value=>unit==="GBP"?money(value,"GBP"):number(value)+(unit?" "+unit:"");
+ ctx.fillText(chartValue(max),3,pad);
+ ctx.fillText(chartValue(min),3,h-pad);
  ctx.fillText(date(points[0].date),pad,h-5);
  ctx.textAlign="right";
  ctx.fillText(date(points[points.length-1].date),w-pad,h-5);
  ctx.textAlign="left";
- attachChartReadout(canvas,points.length,i=>date(points[i].date)+" · "+number(points[i].value)+unit, pad);
+ attachChartReadout(canvas,points.length,i=>date(points[i].date)+" · "+chartValue(points[i].value), pad);
 }
 
 // Multi-series chart for the grocery index.
@@ -558,7 +563,10 @@ let activeHistoryRange="1Y";
 let customHistoryRange=false;
 
 function marketHistoryPoints(item){
- return (item&&Array.isArray(item.history)?item.history:[])
+ const converted=item&&Array.isArray(item.gbpHistory)&&item.gbpHistory.length
+  ?item.gbpHistory:null;
+ const history=converted||(item&&Array.isArray(item.history)?item.history:[]);
+ return history
   .map(p=>({
    date:String(p.date||p.timestamp||p.observedAt||"").slice(0,10),
    value:Number(p.value??p.price??p.average??p.index)
@@ -655,7 +663,11 @@ function setHistoryRange(range){
 }
 
 function formatMarketHistoryValue(value,item){
+ if(item&&Array.isArray(item.gbpHistory)&&item.gbpHistory.length){
+  return money(value,"GBP")+(item.gbpUnit?" "+item.gbpUnit:"");
+ }
  if(item&&item.unit==="index points")return number(value)+" pts";
+ if(item&&item.unit&&/\bper\b/i.test(item.unit))return number(value)+" "+item.unit;
  if(item&&item.currency){
   const suffix=item.unit?item.unit.replace(item.currency,"").trim():"";
   return money(value,item.currency)+(suffix?" "+suffix:"");
@@ -928,7 +940,8 @@ function renderCommodityCharts(){
    <div class="chart-title">${safe(label(item))} // PRICE HISTORY</div>
    <div class="chart-wrap"><canvas id="${id}"></canvas></div>`;
   $("commodityCharts").appendChild(panel);
-  chart(id,historyOf(item));
+  const converted=Array.isArray(item.gbpHistory)&&item.gbpHistory.length>0;
+  chart(id,converted?item.gbpHistory:historyOf(item),converted?"GBP":(item.unit||item.currency||""));
  });
 }
 
