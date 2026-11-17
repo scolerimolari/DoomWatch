@@ -42,7 +42,15 @@ def child_value(element, names):
     return ""
 
 def parse_feed(payload, source):
-    root = ET.fromstring(payload)
+    try:
+        root = ET.fromstring(payload)
+    except ET.ParseError:
+        # RSS publishers sometimes emit HTML named entities inside XML text.
+        # Escape only undefined named entities, then let html.unescape decode them.
+        safe_payload = re.sub(rb"&(?!amp;|lt;|gt;|quot;|apos;|#[0-9]+;|#x[0-9A-Fa-f]+;)([A-Za-z][A-Za-z0-9]+);", rb"&amp;\\1;", payload)
+        if safe_payload == payload:
+            raise
+        root = ET.fromstring(safe_payload)
     records = []
     for item in root.iter():
         if local(item.tag) not in ("item", "entry"):
@@ -98,7 +106,9 @@ def main():
             print("FEED DISABLED", source["name"], source.get("disabledReason", "Manual review"))
             continue
         try:
-            for attempt in range(2):
+            if "news.google.com" in source["url"]:
+                time.sleep(1)
+            for attempt in range(3):
                 try:
                     req = Request(source["url"], headers={"User-Agent": USER_AGENT, "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*"})
                     with urlopen(req, timeout=TIMEOUT) as response:
@@ -110,9 +120,14 @@ def main():
                     break
                 except Exception as error:
                     retryable = getattr(error, "code", None) in (429, 500, 502, 503, 504) or isinstance(error, TimeoutError)
-                    if attempt == 0 and retryable:
-                        print("FEED RETRY", source["name"], str(error)[:120])
-                        time.sleep(2)
+                    if attempt < 2 and retryable:
+                        retry_after = getattr(error, "headers", {}).get("Retry-After") if getattr(error, "headers", None) else None
+                        try:
+                            delay = min(8, max(3, int(retry_after))) if retry_after else 3 * (attempt + 1)
+                        except (TypeError, ValueError):
+                            delay = 3 * (attempt + 1)
+                        print("FEED RETRY", source["name"], str(error)[:120], "- waiting", delay, "seconds")
+                        time.sleep(delay)
                         continue
                     raise
             for item in items:

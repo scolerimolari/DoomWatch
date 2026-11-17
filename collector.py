@@ -2,6 +2,7 @@ import json
 import re
 import hashlib
 import urllib.request
+import time
 from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import urlencode, urljoin, urlparse
 import xml.etree.ElementTree as ET
@@ -391,9 +392,24 @@ def fetch_gdacs_api(source):
         }
     )
 
-    with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
-        content_type = response.headers.get("Content-Type", "")
-        body = response.read(MAX_FEED_SIZE)
+    last_error = None
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+                content_type = response.headers.get("Content-Type", "")
+                body = response.read(MAX_FEED_SIZE)
+            break
+        except Exception as error:
+            last_error = error
+            retryable = isinstance(error, TimeoutError) or getattr(error, "code", None) in (429, 500, 502, 503, 504)
+            if attempt < 2 and retryable:
+                delay = 3 * (attempt + 1)
+                print("GDACS API RETRY:", str(error)[:160], "- waiting", delay, "seconds")
+                time.sleep(delay)
+                continue
+            raise
+    else:
+        raise last_error or RuntimeError("GDACS API request failed")
 
     if not body:
         raise ValueError("GDACS API returned an empty response")
