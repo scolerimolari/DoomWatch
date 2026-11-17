@@ -11,7 +11,7 @@
  <div class="dw-kicker">OPEN-SOURCE INTELLIGENCE / SITUATIONAL AWARENESS</div>
  <div class="dw-heading-row"><div><h1>Command</h1><p>One concise view of what is changing across Northern Ireland, the UK and the wider world.</p></div><div class="dw-updated" id="dw-updated">LOADING SNAPSHOTS</div></div>
  <div class="dw-regions" role="group" aria-label="Geographic filter">
-  <button class="is-active" data-region="ALL">All regions</button><button data-region="NI">Northern Ireland</button><button data-region="UK">United Kingdom</button><button data-region="GLOBAL">Global</button>
+  <button class="is-active" data-region="ALL" aria-pressed="true">All regions</button><button data-region="NI" aria-pressed="false">Northern Ireland</button><button data-region="UK" aria-pressed="false">United Kingdom</button><button data-region="GLOBAL" aria-pressed="false">Global</button>
  </div>
 </section>
 <section class="dw-metric-grid" aria-label="Intelligence snapshot">
@@ -38,19 +38,21 @@
 (()=>{"use strict";
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmtDate=v=>{if(!v)return"Time not supplied";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"});};
-const regionOf=x=>{const s=String(x?.region||x?.area||x?.location||"").toLowerCase();if(/northern ireland|\bni\b|belfast|antrim|derry|armagh|tyrone|fermanagh|down/.test(s))return"NI";if(/united kingdom|\buk\b|england|scotland|wales|britain/.test(s))return"UK";if(/global|international|world|overseas/.test(s))return"GLOBAL";return"UNKNOWN";};
+const regionOf=x=>{const s=String(x?.region||x?.area||x?.location||x?.geo||x?.geography||x?.country||"").toLowerCase();if(/bounding box|geometry must be checked/.test(s))return"UNKNOWN";if(/northern ireland|\\bni\\b|belfast|antrim|derry|armagh|tyrone|fermanagh|down/.test(s))return"NI";if(/united kingdom|\\buk\\b|\\bgb\\b|england|scotland|wales|great britain|britain/.test(s))return"UK";if(/global|international|world|overseas|europe|north america|south america|asia|africa|middle east|oceania|republic of ireland/.test(s)||/^ireland$/.test(s))return"GLOBAL";return"UNKNOWN";};
 const titleOf=x=>x?.title||x?.headline||x?.name||"Untitled report";
 const dateOf=x=>x?.publishedAt||x?.date||x?.published||x?.collectedAt||x?.timestamp||"";
 const sourceOf=x=>x?.source||x?.publisher||x?.sourceName||x?.sourceId||"Source not identified";
 const urlOf=x=>{try{const u=new URL(x?.url||"",location.href);return["https:","http:"].includes(u.protocol)?u.href:"";}catch{return"";}};
 const summaryOf=x=>x?.summary||x?.description||x?.contentSnippet||"No additional summary supplied by the source.";
-let selected="ALL",archive=[],flows=[],markets={},comms={};
+const compactViewport=window.matchMedia("(max-width:760px)");
+let selected="ALL",archive=[]
 function filtered(items){return items.filter(x=>selected==="ALL"||regionOf(x)===selected).sort((a,b)=>new Date(dateOf(b)||0)-new Date(dateOf(a)||0));}
 function story(x){const u=urlOf(x);const grade=x.sourceGrade||x.reliabilityGrade||x.sourceTrust||x.trust||"Unclassified";return '<article class="dw-story"><div class="dw-story-meta">'+esc(regionOf(x))+' / '+esc(sourceOf(x))+' / '+esc(fmtDate(dateOf(x)))+'</div><h3>'+(u?'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+esc(titleOf(x))+'</a>':esc(titleOf(x)))+'</h3><p>'+esc(summaryOf(x))+'</p><div class="dw-story-foot"><span>SOURCE CLASS: '+esc(String(grade).replaceAll("_"," "))+'</span>'+(u?'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">Original report ↗</a>':"")+'</div></article>';}
 function render(){
- const current=filtered(archive).slice(0,7);$("latest-intelligence").innerHTML=current.length?current.map(story).join(""):'<p class="dw-muted">No matching records in the current archive. This is not evidence that nothing is happening.</p>';
- const emergent=filtered(flows).slice(0,5);$("emerging-signals").innerHTML=emergent.length?emergent.map(story).join(""):'<p class="dw-muted">No observatory records available for this filter.</p>';
- document.querySelectorAll("[data-region]").forEach(b=>b.classList.toggle("is-active",b.dataset.region===selected));
+ const compact=compactViewport.matches;
+ const current=filtered(archive).slice(0,compact?4:7);
+ const emergent=filtered(flows).slice(0,compact?3:5);
+ document.querySelectorAll("[data-region]").forEach(b=>{const active=b.dataset.region===selected;b.classList.toggle("is-active",active);b.setAttribute("aria-pressed",String(active));});
 }
 async function get(path){const r=await fetch(path+"?v="+Date.now(),{cache:"no-store"});if(!r.ok)throw Error(path+" HTTP "+r.status);return r.json();}
 async function start(){
@@ -67,6 +69,9 @@ async function start(){
  render();
 }
 document.querySelectorAll("[data-region]").forEach(b=>b.addEventListener("click",()=>{selected=b.dataset.region;render();}));
+compactViewport.addEventListener?.("change",render);
+// Start after all controls and responsive state are ready.
+start().catch
 start().catch(e=>{$("dw-updated").textContent="PARTIAL SNAPSHOT";$("latest-intelligence").innerHTML='<p class="dw-muted">'+esc(e.message)+'</p>';});
 })();
 </script>
