@@ -31,7 +31,7 @@ FLOW_DEFS = {
  "community": {
   "name":"Community Signals",
   "desc":"Public community and social reporting, including local observations. These are leads for review, not proof. Private messages and closed groups are not collected.",
-  "terms":("ballyclare","newtownabbey","belfast","antrim","larne","derry","northern ireland","community","local report","resident","neighbourhood","road closed","power cut","water outage","shelter","evacuation","bluesky","mastodon","lemmy","reddit","telegram"),
+  "terms":("ballyclare","newtownabbey","belfast","antrim","larne","derry","northern ireland","community","local report","resident","neighbourhood","road closed","power cut","water outage","shelter","evacuation","mastodon","lemmy","reddit","telegram"),
   "types":("social_network","community_network","regional_newsroom","community_report")
  },
  "fringe": {
