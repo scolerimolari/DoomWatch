@@ -135,7 +135,11 @@ function render(){
  const visible=all.filter(r=>{
   const hay=[r.title,r.summary,r.source,r.region,r.sourceType,r.evidenceStatus].join(" ").toLowerCase();
   const geo=String(r.region||"").toLowerCase();
-  const regionMatch=region==="ALL"||(region==="NI"&&(geo.includes("northern ireland")||geo==="ni"))||(region==="UK"&&(geo==="uk"||geo.includes("united kingdom")||geo.includes("england")||geo.includes("scotland")||geo.includes("wales")||geo.includes("great britain")))||(region==="GLOBAL"&&(geo.includes("global")||geo.includes("international")||geo.includes("world")));
+  const ambiguousGeo=/bounding box|geometry must be checked/.test(geo);
+  const isNI=geo.includes("northern ireland")||geo==="ni";
+  const isUK=!ambiguousGeo&&!isNI&&(geo==="uk"||geo==="gb"||geo.includes("united kingdom")||geo.includes("england")||geo.includes("scotland")||geo.includes("wales")||geo.includes("great britain")||geo.includes("britain"));
+  const isGlobal=!ambiguousGeo&&!isNI&&(geo.includes("global")||geo.includes("international")||geo.includes("world")||geo.includes("europe")||geo.includes("north america")||geo.includes("south america")||geo.includes("asia")||geo.includes("africa")||geo.includes("middle east")||geo.includes("oceania")||geo==="ireland"||geo.includes("republic of ireland"));
+  const regionMatch=region==="ALL"||(region==="NI"&&isNI)||(region==="UK"&&isUK)||(region==="GLOBAL"&&isGlobal);
   return (!q||hay.includes(q))&&(grade==="ALL"||String(r.reliabilityGrade||"U").toUpperCase()===grade)&&regionMatch;
  });
  $("flow-name").textContent=names[activeFlow]||flow.name;
