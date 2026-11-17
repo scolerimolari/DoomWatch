@@ -31,7 +31,7 @@ FLOW_DEFS = {
  "community": {
   "name":"Community Signals",
   "desc":"Public community and social reporting, including local observations. These are leads for review, not proof. Private messages and closed groups are not collected.",
-  "terms":("ballyclare","newtownabbey","belfast","antrim","larne","derry","northern ireland","community","local report","resident","neighbourhood","road closed","power cut","water outage","shelter","evacuation","bluesky","mastodon","lemmy","reddit","telegram"),
+  "terms":("ballyclare","newtownabbey","belfast","antrim","larne","derry","northern ireland","community","local report","resident","neighbourhood","road closed","power cut","water outage","shelter","evacuation","mastodon","lemmy","reddit","telegram"),
   "types":("social_network","community_network","regional_newsroom","community_report")
  },
  "fringe": {
@@ -85,7 +85,6 @@ SOURCE_DIRECTORY = [
  {"id":"gdacs","flow":"osint","name":"Global Disaster Alert and Coordination System","url":"https://www.gdacs.org/","method":"Public API already collected by the main archive","access":"Event alert metadata; check national/local authorities for ground truth.","status":"existing"},
  {"id":"opensky","flow":"osint","name":"OpenSky Network","url":"https://openskynetwork.github.io/opensky-api/","method":"REST API","access":"OAuth2 client credentials required from 18 March 2026; no anonymous automation configured.","status":"access-limited"},
  {"id":"marinetraffic","flow":"osint","name":"MarineTraffic","url":"https://www.marinetraffic.com/","method":"Commercial AIS platform","access":"Commercial access; no scraping or paid key configured.","status":"commercial"},
- {"id":"bluesky","flow":"community","name":"Bluesky public search","url":"https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts","method":"Public search API, already collected by main archive","access":"Query-limited; posts remain unverified and are not independent corroboration.","status":"existing"},
  {"id":"reddit","flow":"community","name":"Reddit Data API","url":"https://support.reddithelp.com/hc/en-us/articles/16160319875092-Reddit-Data-API-Wiki","method":"Official API only","access":"Explicit developer approval and OAuth required; not bypassed or scraped.","status":"approval-required"},
  {"id":"telegram","flow":"community","name":"Telegram public channels","url":"https://telegram.org/","method":"Selected public channel review","access":"No private or closed groups; no broad automated collection configured.","status":"manual-review"},
  {"id":"mastodon","flow":"community","name":"Mastodon public instances","url":"https://joinmastodon.org/","method":"Instance-specific public API / RSS","access":"Instance and account list must be selected; not a single global firehose.","status":"connector-required"},

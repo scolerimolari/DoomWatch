@@ -134,32 +134,6 @@
       "notes": "Defence, security, foreign policy and investigations."
     },
     {
-      "id": "bluesky-public",
-      "name": "Bluesky public network",
-      "platform": "bluesky",
-      "type": "social_network",
-      "url": "https://bsky.app/",
-      "endpoint": "https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts",
-      "method": "public_api",
-      "region": "Global",
-      "sectors": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11
-      ],
-      "trust": "unverified_social",
-      "status": "active",
-      "notes": "Public Bluesky search API queried for cyber incidents, supply-chain disruption, Belfast and NI occurrences, Newtownabbey, Ballyclare, NI utilities, ports and freight, conflict and shipping, fuel/food supply chatter, culture-war discussion and civil liberties. Posts are unverified signals; query coverage is limited and subject to platform availability and rate limits."
-    },
-    {
       "id": "mastodon-public",
       "name": "Mastodon public accounts",
       "platform": "mastodon",

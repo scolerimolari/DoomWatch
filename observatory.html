@@ -45,7 +45,7 @@
  </div>
  <div class="obs-status" id="obs-status" aria-live="polite">CONNECTING TO OBSERVATORY SNAPSHOT…</div>
 </div>
-<div class="panel" id="obs-integrations" style="margin:12px 0;border:1px solid #596653"><div class="panel-title">CONNECTED DOOMWATCH WORKSPACES</div><div class="obs-actions"><a href="./feed.html">FEED / SIGNAL ROOM ↗</a><a href="./map.html">LIVE MAP ↗</a><a href="./operations.html">OPERATIONS ↗</a><a href="./markets.html">MARKETS ↗</a><a href="./index.html#intelligence">INTELLIGENCE / GRAPHS ↗</a><a href="./meshcore.html">MESHCORE ↗</a></div><div class="obs-status" style="margin-top:8px">Move between information streams to compare coverage, geography, market context and source provenance. All records are read-only source information.</div></div>
+<div class="panel" id="obs-integrations" style="margin:12px 0;border:1px solid #596653"><div class="panel-title">CONNECTED DOOMWATCH WORKSPACES</div><div class="obs-actions"><a href="./index.html">COMMAND ↗</a><a href="./map.html">MAP ↗</a><a href="./markets.html">ECONOMY ↗</a><a href="./communications.html">CONNECTIVITY ↗</a><a href="./meshcore.html">MESHCORE RESOURCES ↗</a></div><div class="obs-status" style="margin-top:8px">Move between information streams to compare coverage, geography, market context and source provenance. All records are read-only source information.</div></div>
 <div class="obs-note"><strong>ASSESSMENT RULE:</strong> Reliability grades describe the type of source, not whether a particular claim is true. Repeated posts, syndicated copy and reports citing one original source are not independent corroboration. Automated grouping is a research aid, not proof of an event or a common cause.</div>
 <h2>SELECT AN INTELLIGENCE FLOW</h2>
 <div class="obs-tabs" id="obs-tabs" role="tablist" aria-label="Six intelligence flows">
@@ -68,17 +68,17 @@
 </div>
 <div class="obs-toolbar">
  <input id="obs-search" type="search" placeholder="Search this flow by source, topic, place or claim…">
+ <select id="obs-region" aria-label="Filter by geography"><option value="ALL">ALL REGIONS</option><option value="NI">NORTHERN IRELAND</option><option value="UK">UNITED KINGDOM</option><option value="GLOBAL">GLOBAL</option></select>
  <select id="obs-grade" aria-label="Filter by source reliability"><option value="ALL">ALL SOURCE GRADES</option><option value="A">GRADE A</option><option value="B">GRADE B</option><option value="C">GRADE C</option><option value="D">GRADE D</option><option value="E">GRADE E</option><option value="U">GRADE U</option></select>
  <button type="button" class="action-button" id="obs-clear">CLEAR</button>
 </div>
 <div class="obs-status" id="flow-status">Loading records…</div>
 <div class="obs-records" id="obs-records"></div>
-<h2 style="margin-top:20px">SOURCE REGISTER // ACCESS & LIMITATIONS</h2>
-<div class="obs-status" style="margin:-3px 0 9px">Sources are grouped by flow. Candidate and directory entries are not represented as successfully polled. Status reflects the current integration state, not source quality.</div>
-<div class="obs-directory" id="obs-directory"></div>
-<h2 style="margin-top:20px">COLLECTOR HEALTH</h2>
-<div class="obs-directory" id="obs-health"></div>
-<h2 style="margin-top:20px">RELIABILITY & EVIDENCE STANDARD</h2>
+<details class="obs-disclosure"><summary>SOURCE REGISTER / ACCESS & LIMITATIONS</summary>
+<div class="obs-status" style="margin:9px 0">Sources are grouped by flow. Candidate and directory entries are not represented as successfully polled. Status reflects the current integration state, not source quality.</div>
+<div class="obs-directory" id="obs-directory"></div></details>
+<details class="obs-disclosure"><summary>COLLECTOR HEALTH</summary><div class="obs-directory" id="obs-health"></div></details>
+<details class="obs-disclosure"><summary>RELIABILITY & EVIDENCE STANDARD</summary>
 <div class="panel">
  <div class="obs-directory">
   <div class="obs-source"><strong>GRADE A — OFFICIAL / PRIMARY</strong><p>Government, regulator, operator or primary catalogue. Strong provenance, but may be delayed, incomplete or narrowly scoped.</p></div>
@@ -89,7 +89,7 @@
   <div class="obs-source"><strong>GRADE U — UNCLASSIFIED</strong><p>Insufficient publisher metadata to assign a source class. Do not infer reliability from appearance or repetition.</p></div>
  </div>
  <p class="obs-status" style="margin-top:12px">Evidence labels are inherited from upstream records or describe a specific catalogue record. Claim confidence remains unassessed unless a numeric value was supplied upstream. Reliability grade is never converted into a confidence score.</p>
-</div>
+</div></details>
 <div class="obs-note"><strong>IMPORTANT LIMITS:</strong> OpenSky now requires OAuth2 for automated API use; Reddit requires approved API access; Telegram/X are not treated as unrestricted data sources; AIS services may be commercial; Cloudflare Radar API access requires a token; RIPE Atlas needs selected measurements. These connectors are deliberately not bypassed. Copernicus records are catalogue metadata only, not interpreted satellite imagery. Economic Stress is currently a qualitative signal stream, not a validated composite index.</div>
 </main>
 <footer>DOOMWATCH // INTELLIGENCE OBSERVATORY<br>PUBLIC / AUTHORISED SOURCES ONLY // HUMAN REVIEW REQUIRED</footer>
@@ -125,16 +125,18 @@ function renderRecord(r){
  const summary=r.summary?'<p>'+esc(r.summary)+'</p>':'<p class="obs-status">No summary supplied by source.</p>';
  const cve=r.cve?'<span class="obs-tag">'+esc(r.cve)+'</span>':"";
  const ransomware=r.ransomwareUse&&r.ransomwareUse!=="Unknown"?'<span class="obs-tag">RANSOMWARE: '+esc(r.ransomwareUse)+'</span>':"";
- return '<article class="obs-record grade-'+esc(grade)+'"><div class="obs-tags"><span class="obs-tag grade">SOURCE GRADE '+esc(grade)+'</span><span class="obs-tag">'+esc(r.reliabilityLabel||"Unclassified")+'</span><span class="obs-tag">'+esc(evidence)+'</span>'+cve+ransomware+'</div><h3>'+esc(r.title)+'</h3>'+summary+'<div class="obs-meta"><strong>'+esc(r.source||"Source not specified")+'</strong><br>TYPE: '+esc(r.sourceType||"unclassified")+' · REGION: '+esc(r.region||"Not stated")+'<br>PUBLISHED: '+esc(date(r.publishedAt))+'<br>'+esc(conf)+'</div><div class="obs-actions">'+sourceUrl+mapAction(r)+'<a href="./feed.html">FEED ↗</a><a href="./operations.html">OPS ↗</a>'+(activeFlow==="economic"?'<a href="./markets.html">MARKETS ↗</a>':"")+'</div></article>';
+ return '<article class="obs-record grade-'+esc(grade)+'"><div class="obs-tags"><span class="obs-tag grade">SOURCE GRADE '+esc(grade)+'</span><span class="obs-tag">'+esc(r.reliabilityLabel||"Unclassified")+'</span><span class="obs-tag">'+esc(evidence)+'</span>'+cve+ransomware+'</div><h3>'+esc(r.title)+'</h3>'+summary+'<div class="obs-meta"><strong>'+esc(r.source||"Source not specified")+'</strong><br>TYPE: '+esc(r.sourceType||"unclassified")+' · REGION: '+esc(r.region||"Not stated")+'<br>PUBLISHED: '+esc(date(r.publishedAt))+'<br>'+esc(conf)+'</div><div class="obs-actions">'+sourceUrl+mapAction(r)+''+(activeFlow==="economic"?'<a href="./markets.html">MARKETS ↗</a>':"")+'</div></article>';
 }
 function render(){
  if(!data)return;
  const flow=data.flows?.[activeFlow]||{records:[],directory:[],registeredSources:[],description:"No flow data."};
- const q=$("obs-search").value.trim().toLowerCase(),grade=$("obs-grade").value;
+ const q=$("obs-search").value.trim().toLowerCase(),grade=$("obs-grade").value,region=$("obs-region").value;
  const all=Array.isArray(flow.records)?flow.records:[];
  const visible=all.filter(r=>{
   const hay=[r.title,r.summary,r.source,r.region,r.sourceType,r.evidenceStatus].join(" ").toLowerCase();
-  return (!q||hay.includes(q))&&(grade==="ALL"||String(r.reliabilityGrade||"U").toUpperCase()===grade);
+  const geo=String(r.region||"").toLowerCase();
+  const regionMatch=region==="ALL"||(region==="NI"&&(geo.includes("northern ireland")||geo==="ni"))||(region==="UK"&&(geo==="uk"||geo.includes("united kingdom")||geo.includes("england")||geo.includes("scotland")||geo.includes("wales")||geo.includes("great britain")))||(region==="GLOBAL"&&(geo.includes("global")||geo.includes("international")||geo.includes("world")));
+  return (!q||hay.includes(q))&&(grade==="ALL"||String(r.reliabilityGrade||"U").toUpperCase()===grade)&&regionMatch;
  });
  $("flow-name").textContent=names[activeFlow]||flow.name;
  $("flow-description").textContent=flow.description||"";
@@ -160,7 +162,8 @@ function selectFlow(key){
 $("obs-tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-flow]");if(b)selectFlow(b.dataset.flow);});
 $("obs-search").addEventListener("input",render);
 $("obs-grade").addEventListener("change",render);
-$("obs-clear").addEventListener("click",()=>{$("obs-search").value="";$("obs-grade").value="ALL";render();});
+$("obs-region").addEventListener("change",render);
+$("obs-clear").addEventListener("click",()=>{$("obs-search").value="";$("obs-grade").value="ALL";$("obs-region").value="ALL";render();});
 async function load(){
  try{
   const response=await fetch(DATA_URL+"?v="+Date.now(),{cache:"no-store"});
