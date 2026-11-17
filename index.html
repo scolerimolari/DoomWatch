@@ -3,8 +3,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#101411"><meta name="description" content="DoomWatch — source-led intelligence and situational awareness.">
 <link rel="manifest" href="./manifest.json"><link rel="stylesheet" href="./doomwatch.css">
-<title>DOOMWATCH / COMMAND</title>
-</head><body class="dw-command-page">
+<title>DOOMWATCH / COMMAND</title></head>
+<body class="dw-command-page">
 <header class="dw-old-header"><div class="dw-brand-old">DOOMWATCH</div></header>
 <main class="dw-command">
 <section class="dw-command-head">
@@ -23,7 +23,7 @@
 <section class="dw-command-grid">
  <div class="dw-main-column">
   <section class="dw-panel"><div class="dw-panel-head"><div><span class="dw-kicker">01 / DEVELOPMENTS</span><h2>Latest intelligence</h2></div><a href="./observatory.html">Open intelligence ↗</a></div><div id="latest-intelligence" class="dw-story-list"><p class="dw-muted">Loading source records…</p></div></section>
-  <section class="dw-panel"><div class="dw-panel-head"><div><span class="dw-kicker">02 / EMERGING</span><h2>Signals to watch</h2></div><a href="./observatory.html#fringe">Explore observatories ↗</a></div><div id="emerging-signals" class="dw-story-list"><p class="dw-muted">Loading observatory snapshot…</p></div></section>
+  <section class="dw-panel"><div class="dw-panel-head"><div><span class="dw-kicker">02 / EMERGING</span><h2>Signals to watch</h2></div><a href="./observatory.html#fringe">Explore fringe & emerging ↗</a></div><div id="emerging-signals" class="dw-story-list"><p class="dw-muted">Loading emerging signals…</p></div></section>
  </div>
  <aside class="dw-side-column">
   <section class="dw-panel"><div class="dw-panel-head"><div><span class="dw-kicker">03 / REGIONAL PICTURE</span><h2>Geography</h2></div><a href="./map.html">Open map ↗</a></div><a class="dw-map-tile" href="./map.html"><span>INTERACTIVE GEOGRAPHIC INTELLIGENCE</span><strong>Explore the map <b>↗</b></strong><small>Events · infrastructure · transport · disruption</small></a></section>
@@ -36,43 +36,78 @@
 <script src="./doomwatch-ui.js"></script>
 <script>
 (()=>{"use strict";
-const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const fmtDate=v=>{if(!v)return"Time not supplied";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"});};
-const regionOf=x=>{const s=String(x?.region||x?.area||x?.location||x?.geo||x?.geography||x?.country||"").toLowerCase();if(/bounding box|geometry must be checked/.test(s))return"UNKNOWN";if(/northern ireland|\\bni\\b|belfast|antrim|derry|armagh|tyrone|fermanagh|down/.test(s))return"NI";if(/united kingdom|\\buk\\b|\\bgb\\b|england|scotland|wales|great britain|britain/.test(s))return"UK";if(/global|international|world|overseas|europe|north america|south america|asia|africa|middle east|oceania|republic of ireland/.test(s)||/^ireland$/.test(s))return"GLOBAL";return"UNKNOWN";};
-const titleOf=x=>x?.title||x?.headline||x?.name||"Untitled report";
-const dateOf=x=>x?.publishedAt||x?.date||x?.published||x?.collectedAt||x?.timestamp||"";
-const sourceOf=x=>x?.source||x?.publisher||x?.sourceName||x?.sourceId||"Source not identified";
-const urlOf=x=>{try{const u=new URL(x?.url||"",location.href);return["https:","http:"].includes(u.protocol)?u.href:"";}catch{return"";}};
-const summaryOf=x=>x?.summary||x?.description||x?.contentSnippet||"No additional summary supplied by the source.";
-const compactViewport=window.matchMedia("(max-width:760px)");
-let selected="ALL",archive=[]
-function filtered(items){return items.filter(x=>selected==="ALL"||regionOf(x)===selected).sort((a,b)=>new Date(dateOf(b)||0)-new Date(dateOf(a)||0));}
-function story(x){const u=urlOf(x);const grade=x.sourceGrade||x.reliabilityGrade||x.sourceTrust||x.trust||"Unclassified";return '<article class="dw-story"><div class="dw-story-meta">'+esc(regionOf(x))+' / '+esc(sourceOf(x))+' / '+esc(fmtDate(dateOf(x)))+'</div><h3>'+(u?'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+esc(titleOf(x))+'</a>':esc(titleOf(x)))+'</h3><p>'+esc(summaryOf(x))+'</p><div class="dw-story-foot"><span>SOURCE CLASS: '+esc(String(grade).replaceAll("_"," "))+'</span>'+(u?'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">Original report ↗</a>':"")+'</div></article>';}
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const state={region:"ALL",archive:[],flows:{},markets:null,communications:null};
+const compact=window.matchMedia("(max-width:760px)");
+function parsedDate(v){if(v===null||v===undefined||v==="")return null;const d=new Date(typeof v==="number"&&v<1e12?v*1000:v);return Number.isNaN(d.getTime())?null:d;}
+function fmt(v){const d=parsedDate(v);return d?d.toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"}):"Time not supplied";}
+function stamp(x){return x?.publishedAt||x?.date||x?.published||x?.collectedAt||x?.timestamp||"";}
+function region(x){
+ const s=[x?.region,x?.area,x?.location,x?.geo,x?.geography,x?.country].filter(Boolean).join(" ").toLowerCase();
+ if(/bounding box|geometry must be checked|item geometry must be checked/.test(s))return "UNKNOWN";
+ if(/\bnorthern ireland\b|\bni\b|\bbelfast\b|\bantrim\b|\bderry\b|\blondonderry\b|\barmagh\b|\btyrone\b|\bfermanagh\b|\bdown\b|\bnewtownabbey\b|\bballyclare\b/.test(s))return "NI";
+ if(/\bunited kingdom\b|\buk\b|\bgb\b|\bengland\b|\bscotland\b|\bwales\b|\bgreat britain\b|\bbritain\b/.test(s))return "UK";
+ if(/\bglobal\b|\binternational\b|\bworld\b|\bworldwide\b|\boverseas\b|\beurope\b|\bnorth america\b|\bsouth america\b|\basia\b|\bafrica\b|\bmiddle east\b|\boceania\b|\brepublic of ireland\b|\bireland\b/.test(s))return "GLOBAL";
+ return "UNKNOWN";
+}
+function urlOf(x){const u=String(x?.url||"");if(!/^https?:\/\//i.test(u))return "";try{const p=new URL(u);return p.protocol==="https:"||p.protocol==="http:"?p.href:"";}catch{return "";}}
+function ordered(items){return (Array.isArray(items)?items:[]).filter(x=>state.region==="ALL"||region(x)===state.region).slice().sort((a,b)=>(parsedDate(stamp(b))?.getTime()||0)-(parsedDate(stamp(a))?.getTime()||0));}
+function story(x){
+ const url=urlOf(x),heading=esc(x.title||x.headline||x.name||"Untitled report");
+ const source=x.source||x.publisher||x.sourceName||x.sourceId||"Source not identified";
+ const grade=String(x.reliabilityGrade||x.sourceGrade||x.sourceTrust||x.trust||"Unclassified").replaceAll("_"," ").replaceAll("-"," ");
+ return '<article class="dw-story"><div class="dw-story-meta">'+esc(region(x))+' / '+esc(source)+' / '+esc(fmt(stamp(x)))+'</div><h3>'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+heading+'</a>':heading)+'</h3><p>'+esc(x.summary||x.description||x.contentSnippet||"No additional summary supplied by the source.")+'</p><div class="dw-story-foot"><span>SOURCE CLASS: '+esc(grade)+'</span>'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Original report ↗</a>':"")+'</div></article>';
+}
+function renderList(id,items,limit,empty){
+ const rows=items.slice(0,limit);$(id).innerHTML=rows.length?rows.map(story).join(""):'<p class="dw-muted">'+esc(empty)+'</p>';
+}
+function renderMarkets(){
+ const d=state.markets;if(!d){$("metric-markets").textContent="Unavailable";$("economy-summary").innerHTML='<p class="dw-muted">Market snapshot unavailable.</p>';return;}
+ const keys=["commodities","indices","crypto","fx","stocks"];
+ const count=keys.reduce((n,k)=>n+(Array.isArray(d[k])?d[k].length:Object.keys(d[k]||{}).length),0);
+ $("metric-markets").textContent=count.toLocaleString("en-GB");$("metric-markets-note").textContent="Snapshot "+fmt(d.updatedAt||d.generatedAt);
+ const rows=[];
+ for(const [label,group,key] of [["Brent crude","commodities","brent"],["Gold","commodities","gold"],["FTSE 100","indices","ftse100"]]){
+  const x=(d[group]||{})[key];if(!x)continue;
+  const v=x.price??x.value??x.level;const p=typeof v==="number"?v.toLocaleString("en-GB",{maximumFractionDigits:2}):String(v??"Observation unavailable");
+  const c=x.changePct==null?"":" ("+(x.changePct>0?"+":"")+Number(x.changePct).toFixed(2)+"%)";
+  rows.push('<div class="dw-status-row"><span>'+label+'</span><strong>'+esc((x.currency?x.currency+" ":"")+p+c)+'</strong></div>');
+ }
+ $("economy-summary").innerHTML=rows.join("")||'<p class="dw-muted">Open Economy for the latest available observations.</p>';
+}
+function renderCommunications(){
+ const d=state.communications;if(!d){$("metric-connectivity").textContent="Unavailable";$("service-summary").innerHTML='<p class="dw-muted">Connectivity snapshot unavailable.</p>';return;}
+ const p=Array.isArray(d.providers)?d.providers:[];
+ const issues=p.filter(x=>x.status==="ISSUE_SIGNAL").length;
+ const staleIssues=p.filter(x=>x.status==="STALE_ISSUE_SIGNAL").length;
+ const unconfirmed=p.filter(x=>x.status==="UNCONFIRMED_REPORT_SIGNAL").length;
+ const stale=p.filter(x=>x.status==="STALE_OR_UNKNOWN").length;
+ $("metric-connectivity").textContent=issues?"ISSUE SIGNAL":staleIssues?"STALE ISSUE SIGNAL":stale?"STALE / UNKNOWN":"NO ISSUE SIGNAL REPORTED";
+ $("metric-connectivity-note").textContent=issues+" current · "+staleIssues+" stale issue · "+unconfirmed+" unconfirmed · "+stale+" stale / unknown";
+ $("service-summary").innerHTML='<div class="dw-status-row"><span>Current issue signals</span><strong class="'+(issues?"dw-red":"")+'">'+issues+'</strong></div><div class="dw-status-row"><span>Stale issue signals</span><strong class="'+(staleIssues?"dw-red":"")+'">'+staleIssues+'</strong></div><div class="dw-status-row"><span>Unconfirmed reports</span><strong>'+unconfirmed+'</strong></div><div class="dw-status-row"><span>Stale / unknown</span><strong>'+stale+'</strong></div><p class="dw-muted">No reported signal does not guarantee that a service is operating normally.</p>';
+}
 function render(){
- const compact=compactViewport.matches;
- const current=filtered(archive).slice(0,compact?4:7);
- const emergent=filtered(flows).slice(0,compact?3:5);
- document.querySelectorAll("[data-region]").forEach(b=>{const active=b.dataset.region===selected;b.classList.toggle("is-active",active);b.setAttribute("aria-pressed",String(active));});
+ document.querySelectorAll("[data-region]").forEach(b=>{const active=b.dataset.region===state.region;b.classList.toggle("is-active",active);b.setAttribute("aria-pressed",String(active));});
+ const fringe=state.flows.fringe?.records||[];
+ renderList("latest-intelligence",ordered(state.archive),compact.matches?4:7,"No intelligence records match this region in the current snapshot.");
+ renderList("emerging-signals",ordered(fringe),compact.matches?3:5,"No fringe or emerging records match this region in the current snapshot.");
 }
-async function get(path){const r=await fetch(path+"?v="+Date.now(),{cache:"no-store"});if(!r.ok)throw Error(path+" HTTP "+r.status);return r.json();}
+async function getJson(path){const r=await fetch(path+"?v="+Date.now(),{cache:"no-store"});if(!r.ok)throw Error(path+" HTTP "+r.status);return r.json();}
 async function start(){
- const results=await Promise.allSettled([get("./data/intelligence.json"),get("./data/observatory.json"),get("./data/markets.json"),get("./data/communications.json")]);
- if(results[0].status==="fulfilled"){const d=results[0].value;archive=Array.isArray(d.articles)?d.articles:[];$("metric-records").textContent=archive.length.toLocaleString("en-GB");$("metric-records-note").textContent="Updated "+fmtDate(d.collector?.lastRun||d.updatedAt);}
- else $("metric-records").textContent="Unavailable";
- if(results[1].status==="fulfilled"){const d=results[1].value;flows=Object.values(d.flows||{}).flatMap(f=>f.records||[]);$("metric-signals").textContent=(d.totalFlowRecords??flows.length).toLocaleString("en-GB");}
+ const results=await Promise.allSettled([getJson("./data/intelligence.json"),getJson("./data/observatory.json"),getJson("./data/markets.json"),getJson("./data/communications.json")]);
+ if(results[0].status==="fulfilled"){const d=results[0].value;state.archive=Array.isArray(d.articles)?d.articles:[];$("metric-records").textContent=state.archive.length.toLocaleString("en-GB");$("metric-records-note").textContent="Updated "+fmt(d.collector?.lastRun||d.updatedAt);}
+ else{$("metric-records").textContent="Unavailable";$("metric-records-note").textContent="Intelligence archive could not be loaded";}
+ if(results[1].status==="fulfilled"){const d=results[1].value;state.flows=d.flows&&typeof d.flows==="object"?d.flows:{};const n=d.totalFlowRecords??Object.values(state.flows).reduce((a,f)=>a+(f.records?.length||0),0);$("metric-signals").textContent=Number(n).toLocaleString("en-GB");}
  else $("metric-signals").textContent="Unavailable";
- if(results[2].status==="fulfilled"){markets=results[2].value;const count=["commodities","indices","crypto","fx","stocks"].reduce((n,k)=>n+(Array.isArray(markets[k])?markets[k].length:Object.keys(markets[k]||{}).length),0);$("metric-markets").textContent=count.toLocaleString("en-GB");$("metric-markets-note").textContent="Snapshot "+fmtDate(markets.updatedAt||markets.generatedAt);const rows=[];for(const [label,group,key] of [["Brent crude","commodities","brent"],["Gold","commodities","gold"],["FTSE 100","indices","ftse100"]]){const x=(markets[group]||{})[key];if(x)rows.push('<div class="dw-status-row"><span>'+label+'</span><strong>'+esc(x.price??x.value??x.level??"Observation unavailable")+(x.changePct!=null?" ("+(x.changePct>0?"+":"")+Number(x.changePct).toFixed(2)+"%)":"") +'</strong></div>');}$("economy-summary").innerHTML=rows.join("")||'<p class="dw-muted">Open Economy for the latest available observations.</p>';}
- else {$("metric-markets").textContent="Unavailable";$("economy-summary").innerHTML='<p class="dw-muted">Market snapshot unavailable.</p>';}
- if(results[3].status==="fulfilled"){comms=results[3].value;const providers=comms.providers||[],issues=providers.filter(p=>p.status==="ISSUE_SIGNAL").length,unconfirmed=providers.filter(p=>p.status==="UNCONFIRMED_REPORT_SIGNAL").length,stale=providers.filter(p=>["STALE_ISSUE_SIGNAL","STALE_OR_UNKNOWN"].includes(p.status)).length;$("metric-connectivity").textContent=issues?"ISSUE SIGNAL":stale?"STALE / UNKNOWN":"NO CURRENT SIGNAL";$("metric-connectivity-note").textContent=issues+" current · "+unconfirmed+" unconfirmed · "+stale+" stale";$("service-summary").innerHTML='<div class="dw-status-row"><span>Current issue signals</span><strong class="'+(issues?"dw-red":"")+'">'+issues+'</strong></div><div class="dw-status-row"><span>Unconfirmed reports</span><strong>'+unconfirmed+'</strong></div><div class="dw-status-row"><span>Stale / unknown</span><strong>'+stale+'</strong></div><p class="dw-muted">Absence of a signal is not a guarantee of service.</p>';}
- else {$("metric-connectivity").textContent="Unavailable";$("service-summary").innerHTML='<p class="dw-muted">Connectivity snapshot unavailable.</p>';}
- const times=results.filter(x=>x.status==="fulfilled").map(x=>x.value.updatedAt||x.value.generatedAt).filter(Boolean).sort();$("dw-updated").textContent="SNAPSHOTS / "+(times.length?fmtDate(times[times.length-1]):"PARTIAL DATA");
- render();
+ if(results[2].status==="fulfilled")state.markets=results[2].value;renderMarkets();
+ if(results[3].status==="fulfilled")state.communications=results[3].value;renderCommunications();
+ const times=results.filter(x=>x.status==="fulfilled").map(x=>x.value.generatedAt||x.value.updatedAt||x.value.collector?.lastRun).filter(Boolean).map(parsedDate).filter(Boolean).sort((a,b)=>a-b);
+ $("dw-updated").textContent="SNAPSHOTS / "+(times.length?fmt(times[times.length-1]):"PARTIAL DATA");
+ render();const failed=results.filter(x=>x.status==="rejected").length;if(failed)$("dw-updated").textContent+=" / "+failed+" FILES UNAVAILABLE";
 }
-document.querySelectorAll("[data-region]").forEach(b=>b.addEventListener("click",()=>{selected=b.dataset.region;render();}));
-compactViewport.addEventListener?.("change",render);
-// Start after all controls and responsive state are ready.
-start().catch
-start().catch(e=>{$("dw-updated").textContent="PARTIAL SNAPSHOT";$("latest-intelligence").innerHTML='<p class="dw-muted">'+esc(e.message)+'</p>';});
+document.querySelectorAll("[data-region]").forEach(b=>b.addEventListener("click",()=>{state.region=b.dataset.region;render();}));
+if(compact.addEventListener)compact.addEventListener("change",render);else if(compact.addListener)compact.addListener(render);
+start().catch(e=>{$("dw-updated").textContent="PARTIAL SNAPSHOT";$("latest-intelligence").innerHTML='<p class="dw-muted">'+esc(e.message)+'</p>';$("emerging-signals").innerHTML='<p class="dw-muted">Emerging signals unavailable.</p>';});
 })();
-</script>
-</body></html>
+</script></body></html>

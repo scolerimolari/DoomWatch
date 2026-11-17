@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-16",
+  "updatedAt": "2026-11-17",
   "regions": [
     "NI",
     "UK",
@@ -124,12 +124,15 @@
     {
       "id": "uk-parliament",
       "name": "UK Parliament News",
-      "url": "https://www.parliament.uk/business/news/rss/",
+      "url": "https://www.parliament.uk/site-information/rss-feeds/",
       "region": "UK",
       "category": "POLITICS & GOVERNMENT",
       "class": "Official institution",
       "trust": "PRIMARY INSTITUTIONAL SOURCE",
-      "description": "Parliamentary business, legislation and committee activity."
+      "description": "Parliamentary business, legislation and committee activity.",
+      "enabled": false,
+      "status": "manual-review",
+      "disabledReason": "The official RSS directory lists Bills and Lords Library research feeds, not a general news feed; the previous endpoint returned HTTP 403."
     },
     {
       "id": "uk-google-security",
@@ -244,7 +247,7 @@
     {
       "id": "black-vault",
       "name": "The Black Vault",
-      "url": "https://www.theblackvault.com/feed/",
+      "url": "https://www.theblackvault.com/documentarchive/feed/",
       "region": "GLOBAL",
       "category": "UFO / UAP & UNEXPLAINED",
       "class": "UFO research archive",
@@ -264,7 +267,7 @@
     {
       "id": "mysterious-universe",
       "name": "Mysterious Universe",
-      "url": "https://mysteriousuniverse.org/feed/",
+      "url": "https://mysteriousuniverse.org/feed/podcast",
       "region": "GLOBAL",
       "category": "UFO / UAP & UNEXPLAINED",
       "class": "Fringe / paranormal media",
@@ -294,12 +297,15 @@
     {
       "id": "coast-to-coast",
       "name": "Coast to Coast AM",
-      "url": "https://www.coasttocoastam.com/feed/",
+      "url": "https://www.coasttocoastam.com/pages/rss/",
       "region": "GLOBAL",
       "category": "OCCULT, ESOTERIC & CONSPIRACY",
       "class": "Paranormal talk media",
       "trust": "CLAIM-LED / UNVERIFIED",
-      "description": "Paranormal, occult, UFO and conspiracy discussion."
+      "description": "Paranormal, occult, UFO and conspiracy discussion.",
+      "enabled": false,
+      "status": "manual-review",
+      "disabledReason": "The public RSS page does not expose a general article feed; the podcast feed requires Coast Insider credentials."
     },
     {
       "id": "global-google-nwo",

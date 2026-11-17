@@ -384,8 +384,8 @@
         10
       ],
       "trust": "alternative_commentary",
-      "status": "candidate",
-      "notes": "Alternative reporting on UK policy, health, institutions and public affairs. Claims require corroboration."
+      "status": "manual_review",
+      "notes": "Alternative reporting on UK policy, health, institutions and public affairs. The configured RSS endpoint returned HTTP 403 in automated collection; retained for manual review rather than repeatedly failing."
     },
     {
       "id": "opendemocracy",

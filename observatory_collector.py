@@ -16,6 +16,8 @@ ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 ARCHIVE = DATA / "intelligence.json"
 SOURCES = ROOT / "sources.json"
+FRINGE_SOURCES = ROOT / "fringe_sources.json"
+FRINGE_ARCHIVE = DATA / "fringe.json"
 OUTPUT = DATA / "observatory.json"
 UA = "DoomWatch-Observatory/1.0 (+https://github.com/scolerimolari/DoomWatch)"
 TIMEOUT = 18
@@ -200,6 +202,39 @@ def normalize_record(a, flow):
   "recordKind":"ARCHIVE_SIGNAL"
  }
 
+
+def normalize_fringe_record(article):
+    trust = str(article.get("sourceTrust") or article.get("trust") or "").strip().upper()
+    if "CLAIM-LED" in trust or "UNVERIFIED" in trust or "ALTERNATIVE HISTORY" in trust:
+        grade, label = "D", "Claim-led / alternative commentary"
+    elif "AGGREGATED" in trust:
+        grade, label = "C", "News search aggregator"
+    elif "DOCUMENT-LED" in trust:
+        grade, label = "B", "Document-led specialist archive"
+    elif any(term in trust for term in ("SPECIALIST", "SCEPTICAL", "INDEPENDENT", "MAINSTREAM", "PUBLIC BROADCASTER", "REGIONAL NEWS", "NEWSPAPER")):
+        grade, label = "B", "Specialist / established publisher"
+    else:
+        grade, label = "U", "Unclassified"
+    url = str(article.get("url") or "")
+    if not url.startswith(("http://", "https://")):
+        url = ""
+    source_id = str(article.get("sourceId") or "")
+    return {
+        "id": "fringe-rss:" + str(article.get("id") or (source_id + ":" + url))[:480],
+        "flow": "fringe", "title": str(article.get("title") or "Untitled fringe feed item")[:320],
+        "summary": str(article.get("description") or article.get("summary") or "")[:1400],
+        "source": str(article.get("source") or article.get("publisher") or source_id or "Source not specified")[:180],
+        "sourceId": source_id, "sourceType": str(article.get("sourceClass") or "fringe RSS"),
+        "sourcePriority": "MEDIUM", "sourceTrust": trust or "UNCLASSIFIED",
+        "reliabilityGrade": grade, "reliabilityLabel": label,
+        "evidenceStatus": "UNASSESSED", "claimConfidence": None,
+        "region": str(article.get("region") or "GLOBAL")[:120],
+        "publishedAt": str(article.get("publishedAt") or article.get("collectedAt") or ""),
+        "collectedAt": str(article.get("collectedAt") or ""), "url": url,
+        "recordKind": "FRINGE_RSS", "category": str(article.get("category") or "")
+    }
+
+
 def collect_cisa():
  url="https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
  payload=fetch_json(url)
@@ -270,7 +305,10 @@ def collect_copernicus():
 def build():
  archive=load(ARCHIVE,{})
  source_register=load(SOURCES,{"sources":[]})
+ fringe_archive=load(FRINGE_ARCHIVE,{})
+ fringe_source_register=load(FRINGE_SOURCES,{"sources":[]})
  articles=archive.get("articles",[]) if isinstance(archive,dict) else []
+ fringe_articles=fringe_archive.get("articles",[]) if isinstance(fringe_archive,dict) else []
  statuses=[]
  api_records=[]
  try:
@@ -283,19 +321,31 @@ def build():
   statuses.append({"id":"copernicus-stac","name":"Copernicus STAC Sentinel-1 catalogue","status":"FAILED","checkedAt":iso(),"error":str(e)[:260],"articleCount":0})
  flows={}
  all_records=[]
+ fringe_directory=[]
+ for source in fringe_source_register.get("sources",[]):
+  enabled=source.get("enabled",True) is not False
+  fringe_directory.append({"id":source.get("id"),"flow":"fringe","name":source.get("name"),"url":source.get("url"),"method":"RSS feed" if enabled else "Manual review / automation paused","access":source.get("description") or source.get("disabledReason") or "See publisher website.","status":"automated" if enabled else "manual-review"})
+ source_directory=SOURCE_DIRECTORY+fringe_directory
  for key,definition in FLOW_DEFS.items():
   archive_selected=[normalize_record(a,key) for a in articles if isinstance(a,dict) and flow_match(a,key)]
   api_selected=[r for r in api_records if r.get("flow")==key]
+  fringe_selected=[normalize_fringe_record(a) for a in fringe_articles if isinstance(a,dict)] if key=="fringe" else []
   unique={}
-  for r in archive_selected+api_selected:
-   unique[r["id"]]=r
+  for r in archive_selected+api_selected+fringe_selected:
+   unique[r.get("url") or r["id"]]=r
   api_kept=[r for r in unique.values() if r.get("recordKind") in ("CISA_KEV","SATELLITE_CATALOGUE")]
-  archive_kept=[r for r in unique.values() if r.get("recordKind") not in ("CISA_KEV","SATELLITE_CATALOGUE")]
+  fringe_kept=[r for r in unique.values() if r.get("recordKind")=="FRINGE_RSS"]
+  archive_kept=[r for r in unique.values() if r.get("recordKind") not in ("CISA_KEV","SATELLITE_CATALOGUE","FRINGE_RSS")]
   archive_kept.sort(key=lambda x:x.get("publishedAt") or x.get("collectedAt") or "",reverse=True)
-  records=(api_kept+archive_kept[:max(0,MAX_RECORDS-len(api_kept))])
+  fringe_kept.sort(key=lambda x:x.get("publishedAt") or x.get("collectedAt") or "",reverse=True)
+  if key=="fringe":
+   records=api_kept+fringe_kept[:max(0,MAX_RECORDS-len(api_kept))]
+   records+=archive_kept[:max(0,MAX_RECORDS-len(records))]
+  else:
+   records=api_kept+archive_kept[:max(0,MAX_RECORDS-len(api_kept))]
   records.sort(key=lambda x:x.get("publishedAt") or x.get("collectedAt") or "",reverse=True)
   source_ids=set(r["sourceId"] for r in records if r.get("sourceId"))
-  directory=[s for s in SOURCE_DIRECTORY if s["flow"]==key]
+  directory=[s for s in source_directory if s["flow"]==key]
   registry=[s for s in source_register.get("sources",[]) if isinstance(s,dict) and (
    s.get("id") in source_ids or
    (key=="community" and ("social" in str(s.get("type","")) or "community" in str(s.get("type","")))) or
@@ -305,23 +355,27 @@ def build():
   flows[key]={
    "id":key,"name":definition["name"],"description":definition["desc"],
    "recordCount":len(records),"sourceCount":len(source_ids),
+   "feedRecordCount":sum(1 for r in records if r.get("recordKind")=="FRINGE_RSS"),
    "records":records,"directory":directory,
    "registeredSources":[{"id":s.get("id"),"name":s.get("name"),"url":s.get("url"),"endpoint":s.get("endpoint"),"method":s.get("method"),"status":s.get("status"),"trust":s.get("trust"),"notes":s.get("notes")} for s in registry[:50]]
   }
   all_records.extend(records)
  total_sources=len({r.get("sourceId") for r in all_records if r.get("sourceId")})
  statuses.extend([s for s in archive.get("sourceStatus",[]) if isinstance(s,dict)])
+ for source in fringe_archive.get("sources",[]):
+  if isinstance(source,dict): statuses.append({**source,"id":"fringe:"+str(source.get("id") or "unknown"),"name":source.get("name") or source.get("id"),"status":source.get("status","UNKNOWN")})
  data={
   "schemaVersion":1,
   "generatedAt":iso(),
   "archiveLastRun":archive.get("collector",{}).get("lastRun") or archive.get("collectorLastRun"),
+  "fringeLastRun":fringe_archive.get("collectorLastRun") or fringe_archive.get("updatedAt"),
   "archiveRecordCount":len(articles),
   "flowCount":len(flows),
   "totalFlowRecords":sum(x["recordCount"] for x in flows.values()),
   "uniqueSourceCount":total_sources,
   "collectorStatus":statuses,
   "flows":flows,
-  "sourceDirectory":SOURCE_DIRECTORY,
+  "sourceDirectory":source_directory,
   "methodology":{
    "reliability":"A official primary source/catalogue; B established newsroom or independent research; C specialist, advocacy or aggregator; D alternative commentary; E unverified social/community; U unclassified. Grade describes source class, not the truth of a specific claim.",
    "confidence":"Claim confidence is left unassessed unless an upstream collector supplies a numeric value. Source grade is not claim confidence.",

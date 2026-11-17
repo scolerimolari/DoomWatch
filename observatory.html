@@ -111,6 +111,7 @@ function mapLink(record){
  return "./map.html?"+params.toString();
 }
 function mapAction(record){
+ if(record.recordKind==="FRINGE_RSS"&&!record.locality&&!record.latitude&&!record.longitude){return '<span class="obs-tag">NO GEOGRAPHIC DATA</span>';}
  if(record.recordKind==="SATELLITE_CATALOGUE"||String(record.region||"").startsWith("Global")){
   return '<span class="obs-tag">NO LOCAL MAP POINT</span>';
  }

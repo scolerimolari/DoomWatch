@@ -24,6 +24,7 @@ name: DoomWatch Intelligence Collector
       - "doomwatch-ui.js"
       - "doomwatch.css"
       - "containment.svg"
+      - "validate_site.py"
       - ".github/workflows/collector.yml"
 
   workflow_dispatch:
@@ -64,6 +65,7 @@ jobs:
           python -m json.tool sources.json > /dev/null
           python -m json.tool manifest.json > /dev/null
           python -m py_compile markets_collector.py
+          python -m py_compile validate_site.py
 
       - name: Validate dashboard JavaScript
         run: |
@@ -106,8 +108,11 @@ jobs:
       - name: Run DoomWatch collector
         run: |
           python collector.py
-          python observatory_collector.py
           python fringe_collector.py
+          python observatory_collector.py
+
+      - name: Run end-to-end site and data integrity audit
+        run: python validate_site.py
 
       - name: Save updated intelligence safely
         run: |

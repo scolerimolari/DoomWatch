@@ -93,15 +93,28 @@ def main():
     statuses, fresh = [], {}
     for source in config.get("sources", []):
         started = time.monotonic()
+        if source.get("enabled", True) is False:
+            statuses.append({"id": source["id"], "name": source["name"], "region": source["region"], "category": source["category"], "trust": source["trust"], "url": source["url"], "status": "DISABLED", "checkedAt": iso(), "articleCount": 0, "reason": source.get("disabledReason", "Manual review; automated polling is disabled.")})
+            print("FEED DISABLED", source["name"], source.get("disabledReason", "Manual review"))
+            continue
         try:
-            req = Request(source["url"], headers={"User-Agent": USER_AGENT,
-                "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*"})
-            with urlopen(req, timeout=TIMEOUT) as response:
-                payload = response.read(MAX_BYTES)
-                content_type = response.headers.get("Content-Type", "")
-            if not payload:
-                raise ValueError("Empty feed response")
-            items = parse_feed(payload, source)
+            for attempt in range(2):
+                try:
+                    req = Request(source["url"], headers={"User-Agent": USER_AGENT, "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*"})
+                    with urlopen(req, timeout=TIMEOUT) as response:
+                        payload = response.read(MAX_BYTES)
+                        content_type = response.headers.get("Content-Type", "")
+                    if not payload:
+                        raise ValueError("Empty feed response")
+                    items = parse_feed(payload, source)
+                    break
+                except Exception as error:
+                    retryable = getattr(error, "code", None) in (429, 500, 502, 503, 504) or isinstance(error, TimeoutError)
+                    if attempt == 0 and retryable:
+                        print("FEED RETRY", source["name"], str(error)[:120])
+                        time.sleep(2)
+                        continue
+                    raise
             for item in items:
                 fresh[item["id"]] = item
             statuses.append({"id": source["id"], "name": source["name"],
@@ -133,9 +146,11 @@ def main():
     retained.sort(key=lambda a: str(a.get("publishedAt") or a.get("collectedAt") or ""), reverse=True)
     output = {"schemaVersion":2,"collectorLastRun":iso(),"updatedAt":iso(),
         "configuredFeeds":len(config.get("sources",[])),
+        "activeFeeds":sum(s["status"]!="DISABLED" for s in statuses),
         "successfulFeeds":sum(s["status"]=="OK" for s in statuses),
         "emptyFeeds":sum(s["status"]=="EMPTY" for s in statuses),
         "failedFeeds":sum(s["status"]=="FAILED" for s in statuses),
+        "disabledFeeds":sum(s["status"]=="DISABLED" for s in statuses),
         "newRecords":len(fresh),"recordCount":len(retained),
         "sectionOrder":config.get("sectionOrder",[]),"sources":statuses,
         "articles":retained[:1400],
