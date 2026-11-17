@@ -68,6 +68,7 @@
 </div>
 <div class="obs-toolbar">
  <input id="obs-search" type="search" placeholder="Search this flow by source, topic, place or claim…">
+ <select id="obs-region" aria-label="Filter by geography"><option value="ALL">ALL REGIONS</option><option value="NI">NORTHERN IRELAND</option><option value="UK">UNITED KINGDOM</option><option value="GLOBAL">GLOBAL</option></select>
  <select id="obs-grade" aria-label="Filter by source reliability"><option value="ALL">ALL SOURCE GRADES</option><option value="A">GRADE A</option><option value="B">GRADE B</option><option value="C">GRADE C</option><option value="D">GRADE D</option><option value="E">GRADE E</option><option value="U">GRADE U</option></select>
  <button type="button" class="action-button" id="obs-clear">CLEAR</button>
 </div>
@@ -134,7 +135,8 @@ function render(){
  const all=Array.isArray(flow.records)?flow.records:[];
  const visible=all.filter(r=>{
   const hay=[r.title,r.summary,r.source,r.region,r.sourceType,r.evidenceStatus].join(" ").toLowerCase();
-  const geo=String(r.region||"").toLowerCase();\n  const regionMatch=region==="ALL"||(region==="NI"&&/northern ireland|\\bni\\b/.test(geo))||(region==="UK"&&/(\\buk\\b|united kingdom|england|scotland|wales|great britain)/.test(geo))||(region==="GLOBAL"&&/(global|international|world)/.test(geo));\n  return (!q||hay.includes(q))&&(grade==="ALL"||String(r.reliabilityGrade||"U").toUpperCase()===grade)&&regionMatch;
+  const geo=String(r.region||"").toLowerCase();
+  const regionMatch=region==="ALL"||(region==="NI"&&/northern ireland|\\bni\\b/.test(geo))||(region==="UK"&&/(\\buk\\b|united kingdom|england|scotland|wales|great britain)/.test(geo))||(region==="GLOBAL"&&/(global|international|world)/.test(geo));\n  return (!q||hay.includes(q))&&(grade==="ALL"||String(r.reliabilityGrade||"U").toUpperCase()===grade)&&regionMatch;
  });
  $("flow-name").textContent=names[activeFlow]||flow.name;
  $("flow-description").textContent=flow.description||"";
@@ -159,7 +161,8 @@ function selectFlow(key){
 }
 $("obs-tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-flow]");if(b)selectFlow(b.dataset.flow);});
 $("obs-search").addEventListener("input",render);
-$("obs-grade").addEventListener("change",render);\n$("obs-region").addEventListener("change",render);
+$("obs-grade").addEventListener("change",render);
+$("obs-region").addEventListener("change",render);
 $("obs-clear").addEventListener("click",()=>{$("obs-search").value="";$("obs-grade").value="ALL";$("obs-region").value="ALL";render();});
 async function load(){
  try{
