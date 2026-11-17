@@ -137,6 +137,81 @@ def validate_financial_histories(data):
     )
 
 
+def validate_gbp_conversions(data):
+    """Validate optional GBP display values without changing native series."""
+    groups = ("commodities", "crypto", "stocks")
+    checked_series = 0
+    checked_points = 0
+
+    for group in groups:
+        values = data.get(group) or {}
+        if isinstance(values, dict):
+            items = values.values()
+        elif isinstance(values, list):
+            items = values
+        else:
+            continue
+
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+
+            gbp_price = item.get("gbpPrice")
+            if gbp_price is not None:
+                if (
+                    isinstance(gbp_price, bool)
+                    or not isinstance(gbp_price, (int, float))
+                    or not math.isfinite(gbp_price)
+                    or gbp_price <= 0
+                ):
+                    fail(f"{group} contains an invalid GBP display price")
+                if item.get("gbpCurrency") != "GBP":
+                    fail(f"{group} GBP display price is not labelled GBP")
+
+            history = item.get("gbpHistory")
+            if history is None:
+                continue
+            if not isinstance(history, list) or not history:
+                fail(f"{group} GBP history is empty or invalid")
+            if item.get("gbpCurrency") != "GBP":
+                fail(f"{group} GBP history is not labelled GBP")
+
+            previous_day = None
+            seen = set()
+            for position, point in enumerate(history):
+                if not isinstance(point, dict):
+                    fail(f"{group} GBP history point {position} is not an object")
+                day = point.get("date")
+                if not isinstance(day, str):
+                    fail(f"{group} GBP history point {position} has no date")
+                try:
+                    datetime.strptime(day, "%Y-%m-%d")
+                except ValueError:
+                    fail(f"{group} GBP history point {position} has an invalid date")
+                if day in seen:
+                    fail(f"{group} GBP history contains duplicate date {day}")
+                if previous_day and day < previous_day:
+                    fail(f"{group} GBP history is not chronological")
+                value = point.get("value")
+                if (
+                    isinstance(value, bool)
+                    or not isinstance(value, (int, float))
+                    or not math.isfinite(value)
+                    or value <= 0
+                ):
+                    fail(f"{group} GBP history point {position} has an invalid value")
+                seen.add(day)
+                previous_day = day
+                checked_points += 1
+
+            checked_series += 1
+
+    print(
+        "PASS: GBP display conversion integrity; "
+        f"{checked_series} series, {checked_points} daily observations."
+    )
+
+
 def main():
     if not DATA_FILE.exists():
         fail("data/markets.json does not exist")
@@ -146,6 +221,7 @@ def main():
         fail("Top-level market data must be an object")
 
     validate_financial_histories(data)
+    validate_gbp_conversions(data)
 
     now = datetime.now(timezone.utc)
     updated = parse_time(data.get("updatedAt"), "updatedAt")
