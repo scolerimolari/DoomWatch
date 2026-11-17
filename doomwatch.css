@@ -91,3 +91,23 @@ footer{color:#78877d!important}
 .dw-ready .obs-disclosure>summary:after{content:"+";float:right;color:var(--dw-green)}
 .dw-ready .obs-disclosure[open]>summary:after{content:"−"}
 @media(max-width:700px){.dw-ready .obs-toolbar{grid-template-columns:1fr 1fr!important}.dw-ready .obs-toolbar input{grid-column:1/-1}.dw-ready .obs-toolbar button{min-height:38px}}
+
+/* Mobile audit: comfortable touch targets and visible keyboard focus */
+.dw-global-nav a,.dw-regions button,.dw-shell-shortcut,.dw-panel-head>a,
+.dw-ready button,.dw-ready .action-button,.dw-ready .obs-actions a,
+.dw-ready .obs-source a,.dw-ready .mc-links a,.dw-ready .mc-copy,
+.dw-ready .comms-actions a,.dw-ready .map-actions a,.dw-ready .map-actions button,
+.dw-ready .detail-actions button,.dw-ready .map-event-links button,
+.dw-ready #refresh,.dw-ready .map-control,.dw-ready .obs-toolbar input,
+.dw-ready .obs-toolbar select{min-height:44px}
+.dw-ready .layer-row{min-height:44px;display:flex;align-items:center}
+.dw-ready a:focus-visible,.dw-ready button:focus-visible,
+.dw-ready input:focus-visible,.dw-ready select:focus-visible,
+.dw-ready summary:focus-visible{outline:2px solid var(--dw-green);outline-offset:2px}
+@media(max-width:760px){
+ .dw-global-nav{scroll-snap-type:x proximity}
+ .dw-global-nav a{scroll-snap-align:center}
+ .dw-story{padding:9px 0}
+ .dw-story p{font-size:11px;line-height:1.4}
+ .dw-panel-head>a{font-size:11px;white-space:normal}
+}
