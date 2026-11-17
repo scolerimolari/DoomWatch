@@ -47,7 +47,11 @@ def parse_feed(payload, source):
     except ET.ParseError:
         # RSS publishers sometimes emit HTML named entities inside XML text.
         # Escape only undefined named entities, then let html.unescape decode them.
-        safe_payload = re.sub(rb"&(?!amp;|lt;|gt;|quot;|apos;|#[0-9]+;|#x[0-9A-Fa-f]+;)([A-Za-z][A-Za-z0-9]+);", rb"&amp;\\1;", payload)
+        safe_payload = re.sub(
+            rb"&(?!amp;|lt;|gt;|quot;|apos;|#[0-9]+;|#x[0-9A-Fa-f]+;)([A-Za-z][A-Za-z0-9]+);",
+            lambda match: b"&amp;" + match.group(1) + b";",
+            payload
+        )
         if safe_payload == payload:
             raise
         root = ET.fromstring(safe_payload)
