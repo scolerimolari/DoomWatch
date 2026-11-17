@@ -136,7 +136,8 @@ function render(){
  const visible=all.filter(r=>{
   const hay=[r.title,r.summary,r.source,r.region,r.sourceType,r.evidenceStatus].join(" ").toLowerCase();
   const geo=String(r.region||"").toLowerCase();
-  const regionMatch=region==="ALL"||(region==="NI"&&/northern ireland|\\bni\\b/.test(geo))||(region==="UK"&&/(\\buk\\b|united kingdom|england|scotland|wales|great britain)/.test(geo))||(region==="GLOBAL"&&/(global|international|world)/.test(geo));\n  return (!q||hay.includes(q))&&(grade==="ALL"||String(r.reliabilityGrade||"U").toUpperCase()===grade)&&regionMatch;
+  const regionMatch=region==="ALL"||(region==="NI"&&(geo.includes("northern ireland")||geo==="ni"))||(region==="UK"&&(geo==="uk"||geo.includes("united kingdom")||geo.includes("england")||geo.includes("scotland")||geo.includes("wales")||geo.includes("great britain")))||(region==="GLOBAL"&&(geo.includes("global")||geo.includes("international")||geo.includes("world")));
+  return (!q||hay.includes(q))&&(grade==="ALL"||String(r.reliabilityGrade||"U").toUpperCase()===grade)&&regionMatch;
  });
  $("flow-name").textContent=names[activeFlow]||flow.name;
  $("flow-description").textContent=flow.description||"";
