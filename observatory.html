@@ -160,11 +160,13 @@ function render(){
 function selectFlow(key){
  if(!flowOrder.includes(key))return;
  activeFlow=key;
+ history.replaceState(null,"",location.pathname+"#"+key);
  $("obs-search").value="";
  $("obs-grade").value="ALL";
  render();
 }
 $("obs-tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-flow]");if(b)selectFlow(b.dataset.flow);});
+window.addEventListener("hashchange",()=>{const key=location.hash.slice(1);if(flowOrder.includes(key)&&key!==activeFlow)selectFlow(key);});
 $("obs-search").addEventListener("input",render);
 $("obs-grade").addEventListener("change",render);
 $("obs-region").addEventListener("change",render);
