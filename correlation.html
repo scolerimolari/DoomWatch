@@ -1,1 +1,171 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=./meshcore.html"><title>DOOMWATCH / MOVED</title><link rel="stylesheet" href="./doomwatch.css"></head><body><main><h1>Section consolidated</h1><p>The former local-message correlation workspace is retired. MeshCore reference material remains available.</p><p><a href="./meshcore.html">Continue to the new section ↗</a></p></main><script>location.replace("./meshcore.html");</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101411">
+<meta name="description" content="DoomWatch cross-domain situation picture and source-linked signal clusters.">
+<title>DOOMWATCH / SITUATION</title><link rel="stylesheet" href="./doomwatch.css">
+<style>
+.sit-hero{padding:16px;border:1px solid #52634f;border-radius:9px;background:radial-gradient(ellipse at 90% 0,#34442f,#19231b 48%,#121813);margin-bottom:12px}
+.sit-kicker{font-size:9px;letter-spacing:.16em;color:#9db99e;font-weight:800}.sit-title{font-size:clamp(24px,5vw,36px);font-weight:850;letter-spacing:-.04em;margin:5px 0;color:#eef4ed}
+.sit-sub{max-width:850px;color:#b8c6b9;font-size:12px;line-height:1.55;margin:0}
+.sit-controls{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.sit-controls select{min-height:42px;background:#141d17;border:1px solid #34463a;border-radius:6px;color:#e2ebe2;padding:8px 10px;font-size:11px}
+.sit-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}.sit-stat{padding:11px;background:#171f19;border:1px solid #2c3a31;border-radius:8px;min-width:0}
+.sit-stat span{display:block;color:#91a096;font-size:9px;letter-spacing:.1em}.sit-stat strong{display:block;font-size:22px;color:#e7eee7;margin-top:4px;overflow-wrap:anywhere}.sit-stat small{display:block;color:#91a096;font-size:9px}
+.sit-note{padding:11px 13px;margin:10px 0;border-left:3px solid #c3a45d;background:#252218;color:#d8ceb0;font-size:10px;line-height:1.5}
+.sit-section{margin:13px 0}.sit-section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}.sit-section-head h2{font-size:16px!important}.sit-section-head small{font-size:9px;color:#91a096}
+.sit-clusters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.sit-cluster{min-width:0;padding:13px;border:1px solid #344238;border-radius:8px;background:linear-gradient(145deg,#1c2820,#151c17)}
+.sit-cluster-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.sit-cluster h3{font-size:14px!important;margin:0 0 6px!important;color:#e8efe7}.sit-coverage{font:9px ui-monospace,monospace;color:#cbb67e;white-space:nowrap}
+.sit-flows{display:flex;flex-wrap:wrap;gap:4px;margin:7px 0}.sit-flow{padding:3px 6px;border:1px solid #45564a;border-radius:4px;color:#b9c8bb;font-size:9px}
+.sit-cluster p{font-size:10px;color:#aebbb1;line-height:1.45;margin:6px 0}.sit-record{padding:8px 0;border-top:1px solid #2b382f}.sit-record:first-of-type{border-top:0}
+.sit-record a{display:block;color:#e1eae1;text-decoration:none;font-size:11px;line-height:1.4;font-weight:650}.sit-record a:hover{text-decoration:underline}.sit-meta{font-size:9px;color:#8f9d92;margin-top:4px}
+.sit-empty{padding:18px;border:1px dashed #46564a;border-radius:8px;color:#9eaca1;font-size:11px;line-height:1.5}
+.sit-network{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.sit-network .sit-stat strong{font-size:18px}
+.sit-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.sit-links a{font-size:10px;text-decoration:none;border:1px solid #3a4a3e;border-radius:5px;padding:8px 10px;color:#b8cdbb}
+.sit-footer{font-size:9px;color:#829086;margin:12px 0 4px}
+@media(max-width:720px){.sit-clusters{grid-template-columns:1fr}.sit-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.sit-network{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div><div class="logo">DOOMWATCH</div><div class="subtitle">CROSS-DOMAIN SIGNAL ANALYSIS</div></div><div class="classification">AUTOMATED TOPIC GROUPING</div></div></header>
+<main>
+<section class="sit-hero">
+ <div class="sit-kicker">SITUATIONAL AWARENESS / CROSS-STREAM VIEW</div><h1 class="sit-title">Situation Picture</h1>
+ <p class="sit-sub">A compact view of subjects appearing across multiple DoomWatch intelligence streams. It groups records by shared topic and geography, then shows the original reporting so you can judge the connection yourself.</p>
+ <div class="sit-links"><a href="./map.html">Open situation map ↗</a><a href="./observatory.html">Browse all six streams ↗</a><a href="./markets.html">Markets & history ↗</a><a href="./communications.html">Network status ↗</a></div>
+</section>
+<div class="sit-controls" aria-label="Situation picture filters">
+ <select id="sit-period" aria-label="Time period"><option value="7">LAST 7 DAYS</option><option value="30" selected>LAST 30 DAYS</option><option value="90">LAST 90 DAYS</option><option value="0">ALL AVAILABLE</option></select>
+ <select id="sit-region" aria-label="Geographic region"><option value="ALL">ALL REGIONS</option><option value="NI">NORTHERN IRELAND</option><option value="UK">UNITED KINGDOM</option><option value="GLOBAL">GLOBAL</option></select>
+ <select id="sit-flow" aria-label="Show themes involving this stream"><option value="ALL">ALL STREAMS</option><option value="osint">OSINT OBSERVATORY</option><option value="community">COMMUNITY SIGNALS</option><option value="fringe">FRINGE & EMERGING</option><option value="economic">ECONOMIC STRESS</option><option value="digital">DIGITAL INFRASTRUCTURE</option><option value="independent">INDEPENDENT MEDIA</option></select>
+</div>
+<section class="sit-summary" aria-label="Situation picture metrics">
+ <div class="sit-stat"><span>CROSS-STREAM THEMES</span><strong id="sit-themes">—</strong><small>Two or more streams</small></div>
+ <div class="sit-stat"><span>RECORDS IN VIEW</span><strong id="sit-records">—</strong><small>After filters</small></div>
+ <div class="sit-stat"><span>STREAMS ACTIVE</span><strong id="sit-streams">—</strong><small>Distinct observatories</small></div>
+ <div class="sit-stat"><span>SNAPSHOT</span><strong id="sit-updated" style="font-size:12px">WAITING</strong><small id="sit-source-count">Source count pending</small></div>
+</section>
+<div class="sit-note"><strong>STREAM FILTER:</strong> Choosing a stream highlights themes that include it; the other matching streams remain visible for comparison. <strong>READ THIS CORRECTLY:</strong> A cluster means multiple streams contain records with overlapping topic terms and a matching broad region. It does not establish that reports describe the same incident, are independently corroborated, or share a cause. Source grade describes publisher class, not whether an individual claim is true. Dates and locations are inherited from source records.</div>
+<section class="sit-section"><div class="sit-section-head"><h2>Cross-stream signal clusters</h2><small id="sit-cluster-count">BUILDING VIEW…</small></div><div id="sit-clusters" class="sit-clusters"><div class="sit-empty">Loading observatory records…</div></div></section>
+<section class="sit-section">
+ <div class="sit-section-head"><h2>Network disruption context</h2><small id="sit-network-updated">WAITING FOR SNAPSHOT</small></div>
+ <div id="sit-network" class="sit-network"><div class="sit-empty">Loading network status…</div></div>
+ <div class="sit-links"><a href="./communications.html">Open full network monitor ↗</a><a href="./markets.html">Open market history ↗</a></div>
+</section>
+<div class="sit-footer" id="sit-status" aria-live="polite">CONNECTING TO READ-ONLY SNAPSHOTS…</div>
+</main>
+<footer>DOOMWATCH / INFORMATION ONLY / OPEN SOURCES / AUTOMATED GROUPING IS NOT VERIFICATION</footer>
+<script src="./doomwatch-ui.js"></script>
+<script>
+"use strict";
+(()=>{
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const flowNames={osint:"OSINT",community:"Community",fringe:"Fringe",economic:"Economic",digital:"Digital",independent:"Independent media"};
+const flowOrder=["osint","community","fringe","economic","digital","independent"];
+const topicRules=[
+ {id:"conflict",name:"Conflict & defence",desc:"Military activity, armed conflict, weapons and security developments.",re:/\b(conflict|warfare|war |war-|military|missile|drone|airstrike|air strike|armed forces|nato|defence|defense|naval|weapons|ammunition|troops|ceasefire|battlefield|militant|insurgent)\b/i},
+ {id:"energy",name:"Energy & fuel",desc:"Oil, gas, electricity, fuel supply and energy infrastructure.",re:/\b(energy|oil|gas|fuel|electricity|power grid|power station|refinery|pipeline|lng|nuclear power|heating oil|petrol|diesel|renewable)\b/i},
+ {id:"cyber",name:"Cyber & digital infrastructure",desc:"Cyber operations, vulnerabilities, telecoms, internet and digital-service resilience.",re:/\b(cyber|ransomware|malware|vulnerability|data breach|telecom|broadband|internet outage|network outage|internet infrastructure|cloud service|data centre|bgp|satellite internet|communications outage)\b/i},
+ {id:"shipping",name:"Shipping, trade & supply chains",desc:"Maritime routes, ports, shipping, freight and cross-border supply chains.",re:/\b(shipping|maritime|port|ports|vessel|tanker|strait|suez|hormuz|freight|trade route|container|supply chain|cargo|merchant fleet|shipping lane)\b/i},
+ {id:"food",name:"Food & agriculture",desc:"Food prices, agricultural inputs, crops, harvests and food supply.",re:/\b(food|agriculture|agricultural|crop|harvest|fertili[sz]er|grain|wheat|livestock|dairy|supermarket|food inflation|food supply|farming)\b/i},
+ {id:"weather",name:"Weather & environment",desc:"Severe weather, flooding, climate pressures and natural hazards.",re:/\b(flood|flooding|storm|weather|climate|drought|wildfire|earthquake|volcano|rainfall|heatwave|heat wave|landslide|natural hazard|environmental)\b/i},
+ {id:"finance",name:"Finance, inflation & markets",desc:"Financial conditions, currencies, inflation, banking and market stress.",re:/\b(inflation|currency|sterling|pound|bitcoin|banking|bank failure|bond market|stock market|shares|recession|public debt|sovereign debt|interest rate|central bank|financial stress|market volatility|economy|economic growth)\b/i},
+ {id:"resilience",name:"Civil resilience & public services",desc:"Public infrastructure, transport, utilities, strikes, civil protection and service disruption.",re:/\b(protest|strike action|industrial action|road closure|roadworks|transport|water supply|water outage|hospital|health service|emergency service|police|civil defence|public service|power outage|service disruption|infrastructure failure)\b/i},
+ {id:"space",name:"Space, UAP & unexplained",desc:"Space activity and unexplained-phenomena reporting, including fringe-source leads.",re:/\b(ufo|uap|unidentified aerial|extraterrestrial|alien craft|anomalous phenomenon|space debris|space weather|solar flare|ancient civilisation|ancient civilization|occult|new world order|deep state|secret societ)\b/i}
+];
+let observatory=null,communications=null;
+function dateOf(v){if(!v)return null;const d=new Date(v);return Number.isNaN(d.getTime())?null:d;}
+function regionOf(v){
+ const s=String(v||"").toLowerCase();
+ if(/\bnorthern ireland\b|^ni$|\bni\b|belfast|antrim|derry|ballyclare/.test(s))return "NI";
+ if(/\bunited kingdom\b|^uk$|\buk\b|england|scotland|wales|great britain|britain/.test(s))return "UK";
+ if(/global|international|world|europe|asia|africa|middle east|america|oceania|republic of ireland|^ireland$/.test(s))return "GLOBAL";
+ return "UNKNOWN";
+}
+function safeUrl(v){const s=String(v||"");try{const u=new URL(s);return u.protocol==="http:"||u.protocol==="https:"?u.href:"";}catch(e){return "";}}
+function allRecords(){
+ const out=[];
+ for(const key of flowOrder){const rows=observatory?.flows?.[key]?.records;if(Array.isArray(rows))for(const r of rows)out.push({...r,flow:key});}
+ return out;
+}
+function currentRecords(){
+ const period=Number($("sit-period").value),region=$("sit-region").value,flow=$("sit-flow").value;
+ const cutoff=period?Date.now()-period*86400000:0;
+ return allRecords().filter(r=>{
+  const d=dateOf(r.publishedAt)||dateOf(r.collectedAt);
+  if(cutoff&&(!d||d.getTime()<cutoff))return false;
+  if(region!=="ALL"&&regionOf(r.region)!==region)return false;
+  return true;
+ });
+}
+function topicMatches(r){
+ const hay=[r.title,r.summary,r.category].filter(Boolean).join(" ");
+ return topicRules.filter(t=>t.re.test(hay));
+}
+function buildClusters(records){
+ const groups=new Map();
+ for(const r of records){
+  const geo=regionOf(r.region);if(geo==="UNKNOWN")continue;
+  for(const topic of topicMatches(r)){
+   const id=topic.id+"|"+geo;
+   if(!groups.has(id))groups.set(id,{topic,geo,records:[],flows:new Set(),sources:new Set()});
+   const g=groups.get(id);
+   const dupe=g.records.some(x=>x.id===r.id||(x.url&&r.url&&x.url===r.url)||((x.sourceId||x.source)===(r.sourceId||r.source)&&x.title===r.title));
+   if(dupe)continue;
+   g.records.push(r);g.flows.add(r.flow);g.sources.add(r.sourceId||r.source||"unknown");
+  }
+ }
+ return Array.from(groups.values()).filter(g=>g.flows.size>=2).map(g=>{
+  g.records.sort((a,b)=>(dateOf(b.publishedAt||b.collectedAt)?.getTime()||0)-(dateOf(a.publishedAt||a.collectedAt)?.getTime()||0));
+  return g;
+ }).sort((a,b)=>b.flows.size-a.flows.size||b.records.length-a.records.length||a.topic.name.localeCompare(b.topic.name));
+}
+function recordHtml(r){
+ const url=safeUrl(r.url),d=dateOf(r.publishedAt)||dateOf(r.collectedAt);
+ const date=d?d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}):"Date not supplied";
+ const grade=String(r.reliabilityGrade||"U").toUpperCase(),title=esc(r.title||"Untitled source record");
+ return '<div class="sit-record">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+title+'</a>':'<span>'+title+'</span>')+'<div class="sit-meta">'+esc(flowNames[r.flow]||r.flow)+' · '+esc(r.source||"Source not identified")+' · '+date+' · GRADE '+esc(grade)+'</div></div>';
+}
+function render(){
+ const records=currentRecords(),selectedFlow=$("sit-flow").value,clusters=buildClusters(records).filter(g=>selectedFlow==="ALL"||g.flows.has(selectedFlow)),activeFlows=new Set(records.map(r=>r.flow));
+ $("sit-themes").textContent=clusters.length.toLocaleString("en-GB");
+ $("sit-records").textContent=records.length.toLocaleString("en-GB");
+ $("sit-streams").textContent=activeFlows.size+"/6";
+ $("sit-cluster-count").textContent=clusters.length+" MATCHING THEMES";
+ const uniqueSources=new Set(records.map(r=>r.sourceId||r.source).filter(Boolean));
+ $("sit-source-count").textContent=uniqueSources.size+" distinct source labels";
+ if(!clusters.length){$("sit-clusters").innerHTML='<div class="sit-empty">No cross-stream topic overlaps match these filters. Try a longer period or all regions. This does not mean there are no relevant developments; it means the current records did not meet the grouping rules.</div>';return;}
+ $("sit-clusters").innerHTML=clusters.slice(0,24).map(g=>{
+  const flows=Array.from(g.flows).sort((a,b)=>flowOrder.indexOf(a)-flowOrder.indexOf(b));
+  const label=g.geo==="NI"?"Northern Ireland":g.geo==="UK"?"United Kingdom":"Global";
+  return '<article class="sit-cluster"><div class="sit-cluster-top"><div><h3>'+esc(g.topic.name)+'</h3><div class="sit-meta">'+label+'</div></div><div class="sit-coverage">'+flows.length+' STREAMS / '+g.records.length+' RECORDS</div></div><p>'+esc(g.topic.desc)+'</p><div class="sit-flows">'+flows.map(f=>'<span class="sit-flow">'+esc(flowNames[f])+'</span>').join("")+'</div>'+g.records.slice(0,5).map(recordHtml).join("")+'</article>';
+ }).join("");
+}
+function renderNetwork(){
+ if(!communications){$("sit-network").innerHTML='<div class="sit-empty">Network snapshot unavailable.</div>';return;}
+ const s=communications.summary||{},updated=dateOf(communications.generatedAt);
+ $("sit-network-updated").textContent=updated?updated.toLocaleString("en-GB"):"SNAPSHOT DATE NOT SUPPLIED";
+ const items=[["Current issues",s.currentIssueProviders||0],["Stale issue signals",s.staleIssueProviders||0],["Unconfirmed reports",s.unconfirmedReportProviders||0],["Stale / unknown",s.staleOrUnknownProviders||0]];
+ $("sit-network").innerHTML=items.map(x=>'<div class="sit-stat"><span>'+x[0].toUpperCase()+'</span><strong>'+Number(x[1]).toLocaleString("en-GB")+'</strong></div>').join("");
+}
+async function load(){
+ const results=await Promise.allSettled([
+  fetch("./data/observatory.json?v="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("Observatory HTTP "+r.status);return r.json();}),
+  fetch("./data/communications.json?v="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("Network HTTP "+r.status);return r.json();})
+ ]);
+ if(results[0].status==="fulfilled"){
+  observatory=results[0].value;const d=dateOf(observatory.generatedAt);
+  $("sit-updated").textContent=d?d.toLocaleDateString("en-GB",{day:"2-digit",month:"short"}):"AVAILABLE";
+ }else{$("sit-updated").textContent="PARTIAL";$("sit-clusters").innerHTML='<div class="sit-empty">Observatory snapshot unavailable. Check the collector run and refresh later.</div>';}
+ if(results[1].status==="fulfilled")communications=results[1].value;
+ renderNetwork();if(observatory)render();
+ const failed=results.filter(x=>x.status==="rejected").length;
+ $("sit-status").textContent=failed?failed+" snapshot(s) unavailable. Remaining information is shown where available.":"Read-only snapshots loaded. "+(observatory?.totalFlowRecords||0)+" observatory records available before filters.";
+}
+["sit-period","sit-region","sit-flow"].forEach(id=>$(id).addEventListener("change",render));
+load().catch(e=>{$("sit-status").textContent="Snapshot loading error: "+e.message;});
+})();
+</script>
+</body>
+</html>
