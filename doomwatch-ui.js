@@ -4,7 +4,8 @@ const body=document.body,path=location.pathname.toLowerCase();
 const embedMode=new URLSearchParams(location.search).get("embed")==="1";if(embedMode)body.classList.add("dw-embed");
 const routes=[
  ["command","./index.html","Command",["/","/index.html"]],
- ["intelligence","./observatory.html","Intelligence",["/observatory.html","/feed.html","/signals.html","/correlation.html","/operations.html"]],
+ ["situation","./correlation.html","Situation",["/correlation.html"]],
+ ["intelligence","./observatory.html","Intelligence",["/observatory.html","/feed.html","/signals.html","/operations.html"]],
  ["map","./map.html","Map",["/map.html"]],
  ["economy","./markets.html","Markets",["/markets.html","/household.html"]],
  ["connectivity","./communications.html","Network",["/communications.html","/meshcore.html"]]
