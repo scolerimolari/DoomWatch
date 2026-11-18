@@ -1,6 +1,7 @@
 (()=>{"use strict";
 if(window.__doomwatchShell)return;window.__doomwatchShell=true;
 const body=document.body,path=location.pathname.toLowerCase();
+const embedMode=new URLSearchParams(location.search).get("embed")==="1";if(embedMode)body.classList.add("dw-embed");
 const routes=[
  ["command","./index.html","Command",["/","/index.html"]],
  ["intelligence","./observatory.html","Intelligence",["/observatory.html","/feed.html","/signals.html","/correlation.html","/operations.html"]],
