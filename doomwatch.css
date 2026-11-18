@@ -111,3 +111,21 @@ footer{color:#78877d!important}
  .dw-story p{font-size:11px;line-height:1.4}
  .dw-panel-head>a{font-size:11px;white-space:normal}
 }
+
+
+/* World Monitor-inspired integrated Command experience */
+.dw-map-console,.dw-stream-hub{margin:12px 0!important}
+.dw-map-console .dw-panel-head{align-items:flex-start}
+.dw-map-console .dw-panel-head p{margin:4px 0 0;font-size:11px}
+.dw-map-frame{height:clamp(300px,48vw,560px);overflow:hidden;border:1px solid #35483a;border-radius:8px;background:#0b110d}
+.dw-map-frame iframe{display:block;width:100%;height:100%;border:0}
+.dw-map-caption{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:7px;color:var(--dw-muted);font:9px ui-monospace,monospace;letter-spacing:.06em}
+.dw-stream-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.dw-stream-grid a{display:grid;grid-template-columns:26px 1fr;gap:2px 8px;align-items:start;padding:11px;background:#131b15;border:1px solid var(--dw-line);border-radius:7px;text-decoration:none;min-width:0}
+.dw-stream-grid a:hover,.dw-stream-grid a:focus-visible{border-color:#77927b;background:#1b2820}
+.dw-stream-grid b{grid-row:span 2;color:var(--dw-amber);font:11px ui-monospace,monospace}
+.dw-stream-grid strong{color:#e2ece3;font-size:11px}
+.dw-stream-grid small{color:var(--dw-muted);font-size:9px;line-height:1.4}
+.dw-map-tile{display:none!important}
+@media(max-width:760px){.dw-stream-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dw-map-frame{height:390px}.dw-map-caption{font-size:8px}}
+@media(max-width:380px){.dw-stream-grid{grid-template-columns:1fr}.dw-map-frame{height:330px}}
