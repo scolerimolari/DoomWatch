@@ -37,7 +37,7 @@
 <div class="sit-controls" aria-label="Situation picture filters">
  <select id="sit-period" aria-label="Time period"><option value="7">LAST 7 DAYS</option><option value="30" selected>LAST 30 DAYS</option><option value="90">LAST 90 DAYS</option><option value="0">ALL AVAILABLE</option></select>
  <select id="sit-region" aria-label="Geographic region"><option value="ALL">ALL REGIONS</option><option value="NI">NORTHERN IRELAND</option><option value="UK">UNITED KINGDOM</option><option value="GLOBAL">GLOBAL</option></select>
- <select id="sit-flow" aria-label="Intelligence stream"><option value="ALL">ALL STREAMS</option><option value="osint">OSINT OBSERVATORY</option><option value="community">COMMUNITY SIGNALS</option><option value="fringe">FRINGE & EMERGING</option><option value="economic">ECONOMIC STRESS</option><option value="digital">DIGITAL INFRASTRUCTURE</option><option value="independent">INDEPENDENT MEDIA</option></select>
+ <select id="sit-flow" aria-label="Show themes involving this stream"><option value="ALL">ALL STREAMS</option><option value="osint">OSINT OBSERVATORY</option><option value="community">COMMUNITY SIGNALS</option><option value="fringe">FRINGE & EMERGING</option><option value="economic">ECONOMIC STRESS</option><option value="digital">DIGITAL INFRASTRUCTURE</option><option value="independent">INDEPENDENT MEDIA</option></select>
 </div>
 <section class="sit-summary" aria-label="Situation picture metrics">
  <div class="sit-stat"><span>CROSS-STREAM THEMES</span><strong id="sit-themes">—</strong><small>Two or more streams</small></div>
@@ -45,7 +45,7 @@
  <div class="sit-stat"><span>STREAMS ACTIVE</span><strong id="sit-streams">—</strong><small>Distinct observatories</small></div>
  <div class="sit-stat"><span>SNAPSHOT</span><strong id="sit-updated" style="font-size:12px">WAITING</strong><small id="sit-source-count">Source count pending</small></div>
 </section>
-<div class="sit-note"><strong>READ THIS CORRECTLY:</strong> A cluster means multiple streams contain records with overlapping topic terms and a matching broad region. It does not establish that reports describe the same incident, are independently corroborated, or share a cause. Source grade describes publisher class, not whether an individual claim is true. Dates and locations are inherited from source records.</div>
+<div class="sit-note"><strong>STREAM FILTER:</strong> Choosing a stream highlights themes that include it; the other matching streams remain visible for comparison. <strong>READ THIS CORRECTLY:</strong> A cluster means multiple streams contain records with overlapping topic terms and a matching broad region. It does not establish that reports describe the same incident, are independently corroborated, or share a cause. Source grade describes publisher class, not whether an individual claim is true. Dates and locations are inherited from source records.</div>
 <section class="sit-section"><div class="sit-section-head"><h2>Cross-stream signal clusters</h2><small id="sit-cluster-count">BUILDING VIEW…</small></div><div id="sit-clusters" class="sit-clusters"><div class="sit-empty">Loading observatory records…</div></div></section>
 <section class="sit-section">
  <div class="sit-section-head"><h2>Network disruption context</h2><small id="sit-network-updated">WAITING FOR SNAPSHOT</small></div>
@@ -96,7 +96,6 @@ function currentRecords(){
   const d=dateOf(r.publishedAt)||dateOf(r.collectedAt);
   if(cutoff&&(!d||d.getTime()<cutoff))return false;
   if(region!=="ALL"&&regionOf(r.region)!==region)return false;
-  if(flow!=="ALL"&&r.flow!==flow)return false;
   return true;
  });
 }
@@ -129,7 +128,7 @@ function recordHtml(r){
  return '<div class="sit-record">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+title+'</a>':'<span>'+title+'</span>')+'<div class="sit-meta">'+esc(flowNames[r.flow]||r.flow)+' · '+esc(r.source||"Source not identified")+' · '+date+' · GRADE '+esc(grade)+'</div></div>';
 }
 function render(){
- const records=currentRecords(),clusters=buildClusters(records),activeFlows=new Set(records.map(r=>r.flow));
+ const records=currentRecords(),selectedFlow=$("sit-flow").value,clusters=buildClusters(records).filter(g=>selectedFlow==="ALL"||g.flows.has(selectedFlow)),activeFlows=new Set(records.map(r=>r.flow));
  $("sit-themes").textContent=clusters.length.toLocaleString("en-GB");
  $("sit-records").textContent=records.length.toLocaleString("en-GB");
  $("sit-streams").textContent=activeFlows.size+"/6";
