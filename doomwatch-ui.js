@@ -1,12 +1,13 @@
 (()=>{"use strict";
 if(window.__doomwatchShell)return;window.__doomwatchShell=true;
 const body=document.body,path=location.pathname.toLowerCase();
+const embedMode=new URLSearchParams(location.search).get("embed")==="1";if(embedMode)body.classList.add("dw-embed");
 const routes=[
  ["command","./index.html","Command",["/","/index.html"]],
  ["intelligence","./observatory.html","Intelligence",["/observatory.html","/feed.html","/signals.html","/correlation.html","/operations.html"]],
  ["map","./map.html","Map",["/map.html"]],
- ["economy","./markets.html","Economy",["/markets.html","/household.html"]],
- ["connectivity","./communications.html","Connectivity",["/communications.html","/meshcore.html"]]
+ ["economy","./markets.html","Markets",["/markets.html","/household.html"]],
+ ["connectivity","./communications.html","Network",["/communications.html","/meshcore.html"]]
 ];
 let active=routes.find(r=>r[3].some(p=>path.endsWith(p)))||routes[0];
 const oldHeader=body.querySelector(":scope > header");if(oldHeader)oldHeader.hidden=true;

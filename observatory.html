@@ -126,7 +126,8 @@ function renderRecord(r){
  const summary=r.summary?'<p>'+esc(r.summary)+'</p>':'<p class="obs-status">No summary supplied by source.</p>';
  const cve=r.cve?'<span class="obs-tag">'+esc(r.cve)+'</span>':"";
  const ransomware=r.ransomwareUse&&r.ransomwareUse!=="Unknown"?'<span class="obs-tag">RANSOMWARE: '+esc(r.ransomwareUse)+'</span>':"";
- return '<article class="obs-record grade-'+esc(grade)+'"><div class="obs-tags"><span class="obs-tag grade">SOURCE GRADE '+esc(grade)+'</span><span class="obs-tag">'+esc(r.reliabilityLabel||"Unclassified")+'</span><span class="obs-tag">'+esc(evidence)+'</span>'+cve+ransomware+'</div><h3>'+esc(r.title)+'</h3>'+summary+'<div class="obs-meta"><strong>'+esc(r.source||"Source not specified")+'</strong><br>TYPE: '+esc(r.sourceType||"unclassified")+' · REGION: '+esc(r.region||"Not stated")+'<br>PUBLISHED: '+esc(date(r.publishedAt))+'<br>'+esc(conf)+'</div><div class="obs-actions">'+sourceUrl+mapAction(r)+''+(activeFlow==="economic"?'<a href="./markets.html">MARKETS ↗</a>':"")+'</div></article>';
+ const contextLink=activeFlow==="economic"?'<a href="./markets.html">ECONOMY CONTEXT ↗</a>':activeFlow==="digital"?'<a href="./communications.html">NETWORK STATUS ↗</a>':activeFlow==="fringe"?'<a href="./feed.html">RELATED FEED ↗</a>':activeFlow==="independent"?'<a href="./feed.html">LATEST FEED ↗</a>':"";
+ return '<article class="obs-record grade-'+esc(grade)+'"><div class="obs-tags"><span class="obs-tag grade">SOURCE GRADE '+esc(grade)+'</span><span class="obs-tag">'+esc(r.reliabilityLabel||"Unclassified")+'</span><span class="obs-tag">'+esc(evidence)+'</span>'+cve+ransomware+'</div><h3>'+esc(r.title)+'</h3>'+summary+'<div class="obs-meta"><strong>'+esc(r.source||"Source not specified")+'</strong><br>TYPE: '+esc(r.sourceType||"unclassified")+' · REGION: '+esc(r.region||"Not stated")+'<br>PUBLISHED: '+esc(date(r.publishedAt))+'<br>'+esc(conf)+'</div><div class="obs-actions">'+sourceUrl+mapAction(r)+contextLink+'</div></article>';
 }
 function render(){
  if(!data)return;
@@ -160,11 +161,13 @@ function render(){
 function selectFlow(key){
  if(!flowOrder.includes(key))return;
  activeFlow=key;
+ history.replaceState(null,"",location.pathname+"#"+key);
  $("obs-search").value="";
  $("obs-grade").value="ALL";
  render();
 }
 $("obs-tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-flow]");if(b)selectFlow(b.dataset.flow);});
+window.addEventListener("hashchange",()=>{const key=location.hash.slice(1);if(flowOrder.includes(key)&&key!==activeFlow)selectFlow(key);});
 $("obs-search").addEventListener("input",render);
 $("obs-grade").addEventListener("change",render);
 $("obs-region").addEventListener("change",render);
