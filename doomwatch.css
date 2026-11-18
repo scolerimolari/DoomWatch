@@ -129,3 +129,5 @@ footer{color:#78877d!important}
 .dw-map-tile{display:none!important}
 @media(max-width:760px){.dw-stream-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dw-map-frame{height:390px}.dw-map-caption{font-size:8px}}
 @media(max-width:380px){.dw-stream-grid{grid-template-columns:1fr}.dw-map-frame{height:330px}}
+
+.dw-embed .dw-masthead,.dw-embed .dw-global-nav,.dw-embed .dw-skip-link{display:none!important}.dw-embed main{max-width:none!important;padding:6px!important;margin:0!important}.dw-embed{padding-top:0!important}
