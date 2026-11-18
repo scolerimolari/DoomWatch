@@ -67,7 +67,7 @@ const topicRules=[
  {id:"conflict",name:"Conflict & defence",desc:"Military activity, armed conflict, weapons and security developments.",re:/\b(conflict|warfare|war |war-|military|missile|drone|airstrike|air strike|armed forces|nato|defence|defense|naval|weapons|ammunition|troops|ceasefire|battlefield|militant|insurgent)\b/i},
  {id:"energy",name:"Energy & fuel",desc:"Oil, gas, electricity, fuel supply and energy infrastructure.",re:/\b(energy|oil|gas|fuel|electricity|power grid|power station|refinery|pipeline|lng|nuclear power|heating oil|petrol|diesel|renewable)\b/i},
  {id:"cyber",name:"Cyber & digital infrastructure",desc:"Cyber operations, vulnerabilities, telecoms, internet and digital-service resilience.",re:/\b(cyber|ransomware|malware|vulnerability|data breach|telecom|broadband|internet outage|network outage|internet infrastructure|cloud service|data centre|bgp|satellite internet|communications outage)\b/i},
- {id:"shipping",name:"Shipping, trade & supply chains",desc:"Maritime routes, ports, shipping, freight and cross-border supply chains.",re:/\b(shipping|maritime|port |ports|vessel|tanker|strait|suez|hormuz|freight|trade route|container|supply chain|cargo|merchant fleet|shipping lane)\b/i},
+ {id:"shipping",name:"Shipping, trade & supply chains",desc:"Maritime routes, ports, shipping, freight and cross-border supply chains.",re:/\b(shipping|maritime|port|ports|vessel|tanker|strait|suez|hormuz|freight|trade route|container|supply chain|cargo|merchant fleet|shipping lane)\b/i},
  {id:"food",name:"Food & agriculture",desc:"Food prices, agricultural inputs, crops, harvests and food supply.",re:/\b(food|agriculture|agricultural|crop|harvest|fertili[sz]er|grain|wheat|livestock|dairy|supermarket|food inflation|food supply|farming)\b/i},
  {id:"weather",name:"Weather & environment",desc:"Severe weather, flooding, climate pressures and natural hazards.",re:/\b(flood|flooding|storm|weather|climate|drought|wildfire|earthquake|volcano|rainfall|heatwave|heat wave|landslide|natural hazard|environmental)\b/i},
  {id:"finance",name:"Finance, inflation & markets",desc:"Financial conditions, currencies, inflation, banking and market stress.",re:/\b(inflation|currency|sterling|pound|bitcoin|banking|bank failure|bond market|stock market|shares|recession|public debt|sovereign debt|interest rate|central bank|financial stress|market volatility|economy|economic growth)\b/i},
@@ -100,7 +100,7 @@ function currentRecords(){
  });
 }
 function topicMatches(r){
- const hay=[r.title,r.summary,r.source,r.category,r.sourceType].filter(Boolean).join(" ");
+ const hay=[r.title,r.summary,r.category].filter(Boolean).join(" ");
  return topicRules.filter(t=>t.re.test(hay));
 }
 function buildClusters(records){
@@ -111,7 +111,7 @@ function buildClusters(records){
    const id=topic.id+"|"+geo;
    if(!groups.has(id))groups.set(id,{topic,geo,records:[],flows:new Set(),sources:new Set()});
    const g=groups.get(id);
-   const dupe=g.records.some(x=>x.id===r.id||((x.sourceId||x.source)===(r.sourceId||r.source)&&x.title===r.title));
+   const dupe=g.records.some(x=>x.id===r.id||(x.url&&r.url&&x.url===r.url)||((x.sourceId||x.source)===(r.sourceId||r.source)&&x.title===r.title));
    if(dupe)continue;
    g.records.push(r);g.flows.add(r.flow);g.sources.add(r.sourceId||r.source||"unknown");
   }
