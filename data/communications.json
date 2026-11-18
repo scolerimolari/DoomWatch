@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-17T20:02:04Z",
+  "generatedAt": "2026-11-18T02:19:44Z",
   "collectionIntervalMinutes": 5,
   "displayRefreshSeconds": 60,
   "staleAfterMinutes": 120,
@@ -21,8 +21,8 @@
       "scope": "UK mobile networks",
       "format": "json",
       "status": "OK",
-      "checkedAt": "2026-11-17T20:02:01Z",
-      "sourceUpdatedAt": "2026-11-17T20:00:22.687Z",
+      "checkedAt": "2026-11-18T02:19:42Z",
+      "sourceUpdatedAt": "2026-11-18T02:15:22.429Z",
       "providerSignals": [
         {
           "provider": "EE",
@@ -32,7 +32,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T19:15:36.306Z",
+          "sourceUpdatedAt": "2026-11-18T01:35:38.118Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -43,7 +43,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T19:15:36.306Z",
+          "sourceUpdatedAt": "2026-11-18T01:35:38.118Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -54,7 +54,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T19:15:36.306Z",
+          "sourceUpdatedAt": "2026-11-18T01:35:38.118Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -65,7 +65,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T19:15:36.306Z",
+          "sourceUpdatedAt": "2026-11-18T01:35:38.118Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -76,7 +76,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "statuspage",
-          "sourceUpdatedAt": "2026-11-17T19:15:36.657Z",
+          "sourceUpdatedAt": "2026-11-18T01:35:38.376Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -87,7 +87,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T19:15:37.234Z",
+          "sourceUpdatedAt": "2026-11-18T01:35:38.845Z",
           "evidenceClass": "provider_status_and_community_reports"
         }
       ],
@@ -102,8 +102,8 @@
       "scope": "UK fixed broadband providers",
       "format": "json",
       "status": "OK",
-      "checkedAt": "2026-11-17T20:02:02Z",
-      "sourceUpdatedAt": "2026-11-17T20:00:22.687Z",
+      "checkedAt": "2026-11-18T02:19:42Z",
+      "sourceUpdatedAt": "2026-11-18T02:15:22.429Z",
       "providerSignals": [
         {
           "provider": "Virgin Media",
@@ -113,7 +113,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T18:00:34.524Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.760Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -124,7 +124,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T18:00:34.524Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.760Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -135,7 +135,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T18:00:34.524Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.760Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -146,7 +146,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T18:00:34.524Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.760Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -157,7 +157,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T18:00:34.524Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.760Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -168,7 +168,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T18:00:34.524Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.760Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -179,7 +179,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T18:00:34.753Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.981Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -190,7 +190,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T18:00:34.918Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:35.248Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -201,7 +201,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T18:00:35.080Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:35.259Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -212,7 +212,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T18:00:35.280Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:35.303Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -223,7 +223,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T18:00:35.405Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:35.328Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -234,7 +234,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-17T18:00:35.565Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:35.366Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -245,7 +245,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "statuspage",
-          "sourceUpdatedAt": "2026-11-17T18:00:35.618Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:35.428Z",
           "evidenceClass": "provider_status_and_community_reports"
         }
       ],
@@ -260,8 +260,8 @@
       "scope": "UK-wide carrier indicators",
       "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-17T20:02:03Z",
-      "sourceUpdatedAt": "2026-11-17 12:02:04",
+      "checkedAt": "2026-11-18T02:19:43Z",
+      "sourceUpdatedAt": "2026-11-17 18:19:43",
       "providerSignals": [
         {
           "provider": "EE",
@@ -271,7 +271,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-17 12:02:04",
+          "sourceUpdatedAt": "2026-11-17 18:19:43",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -282,7 +282,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-17 12:02:04",
+          "sourceUpdatedAt": "2026-11-17 18:19:43",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -293,7 +293,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-17 12:02:04",
+          "sourceUpdatedAt": "2026-11-17 18:19:43",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -304,7 +304,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-17 12:02:04",
+          "sourceUpdatedAt": "2026-11-17 18:19:43",
           "evidenceClass": "independent_traffic_and_reports"
         }
       ],
@@ -319,7 +319,7 @@
       "scope": "UK-wide fixed broadband infrastructure reports",
       "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-17T20:02:04Z",
+      "checkedAt": "2026-11-18T02:19:44Z",
       "sourceUpdatedAt": null,
       "providerSignals": [
         {
@@ -355,8 +355,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T19:15:37.234Z",
-          "checkedAt": "2026-11-17T20:02:01Z",
+          "sourceUpdatedAt": "2026-11-18T01:35:38.845Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": false
@@ -380,8 +380,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:34.524Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.760Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -405,8 +405,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:35.280Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:35.303Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -430,8 +430,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T19:15:36.306Z",
-          "checkedAt": "2026-11-17T20:02:01Z",
+          "sourceUpdatedAt": "2026-11-18T01:35:38.118Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": false
@@ -445,8 +445,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:34.524Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.760Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -460,8 +460,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17 12:02:04",
-          "checkedAt": "2026-11-17T20:02:03Z",
+          "sourceUpdatedAt": "2026-11-17 18:19:43",
+          "checkedAt": "2026-11-18T02:19:43Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -485,8 +485,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:35.080Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:35.259Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -510,8 +510,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:35.565Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:35.366Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -535,8 +535,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:34.918Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:35.248Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -560,8 +560,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T19:15:36.306Z",
-          "checkedAt": "2026-11-17T20:02:01Z",
+          "sourceUpdatedAt": "2026-11-18T01:35:38.118Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": false
@@ -575,8 +575,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17 12:02:04",
-          "checkedAt": "2026-11-17T20:02:03Z",
+          "sourceUpdatedAt": "2026-11-17 18:19:43",
+          "checkedAt": "2026-11-18T02:19:43Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -601,7 +601,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": null,
-          "checkedAt": "2026-11-17T20:02:04Z",
+          "checkedAt": "2026-11-18T02:19:44Z",
           "evidenceClass": "community_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -625,8 +625,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:34.524Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.760Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -650,8 +650,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:34.524Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.760Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -675,8 +675,8 @@
           "summary": "All systems operational",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:35.618Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:35.428Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "statuspage",
           "stale": true
@@ -700,8 +700,8 @@
           "summary": "All Systems Operational",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T19:15:36.657Z",
-          "checkedAt": "2026-11-17T20:02:01Z",
+          "sourceUpdatedAt": "2026-11-18T01:35:38.376Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "statuspage",
           "stale": false
@@ -725,8 +725,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:34.524Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.760Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -750,8 +750,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T19:15:36.306Z",
-          "checkedAt": "2026-11-17T20:02:01Z",
+          "sourceUpdatedAt": "2026-11-18T01:35:38.118Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": false
@@ -765,8 +765,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17 12:02:04",
-          "checkedAt": "2026-11-17T20:02:03Z",
+          "sourceUpdatedAt": "2026-11-17 18:19:43",
+          "checkedAt": "2026-11-18T02:19:43Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -790,8 +790,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:34.524Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.760Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -815,8 +815,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T19:15:36.306Z",
-          "checkedAt": "2026-11-17T20:02:01Z",
+          "sourceUpdatedAt": "2026-11-18T01:35:38.118Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": false
@@ -830,8 +830,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:34.753Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:34.981Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -845,8 +845,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17 12:02:04",
-          "checkedAt": "2026-11-17T20:02:03Z",
+          "sourceUpdatedAt": "2026-11-17 18:19:43",
+          "checkedAt": "2026-11-18T02:19:43Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -870,8 +870,8 @@
           "summary": "No unusual user reports",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-17T18:00:35.405Z",
-          "checkedAt": "2026-11-17T20:02:02Z",
+          "sourceUpdatedAt": "2026-11-17T22:35:35.328Z",
+          "checkedAt": "2026-11-18T02:19:42Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
