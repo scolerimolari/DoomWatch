@@ -1,57 +1,57 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-21T19:10:00+00:00",
-  "generatedAt": "2026-11-21T19:10:00+00:00",
+  "updatedAt": "2026-11-22T06:40:15+00:00",
+  "generatedAt": "2026-11-22T06:40:15+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:55+00:00"
+      "checkedAt": "2026-11-22T06:40:09+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:55+00:00"
+      "checkedAt": "2026-11-22T06:40:09+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:55+00:00"
+      "checkedAt": "2026-11-22T06:40:09+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:55+00:00"
+      "checkedAt": "2026-11-22T06:40:09+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:55+00:00"
+      "checkedAt": "2026-11-22T06:40:09+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:55+00:00"
+      "checkedAt": "2026-11-22T06:40:10+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:56+00:00"
+      "checkedAt": "2026-11-22T06:40:10+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:56+00:00"
+      "checkedAt": "2026-11-22T06:40:10+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:56+00:00"
+      "checkedAt": "2026-11-22T06:40:10+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:56+00:00"
+      "checkedAt": "2026-11-22T06:40:10+00:00"
     },
     "heatingOil": {
       "status": "failed",
-      "checkedAt": "2026-11-21T19:09:58+00:00",
+      "checkedAt": "2026-11-22T06:40:12+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "error": "HTTP Error 403: Forbidden"
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:58+00:00",
+      "checkedAt": "2026-11-22T06:40:13+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6afb1224ccb3ea58ac8743ad/CSV__2018_-__.csv",
       "observationsImported": 464,
@@ -60,7 +60,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:59+00:00",
+      "checkedAt": "2026-11-22T06:40:14+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -69,7 +69,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:59+00:00",
+      "checkedAt": "2026-11-22T06:40:14+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -78,7 +78,7 @@
     },
     "supermarketPriceIndex": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:59+00:00",
+      "checkedAt": "2026-11-22T06:40:14+00:00",
       "url": "https://data.yappman.com/shelf-price-index/",
       "datasetUrl": "https://api.apify.com/v2/datasets/AvRCWqFinCiNjx3sP/items?format=json",
       "licence": "CC BY 4.0",
@@ -88,12 +88,12 @@
     },
     "gbpConversion": {
       "status": "ok",
-      "checkedAt": "2026-11-21T19:09:57+00:00",
+      "checkedAt": "2026-11-22T06:40:12+00:00",
       "rateSource": "GBPUSD=X daily history from Yahoo Finance",
       "latestRate": 1.3082,
       "eligibleSeries": 14,
       "convertedSeries": 14,
-      "convertedObservations": 18193,
+      "convertedObservations": 18194,
       "note": "USD-denominated commodities, Bitcoin and US shares receive GBP display values. Historical conversion uses the most recent GBP/USD daily close on or before each observation date; native USD source values are preserved. Index points and FX quotes remain in their natural units."
     }
   },
@@ -101,7 +101,7 @@
     "gold": {
       "symbol": "GC=F",
       "price": 3515.4,
-      "changePct": 89.857,
+      "changePct": 94.619,
       "currency": "USD",
       "observedAt": "2026-11-20T21:59:57+00:00",
       "history": [
@@ -10208,7 +10208,7 @@
     "silver": {
       "symbol": "SI=F",
       "price": 41.07,
-      "changePct": 65.738,
+      "changePct": 69.033,
       "currency": "USD",
       "observedAt": "2026-11-20T21:59:58+00:00",
       "history": [
@@ -15250,7 +15250,7 @@
         },
         {
           "date": "2026-11-20",
-          "value": 41.035
+          "value": 41.07
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -20296,18 +20296,18 @@
         },
         {
           "date": "2026-11-20",
-          "value": 31.356885
+          "value": 31.383631
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "per troy oz",
-      "gbpChangePct": -6.982,
+      "gbpChangePct": -6.902,
       "gbpPrice": 31.394282
     },
     "brent": {
       "symbol": "BZ=F",
       "price": 89.95,
-      "changePct": 14.02,
+      "changePct": 12.861,
       "currency": "USD",
       "observedAt": "2026-11-20T21:59:18+00:00",
       "history": [
@@ -25353,7 +25353,7 @@
         },
         {
           "date": "2026-11-20",
-          "value": 92.57
+          "value": 89.949997
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -30403,12 +30403,12 @@
         },
         {
           "date": "2026-11-20",
-          "value": 70.737343
+          "value": 68.735269
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "per barrel",
-      "gbpChangePct": 1.104,
+      "gbpChangePct": -1.757,
       "gbpPrice": 68.7586
     }
   },
@@ -45580,10 +45580,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 60216.12,
-      "changePct": 2.53,
+      "price": 59113.1,
+      "changePct": 5.017,
       "currency": "USD",
-      "observedAt": "2026-11-21T19:09:51+00:00",
+      "observedAt": "2026-11-22T06:40:04+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -52908,6 +52908,10 @@
         {
           "date": "2026-11-21",
           "value": 60216.121094
+        },
+        {
+          "date": "2026-11-22",
+          "value": 59113.101562
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -60238,12 +60242,16 @@
         {
           "date": "2026-11-21",
           "value": 46030.420174
+        },
+        {
+          "date": "2026-11-22",
+          "value": 45187.249748
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": 2.446,
-      "gbpPrice": 46029.750803
+      "gbpChangePct": -1.832,
+      "gbpPrice": 45186.592264
     }
   },
   "fx": {
@@ -60252,7 +60260,7 @@
       "price": 1.3082,
       "changePct": -3.096,
       "currency": "USD",
-      "observedAt": "2026-11-21T15:05:48+00:00",
+      "observedAt": "2026-11-22T00:42:47+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -65472,6 +65480,10 @@
         },
         {
           "date": "2026-11-21",
+          "value": 1.308181
+        },
+        {
+          "date": "2026-11-22",
           "value": 1.308181
         }
       ],
@@ -184321,7 +184333,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-21T19:09:58+00:00",
+    "updatedAt": "2026-11-22T06:40:13+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6afb1224ccb3ea58ac8743ad/CSV__2018_-__.csv",
@@ -193240,7 +193252,7 @@
         "missingPackSize": null
       }
     ],
-    "supermarketIndexUpdatedAt": "2026-11-21T19:09:59+00:00",
+    "supermarketIndexUpdatedAt": "2026-11-22T06:40:14+00:00",
     "supermarketIndex": {
       "vintage": "2026-W45",
       "publishedAt": "2026-11-09T12:49:02Z",
@@ -193262,34 +193274,64 @@
   },
   "news": [
     {
-      "title": "Russia-bound ship attacked in Gulf of Finland",
-      "url": "https://www.bbc.co.uk/news/articles/cj752ddve27ko?at_medium=RSS&at_campaign=rss",
+      "title": "Dozens missing after fire at Indonesian factory",
+      "url": "https://www.bbc.co.uk/news/articles/cw8dvg5pgm0eo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-21T18:22:09+00:00"
+      "publishedAt": "2026-11-22T06:05:00+00:00"
+    },
+    {
+      "title": "New draft deal aims to avert collapse of talks at climate summit",
+      "url": "https://www.bbc.co.uk/news/articles/cq7827z2841zo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-22T05:26:10+00:00"
+    },
+    {
+      "title": "Mexican drug lord on FBI's 10 most wanted list arrested in shoot-out",
+      "url": "https://www.bbc.co.uk/news/articles/ckz749ey0r75o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-22T01:25:03+00:00"
     },
     {
       "title": "FBI reportedly investigating apparent hack of its criminal database",
       "url": "https://www.bbc.co.uk/news/articles/cvze7de86pk3o?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-21T16:35:15+00:00"
+      "publishedAt": "2026-11-22T00:10:44+00:00"
     },
     {
-      "title": "Fight over fossil fuels leaves COP31 climate talks in deadlock",
-      "url": "https://www.bbc.co.uk/news/articles/c6ly5w40eg07o?at_medium=RSS&at_campaign=rss",
+      "title": "Nigerian youth have shown their power in the past - why aren't they shaping this election?",
+      "url": "https://www.bbc.co.uk/news/articles/ck4g174n020eo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-21T14:54:24+00:00"
+      "publishedAt": "2026-11-22T00:10:37+00:00"
+    },
+    {
+      "title": "How a teen gamer and his mother helped rescue a missing girl",
+      "url": "https://www.bbc.co.uk/news/articles/cmq8lyv8lkjwo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-22T00:09:58+00:00"
+    },
+    {
+      "title": "Lock of former US President George Washington's hair sells for $4,000",
+      "url": "https://www.bbc.co.uk/news/articles/cwe9k23dpz0do?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-21T22:01:19+00:00"
+    },
+    {
+      "title": "Bird flu (avian influenza): latest situation in England",
+      "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-21T19:22:19Z"
+    },
+    {
+      "title": "Russia-bound ship attacked in Gulf of Finland",
+      "url": "https://www.bbc.co.uk/news/articles/cj752ddve27ko?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-21T19:20:22+00:00"
     },
     {
       "title": "Zelensky says Crimean Bridge strikes 'fair response' as he meets UK's Streeting",
       "url": "https://www.bbc.co.uk/news/articles/c6wy0qj7w5zqo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-21T13:17:38+00:00"
-    },
-    {
-      "title": "Mexican drug lord on FBI's 10 most wanted list arrested in shoot-out",
-      "url": "https://www.bbc.co.uk/news/articles/ckz749ey0r75o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-21T13:15:21+00:00"
     },
     {
       "title": "Sessions offer advice on rising energy costs",
@@ -193346,12 +193388,6 @@
       "publishedAt": "2026-11-21T00:01:39+00:00"
     },
     {
-      "title": "A new Nepal, an old neighbour - Balendra Shah's India test on first visit",
-      "url": "https://www.bbc.co.uk/news/articles/c6jre8xd83qgo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-20T23:28:17+00:00"
-    },
-    {
       "title": "These dead pets were meant to be cremated - then their bodies appeared on a livestream",
       "url": "https://www.bbc.co.uk/news/articles/cmn502ek17yvo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
@@ -193388,12 +193424,6 @@
       "publishedAt": "2026-11-20T22:37:09+00:00"
     },
     {
-      "title": "'I tell my son it's just fireworks': Life inside Yemeni city besieged by Houthis",
-      "url": "https://www.bbc.co.uk/news/articles/cx7v2d8q879eo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-20T22:14:17+00:00"
-    },
-    {
       "title": "What the new UK-EU deal could mean for future post-Brexit relations",
       "url": "https://www.bbc.co.uk/news/videos/c90k6gl3lyxeo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
@@ -193406,22 +193436,10 @@
       "publishedAt": "2026-11-20T20:54:12+00:00"
     },
     {
-      "title": "Indian man sentenced to 19-plus years in plot to assassinate US-based Sikh separatist leader",
-      "url": "https://www.bbc.co.uk/news/articles/cq702ez8d4lwo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-20T19:27:49+00:00"
-    },
-    {
       "title": "Miami or Vice City? Tour the real-world inspiration for GTA 6",
       "url": "https://www.bbc.co.uk/news/videos/c8wy5d43zp9qo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-20T18:48:48+00:00"
-    },
-    {
-      "title": "Bird flu (avian influenza): latest situation in England",
-      "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-20T18:18:09Z"
     },
     {
       "title": "UK to explore even closer ties with EU after agreeing deal, says Burnham",
@@ -193434,12 +193452,6 @@
       "url": "https://www.gov.uk/government/publications/bluetongue-leaflets-videos-and-posters",
       "source": "DEFRA",
       "publishedAt": "2026-11-20T17:23:13Z"
-    },
-    {
-      "title": "Guidance: SPS agreement: preparing your business",
-      "url": "https://www.gov.uk/government/publications/sps-agreement-preparing-your-business",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-20T16:54:24Z"
     }
   ],
   "supplyNews": [
@@ -193447,7 +193459,7 @@
       "title": "Bird flu (avian influenza): latest situation in England",
       "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
       "source": "DEFRA",
-      "publishedAt": "2026-11-20T18:18:09Z"
+      "publishedAt": "2026-11-21T19:22:19Z"
     },
     {
       "title": "Promotional material: Bluetongue: leaflets, videos and posters",
