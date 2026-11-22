@@ -1,57 +1,57 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-22T06:40:15+00:00",
-  "generatedAt": "2026-11-22T06:40:15+00:00",
+  "updatedAt": "2026-11-22T19:32:07+00:00",
+  "generatedAt": "2026-11-22T19:32:07+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:09+00:00"
+      "checkedAt": "2026-11-22T19:32:00+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:09+00:00"
+      "checkedAt": "2026-11-22T19:32:01+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:09+00:00"
+      "checkedAt": "2026-11-22T19:32:01+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:09+00:00"
+      "checkedAt": "2026-11-22T19:32:01+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:09+00:00"
+      "checkedAt": "2026-11-22T19:32:01+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:10+00:00"
+      "checkedAt": "2026-11-22T19:32:01+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:10+00:00"
+      "checkedAt": "2026-11-22T19:32:01+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:10+00:00"
+      "checkedAt": "2026-11-22T19:32:01+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:10+00:00"
+      "checkedAt": "2026-11-22T19:32:01+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:10+00:00"
+      "checkedAt": "2026-11-22T19:32:02+00:00"
     },
     "heatingOil": {
       "status": "failed",
-      "checkedAt": "2026-11-22T06:40:12+00:00",
+      "checkedAt": "2026-11-22T19:32:03+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "error": "HTTP Error 403: Forbidden"
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:13+00:00",
+      "checkedAt": "2026-11-22T19:32:05+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6afb1224ccb3ea58ac8743ad/CSV__2018_-__.csv",
       "observationsImported": 464,
@@ -60,7 +60,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:14+00:00",
+      "checkedAt": "2026-11-22T19:32:06+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -69,7 +69,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:14+00:00",
+      "checkedAt": "2026-11-22T19:32:06+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -78,7 +78,7 @@
     },
     "supermarketPriceIndex": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:14+00:00",
+      "checkedAt": "2026-11-22T19:32:06+00:00",
       "url": "https://data.yappman.com/shelf-price-index/",
       "datasetUrl": "https://api.apify.com/v2/datasets/AvRCWqFinCiNjx3sP/items?format=json",
       "licence": "CC BY 4.0",
@@ -88,7 +88,7 @@
     },
     "gbpConversion": {
       "status": "ok",
-      "checkedAt": "2026-11-22T06:40:12+00:00",
+      "checkedAt": "2026-11-22T19:32:03+00:00",
       "rateSource": "GBPUSD=X daily history from Yahoo Finance",
       "latestRate": 1.3082,
       "eligibleSeries": 14,
@@ -45580,10 +45580,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 59113.1,
-      "changePct": 5.017,
+      "price": 60633.89,
+      "changePct": 7.718,
       "currency": "USD",
-      "observedAt": "2026-11-22T06:40:04+00:00",
+      "observedAt": "2026-11-22T19:31:59+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -52907,11 +52907,11 @@
         },
         {
           "date": "2026-11-21",
-          "value": 60216.121094
+          "value": 60094.089844
         },
         {
           "date": "2026-11-22",
-          "value": 59113.101562
+          "value": 60633.890625
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -60241,17 +60241,17 @@
         },
         {
           "date": "2026-11-21",
-          "value": 46030.420174
+          "value": 45937.13702
         },
         {
           "date": "2026-11-22",
-          "value": 45187.249748
+          "value": 46349.771649
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": -1.832,
-      "gbpPrice": 45186.592264
+      "gbpChangePct": 0.898,
+      "gbpPrice": 46349.097997
     }
   },
   "fx": {
@@ -184333,7 +184333,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-22T06:40:13+00:00",
+    "updatedAt": "2026-11-22T19:32:05+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6afb1224ccb3ea58ac8743ad/CSV__2018_-__.csv",
@@ -193252,7 +193252,7 @@
         "missingPackSize": null
       }
     ],
-    "supermarketIndexUpdatedAt": "2026-11-22T06:40:14+00:00",
+    "supermarketIndexUpdatedAt": "2026-11-22T19:32:06+00:00",
     "supermarketIndex": {
       "vintage": "2026-W45",
       "publishedAt": "2026-11-09T12:49:02Z",
@@ -193274,16 +193274,82 @@
   },
   "news": [
     {
-      "title": "Dozens missing after fire at Indonesian factory",
-      "url": "https://www.bbc.co.uk/news/articles/cw8dvg5pgm0eo?at_medium=RSS&at_campaign=rss",
+      "title": "Explosion on Russian ship at Libya port caused by suspected drone attack, officials say",
+      "url": "https://www.bbc.co.uk/news/articles/cr894gjz0j0yo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-22T06:05:00+00:00"
+      "publishedAt": "2026-11-22T19:26:54+00:00"
     },
     {
-      "title": "New draft deal aims to avert collapse of talks at climate summit",
-      "url": "https://www.bbc.co.uk/news/articles/cq7827z2841zo?at_medium=RSS&at_campaign=rss",
+      "title": "Bird flu (avian influenza): latest situation in England",
+      "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-22T18:59:37Z"
+    },
+    {
+      "title": "What's next after no deal at COP31 climate talks?",
+      "url": "https://www.bbc.co.uk/news/videos/cr1ewge81q4qo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-22T05:26:10+00:00"
+      "publishedAt": "2026-11-22T18:57:24+00:00"
+    },
+    {
+      "title": "US Army to detonate tonnes of unstable explosives in Iowa despite court order",
+      "url": "https://www.bbc.co.uk/news/articles/cvglrx764gdxo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-22T18:29:46+00:00"
+    },
+    {
+      "title": "COP31 fails to reach major climate deal as talks expose deep divisions",
+      "url": "https://www.bbc.co.uk/news/articles/cqwy06zrd26lo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-22T18:17:59+00:00"
+    },
+    {
+      "title": "'Danger seems greater all the time': Ukrainians search for missing after Russian strikes",
+      "url": "https://www.bbc.co.uk/news/videos/cre3dvd1k9y1o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-22T17:57:43+00:00"
+    },
+    {
+      "title": "Russia-bound ship towed away after it was attacked in Gulf of Finland",
+      "url": "https://www.bbc.co.uk/news/articles/cj752ddve27ko?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-22T17:18:26+00:00"
+    },
+    {
+      "title": "Three killed and dozens missing after fire at Indonesian factory",
+      "url": "https://www.bbc.co.uk/news/articles/cw8dvg5pgm0eo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-22T14:05:20+00:00"
+    },
+    {
+      "title": "Centrica boss says he is 'hugely concerned' over impact of soaring energy bills",
+      "url": "https://www.bbc.co.uk/news/articles/c6jre7gpdw13o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-22T13:50:21+00:00"
+    },
+    {
+      "title": "South Korea education minister resigns over exam cheating scandal",
+      "url": "https://www.bbc.co.uk/news/articles/cw3dgk29d37no?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-22T09:20:45+00:00"
+    },
+    {
+      "title": "Miley Cyrus marries Maxx Morando in California ceremony",
+      "url": "https://www.bbc.co.uk/news/articles/cq8e0p87l89lo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-22T08:46:28+00:00"
+    },
+    {
+      "title": "MP criticises Guernsey and Jersey company ownership register plans",
+      "url": "https://www.bbc.co.uk/news/articles/cqkgmy2nxy4lo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-22T07:22:05+00:00"
+    },
+    {
+      "title": "Italian jeweller and businessman Paolo Bulgari dies aged 89",
+      "url": "https://www.bbc.co.uk/news/articles/c8e39qk5vrpdo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-22T07:12:41+00:00"
     },
     {
       "title": "Mexican drug lord on FBI's 10 most wanted list arrested in shoot-out",
@@ -193310,22 +193376,16 @@
       "publishedAt": "2026-11-22T00:09:58+00:00"
     },
     {
+      "title": "Employers are being asked to give interview feedback - here's what applicants want",
+      "url": "https://www.bbc.co.uk/news/articles/cm2d94le23xyo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-22T00:04:07+00:00"
+    },
+    {
       "title": "Lock of former US President George Washington's hair sells for $4,000",
       "url": "https://www.bbc.co.uk/news/articles/cwe9k23dpz0do?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-21T22:01:19+00:00"
-    },
-    {
-      "title": "Bird flu (avian influenza): latest situation in England",
-      "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-21T19:22:19Z"
-    },
-    {
-      "title": "Russia-bound ship attacked in Gulf of Finland",
-      "url": "https://www.bbc.co.uk/news/articles/cj752ddve27ko?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-21T19:20:22+00:00"
     },
     {
       "title": "Zelensky says Crimean Bridge strikes 'fair response' as he meets UK's Streeting",
@@ -193382,76 +193442,16 @@
       "publishedAt": "2026-11-21T00:34:51+00:00"
     },
     {
+      "title": "Can AI really help spot Black Friday deals? We put it to the test",
+      "url": "https://www.bbc.co.uk/news/articles/cw8dv4jmnle2o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-21T00:06:11+00:00"
+    },
+    {
       "title": "Mamdani announces plan to close New York's Rikers Island jail by 2032  ",
       "url": "https://www.bbc.co.uk/news/articles/cmjeqv89egylo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
       "publishedAt": "2026-11-21T00:01:39+00:00"
-    },
-    {
-      "title": "These dead pets were meant to be cremated - then their bodies appeared on a livestream",
-      "url": "https://www.bbc.co.uk/news/articles/cmn502ek17yvo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-20T23:20:33+00:00"
-    },
-    {
-      "title": "US declassifies more UFO footage filmed in the Middle East",
-      "url": "https://www.bbc.co.uk/news/videos/cqdr1x8mypnko?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-20T23:15:20+00:00"
-    },
-    {
-      "title": "In a year of AI solving maths problems, an Anthropic worker says he may have cracked the biggest",
-      "url": "https://www.bbc.co.uk/news/articles/c6pqr2g7w059o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-20T23:08:57+00:00"
-    },
-    {
-      "title": "GTA 6 sales hit $3.8bn in a single day - the biggest entertainment launch in history",
-      "url": "https://www.bbc.co.uk/news/articles/c9zr5nyv5dj2o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-20T22:53:24+00:00"
-    },
-    {
-      "title": "Tech stock sell-off drags markets down as Anthropic shares slide",
-      "url": "https://www.bbc.co.uk/news/articles/c6808ym10vzgo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-20T22:42:47+00:00"
-    },
-    {
-      "title": "French police officers sentenced for beating of music producer Michel Zecler",
-      "url": "https://www.bbc.co.uk/news/articles/ck9d7e9wvvweo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-20T22:37:09+00:00"
-    },
-    {
-      "title": "What the new UK-EU deal could mean for future post-Brexit relations",
-      "url": "https://www.bbc.co.uk/news/videos/c90k6gl3lyxeo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-20T21:43:22+00:00"
-    },
-    {
-      "title": "Trump threatens ban on US firms building AI data centres overseas",
-      "url": "https://www.bbc.co.uk/news/articles/cmde1lw9y54ko?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-20T20:54:12+00:00"
-    },
-    {
-      "title": "Miami or Vice City? Tour the real-world inspiration for GTA 6",
-      "url": "https://www.bbc.co.uk/news/videos/c8wy5d43zp9qo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-20T18:48:48+00:00"
-    },
-    {
-      "title": "UK to explore even closer ties with EU after agreeing deal, says Burnham",
-      "url": "https://www.bbc.co.uk/news/articles/c6jreyqgw4e9o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-20T17:49:48+00:00"
-    },
-    {
-      "title": "Promotional material: Bluetongue: leaflets, videos and posters",
-      "url": "https://www.gov.uk/government/publications/bluetongue-leaflets-videos-and-posters",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-20T17:23:13Z"
     }
   ],
   "supplyNews": [
@@ -193459,7 +193459,7 @@
       "title": "Bird flu (avian influenza): latest situation in England",
       "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
       "source": "DEFRA",
-      "publishedAt": "2026-11-21T19:22:19Z"
+      "publishedAt": "2026-11-22T18:59:37Z"
     },
     {
       "title": "Promotional material: Bluetongue: leaflets, videos and posters",
