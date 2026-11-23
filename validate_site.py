@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""DoomWatch static, route, collector-output and data-integrity audit."""
+"""DoomWatch NI static, route, collector-output and data-integrity audit."""
 import json, re, sys
 from datetime import datetime, timezone
 from html.parser import HTMLParser
@@ -9,8 +9,8 @@ from urllib.parse import unquote, urlsplit
 ROOT=Path(__file__).resolve().parent
 PAGES=("index.html","observatory.html","map.html","markets.html","communications.html","meshcore.html","signals.html","operations.html","correlation.html","incident.html","feed.html","household.html")
 FLOWS=("osint","community","fringe","economic","digital","independent")
-ROUTES=("./index.html","./observatory.html","./map.html","./markets.html","./communications.html")
-CORE=("index.html","observatory.html","doomwatch-ui.js","feeds.json","fringe_sources.json","sources.json","map.html","communications.html","markets.html","meshcore.html")
+ROUTES=("./index.html","./observatory.html","./map.html","./household.html","./markets.html","./communications.html")
+CORE=("index.html","observatory.html","doomwatch-ui.js","doomwatch-ni.css","feeds.json","fringe_sources.json","sources.json","map.html","communications.html","markets.html","meshcore.html")
 errors=[]; warnings=[]
 def fail(message): errors.append(message)
 class Parser(HTMLParser):
@@ -54,17 +54,21 @@ def audit_pages():
  for route in ROUTES:
   if route not in shell:fail("Main navigation route missing: "+route)
  text=(ROOT/"index.html").read_text(encoding="utf-8"); p=Parser();p.feed(text)
- for key in ("latest-intelligence","emerging-signals","metric-records","metric-signals","metric-markets","metric-connectivity","service-summary","economy-summary","dw-updated"):
-  if key not in p.ids:fail("Command dashboard missing element: "+key)
- if "start().catch\nstart().catch" in text:fail("Duplicate dashboard startup invocation remains")
+ for key in ("area-form","area-query","area-radius","area-results","ni-wide-feed","ni-updated"):
+  if key not in p.ids:fail("NI area checker missing element: "+key)
+ for token in ("api.postcodes.io","nominatim.openstreetmap.org","powercheck.nienetworks.co.uk","niwater.com","trafficwatchni.com"):
+  if token not in text:fail("NI area checker missing expected source/integration: "+token)
+ if "CHECK MY AREA" not in text:fail("NI area checker heading is missing")
  css=(ROOT/"doomwatch.css").read_text(encoding="utf-8")
  if "min-height:44px" not in css or "@media(max-width:760px)" not in css:fail("Mobile touch-target or responsive CSS check failed")
+ ni_css=(ROOT/"doomwatch-ni.css").read_text(encoding="utf-8")
+ if "@media(max-width:760px)" not in ni_css:fail("NI mobile layout CSS is missing")
  obs=(ROOT/"observatory.html").read_text(encoding="utf-8")
  declared=set(re.findall(r'data-flow="([^"]+)"',obs))
  if declared!=set(FLOWS):fail("Six observatory tabs do not match expected flows")
  if 'id="fringe" data-flow="fringe"' not in obs:fail("Fringe deep link target is missing")
  if "activeFlow=flowOrder.includes(location.hash.slice(1))" not in obs:fail("Fringe deep link does not select the requested flow")
- print(f"ROUTES: {len(PAGES)} pages checked; five main destinations present")
+ print(f"ROUTES: {len(PAGES)} pages checked; NI home and six main navigation destinations present")
 def audit_bluesky():
  for name in CORE:
   path=ROOT/name
