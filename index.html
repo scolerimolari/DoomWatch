@@ -1,128 +1,86 @@
 <!doctype html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101411"><meta name="description" content="DoomWatch — source-led intelligence and situational awareness.">
-<link rel="manifest" href="./manifest.json"><link rel="stylesheet" href="./doomwatch.css">
-<title>DOOMWATCH / COMMAND</title></head>
-<body class="dw-command-page">
-<header class="dw-old-header"><div class="dw-brand-old">DOOMWATCH</div></header>
-<main class="dw-command">
-<section class="dw-command-head">
- <div class="dw-kicker">OPEN-SOURCE INTELLIGENCE / SITUATIONAL AWARENESS</div>
- <div class="dw-heading-row"><div><h1>Command</h1><p>One concise view of what is changing across Northern Ireland, the UK and the wider world.</p></div><div class="dw-updated" id="dw-updated">LOADING SNAPSHOTS</div></div>
- <div class="dw-regions" role="group" aria-label="Geographic filter">
-  <button class="is-active" data-region="ALL" aria-pressed="true">All regions</button><button data-region="NI" aria-pressed="false">Northern Ireland</button><button data-region="UK" aria-pressed="false">United Kingdom</button><button data-region="GLOBAL" aria-pressed="false">Global</button>
+<meta name="theme-color" content="#101411"><meta name="description" content="DoomWatch NI — local hazards, infrastructure disruption and verified public information across Northern Ireland and nearby border counties.">
+<link rel="manifest" href="./manifest.json"><link rel="stylesheet" href="./doomwatch.css"><link rel="stylesheet" href="./doomwatch-ni.css">
+<title>DOOMWATCH NI / CHECK MY AREA</title>
+</head>
+<body class="dw-ni-home">
+<header hidden><div>DOOMWATCH NI</div></header>
+<main class="dw-ni-main">
+<section class="ni-hero">
+ <div class="ni-eyebrow">NORTHERN IRELAND / LOCAL SITUATIONAL AWARENESS</div>
+ <div class="ni-hero-row"><div><h1>Check my area.</h1><p>Local disruption, hazards and developments — drawn from public sources, with the evidence and freshness shown.</p></div><div class="ni-clock" id="ni-updated">LOADING DATA</div></div>
+ <form id="area-form" class="ni-search">
+  <label for="area-query">Enter a postcode, town or village</label>
+  <div class="ni-search-row"><input id="area-query" name="area" autocomplete="postal-code" placeholder="e.g. BT39 9AA or Ballyclare" required><button type="submit">CHECK AREA <span aria-hidden="true">→</span></button></div>
+  <div class="ni-search-options"><label for="area-radius">Search radius</label><select id="area-radius"><option value="5">5 km</option><option value="15" selected>15 km</option><option value="30">30 km</option><option value="50">50 km</option></select><span>NI and relevant cross-border coverage</span></div>
+ </form>
+ <div class="ni-quick"><span>TRY AN AREA</span><button type="button" data-area="Ballyclare">Ballyclare</button><button type="button" data-area="Belfast">Belfast</button><button type="button" data-area="Derry / Londonderry">Derry</button><button type="button" data-area="Newry">Newry</button></div>
+</section>
+<section class="ni-results" id="area-results" aria-live="polite">
+ <div class="ni-welcome"><div class="ni-welcome-icon">⌖</div><h2>Your local picture starts here</h2><p>Search a place to see matching intelligence, nearby disruption and the official services that can confirm current conditions.</p><p class="ni-note">DoomWatch is an information tool, not an emergency service. In an emergency call 999.</p></div>
+</section>
+<section class="ni-global">
+ <div class="ni-section-head"><div><span class="ni-eyebrow">WIDER PICTURE</span><h2>Northern Ireland watch</h2><p>Developments across NI and adjoining border counties that may have wider implications.</p></div><a href="./observatory.html">All intelligence ↗</a></div>
+ <div id="ni-wide-feed" class="ni-feed"><p class="ni-muted">Loading regional intelligence…</p></div>
+</section>
+<section class="ni-secondary">
+ <div class="ni-section-head"><div><span class="ni-eyebrow">DOOMWATCH TOOLS</span><h2>More than your area</h2></div></div>
+ <div class="ni-tool-grid">
+  <a href="./observatory.html"><b>01 / INTELLIGENCE</b><strong>Observatory</strong><span>Six streams of source-led intelligence.</span></a>
+  <a href="./map.html"><b>02 / GEOSPATIAL</b><strong>Situation map</strong><span>Explore mapped events and infrastructure.</span></a>
+  <a href="./correlation.html"><b>03 / ANALYSIS</b><strong>Situation picture</strong><span>Correlations and developing signals.</span></a>
+  <a href="./household.html"><b>04 / RESILIENCE</b><strong>Household</strong><span>Practical preparedness and continuity.</span></a>
+  <a href="./communications.html"><b>05 / CONNECTIVITY</b><strong>Network monitor</strong><span>Communications and service disruption.</span></a>
+  <a href="./markets.html"><b>06 / ECONOMY</b><strong>Markets</strong><span>Energy, commodities and financial pressure.</span></a>
+  <a href="./meshcore.html"><b>07 / OFF-GRID</b><strong>MeshCore</strong><span>Independent local communications.</span></a>
+  <a href="./incident.html"><b>08 / REFERENCE</b><strong>Incident resources</strong><span>Useful response and reporting links.</span></a>
  </div>
 </section>
-<section class="dw-metric-grid" aria-label="Intelligence snapshot">
- <article class="dw-metric"><span>INTELLIGENCE RECORDS</span><strong id="metric-records">—</strong><small id="metric-records-note">Current archive</small></article>
- <article class="dw-metric"><span>OBSERVATORY SIGNALS</span><strong id="metric-signals">—</strong><small>Across six observatories</small></article>
- <article class="dw-metric"><span>MARKET DATA</span><strong id="metric-markets">—</strong><small id="metric-markets-note">Latest snapshot</small></article>
- <article class="dw-metric"><span>CONNECTIVITY</span><strong id="metric-connectivity">—</strong><small id="metric-connectivity-note">Provider status snapshot</small></article>
-</section>
-<section class="dw-map-console dw-panel">
- <div class="dw-panel-head"><div><span class="dw-kicker">LIVE GEOSPATIAL PICTURE</span><h2>Global situation map</h2><p class="dw-muted">Explore mapped events, infrastructure, transport and disruption. Select layers and time windows inside the map.</p></div><a href="./map.html?embed=1">Expand map ↗</a></div>
- <div class="dw-map-frame"><iframe title="DoomWatch interactive intelligence map" src="./map.html?embed=1" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
- <div class="dw-map-caption"><span>UK / NORTHERN IRELAND START VIEW</span><span>MAP LAYERS AND TIME RANGE ARE INTERACTIVE</span></div>
-</section>
-<section class="dw-stream-hub dw-panel">
- <div class="dw-panel-head"><div><span class="dw-kicker">SIX INTELLIGENCE STREAMS</span><h2>Explore the observatory</h2></div><a href="./correlation.html">Situation picture ↗</a><a href="./observatory.html">All intelligence ↗</a></div>
- <div class="dw-stream-grid">
-  <a href="./observatory.html#osint"><b>01</b><strong>OSINT Observatory</strong><small>Geospatial · transport · hazards</small></a>
-  <a href="./observatory.html#community"><b>02</b><strong>Community Signals</strong><small>Public reporting · local signals</small></a>
-  <a href="./observatory.html#fringe"><b>03</b><strong>Fringe & Emerging</strong><small>Alternative narratives · weak signals</small></a>
-  <a href="./observatory.html#economic"><b>04</b><strong>Economic Stress</strong><small>Food · fuel · trade · finance</small></a>
-  <a href="./observatory.html#digital"><b>05</b><strong>Digital Infrastructure</strong><small>Cyber · telecoms · utilities</small></a>
-  <a href="./observatory.html#independent"><b>06</b><strong>Independent Media</strong><small>Investigations · regional journalism</small></a>
- </div>
-</section>
-<section class="dw-command-grid">
- <div class="dw-main-column">
-  <section class="dw-panel"><div class="dw-panel-head"><div><span class="dw-kicker">01 / DEVELOPMENTS</span><h2>Latest intelligence</h2></div><a href="./observatory.html">Open intelligence ↗</a></div><div id="latest-intelligence" class="dw-story-list"><p class="dw-muted">Loading source records…</p></div></section>
-  <section class="dw-panel"><div class="dw-panel-head"><div><span class="dw-kicker">02 / EMERGING</span><h2>Signals to watch</h2></div><a href="./observatory.html#fringe">Explore fringe & emerging ↗</a></div><div id="emerging-signals" class="dw-story-list"><p class="dw-muted">Loading emerging signals…</p></div></section>
- </div>
- <aside class="dw-side-column">
-  <section class="dw-panel"><div class="dw-panel-head"><div><span class="dw-kicker">04 / SERVICE STATUS</span><h2>Disruptions</h2></div><a href="./communications.html">Network monitor ↗</a></div><div id="service-summary" class="dw-status-list"><p class="dw-muted">Loading service status…</p></div></section>
-  <section class="dw-panel"><div class="dw-panel-head"><div><span class="dw-kicker">05 / ECONOMIC CONTEXT</span><h2>Markets & pressure</h2></div><a href="./markets.html#marketHistoryExplorer">Explore history ↗</a></div><div id="economy-summary" class="dw-status-list"><p class="dw-muted">Loading market data…</p></div></section>
- </aside>
-</section>
-<footer class="dw-footer">DOOMWATCH / INFORMATION ONLY / OPEN SOURCES / NOT AN EMERGENCY SERVICE</footer>
+<footer class="dw-footer">DOOMWATCH NI / PUBLIC INFORMATION / SOURCE-LED / NOT AN EMERGENCY SERVICE</footer>
 </main>
 <script src="./doomwatch-ui.js"></script>
 <script>
 (()=>{"use strict";
-const $=id=>document.getElementById(id);
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const state={region:"ALL",archive:[],flows:{},markets:null,communications:null};
-const compact=window.matchMedia("(max-width:760px)");
-function parsedDate(v){if(v===null||v===undefined||v==="")return null;const d=new Date(typeof v==="number"&&v<1e12?v*1000:v);return Number.isNaN(d.getTime())?null:d;}
-function fmt(v){const d=parsedDate(v);return d?d.toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"}):"Time not supplied";}
-function stamp(x){return x?.publishedAt||x?.date||x?.published||x?.collectedAt||x?.timestamp||"";}
-function region(x){
- const s=[x?.region,x?.area,x?.location,x?.geo,x?.geography,x?.country].filter(Boolean).join(" ").toLowerCase();
- if(/bounding box|geometry must be checked|item geometry must be checked/.test(s))return "UNKNOWN";
- if(/\bnorthern ireland\b|\bni\b|\bbelfast\b|\bantrim\b|\bderry\b|\blondonderry\b|\barmagh\b|\btyrone\b|\bfermanagh\b|\bdown\b|\bnewtownabbey\b|\bballyclare\b/.test(s))return "NI";
- if(/\bunited kingdom\b|\buk\b|\bgb\b|\bengland\b|\bscotland\b|\bwales\b|\bgreat britain\b|\bbritain\b/.test(s))return "UK";
- if(/\bglobal\b|\binternational\b|\bworld\b|\bworldwide\b|\boverseas\b|\beurope\b|\bnorth america\b|\bsouth america\b|\basia\b|\bafrica\b|\bmiddle east\b|\boceania\b|\brepublic of ireland\b|\bireland\b/.test(s))return "GLOBAL";
- return "UNKNOWN";
+const $=id=>document.getElementById(id), esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const state={area:"",geo:null,archive:[],observatory:{},communications:null,wide:[],radius:15};
+const now=()=>new Date();
+const dateOf=v=>{if(!v)return null;const d=new Date(typeof v==="number"&&v<1e12?v*1000:v);return Number.isNaN(d.getTime())?null:d;};
+const stamp=x=>x?.publishedAt||x?.date||x?.published||x?.collectedAt||x?.timestamp||x?.updatedAt||"";
+const fmt=v=>{const d=dateOf(v);return d?d.toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"}):"Date not supplied";};
+const safeUrl=v=>{try{const u=new URL(String(v||""));return ["https:","http:"].includes(u.protocol)?u.href:"";}catch{return "";}};
+const regionText=x=>[x?.region,x?.area,x?.location,x?.geo,x?.geography,x?.country,x?.title,x?.summary,x?.description,x?.contentSnippet].filter(Boolean).join(" ").toLowerCase();
+const localPattern=s=>{const words=String(s||"").toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(w=>w.length>2);return words.filter(w=>!["northern","ireland","county","district","road","street"].includes(w));};
+function haversine(a,b){const rad=n=>n*Math.PI/180,R=6371,dLat=rad(b.lat-a.lat),dLon=rad(b.lon-a.lon),x=Math.sin(dLat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
+function coords(x){const lat=Number(x.latitude??x.lat??x.geometry?.coordinates?.[1]??x.coordinates?.lat),lon=Number(x.longitude??x.lon??x.lng??x.geometry?.coordinates?.[0]??x.coordinates?.lon);return Number.isFinite(lat)&&Number.isFinite(lon)&&Math.abs(lat)<=90&&Math.abs(lon)<=180?{lat,lon}:null;}
+function matchLocal(x){const text=regionText(x),terms=localPattern(state.area);if(!terms.length)return false;const geo=coords(x);if(geo&&state.geo)return haversine(geo,state.geo)<=state.radius;return terms.some(t=>text.includes(t));}
+function isNI(x){return /northern ireland|\bni\b|belfast|antrim|armagh|derry|londonderry|fermanagh|tyrone|down|newry|lisburn|ballyclare|carrickfergus|coleraine|omagh|enniskillen|cookstown|limavady|strabane|banbridge|newtownards|larne|magherafelt|mid ulster/.test(regionText(x));}
+function isBorder(x){return /republic of ireland|\bireland\b|\bdonegal\b|\bleitrim\b|\bcavan\b|\bmonaghan\b|\blouth\b/.test(regionText(x));}
+function allRecords(){const a=state.archive;const o=state.observatory;const extra=[];Object.values(o.flows||{}).forEach(f=>{if(Array.isArray(f.records))extra.push(...f.records);});return [...a,...extra];}
+function story(x){const u=safeUrl(x.url||x.link||x.articleUrl),title=esc(x.title||x.headline||x.name||"Untitled report"),source=esc(x.source||x.publisher||x.sourceName||x.sourceId||"Source not identified"),grade=esc(String(x.reliabilityGrade||x.sourceGrade||x.trust||"Unclassified").replaceAll("_"," ").replaceAll("-"," "));return '<article class="ni-story"><div class="ni-story-meta"><span>'+source+'</span><span>'+fmt(stamp(x))+'</span></div><h3>'+(u?'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+title+'</a>':title)+'</h3><p>'+esc(x.summary||x.description||x.contentSnippet||"The source record does not include a summary.")+'</p><div class="ni-story-foot"><span>CLASS: '+grade+'</span>'+(u?'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">SOURCE ↗</a>':"")+'</div></article>';}
+function setStatus(el,kind,title,detail,link){$(el).innerHTML='<div class="ni-status '+kind+'"><div class="ni-status-mark"></div><div><strong>'+esc(title)+'</strong><span>'+esc(detail)+'</span>'+(link?'<a href="'+esc(link.url)+'" target="_blank" rel="noopener noreferrer">'+esc(link.label)+' ↗</a>':"")+'</div></div>';}
+async function geocode(q){const s=q.trim();if(!s)throw Error("Enter a postcode, town or village.");
+ if(/^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i.test(s)){const p=await fetch("https://api.postcodes.io/postcodes/"+encodeURIComponent(s.replace(/\s/g,"")),{cache:"no-store"});if(p.ok){const j=await p.json();if(j.status===200&&j.result)return {lat:j.result.latitude,lon:j.result.longitude,label:j.result.admin_district||j.result.parish||s,postcode:j.result.postcode};}}
+ const url="https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=gb,ie&q="+encodeURIComponent(s);
+ const r=await fetch(url,{headers:{"Accept":"application/json"}});if(!r.ok)throw Error("Place lookup unavailable. Try a full postcode or a nearby town.");const rows=await r.json();if(!rows.length)throw Error("Couldn't locate that place. Check the spelling or try a postcode.");
+ return {lat:Number(rows[0].lat),lon:Number(rows[0].lon),label:rows[0].display_name.split(",").slice(0,3).join(", "),postcode:""};
 }
-function urlOf(x){const u=String(x?.url||"");if(!/^https?:\/\//i.test(u))return "";try{const p=new URL(u);return p.protocol==="https:"||p.protocol==="http:"?p.href:"";}catch{return "";}}
-function ordered(items){return (Array.isArray(items)?items:[]).filter(x=>state.region==="ALL"||region(x)===state.region).slice().sort((a,b)=>(parsedDate(stamp(b))?.getTime()||0)-(parsedDate(stamp(a))?.getTime()||0));}
-function story(x){
- const url=urlOf(x),heading=esc(x.title||x.headline||x.name||"Untitled report");
- const source=x.source||x.publisher||x.sourceName||x.sourceId||"Source not identified";
- const grade=String(x.reliabilityGrade||x.sourceGrade||x.sourceTrust||x.trust||"Unclassified").replaceAll("_"," ").replaceAll("-"," ");
- return '<article class="dw-story"><div class="dw-story-meta">'+esc(region(x))+' / '+esc(source)+' / '+esc(fmt(stamp(x)))+'</div><h3>'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+heading+'</a>':heading)+'</h3><p>'+esc(x.summary||x.description||x.contentSnippet||"No additional summary supplied by the source.")+'</p><div class="dw-story-foot"><span>SOURCE CLASS: '+esc(grade)+'</span>'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Original report ↗</a>':"")+'</div></article>';
+function classify(x){const s=(x.type||x.category||x.sourceType||x.title||"").toLowerCase()+" "+regionText(x);if(/flood|river|rainfall|coastal|storm|weather|warning/.test(s))return ["Weather & flooding","ni-blue"];if(/electric|power|nie network|outage/.test(s))return ["Electricity","ni-amber"];if(/water|sewage|reservoir/.test(s))return ["Water","ni-blue"];if(/fire|smoke|hazmat|chemical|pollution|environment/.test(s))return ["Fire & environment","ni-red"];if(/road|traffic|transport|rail|port|airport/.test(s))return ["Transport","ni-amber"];if(/health|hospital|public health/.test(s))return ["Health","ni-red"];if(/telecom|mobile|broadband|network/.test(s))return ["Connectivity","ni-purple"];return ["Local development","ni-neutral"];}
+function renderArea(items){const target=$("area-results"),recent=items.filter(x=>{const d=dateOf(stamp(x));return !d||now()-d<14*86400000;}).sort((a,b)=>(dateOf(stamp(b))?.getTime()||0)-(dateOf(stamp(a))?.getTime()||0));const local=recent.filter(matchLocal),near=local.slice(0,30);
+ const cards=[["Electricity","https://powercheck.nienetworks.co.uk/TabularFaults.html","NIE Networks Powercheck","Check live reported network faults for your area."],["Water","https://www.niwater.com/whats-happening-in-your-area/current-service-updates/","NI Water service updates","Check interruptions, planned works and water quality notices."],["Weather & flooding","https://www.metoffice.gov.uk/weather/warnings-and-advice/uk-warnings","Met Office warnings","Official warnings for Northern Ireland."],["Flooding","https://www.nidirect.gov.uk/articles/flooding","DfI / nidirect flood information","Official NI flood advice and reporting."],["Air quality","https://airquality.gov.uk/","UK-AIR monitoring","Check monitoring stations and current air quality."],["Roads","https://www.trafficwatchni.com/","TrafficWatchNI","Road incidents, roadworks and planned events."]];
+ const statusHtml=cards.map(c=>'<div class="ni-service"><div class="ni-service-icon">⌁</div><div><strong>'+c[0]+'</strong><span>'+c[3]+'</span><a href="'+c[1]+'" target="_blank" rel="noopener noreferrer">'+c[2]+' ↗</a></div><em>CHECK SOURCE</em></div>').join("");
+ const list=near.length?near.slice(0,12).map(x=>{const c=classify(x);return '<div class="ni-local-item"><span class="ni-tag '+c[1]+'">'+c[0]+'</span>'+story(x)+'</div>';}).join(""):'<div class="ni-empty"><strong>No matching local records found in the current archive.</strong><p>This is not confirmation that the area is clear. The archive may not contain precise location data or a current report. Use the official service links below for live checks.</p></div>';
+ target.innerHTML='<div class="ni-area-banner"><div><span class="ni-eyebrow">AREA SEARCH</span><h2>'+esc(state.area)+'</h2><p>'+esc(state.geo?.label||"Location resolved")+' · '+state.radius+' km search radius</p></div><button type="button" id="change-area">CHANGE AREA</button></div><div class="ni-integrity"><span class="ni-integrity-dot"></span><span><strong>'+near.length+' matching records</strong> in the available 14-day archive · '+items.length+' records examined · '+fmt(new Date().toISOString())+' checked</span></div><div class="ni-area-grid"><div class="ni-area-main"><section class="ni-card"><div class="ni-section-head"><div><span class="ni-eyebrow">LOCAL DEVELOPMENTS</span><h2>What is happening nearby?</h2></div></div>'+list+'</section></div><aside class="ni-area-side"><section class="ni-card"><span class="ni-eyebrow">OFFICIAL LIVE CHECKS</span><h2>Verify local conditions</h2><p class="ni-muted">These links take you to the responsible service. DoomWatch does not infer an all-clear from an empty news feed.</p>'+statusHtml+'</section></aside></div><p class="ni-disclaimer">Location matching uses available place names and coordinates in collected records. Where a record has no usable location, it is not presented as local. Cross-border results are included when relevant. Always follow official instructions.</p>';
+ $("change-area").addEventListener("click",()=>{$("area-query").focus();window.scrollTo({top:0,behavior:"smooth"});});
 }
-function renderList(id,items,limit,empty){
- const rows=items.slice(0,limit);$(id).innerHTML=rows.length?rows.map(story).join(""):'<p class="dw-muted">'+esc(empty)+'</p>';
-}
-function renderMarkets(){
- const d=state.markets;if(!d){$("metric-markets").textContent="Unavailable";$("economy-summary").innerHTML='<p class="dw-muted">Market snapshot unavailable.</p>';return;}
- const keys=["commodities","indices","crypto","fx","stocks"];
- const count=keys.reduce((n,k)=>n+(Array.isArray(d[k])?d[k].length:Object.keys(d[k]||{}).length),0);
- $("metric-markets").textContent=count.toLocaleString("en-GB");$("metric-markets-note").textContent="Snapshot "+fmt(d.updatedAt||d.generatedAt);
- const rows=[];
- for(const [label,group,key] of [["Brent crude","commodities","brent"],["Gold","commodities","gold"],["FTSE 100","indices","ftse100"]]){
-  const x=(d[group]||{})[key];if(!x)continue;
-  const v=x.price??x.value??x.level;const p=typeof v==="number"?v.toLocaleString("en-GB",{maximumFractionDigits:2}):String(v??"Observation unavailable");
-  const c=x.changePct==null?"":" ("+(x.changePct>0?"+":"")+Number(x.changePct).toFixed(2)+"%)";
-  rows.push('<div class="dw-status-row"><span>'+label+'</span><strong>'+esc((x.currency?x.currency+" ":"")+p+c)+'</strong></div>');
- }
- $("economy-summary").innerHTML=rows.join("")||'<p class="dw-muted">Open Economy for the latest available observations.</p>';
-}
-function renderCommunications(){
- const d=state.communications;if(!d){$("metric-connectivity").textContent="Unavailable";$("service-summary").innerHTML='<p class="dw-muted">Connectivity snapshot unavailable.</p>';return;}
- const p=Array.isArray(d.providers)?d.providers:[];
- const issues=p.filter(x=>x.status==="ISSUE_SIGNAL").length;
- const staleIssues=p.filter(x=>x.status==="STALE_ISSUE_SIGNAL").length;
- const unconfirmed=p.filter(x=>x.status==="UNCONFIRMED_REPORT_SIGNAL").length;
- const stale=p.filter(x=>x.status==="STALE_OR_UNKNOWN").length;
- $("metric-connectivity").textContent=issues?"ISSUE SIGNAL":staleIssues?"STALE ISSUE SIGNAL":stale?"STALE / UNKNOWN":"NO ISSUE SIGNAL REPORTED";
- $("metric-connectivity-note").textContent=issues+" current · "+staleIssues+" stale issue · "+unconfirmed+" unconfirmed · "+stale+" stale / unknown";
- $("service-summary").innerHTML='<div class="dw-status-row"><span>Current issue signals</span><strong class="'+(issues?"dw-red":"")+'">'+issues+'</strong></div><div class="dw-status-row"><span>Stale issue signals</span><strong class="'+(staleIssues?"dw-red":"")+'">'+staleIssues+'</strong></div><div class="dw-status-row"><span>Unconfirmed reports</span><strong>'+unconfirmed+'</strong></div><div class="dw-status-row"><span>Stale / unknown</span><strong>'+stale+'</strong></div><p class="dw-muted">No reported signal does not guarantee that a service is operating normally.</p>';
-}
-function render(){
- document.querySelectorAll("[data-region]").forEach(b=>{const active=b.dataset.region===state.region;b.classList.toggle("is-active",active);b.setAttribute("aria-pressed",String(active));});
- const fringe=state.flows.fringe?.records||[];
- renderList("latest-intelligence",ordered(state.archive),compact.matches?4:7,"No intelligence records match this region in the current snapshot.");
- renderList("emerging-signals",ordered(fringe),compact.matches?3:5,"No fringe or emerging records match this region in the current snapshot.");
-}
-async function getJson(path){const r=await fetch(path+"?v="+Date.now(),{cache:"no-store"});if(!r.ok)throw Error(path+" HTTP "+r.status);return r.json();}
-async function start(){
- const results=await Promise.allSettled([getJson("./data/intelligence.json"),getJson("./data/observatory.json"),getJson("./data/markets.json"),getJson("./data/communications.json")]);
- if(results[0].status==="fulfilled"){const d=results[0].value;state.archive=Array.isArray(d.articles)?d.articles:[];$("metric-records").textContent=state.archive.length.toLocaleString("en-GB");$("metric-records-note").textContent="Updated "+fmt(d.collector?.lastRun||d.updatedAt);}
- else{$("metric-records").textContent="Unavailable";$("metric-records-note").textContent="Intelligence archive could not be loaded";}
- if(results[1].status==="fulfilled"){const d=results[1].value;state.flows=d.flows&&typeof d.flows==="object"?d.flows:{};const n=d.totalFlowRecords??Object.values(state.flows).reduce((a,f)=>a+(f.records?.length||0),0);$("metric-signals").textContent=Number(n).toLocaleString("en-GB");}
- else $("metric-signals").textContent="Unavailable";
- if(results[2].status==="fulfilled")state.markets=results[2].value;renderMarkets();
- if(results[3].status==="fulfilled")state.communications=results[3].value;renderCommunications();
- const times=results.filter(x=>x.status==="fulfilled").map(x=>x.value.generatedAt||x.value.updatedAt||x.value.collector?.lastRun).filter(Boolean).map(parsedDate).filter(Boolean).sort((a,b)=>a-b);
- $("dw-updated").textContent="SNAPSHOTS / "+(times.length?fmt(times[times.length-1]):"PARTIAL DATA");
- render();const failed=results.filter(x=>x.status==="rejected").length;if(failed)$("dw-updated").textContent+=" / "+failed+" FILES UNAVAILABLE";
-}
-document.querySelectorAll("[data-region]").forEach(b=>b.addEventListener("click",()=>{state.region=b.dataset.region;render();}));
-if(compact.addEventListener)compact.addEventListener("change",render);else if(compact.addListener)compact.addListener(render);
-start().catch(e=>{$("dw-updated").textContent="PARTIAL SNAPSHOT";$("latest-intelligence").innerHTML='<p class="dw-muted">'+esc(e.message)+'</p>';$("emerging-signals").innerHTML='<p class="dw-muted">Emerging signals unavailable.</p>';});
+async function checkArea(q){$("area-results").innerHTML='<div class="ni-loading">LOCATING AREA AND MATCHING AVAILABLE RECORDS…</div>';state.area=q;try{state.geo=await geocode(q);state.radius=Number($("area-radius").value)||15;renderArea(allRecords());}catch(e){$("area-results").innerHTML='<div class="ni-error"><strong>Area search could not be completed.</strong><p>'+esc(e.message)+'</p><p>Try a postcode such as BT39 9AA or a nearby town.</p></div>';}}
+function renderWide(){const rows=[...state.archive.filter(x=>isNI(x)||isBorder(x)),...Object.values(state.observatory.flows||{}).flatMap(f=>Array.isArray(f.records)?f.records:[]).filter(x=>isNI(x)||isBorder(x))].sort((a,b)=>(dateOf(stamp(b))?.getTime()||0)-(dateOf(stamp(a))?.getTime()||0)).slice(0,7);$("ni-wide-feed").innerHTML=rows.length?rows.map(story).join(""):'<p class="ni-muted">No regional records are available in the current snapshot. Open the full Observatory for source and collection status.</p>';}
+async function load(){const files=["./data/intelligence.json","./data/observatory.json","./data/communications.json"];const results=await Promise.allSettled(files.map(async u=>{const r=await fetch(u+"?v="+Date.now(),{cache:"no-store"});if(!r.ok)throw Error(u+" "+r.status);return r.json();}));if(results[0].status==="fulfilled")state.archive=Array.isArray(results[0].value.articles)?results[0].value.articles:[];if(results[1].status==="fulfilled")state.observatory=results[1].value;if(results[2].status==="fulfilled")state.communications=results[2].value;$("ni-updated").textContent="DATA CHECKED / "+fmt(new Date().toISOString());renderWide();if(state.area&&state.geo)renderArea(allRecords());}
+$("area-form").addEventListener("submit",e=>{e.preventDefault();checkArea($("area-query").value);});
+document.querySelectorAll("[data-area]").forEach(b=>b.addEventListener("click",()=>{$("area-query").value=b.dataset.area;checkArea(b.dataset.area);}));
+load().catch(()=>{$("ni-updated").textContent="PARTIAL DATA";$("ni-wide-feed").innerHTML='<p class="ni-muted">Regional intelligence snapshot could not be loaded.</p>';});
 })();
-</script></body></html>
+</script>
+</body></html>
