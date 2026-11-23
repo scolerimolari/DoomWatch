@@ -23,6 +23,7 @@ name: DoomWatch Intelligence Collector
       - "feed.html"
       - "doomwatch-ui.js"
       - "doomwatch.css"
+      - "doomwatch-ni.css"
       - "containment.svg"
       - "validate_site.py"
       - ".github/workflows/collector.yml"
@@ -104,8 +105,7 @@ jobs:
           for script in /tmp/dw-script-*.js; do node --check "$script"; done
           node --check doomwatch-ui.js
 
-      # Generate all six intelligence flows from the refreshed archive and current source register.
-      - name: Run DoomWatch collector
+      - name: Run DoomWatch collectors
         run: |
           python collector.py
           python fringe_collector.py
@@ -121,21 +121,16 @@ jobs:
 
           for attempt in 1 2 3; do
             echo "Saving intelligence update, attempt $attempt"
-
             git add data/intelligence.json data/ballyclare-history.json data/observatory.json data/fringe.json
-
             if git diff --cached --quiet; then
               echo "No intelligence data changes to commit."
               exit 0
             fi
-
             git commit -m "Update DoomWatch intelligence"
-
             if git pull --rebase origin main && git push origin HEAD:main; then
               echo "Intelligence update committed successfully."
               exit 0
             fi
-
             echo "Remote changed during collection. Refreshing data and retrying."
             git rebase --abort || true
             git fetch origin main
@@ -144,6 +139,5 @@ jobs:
             python observatory_collector.py
             python fringe_collector.py
           done
-
           echo "Unable to save intelligence after three attempts."
           exit 1
