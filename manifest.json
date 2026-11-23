@@ -1,24 +1,13 @@
 {
-  "name": "DoomWatch — Independent Intelligence",
-  "short_name": "DoomWatch",
-  "description": "Independent, source-led intelligence for the UK and Northern Ireland.",
+  "name": "DoomWatch NI — Check My Area",
+  "short_name": "DoomWatch NI",
+  "description": "Local hazards, infrastructure disruption and source-led intelligence for Northern Ireland and relevant cross-border areas.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#09131b",
-  "theme_color": "#0b1720",
-  "categories": [
-    "news",
-    "utilities",
-    "productivity"
-  ],
-  "icons": [
-    {
-      "src": "containment.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    }
-  ]
+  "background_color": "#101411",
+  "theme_color": "#101411",
+  "categories": ["news", "utilities", "productivity"],
+  "icons": [{"src": "containment.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}]
 }
