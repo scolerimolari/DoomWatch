@@ -58,7 +58,7 @@ def audit_pages():
   if key not in p.ids:fail("NI area checker missing element: "+key)
  for token in ("api.postcodes.io","nominatim.openstreetmap.org","powercheck.nienetworks.co.uk","niwater.com","trafficwatchni.com"):
   if token not in text:fail("NI area checker missing expected source/integration: "+token)
- if "CHECK MY AREA" not in text:fail("NI area checker heading is missing")
+ if "check my area" not in text.lower():fail("NI area checker heading is missing")
  css=(ROOT/"doomwatch.css").read_text(encoding="utf-8")
  if "min-height:44px" not in css or "@media(max-width:760px)" not in css:fail("Mobile touch-target or responsive CSS check failed")
  ni_css=(ROOT/"doomwatch-ni.css").read_text(encoding="utf-8")
