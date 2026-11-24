@@ -1,57 +1,57 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-24T09:49:18+00:00",
-  "generatedAt": "2026-11-24T09:49:18+00:00",
+  "updatedAt": "2026-11-24T22:22:05+00:00",
+  "generatedAt": "2026-11-24T22:22:05+00:00",
   "sources": {
     "commodities.gold": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:14+00:00"
+      "checkedAt": "2026-11-24T22:21:55+00:00"
     },
     "commodities.silver": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:14+00:00"
+      "checkedAt": "2026-11-24T22:21:55+00:00"
     },
     "commodities.brent": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:14+00:00"
+      "checkedAt": "2026-11-24T22:21:56+00:00"
     },
     "indices.sp500": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:14+00:00"
+      "checkedAt": "2026-11-24T22:21:56+00:00"
     },
     "indices.nasdaq": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:14+00:00"
+      "checkedAt": "2026-11-24T22:21:56+00:00"
     },
     "indices.ftse100": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:14+00:00"
+      "checkedAt": "2026-11-24T22:21:57+00:00"
     },
     "crypto.bitcoin": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:14+00:00"
+      "checkedAt": "2026-11-24T22:21:57+00:00"
     },
     "fx.GBPUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:14+00:00"
+      "checkedAt": "2026-11-24T22:21:57+00:00"
     },
     "fx.GBPEUR": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:14+00:00"
+      "checkedAt": "2026-11-24T22:21:58+00:00"
     },
     "fx.EURUSD": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:14+00:00"
+      "checkedAt": "2026-11-24T22:21:58+00:00"
     },
     "heatingOil": {
       "status": "failed",
-      "checkedAt": "2026-11-24T09:49:16+00:00",
+      "checkedAt": "2026-11-24T22:22:01+00:00",
       "url": "https://www.consumercouncil.org.uk/home-heating/price-checker",
       "error": "HTTP Error 403: Forbidden"
     },
     "roadFuel": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:16+00:00",
+      "checkedAt": "2026-11-24T22:22:03+00:00",
       "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6b044e1987fd9efe822cc25f/CSV__2018_-__.csv",
       "observationsImported": 465,
@@ -60,7 +60,7 @@
     },
     "foodInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:17+00:00",
+      "checkedAt": "2026-11-24T22:22:04+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -69,7 +69,7 @@
     },
     "overallInflation": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:17+00:00",
+      "checkedAt": "2026-11-24T22:22:04+00:00",
       "url": "https://www.gov.uk/government/statistics/food-statistics-pocketbook/food-statistics-in-your-pocket",
       "csvUrl": "https://assets.publishing.service.gov.uk/media/6a3cfd9ada47783d87723a5d/fsp-csv-cpih-inflation-09jul2026.csv",
       "observationsImported": 76,
@@ -78,7 +78,7 @@
     },
     "supermarketPriceIndex": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:18+00:00",
+      "checkedAt": "2026-11-24T22:22:05+00:00",
       "url": "https://data.yappman.com/shelf-price-index/",
       "datasetUrl": "https://api.apify.com/v2/datasets/AvRCWqFinCiNjx3sP/items?format=json",
       "licence": "CC BY 4.0",
@@ -88,22 +88,22 @@
     },
     "gbpConversion": {
       "status": "ok",
-      "checkedAt": "2026-11-24T09:49:16+00:00",
+      "checkedAt": "2026-11-24T22:22:01+00:00",
       "rateSource": "GBPUSD=X daily history from Yahoo Finance",
-      "latestRate": 1.3064,
+      "latestRate": 1.3113,
       "eligibleSeries": 14,
       "convertedSeries": 14,
-      "convertedObservations": 18212,
+      "convertedObservations": 18222,
       "note": "USD-denominated commodities, Bitcoin and US shares receive GBP display values. Historical conversion uses the most recent GBP/USD daily close on or before each observation date; native USD source values are preserved. Index points and FX quotes remain in their natural units."
     }
   },
   "commodities": {
     "gold": {
       "symbol": "GC=F",
-      "price": 3618.7,
-      "changePct": 102.808,
+      "price": 3555.1,
+      "changePct": 99.243,
       "currency": "USD",
-      "observedAt": "2026-11-24T09:39:02+00:00",
+      "observedAt": "2026-11-24T21:59:57+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -5155,7 +5155,7 @@
         },
         {
           "date": "2026-11-24",
-          "value": 3618.699951
+          "value": 3555.100098
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -10213,20 +10213,20 @@
         },
         {
           "date": "2026-11-24",
-          "value": 2769.89796
+          "value": 2711.120235
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "per troy oz",
-      "gbpChangePct": -0.666,
-      "gbpPrice": 2769.978567
+      "gbpChangePct": -2.774,
+      "gbpPrice": 2711.126363
     },
     "silver": {
       "symbol": "SI=F",
-      "price": 41.73,
-      "changePct": 77.605,
+      "price": 40.71,
+      "changePct": 73.264,
       "currency": "USD",
-      "observedAt": "2026-11-24T09:39:01+00:00",
+      "observedAt": "2026-11-24T21:59:52+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -15274,7 +15274,7 @@
         },
         {
           "date": "2026-11-24",
-          "value": 41.73
+          "value": 40.709999
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -20328,20 +20328,20 @@
         },
         {
           "date": "2026-11-24",
-          "value": 31.941814
+          "value": 31.045456
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "per troy oz",
-      "gbpChangePct": -3.06,
-      "gbpPrice": 31.942743
+      "gbpChangePct": -5.78,
+      "gbpPrice": 31.045527
     },
     "brent": {
       "symbol": "BZ=F",
-      "price": 86.71,
-      "changePct": 5.422,
+      "price": 88.5,
+      "changePct": 7.599,
       "currency": "USD",
-      "observedAt": "2026-11-24T09:39:12+00:00",
+      "observedAt": "2026-11-24T21:59:17+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -25393,7 +25393,7 @@
         },
         {
           "date": "2026-11-24",
-          "value": 86.709999
+          "value": 88.5
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -30451,22 +30451,22 @@
         },
         {
           "date": "2026-11-24",
-          "value": 66.371308
+          "value": 67.490122
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "per barrel",
-      "gbpChangePct": -2.752,
-      "gbpPrice": 66.373239
+      "gbpChangePct": -1.112,
+      "gbpPrice": 67.490277
     }
   },
   "indices": {
     "sp500": {
       "symbol": "^GSPC",
-      "price": 7237.17,
-      "changePct": 54.288,
+      "price": 7201.09,
+      "changePct": 53.167,
       "currency": "USD",
-      "observedAt": "2026-11-23T21:42:33+00:00",
+      "observedAt": "2026-11-24T21:54:10+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -35503,6 +35503,10 @@
         {
           "date": "2026-11-23",
           "value": 7237.169922
+        },
+        {
+          "date": "2026-11-24",
+          "value": 7201.089844
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -35512,10 +35516,10 @@
     },
     "nasdaq": {
       "symbol": "^IXIC",
-      "price": 24089.559,
-      "changePct": 52.706,
+      "price": 23733.535,
+      "changePct": 49.783,
       "currency": "USD",
-      "observedAt": "2026-11-23T22:15:59+00:00",
+      "observedAt": "2026-11-24T22:15:59+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -40552,6 +40556,10 @@
         {
           "date": "2026-11-23",
           "value": 24089.560547
+        },
+        {
+          "date": "2026-11-24",
+          "value": 23733.535156
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -40561,10 +40569,10 @@
     },
     "ftse100": {
       "symbol": "^FTSE",
-      "price": 10488.83,
-      "changePct": 43.953,
+      "price": 10467.07,
+      "changePct": 43.654,
       "currency": "GBP",
-      "observedAt": "2026-11-24T09:34:14+00:00",
+      "observedAt": "2026-11-24T16:35:30+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -45632,7 +45640,7 @@
         },
         {
           "date": "2026-11-24",
-          "value": 10488.830078
+          "value": 10467.070312
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -45644,10 +45652,10 @@
   "crypto": {
     "bitcoin": {
       "symbol": "BTC-USD",
-      "price": 59938.18,
-      "changePct": 6.499,
+      "price": 59957.19,
+      "changePct": 6.533,
       "currency": "USD",
-      "observedAt": "2026-11-24T09:49:07+00:00",
+      "observedAt": "2026-11-24T22:21:54+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -52983,7 +52991,7 @@
         },
         {
           "date": "2026-11-24",
-          "value": 59938.179688
+          "value": 59957.191406
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -60325,22 +60333,22 @@
         },
         {
           "date": "2026-11-24",
-          "value": 45879.084724
+          "value": 45723.369356
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": -1.852,
-      "gbpPrice": 45880.419473
+      "gbpChangePct": -2.186,
+      "gbpPrice": 45723.472889
     }
   },
   "fx": {
     "GBPUSD": {
       "symbol": "GBPUSD=X",
-      "price": 1.3064,
-      "changePct": -2.333,
+      "price": 1.3113,
+      "changePct": -1.966,
       "currency": "USD",
-      "observedAt": "2026-11-24T09:48:47+00:00",
+      "observedAt": "2026-11-24T22:21:47+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -65572,7 +65580,7 @@
         },
         {
           "date": "2026-11-24",
-          "value": 1.306438
+          "value": 1.311303
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -65585,7 +65593,7 @@
       "price": 1.1954,
       "changePct": 0.504,
       "currency": "EUR",
-      "observedAt": "2026-11-24T09:47:47+00:00",
+      "observedAt": "2026-11-24T22:21:47+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -70815,10 +70823,10 @@
     },
     "EURUSD": {
       "symbol": "EURUSD=X",
-      "price": 1.0929,
-      "changePct": -2.81,
+      "price": 1.0967,
+      "changePct": -2.472,
       "currency": "USD",
-      "observedAt": "2026-11-24T09:48:47+00:00",
+      "observedAt": "2026-11-24T22:21:47+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -76038,7 +76046,7 @@
         },
         {
           "date": "2026-11-24",
-          "value": 1.092896
+          "value": 1.096732
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -76050,10 +76058,10 @@
   "stocks": [
     {
       "symbol": "AAPL",
-      "price": 349.08,
-      "changePct": 116.269,
+      "price": 354.07,
+      "changePct": 118.643,
       "currency": "USD",
-      "observedAt": "2026-11-23T21:00:01+00:00",
+      "observedAt": "2026-11-24T21:00:01+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -81090,6 +81098,10 @@
         {
           "date": "2026-11-23",
           "value": 349.079987
+        },
+        {
+          "date": "2026-11-24",
+          "value": 354.070007
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -86132,19 +86144,23 @@
         {
           "date": "2026-11-23",
           "value": 266.58194
+        },
+        {
+          "date": "2026-11-24",
+          "value": 270.013877
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": 1.839,
-      "gbpPrice": 267.207593
+      "gbpChangePct": 1.287,
+      "gbpPrice": 270.014489
     },
     {
       "symbol": "MSFT",
-      "price": 492.5,
-      "changePct": 45.848,
+      "price": 496.13,
+      "changePct": 46.823,
       "currency": "USD",
-      "observedAt": "2026-11-23T21:00:01+00:00",
+      "observedAt": "2026-11-24T21:00:01+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -91181,6 +91197,10 @@
         {
           "date": "2026-11-23",
           "value": 492.5
+        },
+        {
+          "date": "2026-11-24",
+          "value": 496.130005
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -96223,19 +96243,23 @@
         {
           "date": "2026-11-23",
           "value": 376.107513
+        },
+        {
+          "date": "2026-11-24",
+          "value": 378.348868
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": 1.583,
-      "gbpPrice": 376.990202
+      "gbpChangePct": 0.596,
+      "gbpPrice": 378.349729
     },
     {
       "symbol": "NVDA",
-      "price": 165.05,
-      "changePct": 419.908,
+      "price": 155.38,
+      "changePct": 375.546,
       "currency": "USD",
-      "observedAt": "2026-11-23T21:00:01+00:00",
+      "observedAt": "2026-11-24T21:00:01+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -101272,6 +101296,10 @@
         {
           "date": "2026-11-23",
           "value": 165.050003
+        },
+        {
+          "date": "2026-11-24",
+          "value": 155.380005
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -106314,19 +106342,23 @@
         {
           "date": "2026-11-23",
           "value": 126.043748
+        },
+        {
+          "date": "2026-11-24",
+          "value": 118.492831
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": 31.4,
-      "gbpPrice": 126.339559
+      "gbpChangePct": -5.991,
+      "gbpPrice": 118.493098
     },
     {
       "symbol": "AMZN",
-      "price": 255.39,
-      "changePct": 42.674,
+      "price": 252.29,
+      "changePct": 40.928,
       "currency": "USD",
-      "observedAt": "2026-11-23T21:00:01+00:00",
+      "observedAt": "2026-11-24T21:00:01+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -111363,6 +111395,10 @@
         {
           "date": "2026-11-23",
           "value": 255.389999
+        },
+        {
+          "date": "2026-11-24",
+          "value": 252.289993
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -116405,19 +116441,23 @@
         {
           "date": "2026-11-23",
           "value": 195.0337
+        },
+        {
+          "date": "2026-11-24",
+          "value": 192.396413
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": 3.407,
-      "gbpPrice": 195.491427
+      "gbpChangePct": -1.352,
+      "gbpPrice": 192.396858
     },
     {
       "symbol": "GOOGL",
-      "price": 282.1,
-      "changePct": 93.508,
+      "price": 279.05,
+      "changePct": 90.973,
       "currency": "USD",
-      "observedAt": "2026-11-23T21:00:01+00:00",
+      "observedAt": "2026-11-24T21:00:01+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -121454,6 +121494,10 @@
         {
           "date": "2026-11-23",
           "value": 282.100006
+        },
+        {
+          "date": "2026-11-24",
+          "value": 279.049988
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -126496,19 +126540,23 @@
         {
           "date": "2026-11-23",
           "value": 215.431333
+        },
+        {
+          "date": "2026-11-24",
+          "value": 212.803592
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": 6.27,
-      "gbpPrice": 215.936926
+      "gbpChangePct": -1.22,
+      "gbpPrice": 212.804088
     },
     {
       "symbol": "META",
-      "price": 597.6,
-      "changePct": 77.198,
+      "price": 589.82,
+      "changePct": 72.937,
       "currency": "USD",
-      "observedAt": "2026-11-23T21:00:01+00:00",
+      "observedAt": "2026-11-24T21:00:01+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -131545,6 +131593,10 @@
         {
           "date": "2026-11-23",
           "value": 597.599976
+        },
+        {
+          "date": "2026-11-24",
+          "value": 589.820007
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -136587,19 +136639,23 @@
         {
           "date": "2026-11-23",
           "value": 456.369219
+        },
+        {
+          "date": "2026-11-24",
+          "value": 449.796887
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": 6.488,
-      "gbpPrice": 457.440294
+      "gbpChangePct": -1.44,
+      "gbpPrice": 449.79791
     },
     {
       "symbol": "BRK-B",
-      "price": 572.36,
-      "changePct": 98.35,
+      "price": 577.21,
+      "changePct": 100.922,
       "currency": "USD",
-      "observedAt": "2026-11-23T21:00:02+00:00",
+      "observedAt": "2026-11-24T21:00:58+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -141636,6 +141692,10 @@
         {
           "date": "2026-11-23",
           "value": 572.359985
+        },
+        {
+          "date": "2026-11-24",
+          "value": 577.210022
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -146678,19 +146738,23 @@
         {
           "date": "2026-11-23",
           "value": 437.094193
+        },
+        {
+          "date": "2026-11-24",
+          "value": 440.180509
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": 0.351,
-      "gbpPrice": 438.120024
+      "gbpChangePct": 0.706,
+      "gbpPrice": 440.181499
     },
     {
       "symbol": "JPM",
-      "price": 316.66,
-      "changePct": 88.174,
+      "price": 317.1,
+      "changePct": 89.926,
       "currency": "USD",
-      "observedAt": "2026-11-23T21:00:02+00:00",
+      "observedAt": "2026-11-24T21:00:02+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -151727,6 +151791,10 @@
         {
           "date": "2026-11-23",
           "value": 316.660004
+        },
+        {
+          "date": "2026-11-24",
+          "value": 317.100006
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -156769,19 +156837,23 @@
         {
           "date": "2026-11-23",
           "value": 241.823769
+        },
+        {
+          "date": "2026-11-24",
+          "value": 241.820545
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": 1.91,
-      "gbpPrice": 242.391304
+      "gbpChangePct": -0.001,
+      "gbpPrice": 241.821094
     },
     {
       "symbol": "AVGO",
-      "price": 313.55,
-      "changePct": 464.833,
+      "price": 301.08,
+      "changePct": 438.865,
       "currency": "USD",
-      "observedAt": "2026-11-23T21:00:01+00:00",
+      "observedAt": "2026-11-24T21:00:01+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -161818,6 +161890,10 @@
         {
           "date": "2026-11-23",
           "value": 313.549988
+        },
+        {
+          "date": "2026-11-24",
+          "value": 301.079987
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -166860,19 +166936,23 @@
         {
           "date": "2026-11-23",
           "value": 239.448743
+        },
+        {
+          "date": "2026-11-24",
+          "value": 229.603674
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": 2.938,
-      "gbpPrice": 240.010716
+      "gbpChangePct": -4.112,
+      "gbpPrice": 229.60421
     },
     {
       "symbol": "TSLA",
-      "price": 385.46,
-      "changePct": 4.269,
+      "price": 384.68,
+      "changePct": 3.409,
       "currency": "USD",
-      "observedAt": "2026-11-23T21:00:00+00:00",
+      "observedAt": "2026-11-24T21:00:01+00:00",
       "history": [
         {
           "date": "2021-11-17",
@@ -171909,6 +171989,10 @@
         {
           "date": "2026-11-23",
           "value": 385.459991
+        },
+        {
+          "date": "2026-11-24",
+          "value": 384.679993
         }
       ],
       "source": "Yahoo Finance chart data",
@@ -176951,12 +177035,16 @@
         {
           "date": "2026-11-23",
           "value": 294.364261
+        },
+        {
+          "date": "2026-11-24",
+          "value": 293.35706
         }
       ],
       "gbpCurrency": "GBP",
       "gbpUnit": "",
-      "gbpChangePct": 11.393,
-      "gbpPrice": 295.055113
+      "gbpChangePct": -0.342,
+      "gbpPrice": 293.357737
     }
   ],
   "heatingOil": {
@@ -184527,7 +184615,7 @@
         "url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
       }
     ],
-    "updatedAt": "2026-11-24T09:49:16+00:00",
+    "updatedAt": "2026-11-24T22:22:03+00:00",
     "source": "DESNZ weekly road fuel prices",
     "sourceUrl": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
     "csvUrl": "https://assets.publishing.service.gov.uk/media/6b044e1987fd9efe822cc25f/CSV__2018_-__.csv",
@@ -196686,7 +196774,7 @@
         "missingPackSize": null
       }
     ],
-    "supermarketIndexUpdatedAt": "2026-11-24T09:49:18+00:00",
+    "supermarketIndexUpdatedAt": "2026-11-24T22:22:05+00:00",
     "supermarketIndex": {
       "vintage": "2026-W47",
       "publishedAt": "2026-11-23T11:12:48Z",
@@ -196708,306 +196796,306 @@
   },
   "news": [
     {
-      "title": "Trump faces backlash after saying he 'convinced' Nvidia to reinstate CEO Jensen Huang",
-      "url": "https://www.bbc.co.uk/news/articles/cq5y1k8ez407o?at_medium=RSS&at_campaign=rss",
+      "title": "Huawei found guilty of stealing trade secrets but acquitted of racketeering",
+      "url": "https://www.bbc.co.uk/news/articles/cmy49ngydqzpo?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
-      "publishedAt": "2026-11-24T09:42:54+00:00"
+      "publishedAt": "2026-11-24T22:12:44+00:00"
     },
     {
-      "title": "Official Statistics: UK International Climate Finance results 2026",
-      "url": "https://www.gov.uk/government/statistics/uk-international-climate-finance-results-2026",
-      "source": "DEFRA",
-      "publishedAt": "2026-11-24T09:38:32Z"
+      "title": "US attorney general dodges questions about Nvidia investigation",
+      "url": "https://www.bbc.co.uk/news/articles/crpdw1qx7jgxo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-24T21:19:42+00:00"
     },
     {
-      "title": "Watch: Moment troops raid home and capture Mexican drug lord",
-      "url": "https://www.bbc.co.uk/news/videos/cm62p9y3y04qo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-24T09:09:41+00:00"
+      "title": "Will I get the £100 energy payment and when will I receive it?",
+      "url": "https://www.bbc.co.uk/news/articles/c35yn8x748e9o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-24T20:16:24+00:00"
     },
     {
-      "title": "DR Congo says aircraft missing as rebels claim to shoot down plane",
+      "title": "DR Congo says military aircraft missing as rebels claim to shoot down plane",
       "url": "https://www.bbc.co.uk/news/articles/cwy7r5z8gg65o?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-24T08:35:41+00:00"
+      "publishedAt": "2026-11-24T19:27:23+00:00"
     },
     {
-      "title": "What Jensen Huang's return teaches China's Xi about Trump",
-      "url": "https://www.bbc.co.uk/news/articles/c63rgpy50x98o?at_medium=RSS&at_campaign=rss",
+      "title": "Nigerian monarch, 92, suspended after sexual assault claims",
+      "url": "https://www.bbc.co.uk/news/articles/cmglrz462nn6o?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-24T07:26:27+00:00"
+      "publishedAt": "2026-11-24T19:10:31+00:00"
     },
     {
-      "title": "Bangladesh's ex-PM Sheikh Hasina says she plans to return on 16 December",
-      "url": "https://www.bbc.co.uk/news/articles/c60rk1yj07xeo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-24T06:23:01+00:00"
+      "title": "Faisal Islam: Fears over the AI boom haven't gone away",
+      "url": "https://www.bbc.co.uk/news/articles/c6894evgpel5o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-24T18:21:43+00:00"
     },
     {
-      "title": "India's 'cockroach' party leader says he was stopped from flying to UK",
+      "title": "Indian government has 'lost the plot', says 'cockroach' leader barred from UK flight",
       "url": "https://www.bbc.co.uk/news/articles/cm5y1ezx2gqyo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-24T05:33:07+00:00"
+      "publishedAt": "2026-11-24T18:07:46+00:00"
+    },
+    {
+      "title": "Policy paper: Livestock Information Transformation Programme (LITP)",
+      "url": "https://www.gov.uk/government/publications/livestock-information-transformation-programme-litp",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-24T17:23:28Z"
+    },
+    {
+      "title": "Zimbabwean convicted in South Africa of trying to fight in Ukraine",
+      "url": "https://www.bbc.co.uk/news/articles/cmqj5qlj5yz9o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-24T17:04:00+00:00"
+    },
+    {
+      "title": "French ex-President Sarkozy and wife Carla Bruni to face trial",
+      "url": "https://www.bbc.co.uk/news/articles/c65y17pwv1z7o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-24T16:49:07+00:00"
+    },
+    {
+      "title": "Four generations of a family working in one factory",
+      "url": "https://www.bbc.co.uk/news/videos/ck7v2r6j1yl3o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-24T16:42:46+00:00"
+    },
+    {
+      "title": "Imports, exports and EU trade of animals and animal products: topical issues",
+      "url": "https://www.gov.uk/guidance/imports-exports-and-eu-trade-of-animals-and-animal-products-topical-issues",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-24T15:51:00Z"
+    },
+    {
+      "title": "Israeli air strike kills Hamas internal security chief in Gaza",
+      "url": "https://www.bbc.co.uk/news/articles/c6rrg7ggq190o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-24T15:35:53+00:00"
+    },
+    {
+      "title": "Land mine casualties soar in Syria, two years after war",
+      "url": "https://www.bbc.co.uk/news/articles/c893rl37ywdgo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-24T15:17:28+00:00"
+    },
+    {
+      "title": "Using the nutrient neutrality calculators",
+      "url": "https://www.gov.uk/guidance/using-the-nutrient-neutrality-calculators",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-24T14:00:02Z"
+    },
+    {
+      "title": "World Cup drove profits surge, says Marston's",
+      "url": "https://www.bbc.co.uk/news/articles/cm7523pyk75lo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Business",
+      "publishedAt": "2026-11-24T13:03:20+00:00"
+    },
+    {
+      "title": "Russian governor detained in rare criminal case against regional leader",
+      "url": "https://www.bbc.co.uk/news/articles/cmwy868v3nneo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-24T12:45:43+00:00"
+    },
+    {
+      "title": "Guidance: Plant imports: authorised border control posts in the UK",
+      "url": "https://www.gov.uk/government/publications/plant-imports-authorised-border-control-posts-in-the-uk",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-24T12:28:51Z"
+    },
+    {
+      "title": "Car bomb tears through Colombian city wounding more than 20",
+      "url": "https://www.bbc.co.uk/news/articles/cjqlq2n4np7do?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-24T11:45:52+00:00"
+    },
+    {
+      "title": "Transparency data: 75th annual report to Parliament on smallholdings in England",
+      "url": "https://www.gov.uk/government/publications/75th-annual-report-to-parliament-on-smallholdings-in-england",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-24T11:33:35Z"
+    },
+    {
+      "title": "Research: Avian influenza (bird flu) in Europe and the UK",
+      "url": "https://www.gov.uk/government/publications/avian-influenza-bird-flu-in-europe",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-24T11:20:07Z"
+    },
+    {
+      "title": "Pope Francis' diary reveals claims he saw the devil three times",
+      "url": "https://www.bbc.co.uk/news/articles/cm78270l4z7no?at_medium=RSS&at_campaign=rss",
+      "source": "BBC World",
+      "publishedAt": "2026-11-24T11:10:57+00:00"
     },
     {
       "title": "Nato chief vows defence against space threat after Russian nuclear satellite reports",
       "url": "https://www.bbc.co.uk/news/articles/c9x2er1ry2mzo?at_medium=RSS&at_campaign=rss",
       "source": "BBC World",
-      "publishedAt": "2026-11-24T02:15:59+00:00"
+      "publishedAt": "2026-11-24T10:58:51+00:00"
     },
     {
-      "title": "Cheers and applause as Jensen Huang returns to Nvidia office",
-      "url": "https://www.bbc.co.uk/news/videos/ckedq2edqegzo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-24T01:21:41+00:00"
-    },
-    {
-      "title": "Why the rise of the corporate landlord could lead to a two-tier rental market",
-      "url": "https://www.bbc.co.uk/news/articles/c6n90g2l82d1o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-24T00:28:48+00:00"
-    },
-    {
-      "title": "King Charles and Elton John pay tribute to Australian music legend Molly Meldrum",
-      "url": "https://www.bbc.co.uk/news/articles/c3qj57rkd2k1o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-24T00:23:25+00:00"
-    },
-    {
-      "title": "BBC secret filming shows dog breeder selling sick puppies for £2k each",
-      "url": "https://www.bbc.co.uk/news/articles/c8d36d43y8po?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-24T00:11:08+00:00"
-    },
-    {
-      "title": "Dad who discovered daughter's murder on Facebook feels ignored by South African police",
-      "url": "https://www.bbc.co.uk/news/articles/cqglr0d5jejxo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-24T00:02:15+00:00"
-    },
-    {
-      "title": "Form: Air carriers: pet travel required method of operation (RMOP)",
-      "url": "https://www.gov.uk/government/publications/air-carriers-pet-travel-required-method-of-operation-rmop",
+      "title": "Guidance: Fishing quota transfers between the UK and the EU",
+      "url": "https://www.gov.uk/government/publications/fishing-quota-transfers-between-the-uk-and-the-eu",
       "source": "DEFRA",
-      "publishedAt": "2026-11-24T00:02:03Z"
+      "publishedAt": "2026-11-24T10:58:03Z"
     },
     {
-      "title": "I pay £250 a month for someone else to do my life admin - it's worth it",
-      "url": "https://www.bbc.co.uk/news/articles/c6zjr3g13zkno?at_medium=RSS&at_campaign=rss",
+      "title": "Trump faces backlash after saying he 'convinced' Nvidia to reinstate CEO Jensen Huang",
+      "url": "https://www.bbc.co.uk/news/articles/cq5y1k8ez407o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Business",
-      "publishedAt": "2026-11-24T00:01:04+00:00"
+      "publishedAt": "2026-11-24T10:53:37+00:00"
     },
     {
-      "title": "Outrage after ICE arrest father and daughter at Seattle airport",
-      "url": "https://www.bbc.co.uk/news/videos/crd910g5x882o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-23T22:59:07+00:00"
-    },
-    {
-      "title": "A comeback for the ages: Trump's influence on Huang's return to Nvidia",
-      "url": "https://www.bbc.co.uk/news/videos/ckp80d5nl586o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-23T21:40:30+00:00"
-    },
-    {
-      "title": "Gisèle Pelicot 'humiliated' after nude photos sent to media to promote book",
-      "url": "https://www.bbc.co.uk/news/articles/cm3eg502nxw2o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-23T21:24:47+00:00"
-    },
-    {
-      "title": "Nvidia value climbs by almost $1tn and tech stocks rally after Jensen Huang returns",
-      "url": "https://www.bbc.co.uk/news/articles/cq62pn6j42jko?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-23T21:23:42+00:00"
-    },
-    {
-      "title": "UK sanctions top Myanmar military leaders after Rohingya genocide ruling",
-      "url": "https://www.bbc.co.uk/news/articles/c6wy4ng1rznxo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-23T21:03:34+00:00"
-    },
-    {
-      "title": "What strike on Russian ship in Libya says about spread of Ukraine war",
-      "url": "https://www.bbc.co.uk/news/articles/cm894p88jzxpo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-23T20:48:35+00:00"
-    },
-    {
-      "title": "First Lady Melania Trump welcomes this year's White House Christmas tree",
-      "url": "https://www.bbc.co.uk/news/videos/c51k9vp48d2vo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-23T18:49:19+00:00"
-    },
-    {
-      "title": "'Biggest U-turn in economic history': Experts react to Jensen Huang's return to Nvidia",
-      "url": "https://www.bbc.co.uk/news/videos/cq8r7e35mkzlo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-23T18:43:00+00:00"
-    },
-    {
-      "title": "Iranian authorities flog singer who performed without hijab, lawyers say",
-      "url": "https://www.bbc.co.uk/news/articles/cq1j6585l5g6o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-23T18:04:20+00:00"
-    },
-    {
-      "title": "Guidance: Bird flu: table of key dates for when control zones are declared",
-      "url": "https://www.gov.uk/government/publications/bird-flu-table-of-key-dates-for-when-control-zones-are-declared",
+      "title": "Bovine TB: how to spot and report the disease",
+      "url": "https://www.gov.uk/guidance/bovine-tb",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T18:03:26Z"
+      "publishedAt": "2026-11-24T10:00:08Z"
     },
     {
-      "title": "Pip assessments need 'fundamental overhaul', report to say",
-      "url": "https://www.bbc.co.uk/news/articles/cvlyj3rn201xo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-23T17:59:55+00:00"
-    },
-    {
-      "title": "Comedian impersonates Trump's dance moves, mocks trade talks at Canada press dinner",
-      "url": "https://www.bbc.co.uk/news/articles/cr930y92dyx4o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-23T17:14:50+00:00"
-    },
-    {
-      "title": "Faisal Islam: Why Jensen Huang proved too big to fire",
-      "url": "https://www.bbc.co.uk/news/articles/ckr5g8edl94eo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Business",
-      "publishedAt": "2026-11-23T17:11:58+00:00"
-    },
-    {
-      "title": "Israeli attacks have turned Gaza into 'toxic wasteland', Oxfam says",
-      "url": "https://www.bbc.co.uk/news/articles/c8r4gzzxvxl3o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC World",
-      "publishedAt": "2026-11-23T17:07:25+00:00"
-    },
-    {
-      "title": "Bird flu (avian influenza): latest situation in England",
-      "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
+      "title": "Form: GEN02: Sam data fix request",
+      "url": "https://www.gov.uk/government/publications/gen02-sam-data-fix-request",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T17:03:42Z"
+      "publishedAt": "2026-11-24T10:00:08Z"
+    },
+    {
+      "title": "Contact Defra",
+      "url": "https://www.gov.uk/guidance/contact-defra",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-24T10:00:08Z"
+    },
+    {
+      "title": "Importing non-native animals",
+      "url": "https://www.gov.uk/guidance/importing-non-native-animals",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-24T10:00:08Z"
+    },
+    {
+      "title": "Guidance: Gelatine and collagen for human consumption - Import Information Notes",
+      "url": "https://www.gov.uk/government/publications/gelatine-and-collagen-for-human-consumption-import-information-notes",
+      "source": "DEFRA",
+      "publishedAt": "2026-11-24T10:00:07Z"
     }
   ],
   "supplyNews": [
     {
-      "title": "Official Statistics: UK International Climate Finance results 2026",
-      "url": "https://www.gov.uk/government/statistics/uk-international-climate-finance-results-2026",
+      "title": "Policy paper: Livestock Information Transformation Programme (LITP)",
+      "url": "https://www.gov.uk/government/publications/livestock-information-transformation-programme-litp",
       "source": "DEFRA",
-      "publishedAt": "2026-11-24T09:38:32Z"
+      "publishedAt": "2026-11-24T17:23:28Z"
     },
     {
-      "title": "Form: Air carriers: pet travel required method of operation (RMOP)",
-      "url": "https://www.gov.uk/government/publications/air-carriers-pet-travel-required-method-of-operation-rmop",
+      "title": "Imports, exports and EU trade of animals and animal products: topical issues",
+      "url": "https://www.gov.uk/guidance/imports-exports-and-eu-trade-of-animals-and-animal-products-topical-issues",
       "source": "DEFRA",
-      "publishedAt": "2026-11-24T00:02:03Z"
+      "publishedAt": "2026-11-24T15:51:00Z"
     },
     {
-      "title": "Guidance: Bird flu: table of key dates for when control zones are declared",
-      "url": "https://www.gov.uk/government/publications/bird-flu-table-of-key-dates-for-when-control-zones-are-declared",
+      "title": "Using the nutrient neutrality calculators",
+      "url": "https://www.gov.uk/guidance/using-the-nutrient-neutrality-calculators",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T18:03:26Z"
+      "publishedAt": "2026-11-24T14:00:02Z"
     },
     {
-      "title": "Bird flu (avian influenza): latest situation in England",
-      "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-latest-situation-in-england",
+      "title": "Guidance: Plant imports: authorised border control posts in the UK",
+      "url": "https://www.gov.uk/government/publications/plant-imports-authorised-border-control-posts-in-the-uk",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T17:03:42Z"
+      "publishedAt": "2026-11-24T12:28:51Z"
     },
     {
-      "title": "Guidance: Businesses approved to export to the EU",
-      "url": "https://www.gov.uk/government/publications/businesses-approved-to-export-to-the-eu",
+      "title": "Transparency data: 75th annual report to Parliament on smallholdings in England",
+      "url": "https://www.gov.uk/government/publications/75th-annual-report-to-parliament-on-smallholdings-in-england",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T16:20:39Z"
+      "publishedAt": "2026-11-24T11:33:35Z"
     },
     {
-      "title": "Developers: get environmental advice on your planning proposals",
-      "url": "https://www.gov.uk/guidance/developers-get-environmental-advice-on-your-planning-proposals",
+      "title": "Research: Avian influenza (bird flu) in Europe and the UK",
+      "url": "https://www.gov.uk/government/publications/avian-influenza-bird-flu-in-europe",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T15:20:44Z"
+      "publishedAt": "2026-11-24T11:20:07Z"
     },
     {
-      "title": "Bird flu: rules if you keep racing pigeons, birds of prey and other captive birds",
-      "url": "https://www.gov.uk/guidance/bird-flu-rules-if-you-keep-racing-pigeons-birds-of-prey-and-other-captive-birds",
+      "title": "Guidance: Fishing quota transfers between the UK and the EU",
+      "url": "https://www.gov.uk/government/publications/fishing-quota-transfers-between-the-uk-and-the-eu",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T15:04:12Z"
+      "publishedAt": "2026-11-24T10:58:03Z"
     },
     {
-      "title": "Bird flu (avian influenza): housing your birds safely",
-      "url": "https://www.gov.uk/guidance/bird-flu-avian-influenza-housing-your-birds-safely",
+      "title": "Bovine TB: how to spot and report the disease",
+      "url": "https://www.gov.uk/guidance/bovine-tb",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T15:03:16Z"
+      "publishedAt": "2026-11-24T10:00:08Z"
     },
     {
-      "title": "Form: Defra honours nomination form",
-      "url": "https://www.gov.uk/government/publications/defra-honours-nomination-form",
+      "title": "Form: GEN02: Sam data fix request",
+      "url": "https://www.gov.uk/government/publications/gen02-sam-data-fix-request",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T14:58:04Z"
+      "publishedAt": "2026-11-24T10:00:08Z"
     },
     {
-      "title": "Market opens up for food and drink in Philippines and Vietnam",
-      "url": "https://www.gov.uk/government/news/market-opens-up-for-food-and-drink-in-philippines-and-vietnam",
+      "title": "Contact Defra",
+      "url": "https://www.gov.uk/guidance/contact-defra",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T14:37:00Z"
+      "publishedAt": "2026-11-24T10:00:08Z"
     },
     {
-      "title": "Transparency data: Packaging waste data reported by reprocessors and exporters",
-      "url": "https://www.gov.uk/government/publications/packaging-waste-data-reported-by-reprocessors-and-exporters",
+      "title": "Importing non-native animals",
+      "url": "https://www.gov.uk/guidance/importing-non-native-animals",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T14:00:12Z"
+      "publishedAt": "2026-11-24T10:00:08Z"
     },
     {
-      "title": "Guidance: Offshore Wind Environmental Standards and how they apply to projects",
-      "url": "https://www.gov.uk/government/publications/offshore-wind-environmental-standards-and-how-they-apply-to-projects",
+      "title": "Guidance: Gelatine and collagen for human consumption - Import Information Notes",
+      "url": "https://www.gov.uk/government/publications/gelatine-and-collagen-for-human-consumption-import-information-notes",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T14:00:06Z"
+      "publishedAt": "2026-11-24T10:00:07Z"
     },
     {
-      "title": "Impact assessment: Offshore Wind Environmental Standards: Impact Assessment",
-      "url": "https://www.gov.uk/government/publications/offshore-wind-environmental-standards-impact-assessment",
+      "title": "Guidance: General information for imports of products of animal origin (POAO) for human consumption - IIN GEN/2",
+      "url": "https://www.gov.uk/government/publications/general-information-for-imports-of-products-of-animal-origin-poao-for-human-consumption-iin-gen2",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T14:00:06Z"
+      "publishedAt": "2026-11-24T10:00:07Z"
     },
     {
-      "title": "Guidance: Offshore Wind Environmental Standards: standards and best practice measures for leasing round 5 projects",
-      "url": "https://www.gov.uk/government/publications/offshore-wind-environmental-standards-standards-and-best-practice-measures-for-leasing-round-5-projects",
+      "title": "Guidance: Milk and colostrum products and by-products (not for human consumption) - Import Information Notes",
+      "url": "https://www.gov.uk/government/publications/milk-and-colostrum-products-and-by-products-not-for-human-consumption-import-information-notes",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T14:00:06Z"
+      "publishedAt": "2026-11-24T10:00:07Z"
     },
     {
-      "title": "Form: Register as a keeper of 50 or more poultry or other captive birds",
-      "url": "https://www.gov.uk/government/publications/poultry-including-game-birds-registration-rules-and-forms",
+      "title": "Guidance: Eggs and egg products for human consumption - Import Information Notes",
+      "url": "https://www.gov.uk/government/publications/eggs-and-egg-products-for-human-consumption-import-information-notes",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T13:07:36Z"
+      "publishedAt": "2026-11-24T10:00:07Z"
     },
     {
-      "title": "Official Statistics: Farming Investment Fund statistics September 2026",
-      "url": "https://www.gov.uk/government/statistics/announcements/farming-investment-fund-statistics-september-2026",
+      "title": "Guidance: Products for technical and pharmaceutical use - Import Information Notes",
+      "url": "https://www.gov.uk/government/publications/products-for-technical-and-pharmaceutical-use-import-information-notes",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T12:59:53Z"
+      "publishedAt": "2026-11-24T10:00:07Z"
     },
     {
-      "title": "Guidance: Bird flu: designated slaughterhouses",
-      "url": "https://www.gov.uk/government/publications/bird-flu-designated-slaughterhouses",
+      "title": "Guidance: Processed animal by-products for use as educational tools - Import Information Notes",
+      "url": "https://www.gov.uk/government/publications/processed-animal-by-products-for-use-as-educational-tools-import-information-notes",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T11:45:24Z"
+      "publishedAt": "2026-11-24T10:00:07Z"
     },
     {
-      "title": "Research: Foot and mouth disease in North Africa and the Middle East",
-      "url": "https://www.gov.uk/government/publications/foot-and-mouth-disease-in-north-africa-and-the-middle-east",
+      "title": "Guidance: Other animal products for human consumption – Import Information Notes",
+      "url": "https://www.gov.uk/government/publications/other-animal-products-for-human-consumption-import-information-notes",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T11:36:15Z"
+      "publishedAt": "2026-11-24T10:00:07Z"
     },
     {
-      "title": "Research: Genetically Modified Organisms: ILiAD Biotechnologies, LLC (21/R53/01)",
-      "url": "https://www.gov.uk/government/publications/genetically-modified-organisms-iliad-biotechnologies-llc-21r5301",
+      "title": "Guidance: Composite products for human consumption - Import Information Notes",
+      "url": "https://www.gov.uk/government/publications/composite-products-for-human-consumption-import-information-notes",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T11:34:16Z"
+      "publishedAt": "2026-11-24T10:00:07Z"
     },
     {
-      "title": "Removing and disposing of dead wild birds",
-      "url": "https://www.gov.uk/guidance/removing-and-disposing-of-dead-wild-birds",
+      "title": "Guidance: Research and trade samples or display items (not for human consumption) - Import Information Notes",
+      "url": "https://www.gov.uk/government/publications/research-and-trade-samples-or-display-items-not-for-human-consumption-import-information-notes",
       "source": "DEFRA",
-      "publishedAt": "2026-11-23T10:42:49Z"
+      "publishedAt": "2026-11-24T10:00:07Z"
     }
   ],
   "foodInflationHistory": [
