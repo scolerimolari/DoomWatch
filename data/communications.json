@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-27T14:25:00Z",
+  "generatedAt": "2026-11-27T22:49:09Z",
   "collectionIntervalMinutes": 5,
   "displayRefreshSeconds": 60,
   "staleAfterMinutes": 120,
@@ -9,7 +9,7 @@
     "currentIssueProviders": 0,
     "unconfirmedReportProviders": 0,
     "staleIssueProviders": 1,
-    "staleOrUnknownProviders": 12
+    "staleOrUnknownProviders": 18
   },
   "sources": [
     {
@@ -21,51 +21,51 @@
       "scope": "UK mobile networks",
       "format": "json",
       "status": "OK",
-      "checkedAt": "2026-11-27T14:24:58Z",
-      "sourceUpdatedAt": "2026-11-27T14:20:21.949Z",
+      "checkedAt": "2026-11-27T22:49:07Z",
+      "sourceUpdatedAt": "2026-11-27T22:45:21.874Z",
       "providerSignals": [
         {
           "provider": "EE",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-27T13:35:27.862Z",
+          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "O2",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-27T13:35:27.862Z",
+          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "Vodafone",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-27T13:35:27.862Z",
+          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "Three",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-27T13:35:27.862Z",
+          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -76,18 +76,18 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "statuspage",
-          "sourceUpdatedAt": "2026-11-27T13:35:28.041Z",
+          "sourceUpdatedAt": "2026-11-27T19:30:27.226Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "Asda Mobile",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-27T13:35:28.041Z",
+          "sourceUpdatedAt": "2026-11-27T19:30:27.233Z",
           "evidenceClass": "provider_status_and_community_reports"
         }
       ],
@@ -102,139 +102,139 @@
       "scope": "UK fixed broadband providers",
       "format": "json",
       "status": "OK",
-      "checkedAt": "2026-11-27T14:24:58Z",
-      "sourceUpdatedAt": "2026-11-27T14:20:21.949Z",
+      "checkedAt": "2026-11-27T22:49:07Z",
+      "sourceUpdatedAt": "2026-11-27T22:45:21.874Z",
       "providerSignals": [
         {
           "provider": "Virgin Media",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-26T07:40:35.397Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "Sky Broadband",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-26T07:40:35.397Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "BT Broadband",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-26T07:40:35.397Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "EE",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-26T07:40:35.397Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "TalkTalk",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-26T07:40:35.397Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "Plusnet",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-26T07:40:35.397Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "Vodafone",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-26T07:40:35.498Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.602Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "NOW Broadband",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-26T07:40:35.721Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:38.025Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "Hyperoptic",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-26T07:40:35.917Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:38.081Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "Community Fibre",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-26T07:40:35.991Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:38.165Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "Zen Internet",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-26T07:40:36.019Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:38.330Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
           "provider": "KCOM",
           "reportedStatus": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-26T07:40:36.182Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:38.615Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -245,7 +245,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "statuspage",
-          "sourceUpdatedAt": "2026-11-26T07:40:36.564Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:38.734Z",
           "evidenceClass": "provider_status_and_community_reports"
         }
       ],
@@ -260,8 +260,8 @@
       "scope": "UK-wide carrier indicators",
       "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-27T14:24:58Z",
-      "sourceUpdatedAt": "2026-11-27 06:24:59",
+      "checkedAt": "2026-11-27T22:49:08Z",
+      "sourceUpdatedAt": "2026-11-27 14:49:08",
       "providerSignals": [
         {
           "provider": "EE",
@@ -271,7 +271,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-27 06:24:59",
+          "sourceUpdatedAt": "2026-11-27 14:49:08",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -282,7 +282,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-27 06:24:59",
+          "sourceUpdatedAt": "2026-11-27 14:49:08",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -293,7 +293,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-27 06:24:59",
+          "sourceUpdatedAt": "2026-11-27 14:49:08",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -304,7 +304,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-27 06:24:59",
+          "sourceUpdatedAt": "2026-11-27 14:49:08",
           "evidenceClass": "independent_traffic_and_reports"
         }
       ],
@@ -319,7 +319,7 @@
       "scope": "UK-wide fixed broadband infrastructure reports",
       "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-27T14:24:59Z",
+      "checkedAt": "2026-11-27T22:49:08Z",
       "sourceUpdatedAt": null,
       "providerSignals": [
         {
@@ -340,10 +340,10 @@
   "providers": [
     {
       "provider": "Asda Mobile",
-      "status": "NO_ISSUE_SIGNAL",
+      "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 1,
+      "noIssueSignals": 0,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -352,14 +352,14 @@
           "url": "https://status-pages.com/mobile",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27T13:35:28.041Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T19:30:27.233Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": false
+          "stale": true
         }
       ]
     },
@@ -377,11 +377,11 @@
           "url": "https://status-pages.com/broadband",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:35.397Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -402,11 +402,11 @@
           "url": "https://status-pages.com/broadband",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:35.991Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:38.165Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -415,10 +415,10 @@
     },
     {
       "provider": "EE",
-      "status": "NO_ISSUE_SIGNAL",
+      "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 1,
+      "noIssueSignals": 0,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -427,14 +427,14 @@
           "url": "https://status-pages.com/mobile",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27T13:35:27.862Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": false
+          "stale": true
         },
         {
           "sourceId": "statuspages-broadband",
@@ -442,11 +442,11 @@
           "url": "https://status-pages.com/broadband",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:35.397Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -460,8 +460,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27 06:24:59",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27 14:49:08",
+          "checkedAt": "2026-11-27T22:49:08Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -482,11 +482,11 @@
           "url": "https://status-pages.com/broadband",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:35.917Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:38.081Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -507,11 +507,11 @@
           "url": "https://status-pages.com/broadband",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:36.182Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:38.615Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -532,11 +532,11 @@
           "url": "https://status-pages.com/broadband",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:35.721Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:38.025Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -545,10 +545,10 @@
     },
     {
       "provider": "O2",
-      "status": "NO_ISSUE_SIGNAL",
+      "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 1,
+      "noIssueSignals": 0,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -557,14 +557,14 @@
           "url": "https://status-pages.com/mobile",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27T13:35:27.862Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": false
+          "stale": true
         },
         {
           "sourceId": "updownsignal-mobile",
@@ -575,8 +575,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27 06:24:59",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27 14:49:08",
+          "checkedAt": "2026-11-27T22:49:08Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -601,7 +601,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": null,
-          "checkedAt": "2026-11-27T14:24:59Z",
+          "checkedAt": "2026-11-27T22:49:08Z",
           "evidenceClass": "community_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -622,11 +622,11 @@
           "url": "https://status-pages.com/broadband",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:35.397Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -647,11 +647,11 @@
           "url": "https://status-pages.com/broadband",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:35.397Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -675,8 +675,8 @@
           "summary": "All systems operational",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:36.564Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:38.734Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "statuspage",
           "stale": true
@@ -685,10 +685,10 @@
     },
     {
       "provider": "Stour",
-      "status": "NO_ISSUE_SIGNAL",
+      "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 1,
+      "noIssueSignals": 0,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -700,11 +700,11 @@
           "summary": "All Systems Operational",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27T13:35:28.041Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T19:30:27.226Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "statuspage",
-          "stale": false
+          "stale": true
         }
       ]
     },
@@ -722,11 +722,11 @@
           "url": "https://status-pages.com/broadband",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:35.397Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -735,10 +735,10 @@
     },
     {
       "provider": "Three",
-      "status": "NO_ISSUE_SIGNAL",
+      "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 1,
+      "noIssueSignals": 0,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -747,14 +747,14 @@
           "url": "https://status-pages.com/mobile",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27T13:35:27.862Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": false
+          "stale": true
         },
         {
           "sourceId": "updownsignal-mobile",
@@ -765,8 +765,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27 06:24:59",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27 14:49:08",
+          "checkedAt": "2026-11-27T22:49:08Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -787,11 +787,11 @@
           "url": "https://status-pages.com/broadband",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:35.397Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -800,10 +800,10 @@
     },
     {
       "provider": "Vodafone",
-      "status": "NO_ISSUE_SIGNAL",
+      "status": "STALE_OR_UNKNOWN",
       "issueSignals": 0,
       "staleIssueSignals": 0,
-      "noIssueSignals": 1,
+      "noIssueSignals": 0,
       "unconfirmedSignals": 0,
       "observations": [
         {
@@ -812,14 +812,14 @@
           "url": "https://status-pages.com/mobile",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27T13:35:27.862Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
-          "stale": false
+          "stale": true
         },
         {
           "sourceId": "statuspages-broadband",
@@ -827,11 +827,11 @@
           "url": "https://status-pages.com/broadband",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:35.498Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:37.602Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -845,8 +845,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27 06:24:59",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27 14:49:08",
+          "checkedAt": "2026-11-27T22:49:08Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -867,11 +867,11 @@
           "url": "https://status-pages.com/broadband",
           "status": "NO_ISSUE_SIGNAL",
           "rawIndicator": "operational",
-          "summary": "No unusual user reports",
+          "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-26T07:40:36.019Z",
-          "checkedAt": "2026-11-27T14:24:58Z",
+          "sourceUpdatedAt": "2026-11-27T17:55:38.330Z",
+          "checkedAt": "2026-11-27T22:49:07Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
