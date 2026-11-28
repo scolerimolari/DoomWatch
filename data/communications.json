@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-28T04:19:40Z",
+  "generatedAt": "2026-11-28T13:16:24Z",
   "collectionIntervalMinutes": 5,
   "displayRefreshSeconds": 60,
   "staleAfterMinutes": 120,
@@ -21,8 +21,8 @@
       "scope": "UK mobile networks",
       "format": "json",
       "status": "OK",
-      "checkedAt": "2026-11-28T04:19:37Z",
-      "sourceUpdatedAt": "2026-11-28T04:15:21.879Z",
+      "checkedAt": "2026-11-28T13:16:22Z",
+      "sourceUpdatedAt": "2026-11-28T13:15:21.933Z",
       "providerSignals": [
         {
           "provider": "EE",
@@ -32,7 +32,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
+          "sourceUpdatedAt": "2026-11-28T10:40:30.030Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -43,7 +43,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
+          "sourceUpdatedAt": "2026-11-28T10:40:30.030Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -54,7 +54,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
+          "sourceUpdatedAt": "2026-11-28T10:40:30.030Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -65,7 +65,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
+          "sourceUpdatedAt": "2026-11-28T10:40:30.030Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -76,7 +76,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "statuspage",
-          "sourceUpdatedAt": "2026-11-27T19:30:27.226Z",
+          "sourceUpdatedAt": "2026-11-28T10:40:30.268Z",
           "evidenceClass": "provider_status_and_community_reports"
         },
         {
@@ -87,7 +87,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "crowd",
-          "sourceUpdatedAt": "2026-11-27T19:30:27.233Z",
+          "sourceUpdatedAt": "2026-11-28T10:40:30.374Z",
           "evidenceClass": "provider_status_and_community_reports"
         }
       ],
@@ -102,8 +102,8 @@
       "scope": "UK fixed broadband providers",
       "format": "json",
       "status": "OK",
-      "checkedAt": "2026-11-28T04:19:38Z",
-      "sourceUpdatedAt": "2026-11-28T04:15:21.879Z",
+      "checkedAt": "2026-11-28T13:16:22Z",
+      "sourceUpdatedAt": "2026-11-28T13:15:21.933Z",
       "providerSignals": [
         {
           "provider": "Virgin Media",
@@ -260,8 +260,8 @@
       "scope": "UK-wide carrier indicators",
       "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-28T04:19:38Z",
-      "sourceUpdatedAt": "2026-11-27 20:19:38",
+      "checkedAt": "2026-11-28T13:16:22Z",
+      "sourceUpdatedAt": "2026-11-28 05:16:23",
       "providerSignals": [
         {
           "provider": "EE",
@@ -271,7 +271,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-27 20:19:38",
+          "sourceUpdatedAt": "2026-11-28 05:16:23",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -282,7 +282,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-27 20:19:38",
+          "sourceUpdatedAt": "2026-11-28 05:16:23",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -293,7 +293,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-27 20:19:38",
+          "sourceUpdatedAt": "2026-11-28 05:16:23",
           "evidenceClass": "independent_traffic_and_reports"
         },
         {
@@ -304,7 +304,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "via": "independent_status_indicator",
-          "sourceUpdatedAt": "2026-11-27 20:19:38",
+          "sourceUpdatedAt": "2026-11-28 05:16:23",
           "evidenceClass": "independent_traffic_and_reports"
         }
       ],
@@ -319,7 +319,7 @@
       "scope": "UK-wide fixed broadband infrastructure reports",
       "format": "html",
       "status": "OK",
-      "checkedAt": "2026-11-28T04:19:39Z",
+      "checkedAt": "2026-11-28T13:16:23Z",
       "sourceUpdatedAt": null,
       "providerSignals": [
         {
@@ -355,8 +355,8 @@
           "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27T19:30:27.233Z",
-          "checkedAt": "2026-11-28T04:19:37Z",
+          "sourceUpdatedAt": "2026-11-28T10:40:30.374Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -381,7 +381,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -406,7 +406,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:38.165Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -430,8 +430,8 @@
           "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
-          "checkedAt": "2026-11-28T04:19:37Z",
+          "sourceUpdatedAt": "2026-11-28T10:40:30.030Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -446,7 +446,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -460,8 +460,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27 20:19:38",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "sourceUpdatedAt": "2026-11-28 05:16:23",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -486,7 +486,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:38.081Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -511,7 +511,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:38.615Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -536,7 +536,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:38.025Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -560,8 +560,8 @@
           "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
-          "checkedAt": "2026-11-28T04:19:37Z",
+          "sourceUpdatedAt": "2026-11-28T10:40:30.030Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -575,8 +575,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27 20:19:38",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "sourceUpdatedAt": "2026-11-28 05:16:23",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -601,7 +601,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": null,
-          "checkedAt": "2026-11-28T04:19:39Z",
+          "checkedAt": "2026-11-28T13:16:23Z",
           "evidenceClass": "community_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -626,7 +626,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -651,7 +651,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -676,7 +676,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:38.734Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "statuspage",
           "stale": true
@@ -700,8 +700,8 @@
           "summary": "All Systems Operational",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27T19:30:27.226Z",
-          "checkedAt": "2026-11-28T04:19:37Z",
+          "sourceUpdatedAt": "2026-11-28T10:40:30.268Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "statuspage",
           "stale": true
@@ -726,7 +726,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -750,8 +750,8 @@
           "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
-          "checkedAt": "2026-11-28T04:19:37Z",
+          "sourceUpdatedAt": "2026-11-28T10:40:30.030Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -765,8 +765,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27 20:19:38",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "sourceUpdatedAt": "2026-11-28 05:16:23",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -791,7 +791,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:37.333Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -815,8 +815,8 @@
           "summary": "Not enough user reports to tell; our own check reached the site",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27T19:30:27.029Z",
-          "checkedAt": "2026-11-28T04:19:37Z",
+          "sourceUpdatedAt": "2026-11-28T10:40:30.030Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -831,7 +831,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:37.602Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
@@ -845,8 +845,8 @@
           "summary": "",
           "activeIncidents": [],
           "reportedAreas": [],
-          "sourceUpdatedAt": "2026-11-27 20:19:38",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "sourceUpdatedAt": "2026-11-28 05:16:23",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "independent_traffic_and_reports",
           "via": "independent_status_indicator",
           "stale": true
@@ -871,7 +871,7 @@
           "activeIncidents": [],
           "reportedAreas": [],
           "sourceUpdatedAt": "2026-11-27T17:55:38.330Z",
-          "checkedAt": "2026-11-28T04:19:38Z",
+          "checkedAt": "2026-11-28T13:16:22Z",
           "evidenceClass": "provider_status_and_community_reports",
           "via": "crowd",
           "stale": true
